@@ -1,0 +1,41 @@
+Connect to postgresql:	
+	sudo -iu postgres
+	psql
+	
+List databases:	
+	\l
+	
+Connect to database:	
+	\c + db_name
+
+Get database socket and port:
+	\conninfo
+
+Help:
+	help
+
+Long list of commands:
+	\?
+
+Create a database:
+	CREATE DATABASE db_name;
+
+Create superuser:
+	CREATE USER user_name SUPERUSER;
+
+Connect to database from terminal:
+	psql -d db_name
+
+List users:
+	\du
+
+If can't connect with just psql because "database user_name does not exist", in terminal:
+	createdb
+
+Delete database:
+	DROP DATABASe db_name;	
+
+See content of database:
+	\dt
+
+
