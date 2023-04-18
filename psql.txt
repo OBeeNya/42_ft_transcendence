@@ -35,5 +35,130 @@ If can't connect with just psql because "database user_name does not exist", in 
 Delete database:
 	DROP DATABASe db_name;	
 
-See content of database:
-	\dt
+List of relations:
+	\d
+
+Create table:
+	CREATE TABLE table_name (
+		Column_name + data_type + any_constraints
+		// name VARCHAR(20)
+	);
+
+Data types:
+	https://www.postgresql.org/docs/current/datatype.html
+	BIGSERIAL: useful for uuid that increments by itself
+
+Describe table:
+	\d table_name
+
+Drop table:
+	DROP TABLE table_name;
+
+Possible constaints:
+	PRIMARY KEY
+	NOT NULL
+
+Add column to table:
+	ALTER TABLE table_name
+		ADD Column_name + data_type + any_constraints;
+
+Remove column:
+	ALTER TABLE table_name
+		DROP Column_name;
+
+Insert record into tables:
+	INSERT INTO table_name (
+		Column_name1,
+		Column_name2
+	)
+		VALUES (
+			value1,
+			value2
+		);
+
+See content of table:
+	SELECT *
+		FROM table_name;
+
+Execute commands from file:
+	\i filename
+
+Sort data:
+	SELECT * FROM table_name
+		ORDER BY Column_name1 ASC, Column_name2 DESC;
+
+See unique values:
+	SELECT DISTNCT Column_name
+		FROM table_name;
+
+Filter based on multiple conditions:
+	SELECT *
+		FROM table_name
+			WHERE column_name1="..."
+				AND (column_name2="..." OR column_name2="...");
+
+Comparison:
+	SELECT x = y;
+	SELECT x <> y; // not equal to
+	SELECT x <= y;
+
+Limit results:
+	SELECT *
+		FROM table_name
+			LIMIT limit_int;
+Starting from a certain row:
+	SELECT *
+		FROM table_name
+			OFFSET offset_int
+			LIMIT limit_int;
+	SELECT *
+		FROM table_name
+			OFFSET offset_int
+			FETCH FIRST 5 ROW ONLY; // sql native
+
+Look into an array of values:
+	SELECT *
+		FROM table_name
+			WHERE column_name1
+				IN (value1, value2);
+
+Select data in a range:
+	SELECT *
+		FROM table_name
+			WHERE column_name1
+				BETWEEN value1
+					AND value2;
+
+Select data using a pattern:
+	SELECT *
+		FROM table_name
+			WHERE column_name1
+				LIKE pattern;
+	example:
+		'%@gmail.___'
+To ignore case sensitivity:
+		SELECT *
+		FROM table_name
+			WHERE column_name1
+				ILIKE pattern;
+
+Group data by columns:
+	SELECT column_name1, FUNCTION(arg)
+		FROM table_name
+			GROUP BY column_name2;
+
+Extra filtering after group by aggregation:
+	SELECT column_name1, FUNCTION(arg)
+		FROM table_name
+			GROUP BY column_name2;
+				HAVING FUNCTION(arg) > 3;
+Aggregate functions:
+	https://www.postgresql.org/docs/current/functions-aggregate.html
+
+Arithmetic operations:
+	+, -, *, /, ^, !, %
+
+Arithmetic operation on column based on an other:
+	SELECT *, column_name1*coeff AS new_col_name
+		FROM table_name;
+
