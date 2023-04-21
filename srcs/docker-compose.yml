@@ -1,6 +1,23 @@
 version: '3.8'
 
 services:
+  postgres:
+    container_name: postgres
+    hostname: postgres
+    build:
+      context: ./back/transcendence
+      dockerfile: postgres.dockerfile
+    expose:
+      - "${DB_PORT}"
+    restart: unless-stopped
+    networks:
+      - back
+    environment:
+      - DB_PORT=${DB_PORT}
+      - DB_PATH=${DB_PATH}
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PWD=${DB_PWD}
   api:
     container_name: api
     hostname: api
@@ -12,4 +29,17 @@ services:
     ports: 
       - 3000:3000
     # volume:
+    depends_on:
+      - "postgres"
 
+volumes:
+  db_volume:
+    driver: "local"
+    driver_opts:
+      o: bind
+      type: "none"
+      device: ${VOLUME_PATH}/postgres
+
+networks:
+  back:
+    driver: bridge

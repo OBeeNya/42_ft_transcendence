@@ -23,6 +23,9 @@
 -- Create superuser:
 	CREATE USER user_name SUPERUSER;
 
+-- Delete user:
+	DROP USER user_name;
+
 -- Connect to database from terminal:
 -- 	psql -d db_name
 

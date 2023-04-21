@@ -1,0 +1,9 @@
+psql -c "CREATE USER ${DB_USER} SUPERUSER;
+	CREATE DATABASE ${DB_NAME};
+	CREATE TABLE users (
+		uuid_var UUID NOT NULL PRIMARY KEY,
+		name VARCHAR(20) NOT NULL
+	);
+	ALTER TABLE users
+		ADD CONSTRAINT unique_var
+			UNIQUE(name);"
