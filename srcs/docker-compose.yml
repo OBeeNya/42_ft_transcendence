@@ -1,45 +1,27 @@
-version: '3.8'
-
+version: '3'
 services:
-  postgres:
-    container_name: postgres
-    hostname: postgres
+  nestjs:
     build:
       context: ./back/transcendence
-      dockerfile: postgres.dockerfile
-    expose:
-      - "${DB_PORT}"
-    restart: unless-stopped
-    networks:
-      - back
-    environment:
-      - DB_PORT=${DB_PORT}
-      - DB_PATH=${DB_PATH}
-      - DB_NAME=${DB_NAME}
-      - DB_USER=${DB_USER}
-      - DB_PWD=${DB_PWD}
-  api:
-    container_name: api
-    hostname: api
-    build:
-      context: ./back/transcendence
-      dockerfile: Dockerfile
-    # command: "npm run start"
-    # command: "cd back/transcendence && npm run start"
-    ports: 
-      - 3000:3000
-    # volume:
+    ports:
+      - "3000:3000"
     depends_on:
-      - "postgres"
-
-volumes:
-  db_volume:
-    driver: "local"
-    driver_opts:
-      o: bind
-      type: "none"
-      device: ${VOLUME_PATH}/postgres
-
-networks:
-  back:
-    driver: bridge
+      - postgres
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: fefeben 
+      POSTGRES_PASSWORD: pwd
+      POSTGRES_DB: transcendence
+  postgres:
+    build:
+      context: ./postgres
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: fefeben
+      POSTGRES_PASSWORD: pwd
+      POSTGRES_DB: transcendence
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./data:/var/lib/postgresql/data
