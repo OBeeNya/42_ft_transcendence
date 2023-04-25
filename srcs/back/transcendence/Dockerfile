@@ -11,6 +11,13 @@ RUN apt-get update -y
 RUN npm install -g npm@latest
 RUN npm install -g @nestjs/cli
 
+# Dependencies that were necessary for Benjamin to install
+# RUN npm install @nestjs/common
+# RUN npm install @nestjs/core
+# RUN npm i --save @nestjs/config
+# RUN  npm install source-map-support
+# RUN npm install @nestjs/platform-express
+
 # ENTRYPOINT [ "/usr/bin/entrypoint.sh" ]
 
 # ENTRYPOINT npm run start
