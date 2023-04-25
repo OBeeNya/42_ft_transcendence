@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller'; //le controleur écoute une requete et renvoie une reponse
 import { AppService } from './app.service';		//fournit des fonctionnalités au controleur
-import { TodosModule } from './todos/todos.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
-  imports: [TodosModule],
+  imports: [UsersModule],
   controllers: [AppController],
   providers: [AppService],
 })
