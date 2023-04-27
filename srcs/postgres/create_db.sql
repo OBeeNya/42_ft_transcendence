@@ -1,7 +1,0 @@
-CREATE TABLE users (
-	uuid_var UUID NOT NULL PRIMARY KEY,
-	name VARCHAR(20) NOT NULL
-);
-ALTER TABLE users
-	ADD CONSTRAINT unique_var
-		UNIQUE(name);
