@@ -1,0 +1,31 @@
+sudo netstat -tulpn && kill ****
+yarn add nestjs
+docker compose up dev-db -d
+npx prisma init
+prisma migrate dev
+yarn add argon2
+yarn add prisma
+yarn add class-validator class-transformer
+yarn add @nestjs/config
+yarn add @nestjs/passport passport @nestjs/jwt passport-jwt @types/passport-jwt
+yarn add dotenv-cli
+yarn add pactum
+
+
+
+
+v0.1:
+	npm i -g @nestjs/cli
+	npm i -g @nestjs/common
+	npm i -g yarn
+	npm i -g @prisma/client
+
+
+
+
+/////////// TO DO:
+
+	- module matchhistory + test e2e
+	- front basique pour tester au moins les routes gardées
+
+
