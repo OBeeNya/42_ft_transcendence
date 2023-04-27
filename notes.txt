@@ -2,6 +2,7 @@ sudo netstat -tulpn && kill ****
 yarn add nestjs
 docker compose up dev-db -d
 npx prisma init
+npx prisma studio
 prisma migrate dev
 yarn add argon2
 yarn add prisma
@@ -12,6 +13,7 @@ yarn add dotenv-cli
 yarn add pactum
 
 
+npx dotenv -e .env.test -- npx prisma studio
 
 
 v0.1:
