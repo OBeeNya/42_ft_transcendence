@@ -7,3 +7,7 @@ import { MatchHistoryService } from './match-history.service';
   providers: [MatchHistoryService]
 })
 export class MatchHistoryModule {}
+
+
+// 4 routes: createMatch && getAllMatches 
+// && getMyMatches && deleteMatchByUserId(obligé?)
