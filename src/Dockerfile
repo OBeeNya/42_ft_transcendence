@@ -4,7 +4,7 @@ FROM node:18
 WORKDIR /usr/backend
 
 # COPY ./bin/sh/entrypoint.sh /usr/bin/entrypoint.sh
-COPY . .
+# COPY . .
 
 # Install dependencies
 # RUN apt-get update -y
