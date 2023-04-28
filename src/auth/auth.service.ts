@@ -22,7 +22,7 @@ export class AuthService {
 					hash,
 				},
 			});
-			return (this.signToken(user.id, user.name));
+			return (this.signToken(user.id, user.name)); //utile d'envoyer un token a l'inscription?
 		}
 		catch (error) {
 			if (error instanceof Prisma.PrismaClientKnownRequestError) {
