@@ -3,6 +3,7 @@ yarn add nestjs
 docker compose up dev-db -d
 npx prisma init
 npx prisma studio
+npx prisma migrate dev ==> whenever we modify prisma schemas
 prisma migrate dev
 yarn add argon2
 yarn add prisma
@@ -29,5 +30,3 @@ v0.1:
 
 	- module matchhistory + test e2e
 	- front basique pour tester au moins les routes gardées
-
-

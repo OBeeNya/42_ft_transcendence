@@ -30,7 +30,7 @@ CREATE TABLE "users" (
 CREATE TABLE "matchhistory" (
     "id" SERIAL NOT NULL,
     "userId" INTEGER NOT NULL,
-    "opponentId" INTEGER NOT NULL,
+    "opponentName" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "ladder" INTEGER NOT NULL,
     "winner" TEXT NOT NULL,
