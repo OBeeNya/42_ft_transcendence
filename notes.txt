@@ -12,9 +12,7 @@ yarn add @nestjs/passport passport @nestjs/jwt passport-jwt @types/passport-jwt
 yarn add dotenv-cli
 yarn add pactum
 
-
 npx dotenv -e .env.test -- npx prisma studio
-
 
 v0.1:
 	npm i -g @nestjs/cli
@@ -22,12 +20,10 @@ v0.1:
 	npm i -g yarn
 	npm i -g @prisma/client
 
-
-
+REACT:
+	
 
 /////////// TO DO:
 
 	- module matchhistory + test e2e
 	- front basique pour tester au moins les routes gardées
-
-
