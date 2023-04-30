@@ -18,24 +18,25 @@ export class UserController {
 		return this.userService.findAll();
 	}
 
-	// localhost:3000/users/:id
-	@Get(":id")
-	findOneById(@Param("id") id: string) {
-		console.log("test findOneById: id= ", id);
-		return this.userService.findOneById(id);
+	// localhost:3000/users/me
+	@Get('me')
+	getMe(@GetUser() user: User) {
+		return (user);
 	}
-
+	
 	// localhost:3000/users/name/:name
 	@Get("name/:name")
 	findOneByName(@Param("name") name: string) {
 		console.log("test findOneByName: name = ", name);
 		return this.userService.findOneByName(name);
 	}
+	
 
-	// localhost:3000/users/me/me
-	@Get('me/me')
-	getMe(@GetUser() user: User) {
-		return (user);
+	// localhost:3000/users/:id
+	@Get(":id")
+	findOneById(@Param("id") id: string) {
+		console.log("test findOneById: id= ", id);
+		return this.userService.findOneById(id);
 	}
 
 	@Patch()

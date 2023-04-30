@@ -29,12 +29,14 @@ model User {
 model MatchHistory {
   
   id Int @id @default(autoincrement())
-  userId Int
   user User @relation(fields: [userId], references: [id])
+  userId Int
+  userName String
   opponentName String
   createdAt DateTime @default(now())
-  ladder Int // which level?
+  ladder Int
   winner Int
 
   @@map("matchhistory")
 }
+
