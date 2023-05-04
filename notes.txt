@@ -23,7 +23,18 @@ v0.1:
 REACT:
 	yarn add axios
 
-/////////// TO DO:
 
-	- module matchhistory + test e2e
-	- front basique pour tester au moins les routes gardées
+/ ********************************************* /
+
+TO LAUNCH:
+	in /back:
+		yarn dev:db:restart
+		npx prisma deploy
+		yarn start:dev
+		npx prisma studio
+	in /front:
+		npx start
+	http://localhost:3000/signup
+
+
+
