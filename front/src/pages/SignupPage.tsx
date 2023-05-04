@@ -7,8 +7,8 @@ import { AuthDto } from "../../../back/auth/dto";
 
 const SignupPage = () => {
 
-	const [name, setName] = useState('');
-	const [password, setPassword] = useState('');
+	const [nameInput, setName] = useState('');
+	const [passwordInput, setPassword] = useState('');
 	const [errorMessage, setErrorMessage] = useState('');
 	
 	const navigate = useNavigate();
@@ -17,8 +17,8 @@ const SignupPage = () => {
 	const handleSignup = () => {
 		try {
 			const dto: AuthDto = {
-				name: "abx",
-				password: "123",
+				name: nameInput,
+				password: passwordInput,
 			};
 			// await ax.post('auth/signup', dto);
 			ax.post('auth/signup', dto);
@@ -38,7 +38,7 @@ const SignupPage = () => {
 				<label>Name:</label>
 				<input
 					type="text"
-					value={name}
+					value={nameInput}
 					onChange={(event) => setName(event.target.value)}
 				/>
 			</div>
@@ -46,7 +46,7 @@ const SignupPage = () => {
 				<label>Password:</label>
 				<input
 					type="password"
-					value={password}
+					value={passwordInput}
 					onChange={(event) => setPassword(event.target.value)}
 				/>
 			</div>
