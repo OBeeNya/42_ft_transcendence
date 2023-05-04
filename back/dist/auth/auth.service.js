@@ -23,6 +23,7 @@ let AuthService = class AuthService {
         this.config = config;
     }
     async signup(dto) {
+        console.log("////////// DEBUG: signup called");
         const hash = await argon.hash(dto.password);
         try {
             const user = await this.prisma.user.create({

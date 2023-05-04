@@ -14,6 +14,7 @@ export class AuthService {
 		private config: ConfigService) {}
 	
 	async signup(dto: AuthDto) {
+		console.log("////////// DEBUG: signup called");
 		const hash = await argon.hash(dto.password);
 		try {
 			const user = await this.prisma.user.create({
@@ -22,7 +23,7 @@ export class AuthService {
 					hash,
 				},
 			});
-			return (this.signToken(user.id, user.name)); //utile d'envoyer un token a l'inscription?
+			return (this.signToken(user.id, user.name)); // utile d'envoyer un token a l'inscription?
 		}
 		catch (error) {
 			if (error instanceof Prisma.PrismaClientKnownRequestError) {
