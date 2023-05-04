@@ -11,7 +11,7 @@ const SignupPage = () => {
 	const navigate = useNavigate();
 	const handleSignup = async () => {
 		try {
-			await axios.Post('/auth/signup',{
+			await axios.Post('/auth/signup', {
 					name,
 					password,
 				});
