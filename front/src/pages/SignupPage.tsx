@@ -13,14 +13,12 @@ const SignupPage = () => {
 	
 	const navigate = useNavigate();
 	
-	// const handleSignup = async () => {
 	const handleSignup = () => {
 		try {
 			const dto: AuthDto = {
 				name: nameInput,
 				password: passwordInput,
 			};
-			// await ax.post('auth/signup', dto);
 			ax.post('auth/signup', dto);
 			navigate('/welcome');
 		}

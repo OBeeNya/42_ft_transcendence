@@ -14,7 +14,6 @@ export class AuthService {
 		private config: ConfigService) {}
 	
 	async signup(dto: AuthDto) {
-		console.log("////////// DEBUG: signup called");
 		const hash = await argon.hash(dto.password);
 		try {
 			const user = await this.prisma.user.create({

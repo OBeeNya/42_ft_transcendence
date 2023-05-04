@@ -1,16 +1,3 @@
-/*
-  Warnings:
-
-  - You are about to drop the `MatchHistory` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `User` table. If the table is not empty, all the data it contains will be lost.
-
-*/
--- DropTable
-DROP TABLE "MatchHistory";
-
--- DropTable
-DROP TABLE "User";
-
 -- CreateTable
 CREATE TABLE "users" (
     "id" SERIAL NOT NULL,
@@ -30,6 +17,7 @@ CREATE TABLE "users" (
 CREATE TABLE "matchhistory" (
     "id" SERIAL NOT NULL,
     "userId" INTEGER NOT NULL,
+    "userName" TEXT NOT NULL,
     "opponentName" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "ladder" INTEGER NOT NULL,

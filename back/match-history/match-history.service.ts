@@ -55,8 +55,7 @@ export class MatchHistoryService {
 		// 		winner: dto.winner,
 		// 		user: { connect: { id: user.id } },
 		// 	}
-		// })
+		// });
 		// return (match);
 	}
 }
-
