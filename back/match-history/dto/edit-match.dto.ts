@@ -8,9 +8,6 @@ export class CreateMatchDto {
 	 
 	@IsString()
 	userName: string;
-
-	@IsNumber()
-	userId: number;
 	
 	@IsString()
 	opponentName: string;
@@ -18,7 +15,7 @@ export class CreateMatchDto {
 	@IsNumber()
 	ladder: number;
 
-	@IsNumber()
-	winner: number;
+	@IsString()
+	winner: string;
 
 }

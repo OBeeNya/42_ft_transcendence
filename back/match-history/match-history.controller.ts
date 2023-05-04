@@ -41,9 +41,9 @@ export class MatchHistoryController {
 	}
 
 	// la creation de match est obligatoirement faite par le user qui joue
-	@Post()
-	createMatch(@Body() dto: CreateMatchDto, @GetUser() user: User) {
-		console.log("dto", dto); 
-		this.historyService.create(dto, user);
-	}
+	// @Post()
+	// createMatch(@Body() dto: CreateMatchDto, @GetUser() user: User) {
+	// 	console.log("dto", dto); 
+	// 	this.historyService.create(dto, user);
+	// }
 }

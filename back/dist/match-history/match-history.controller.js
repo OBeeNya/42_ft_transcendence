@@ -8,24 +8,65 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MatchHistoryController = void 0;
 const common_1 = require("@nestjs/common");
+const decorator_1 = require("../auth/decorator");
+const guard_1 = require("../auth/guard");
 const match_history_service_1 = require("./match-history.service");
 let MatchHistoryController = class MatchHistoryController {
     constructor(historyService) {
         this.historyService = historyService;
     }
-    createHistory() {
+    findAll() {
+        console.log("test findAll matches");
+        return this.historyService.findAll();
+    }
+    findMyMatches(user) {
+        console.log("test findMyMatches matches: id = ", user.id);
+        return this.historyService.findByUserId(user.id.toString());
+    }
+    findByUserId(id) {
+        console.log("test findByUser matches: id = ", id);
+        return this.historyService.findByUserId(id);
+    }
+    findByUserName(name) {
+        console.log("test findByUserName matches: name = ", name);
+        return this.historyService.findByUserName(name);
     }
 };
 __decorate([
-    (0, common_1.Patch)(),
+    (0, common_1.Get)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
-], MatchHistoryController.prototype, "createHistory", null);
+], MatchHistoryController.prototype, "findAll", null);
+__decorate([
+    (0, common_1.Get)("me"),
+    __param(0, (0, decorator_1.GetUser)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], MatchHistoryController.prototype, "findMyMatches", null);
+__decorate([
+    (0, common_1.Get)(":id"),
+    __param(0, (0, common_1.Param)("id")),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], MatchHistoryController.prototype, "findByUserId", null);
+__decorate([
+    (0, common_1.Get)("name/:name"),
+    __param(0, (0, common_1.Param)("name")),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], MatchHistoryController.prototype, "findByUserName", null);
 MatchHistoryController = __decorate([
+    (0, common_1.UseGuards)(guard_1.JwtGuard),
     (0, common_1.Controller)('match-history'),
     __metadata("design:paramtypes", [match_history_service_1.MatchHistoryService])
 ], MatchHistoryController);

@@ -5,9 +5,9 @@ export declare class UserController {
     private userService;
     constructor(userService: UserService);
     findAll(): import(".prisma/client").Prisma.PrismaPromise<User[]>;
-    findOneById(id: string): Promise<User>;
-    findOneByName(name: string): Promise<User>;
     getMe(user: User): User;
+    findOneByName(name: string): Promise<User>;
+    findOneById(id: string): Promise<User>;
     editUser(userId: number, dto: EditUserDto): Promise<User>;
     deleteUserById(id: string): Promise<{
         deletedUsers: number;

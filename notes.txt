@@ -30,7 +30,7 @@ REACT:
 TO LAUNCH:
 	in /back:
 		yarn dev:db:restart
-		npx prisma deploy
+		npx prisma migrate dev
 		yarn start:dev
 		npx prisma studio
 	in /front:

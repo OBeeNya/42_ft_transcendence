@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
+import { PrismaService } from '../prisma_module/prisma.service';
 import { MatchHistory } from '@prisma/client';
 import { CreateMatchDto } from './dto';
 import { User } from '@prisma/client';
@@ -24,14 +24,14 @@ export class MatchHistoryService {
 
 		const matches = await this.prisma.matchHistory.findMany({
 			where: {
-				id: user.id
+				userId: user.id
 			}
 		});
 		return (matches);
 	}
 
 	async findByUserName(nameToSearch: string) {
-		const user = await this.prisma.user.findUniqueOrThrow({
+		const userCurrent = await this.prisma.user.findUniqueOrThrow({
 			where: { 
 				name: nameToSearch, 
 			}
@@ -39,23 +39,24 @@ export class MatchHistoryService {
 
 		const matches = await this.prisma.matchHistory.findMany({
 			where: {
-				userName: user.name
+				userId: userCurrent.id
 			}
 		});
 		return (matches);
 	}
 
 	async create(dto: CreateMatchDto, user: User) {
-		const match = await this.prisma.matchHistory.create({
-			data: {
-				userName: user.name, 
-				opponentName: dto.opponentName,
-				ladder: dto.ladder,
-				winner: dto.winner,
-				user: { connect: { id: user.id } }
-			}
-		})
-		return (match);	
+		// const match = await this.prisma.matchHistory.create({
+		// 	data: {
+		// 		userName: dto.userName,
+		// 		userId: user.id,
+		// 		opponentName: dto.opponentName,
+		// 		ladder: dto.ladder,
+		// 		winner: dto.winner,
+		// 		user: { connect: { id: user.id } },
+		// 	}
+		// })
+		// return (match);
 	}
 }
 
