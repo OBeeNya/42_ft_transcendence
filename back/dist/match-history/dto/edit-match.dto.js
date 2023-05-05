@@ -18,6 +18,11 @@ __decorate([
     __metadata("design:type", Object)
 ], CreateMatchDto.prototype, "user", void 0);
 __decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsNumber)(),
+    __metadata("design:type", Number)
+], CreateMatchDto.prototype, "userId", void 0);
+__decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], CreateMatchDto.prototype, "userName", void 0);
@@ -30,8 +35,8 @@ __decorate([
     __metadata("design:type", Number)
 ], CreateMatchDto.prototype, "ladder", void 0);
 __decorate([
-    (0, class_validator_1.IsString)(),
-    __metadata("design:type", String)
-], CreateMatchDto.prototype, "winner", void 0);
+    (0, class_validator_1.IsBoolean)(),
+    __metadata("design:type", Boolean)
+], CreateMatchDto.prototype, "won", void 0);
 exports.CreateMatchDto = CreateMatchDto;
 //# sourceMappingURL=edit-match.dto.js.map

@@ -48,12 +48,12 @@ export class MatchHistoryService {
 	async create(dto: CreateMatchDto, user: User) {
 		// const match = await this.prisma.matchHistory.create({
 		// 	data: {
-		// 		userName: dto.userName,
+		// 		user: { connect: { id: user.id } },
 		// 		userId: user.id,
+		// 		userName: dto.userName,
 		// 		opponentName: dto.opponentName,
 		// 		ladder: dto.ladder,
-		// 		winner: dto.winner,
-		// 		user: { connect: { id: user.id } },
+		// 		won: dto.won,
 		// 	}
 		// });
 		// return (match);

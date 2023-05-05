@@ -1,32 +1,32 @@
 import { useState } from "react";
-import { useNavigate } from 'react-router-dom';
-import { ax } from '../axios/axios'
+import { useNavigate } from "react-router-dom";
 import { AuthDto } from "../../../back/auth/dto";
+import { ax } from '../axios/axios'
 
-const SignupPage = () => {
+const SigninPage = () => {
 
 	const [nameInput, setName] = useState('');
 	const [passwordInput, setPassword] = useState('');
 	
 	const navigate = useNavigate();
 	
-	const handleSignup = () => {
+	const handleSignin = () => {
 		const dto: AuthDto = {
 			name: nameInput,
 			password: passwordInput,
 		};
-		ax.post('auth/signup', dto)
+		ax.post('auth/signin', dto)
 			.then(
-				() => {navigate('/')}
+				() => {navigate('/home')}
 			)
 			.catch(
-			// display error message	
+				() => {navigate('/')}
 			);
 	};
 
 	return (
 		<div>
-			<h1>Signup</h1>
+			<h1>Signin</h1>
 			<div>
 				<label>Name:</label>
 				<input
@@ -43,10 +43,10 @@ const SignupPage = () => {
 					onChange={(event) => setPassword(event.target.value)}
 				/>
 			</div>
-			<button onClick={handleSignup}>Submit</button>
+			<button onClick={handleSignin}>Submit</button>
 		</div>
 	);
 
 };
 
-export default SignupPage;
+export default SigninPage;

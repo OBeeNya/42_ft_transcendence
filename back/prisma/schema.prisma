@@ -35,7 +35,7 @@ model MatchHistory {
   opponentName String
   createdAt DateTime @default(now())
   ladder Int
-  winner String
+  won Boolean @default(false)
 
   @@map("matchhistory")
 }
