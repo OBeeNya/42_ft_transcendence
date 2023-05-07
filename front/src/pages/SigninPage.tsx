@@ -8,6 +8,7 @@ const SigninPage = () => {
 
 	const [nameInput, setName] = useState('');
 	const [passwordInput, setPassword] = useState('');
+	// const [token, setToken] = useState('');
 	
 	const navigate = useNavigate();
 
@@ -19,7 +20,9 @@ const SigninPage = () => {
 			};
 			const response = await ax.post('auth/signin', dto);
 			if (response.status === 200) {
-				navigate('/home')
+				console.log("test token: ", response.data.access_token);
+				// setToken(response.data.access_token);
+				navigate('/home', { state: { token: response.data.access_token} }); //passing the token as a prop to reuse it later.
 			}
 		} catch (error) {
 			const axiosError = error as AxiosError<{ message: string; statusCode: number }>;
