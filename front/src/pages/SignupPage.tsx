@@ -34,7 +34,7 @@ const SignupPage = () => {
 			} else {
 				console.error('Failed to sign up');
 			}
-		}
+		};
 	};
 	
 	return (
