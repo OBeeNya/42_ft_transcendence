@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { ax } from '../axios/axios'
 import { AxiosError } from 'axios'
 import { AuthDto } from "../../../back/auth/dto";
+import Content from "../components/content"
+
 
 const SignupPage = () => {
 
@@ -38,27 +40,29 @@ const SignupPage = () => {
 	};
 	
 	return (
-		<div>
-			<h1>Signup</h1>
+		<Content>
 			<div>
-				<label>Name:</label>
-				<input
-					type="text"
-					value={nameInput}
-					onChange={(event) => setName(event.target.value)}
-				/>
+				<h1>Signup</h1>
+				<div>
+					<label>Name:</label>
+					<input
+						type="text"
+						value={nameInput}
+						onChange={(event) => setName(event.target.value)}
+					/>
+				</div>
+				<div>
+					<label>Password:</label>
+					<input
+						type="password"
+						value={passwordInput}
+						onChange={(event) => setPassword(event.target.value)}
+					/>
+				</div>
+				<button onClick={handleSignup}>Submit</button>
+				<div id="message"></div>
 			</div>
-			<div>
-				<label>Password:</label>
-				<input
-					type="password"
-					value={passwordInput}
-					onChange={(event) => setPassword(event.target.value)}
-				/>
-			</div>
-			<button onClick={handleSignup}>Submit</button>
-			<div id="message"></div>
-		</div>
+		</Content>
 	);
 
 };
