@@ -1,0 +1,22 @@
+.content-body {
+    background-color: white;
+    border-radius: 20px;
+    padding: 20px;
+    margin: 50px;
+    text-align: center;
+}
+
+.header-body {
+    background-color: white;
+    border-radius: 20px;
+    padding: 20px;
+    margin: 50px;
+    text-align: center;
+    display: flex;
+    justify-content: space-between;
+}
+
+.header-settings {
+    /* text-align: right; */
+
+}
