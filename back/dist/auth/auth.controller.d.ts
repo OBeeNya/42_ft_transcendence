@@ -1,12 +1,6 @@
-import { AuthService } from "./auth.service";
-import { AuthDto } from "./dto";
+import { ConfigService } from "@nestjs/config";
 export declare class AuthController {
-    private authService;
-    constructor(authService: AuthService);
-    signup(dto: AuthDto): Promise<{
-        access_token: string;
-    }>;
-    signin(dto: AuthDto): Promise<{
-        access_token: string;
-    }>;
+    private config;
+    constructor(config: ConfigService);
+    loginIntra(res: any): void;
 }

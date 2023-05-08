@@ -10,12 +10,19 @@ exports.UserModule = void 0;
 const common_1 = require("@nestjs/common");
 const user_controller_1 = require("./user.controller");
 const user_service_1 = require("./user.service");
+const auth_service_1 = require("../auth/auth.service");
+const config_1 = require("@nestjs/config");
+const axios_1 = require("@nestjs/axios");
 let UserModule = class UserModule {
 };
 UserModule = __decorate([
     (0, common_1.Module)({
         controllers: [user_controller_1.UserController],
-        providers: [user_service_1.UserService]
+        providers: [user_service_1.UserService,
+            auth_service_1.AuthService,
+            config_1.ConfigService],
+        exports: [user_service_1.UserService],
+        imports: [axios_1.HttpModule]
     })
 ], UserModule);
 exports.UserModule = UserModule;

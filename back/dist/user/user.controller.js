@@ -30,11 +30,9 @@ let UserController = class UserController {
         return (user);
     }
     findOneByName(name) {
-        console.log("test findOneByName: name = ", name);
         return this.userService.findOneByName(name);
     }
     findOneById(id) {
-        console.log("test findOneById: id= ", id);
         return this.userService.findOneById(id);
     }
     editUser(userId, dto) {
@@ -97,7 +95,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], UserController.prototype, "deleteMe", null);
 UserController = __decorate([
-    (0, common_1.UseGuards)(guard_1.JwtGuard),
+    (0, common_1.UseGuards)(guard_1.IntraGuard),
     (0, common_1.Controller)('users'),
     __metadata("design:paramtypes", [user_service_1.UserService])
 ], UserController);

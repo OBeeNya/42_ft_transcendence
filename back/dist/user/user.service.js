@@ -71,6 +71,22 @@ let UserService = class UserService {
         const nbOfUsersAfterDelete = await this.prisma.user.count();
         return { deletedUsers: 1, nbUsers: Number(nbOfUsersAfterDelete) };
     }
+    async createIntraUser(id) {
+        return (await this.prisma.user.create({
+            data: {
+                name: id,
+                oauthId: id,
+                hash: null,
+            },
+        }));
+    }
+    async findIntraUser(id) {
+        return (await this.prisma.user.findUniqueOrThrow({
+            where: {
+                oauthId: `intra-${id}`,
+            },
+        }));
+    }
 };
 UserService = __decorate([
     (0, common_1.Injectable)(),

@@ -22,6 +22,7 @@ model User {
   losses Int @default(0)
   ladder_level Int @default(0)
   history MatchHistory[]
+  oauthId String @unique
 
   @@map("users")
 }

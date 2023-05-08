@@ -15,15 +15,17 @@ const SignupPage = () => {
 	
 	const handleSignup = async () => {
 		try {
-			const dto: AuthDto = {
-					name: nameInput,
-					password: passwordInput,
-				};
-			const response = await ax.post('auth/signup', dto);
-			console.log("response status =====>", response.status);
-			if (response.status === 200 || response.status === 201) {
-				navigate('/');
-			}
+		// 	const dto: AuthDto = {
+		// 			name: nameInput,
+		// 			password: passwordInput,
+		// 		};
+		// 	const response = await ax.post('auth/signup', dto);
+		// 	console.log("response status =====>", response.status);
+		// 	if (response.status === 200 || response.status === 201) {
+		// 		navigate('/');
+		// 	}
+			await ax.get('auth/login/intra');
+			navigate('/');
 		} catch (error) {
 			const axiosError = error as AxiosError<{ message: string; statusCode: number }>;
 
@@ -38,7 +40,7 @@ const SignupPage = () => {
 			}
 		};
 	};
-	
+
 	return (
 		<Content>
 			<div>

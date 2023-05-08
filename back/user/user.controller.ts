@@ -1,11 +1,12 @@
 import { Body, Controller, Get, Patch, UseGuards, Param, Delete } from '@nestjs/common';
 import { User } from '@prisma/client';
 import { GetUser } from '../auth/decorator';
-import { JwtGuard } from '../auth/guard';
+import { IntraGuard, JwtGuard } from '../auth/guard';
 import { EditUserDto } from './dto';
 import { UserService } from './user.service';
 
-@UseGuards(JwtGuard)
+// @UseGuards(JwtGuard)
+@UseGuards(IntraGuard)
 @Controller('users')
 export class UserController {
 
@@ -27,15 +28,14 @@ export class UserController {
 	// localhost:3000/users/name/:name
 	@Get("name/:name")
 	findOneByName(@Param("name") name: string) {
-		console.log("test findOneByName: name = ", name);
+		// console.log("test findOneByName: name = ", name);
 		return this.userService.findOneByName(name);
 	}
 	
-
 	// localhost:3000/users/:id
 	@Get(":id")
 	findOneById(@Param("id") id: string) {
-		console.log("test findOneById: id= ", id);
+		// console.log("test findOneById: id= ", id);
 		return this.userService.findOneById(id);
 	}
 
