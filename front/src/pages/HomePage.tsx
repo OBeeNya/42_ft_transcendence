@@ -16,7 +16,7 @@ const HomePage = () => {
 	useEffect(() => {
 		const getUsers = async () => {
 		  try {
-			const response = await axios.get("http://localhost:3333/users/me", {
+			const response = await axios.get("http://localhost:8080/users/me", {
 			  headers: {
 				Authorization: `Bearer ${token}`,
 			  },
@@ -28,7 +28,6 @@ const HomePage = () => {
 		};
 		getUsers();
 	}, [token]);
-
 
 	return (
 		<div>
