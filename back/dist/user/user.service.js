@@ -71,6 +71,22 @@ let UserService = class UserService {
         const nbOfUsersAfterDelete = await this.prisma.user.count();
         return { deletedUsers: 1, nbUsers: Number(nbOfUsersAfterDelete) };
     }
+    async create42User(dto) {
+        return (await this.prisma.user.create({
+            data: {
+                name: dto.name,
+                oauthId: dto.oauthId,
+                hash: dto.hash,
+            },
+        }));
+    }
+    async find42User(id) {
+        return (await this.prisma.user.findFirst({
+            where: {
+                oauthId: id,
+            },
+        }));
+    }
 };
 UserService = __decorate([
     (0, common_1.Injectable)(),
