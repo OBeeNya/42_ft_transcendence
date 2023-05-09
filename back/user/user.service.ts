@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma_module/prisma.service';
-import { EditUserDto } from './dto';
+import { EditUserDto, Create42UserDto } from './dto';
 
 @Injectable()
 export class UserService {
@@ -70,20 +70,20 @@ export class UserService {
 			return { deletedUsers: 1, nbUsers: Number(nbOfUsersAfterDelete) };
 	}
 
-	async createIntraUser(id: string) {
+	async create42User(dto: Create42UserDto) {
 		return (await this.prisma.user.create({
 			data: {
-				name: id,
-				oauthId: id,
-				hash: null,
+				name: dto.name,
+				oauthId: dto.oauthId,
+				hash: dto.hash,
 			},
 		}));
 	}
 
-	async findIntraUser(id: string) {
-		return (await this.prisma.user.findUniqueOrThrow({
+	async find42User(id: string) {
+		return (await this.prisma.user.findFirst({
 			where: {
-				oauthId: `intra-${id}`,
+				oauthId: id,
 			},
 		}));
 	}

@@ -5904,6 +5904,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"passport-42@npm:^1.2.6":
+  version: 1.2.6
+  resolution: "passport-42@npm:1.2.6"
+  dependencies:
+    passport-oauth2: ^1.4.0
+  checksum: 4ce429e668339a86fdaeb9fbb81c4455eae4b4b0426818cff761a248f786ad5d9ffe032115fe98b61d639e150c9ab9bc207cb1407e041db1e300f88af03e6a3a
+  languageName: node
+  linkType: hard
+
 "passport-jwt@npm:^4.0.1":
   version: 4.0.1
   resolution: "passport-jwt@npm:4.0.1"
@@ -5914,7 +5923,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"passport-oauth2@npm:^1.7.0":
+"passport-oauth2@npm:^1.4.0, passport-oauth2@npm:^1.7.0":
   version: 1.7.0
   resolution: "passport-oauth2@npm:1.7.0"
   dependencies:
@@ -7046,6 +7055,7 @@ __metadata:
     nestjs: ^0.0.1
     pactum: ^3.4.0
     passport: ^0.6.0
+    passport-42: ^1.2.6
     passport-jwt: ^4.0.1
     passport-oauth2: ^1.7.0
     prettier: ^2.3.2

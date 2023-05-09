@@ -6,6 +6,5 @@ export declare class IntraStrategy extends IntraStrategy_base {
     private auth;
     private http;
     constructor(auth: AuthService, http: HttpService, config: ConfigService);
-    validate(access_token: string): Promise<any>;
 }
 export {};

@@ -3,11 +3,11 @@ import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { PassportStrategy } from "@nestjs/passport";
 import { AuthService } from "auth/auth.service";
-import { Strategy } from "passport-oauth2";
+import { Strategy } from "passport-42";
 import { lastValueFrom } from "rxjs";
 
 @Injectable()
-export class IntraStrategy extends PassportStrategy(Strategy, 'intra-oauth') {
+export class IntraStrategy extends PassportStrategy(Strategy, '42') {
 
 	constructor(private auth: AuthService,
 				private http: HttpService,
@@ -21,15 +21,15 @@ export class IntraStrategy extends PassportStrategy(Strategy, 'intra-oauth') {
 		});
 	}
 
-	async validate(access_token: string): Promise<any> {
-		const obj$ = this.http.get('https://api.intra.42.fr/v2/me', {
-			headers: {
-				Authorization: `Bearer ${access_token}`,
-			},
-		});
-		const { data } = await lastValueFrom(obj$);
-		const id = await this.auth.validateIntra(data.id);
-		return (id);
-	}
+	// async validate(access_token: string): Promise<any> {
+	// 	const obj$ = this.http.get('https://api.intra.42.fr/v2/me', {
+	// 		headers: {
+	// 			Authorization: `Bearer ${access_token}`,
+	// 		},
+	// 	});
+	// 	const { data } = await lastValueFrom(obj$);
+	// 	const id = await this.auth.validateIntra(data.id);
+	// 	return (id);
+	// }
 
 }

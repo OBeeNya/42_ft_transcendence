@@ -1,5 +1,5 @@
 import { PrismaService } from '../prisma_module/prisma.service';
-import { EditUserDto } from './dto';
+import { EditUserDto, Create42UserDto } from './dto';
 export declare class UserService {
     private prisma;
     constructor(prisma: PrismaService);
@@ -15,6 +15,6 @@ export declare class UserService {
         deletedUsers: number;
         nbUsers: number;
     }>;
-    createIntraUser(id: string): Promise<import(".prisma/client").User>;
-    findIntraUser(id: string): Promise<import(".prisma/client").User>;
+    create42User(dto: Create42UserDto): Promise<import(".prisma/client").User>;
+    find42User(id: string): Promise<import(".prisma/client").User>;
 }

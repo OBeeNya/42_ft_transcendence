@@ -23,7 +23,6 @@ let UserController = class UserController {
         this.userService = userService;
     }
     findAll() {
-        console.log("test findAll");
         return this.userService.findAll();
     }
     getMe(user) {

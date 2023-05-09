@@ -15,7 +15,7 @@ export class UserController {
 	// localhost:3000/users
 	@Get()
 	findAll() {
-		console.log("test findAll");
+		// console.log("test findAll");
 		return this.userService.findAll();
 	}
 

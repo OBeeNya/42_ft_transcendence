@@ -15,9 +15,8 @@ const common_1 = require("@nestjs/common");
 const config_1 = require("@nestjs/config");
 const passport_1 = require("@nestjs/passport");
 const auth_service_1 = require("../auth.service");
-const passport_oauth2_1 = require("passport-oauth2");
-const rxjs_1 = require("rxjs");
-let IntraStrategy = class IntraStrategy extends (0, passport_1.PassportStrategy)(passport_oauth2_1.Strategy, 'intra-oauth') {
+const passport_42_1 = require("passport-42");
+let IntraStrategy = class IntraStrategy extends (0, passport_1.PassportStrategy)(passport_42_1.Strategy, '42') {
     constructor(auth, http, config) {
         super({
             authorizationURL: 'https://api.intra.42.fr/oauth/authorize',
@@ -28,16 +27,6 @@ let IntraStrategy = class IntraStrategy extends (0, passport_1.PassportStrategy)
         });
         this.auth = auth;
         this.http = http;
-    }
-    async validate(access_token) {
-        const obj$ = this.http.get('https://api.intra.42.fr/v2/me', {
-            headers: {
-                Authorization: `Bearer ${access_token}`,
-            },
-        });
-        const { data } = await (0, rxjs_1.lastValueFrom)(obj$);
-        const id = await this.auth.validateIntra(data.id);
-        return (id);
     }
 };
 IntraStrategy = __decorate([

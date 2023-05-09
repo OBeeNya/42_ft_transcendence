@@ -71,19 +71,19 @@ let UserService = class UserService {
         const nbOfUsersAfterDelete = await this.prisma.user.count();
         return { deletedUsers: 1, nbUsers: Number(nbOfUsersAfterDelete) };
     }
-    async createIntraUser(id) {
+    async create42User(dto) {
         return (await this.prisma.user.create({
             data: {
-                name: id,
-                oauthId: id,
-                hash: null,
+                name: dto.name,
+                oauthId: dto.oauthId,
+                hash: dto.hash,
             },
         }));
     }
-    async findIntraUser(id) {
-        return (await this.prisma.user.findUniqueOrThrow({
+    async find42User(id) {
+        return (await this.prisma.user.findFirst({
             where: {
-                oauthId: `intra-${id}`,
+                oauthId: id,
             },
         }));
     }
