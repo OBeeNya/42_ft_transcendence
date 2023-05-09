@@ -31,14 +31,19 @@ export class AuthController {
 		let url = 'https://api.intra.42.fr/oauth/authorize';
         url += '?client_id=';
         url += this.configService.get('OAUTH_INTRA_CLIENT_ID');
-        url += '&redirect_uri=http://localhost:3000/auth/callback/42';
+        // url += '&redirect_uri=http://localhost:3000/auth/callback/42';
+        url += '&redirect_uri=http://localhost:8080/auth/callback/42';
         url += '&response_type=code';
         return ({ url: url });
 	}
 
 	@Get('/callback/42')
-	@UseGuards(IntraGuard)
+	// // @UseGuards(IntraGuard)
 	async callback42(@Req() req: Request, @Res() res: Response) {
+		// callback42() {
+		
+		console.log("inside");
+		
 		const current_user = req.user as any;
 		let user = await this.userService.find42User(current_user.profile.id.toString());
 		if (!user) {

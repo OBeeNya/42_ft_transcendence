@@ -17,7 +17,6 @@ const common_1 = require("@nestjs/common");
 const auth_service_1 = require("./auth.service");
 const dto_1 = require("./dto");
 const config_1 = require("@nestjs/config");
-const guard_1 = require("./guard");
 const user_service_1 = require("../user/user.service");
 const crypto = require("crypto");
 let AuthController = class AuthController {
@@ -36,11 +35,12 @@ let AuthController = class AuthController {
         let url = 'https://api.intra.42.fr/oauth/authorize';
         url += '?client_id=';
         url += this.configService.get('OAUTH_INTRA_CLIENT_ID');
-        url += '&redirect_uri=http://localhost:3000/auth/callback/42';
+        url += '&redirect_uri=http://localhost:8080/auth/callback/42';
         url += '&response_type=code';
         return ({ url: url });
     }
     async callback42(req, res) {
+        console.log("inside");
         const current_user = req.user;
         let user = await this.userService.find42User(current_user.profile.id.toString());
         if (!user) {
@@ -88,7 +88,6 @@ __decorate([
 ], AuthController.prototype, "login42", null);
 __decorate([
     (0, common_1.Get)('/callback/42'),
-    (0, common_1.UseGuards)(guard_1.IntraGuard),
     __param(0, (0, common_1.Req)()),
     __param(1, (0, common_1.Res)()),
     __metadata("design:type", Function),

@@ -37,5 +37,9 @@ TO LAUNCH:
 		npx start
 	http://localhost:3000/signup
 
+FRONT: 3000;
+BACK: 8080
+POSTGRE: 5432
+
 
 

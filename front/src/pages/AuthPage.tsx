@@ -9,6 +9,7 @@ const AuthPage = () => {
 			ax.get('/auth/login/42')
 				.then((res) => {
 					window.location.href = res.data.url;
+					console.log(res.data.url);
 				});
 		}
 		catch {
