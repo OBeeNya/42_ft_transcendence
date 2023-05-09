@@ -31,7 +31,7 @@ export class AuthController {
 		let url = 'https://api.intra.42.fr/oauth/authorize';
         url += '?client_id=';
         url += this.configService.get('OAUTH_INTRA_CLIENT_ID');
-        url += '&redirect_uri=http://localhost:3000/auth/callback/42';
+        url += '&redirect_uri=http://localhost:8080/auth/callback/42';
         url += '&response_type=code';
         return ({ url: url });
 	}
