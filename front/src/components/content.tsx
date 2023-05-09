@@ -1,4 +1,4 @@
-import  "./components.css"
+import  "../style/components.css"
 
 export default function Content ({children}: any) {
     return (

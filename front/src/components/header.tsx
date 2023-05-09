@@ -1,4 +1,4 @@
-import  "./components.css"
+import  "../style/components.css"
 
 type HeaderProps = {
     name: string | undefined;
