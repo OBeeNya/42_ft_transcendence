@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma_module/prisma.service';
-import { EditUserDto } from './dto';
-import { User } from '@prisma/client';
+import { EditUserDto, Create42UserDto } from './dto';
 
 @Injectable()
 export class UserService {
@@ -69,6 +68,24 @@ export class UserService {
 		})
 		const nbOfUsersAfterDelete = await this.prisma.user.count();
 			return { deletedUsers: 1, nbUsers: Number(nbOfUsersAfterDelete) };
+	}
+
+	async create42User(dto: Create42UserDto) {
+		return (await this.prisma.user.create({
+			data: {
+				name: dto.name,
+				oauthId: dto.oauthId,
+				hash: dto.hash,
+			},
+		}));
+	}
+
+	async find42User(id: string) {
+		return (await this.prisma.user.findFirst({
+			where: {
+				oauthId: id,
+			},
+		}));
 	}
 
 }

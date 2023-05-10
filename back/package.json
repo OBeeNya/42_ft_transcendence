@@ -28,6 +28,7 @@
     "test:e2e": "yarn test:db:restart && dotenv -e .env.test -- jest --watch --no-cache --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@nestjs/axios": "^2.0.0",
     "@nestjs/common": "^9.0.0",
     "@nestjs/config": "^2.3.1",
     "@nestjs/core": "^9.0.0",
@@ -44,6 +45,7 @@
     "nestjs": "^0.0.1",
     "pactum": "^3.4.0",
     "passport": "^0.6.0",
+    "passport-42": "^1.2.6",
     "passport-jwt": "^4.0.1",
     "react-router-dom": "^6.11.1",
     "reflect-metadata": "^0.1.13",

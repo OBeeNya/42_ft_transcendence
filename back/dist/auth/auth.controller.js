@@ -16,15 +16,53 @@ exports.AuthController = void 0;
 const common_1 = require("@nestjs/common");
 const auth_service_1 = require("./auth.service");
 const dto_1 = require("./dto");
+const config_1 = require("@nestjs/config");
+const guard_1 = require("./guard");
+const user_service_1 = require("../user/user.service");
+const crypto = require("crypto");
 let AuthController = class AuthController {
-    constructor(authService) {
+    constructor(authService, configService, userService) {
         this.authService = authService;
+        this.configService = configService;
+        this.userService = userService;
     }
     signup(dto) {
         return (this.authService.signup(dto));
     }
     signin(dto) {
         return (this.authService.signin(dto));
+    }
+    async login42() {
+        let url = 'https://api.intra.42.fr/oauth/authorize';
+        url += '?client_id=';
+        url += this.configService.get('OAUTH_INTRA_CLIENT_ID');
+        url += '&redirect_uri=http://localhost:8080/auth/callback/42';
+        url += '&response_type=code';
+        return ({ url: url });
+    }
+    async callback42(req, res) {
+        if (req.user == undefined)
+            throw (new common_1.UnauthorizedException('profile is undefined'));
+        const current_user = req.user;
+        let user = await this.userService.find42User(current_user.profile.id.toString());
+        if (!user) {
+            const new_user = {
+                name: current_user.profile.name,
+                oauthId: current_user.profile.id,
+                hash: crypto.randomBytes(50).toString('hex'),
+            };
+            user = await this.userService.create42User({
+                name: new_user.name,
+                oauthId: new_user.oauthId,
+                hash: new_user.hash,
+            });
+        }
+        const token = await this.authService.sign42Token({
+            id: user.id,
+            name: user.name,
+        });
+        await this.authService.setTokenCookie(token.access_token, res);
+        res.redirect('http://localhost:3000/home2?token=' + token.access_token);
     }
 };
 __decorate([
@@ -42,9 +80,26 @@ __decorate([
     __metadata("design:paramtypes", [dto_1.AuthDto]),
     __metadata("design:returntype", void 0)
 ], AuthController.prototype, "signin", null);
+__decorate([
+    (0, common_1.Get)('/login/42'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "login42", null);
+__decorate([
+    (0, common_1.Get)('/callback/42'),
+    (0, common_1.UseGuards)(guard_1.IntraGuard),
+    __param(0, (0, common_1.Req)()),
+    __param(1, (0, common_1.Res)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "callback42", null);
 AuthController = __decorate([
     (0, common_1.Controller)('auth'),
-    __metadata("design:paramtypes", [auth_service_1.AuthService])
+    __metadata("design:paramtypes", [auth_service_1.AuthService,
+        config_1.ConfigService,
+        user_service_1.UserService])
 ], AuthController);
 exports.AuthController = AuthController;
 //# sourceMappingURL=auth.controller.js.map

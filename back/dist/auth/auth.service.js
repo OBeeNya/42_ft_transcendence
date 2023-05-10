@@ -29,6 +29,7 @@ let AuthService = class AuthService {
                 data: {
                     name: dto.name,
                     hash,
+                    oauthId: "not42",
                 },
             });
             return (this.signToken(user.id, user.name));
@@ -66,6 +67,28 @@ let AuthService = class AuthService {
         });
         return ({
             access_token: token,
+        });
+    }
+    async sign42Token(user) {
+        const payload = {
+            sub: user.id,
+            name: user.name,
+        };
+        const secret = this.config.get('JWT_SECRET');
+        const token = await this.jwt.signAsync(payload, {
+            expiresIn: '15m',
+            secret: secret,
+        });
+        return ({
+            access_token: token,
+        });
+    }
+    async setTokenCookie(token, res) {
+        res.cookie('access_token', token, {
+            httpOnly: true,
+            secure: true,
+            sameSite: 'none',
+            expires: new Date(Date.now() + (5 * 24 * 3600 * 1000)),
         });
     }
 };
