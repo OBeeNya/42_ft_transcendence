@@ -17,6 +17,8 @@ export declare class AuthService {
     signToken(userId: number, name: string): Promise<{
         access_token: string;
     }>;
-    sign42Token(user: TokenInputDto): Promise<string>;
-    setTokenCookie(access_token: string, res: Response): Promise<void>;
+    sign42Token(user: TokenInputDto): Promise<{
+        access_token: string;
+    }>;
+    setTokenCookie(token: string, res: Response): Promise<void>;
 }

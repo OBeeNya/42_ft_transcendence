@@ -17,6 +17,7 @@ const common_1 = require("@nestjs/common");
 const auth_service_1 = require("./auth.service");
 const dto_1 = require("./dto");
 const config_1 = require("@nestjs/config");
+const guard_1 = require("./guard");
 const user_service_1 = require("../user/user.service");
 const crypto = require("crypto");
 let AuthController = class AuthController {
@@ -40,12 +41,13 @@ let AuthController = class AuthController {
         return ({ url: url });
     }
     async callback42(req, res) {
-        console.log("inside");
+        if (req.user == undefined)
+            throw (new common_1.UnauthorizedException('profile is undefined'));
         const current_user = req.user;
         let user = await this.userService.find42User(current_user.profile.id.toString());
         if (!user) {
             const new_user = {
-                name: current_user.profile.username,
+                name: current_user.profile.name,
                 oauthId: current_user.profile.id,
                 hash: crypto.randomBytes(50).toString('hex'),
             };
@@ -55,14 +57,12 @@ let AuthController = class AuthController {
                 hash: new_user.hash,
             });
         }
-        else
-            res.redirect('http://localhost:3000/home');
-        const access_token = await this.authService.sign42Token({
+        const token = await this.authService.sign42Token({
             id: user.id,
             name: user.name,
         });
-        await this.authService.setTokenCookie(access_token, res);
-        res.redirect('http://localhost:3000/home');
+        await this.authService.setTokenCookie(token.access_token, res);
+        res.redirect('http://localhost:3000/home2?token=' + token.access_token);
     }
 };
 __decorate([
@@ -88,6 +88,7 @@ __decorate([
 ], AuthController.prototype, "login42", null);
 __decorate([
     (0, common_1.Get)('/callback/42'),
+    (0, common_1.UseGuards)(guard_1.IntraGuard),
     __param(0, (0, common_1.Req)()),
     __param(1, (0, common_1.Res)()),
     __metadata("design:type", Function),

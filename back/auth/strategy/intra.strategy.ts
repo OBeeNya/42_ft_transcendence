@@ -10,7 +10,7 @@ export class IntraStrategy extends PassportStrategy(Strategy, '42') {
         super({
             clientID: configService.get('OAUTH_INTRA_CLIENT_ID'),
             clientSecret: configService.get('OAUTH_INTRA_CLIENT_SECRET'),
-            callbackURL: `http://localhost:3000/auth/callback/42`,
+            callbackURL: `http://localhost:8080/auth/callback/42`,
             profileFields: {
                 id: (obj: any) => {return String(obj.id);},
                 name: 'login',

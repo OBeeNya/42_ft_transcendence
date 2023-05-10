@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Post, Req, Res, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, HttpCode, HttpStatus, Post, Req, Res, UnauthorizedException, UseGuards } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { AuthDto } from "./dto";
 import { ConfigService } from "@nestjs/config";
@@ -31,24 +31,21 @@ export class AuthController {
 		let url = 'https://api.intra.42.fr/oauth/authorize';
         url += '?client_id=';
         url += this.configService.get('OAUTH_INTRA_CLIENT_ID');
-        // url += '&redirect_uri=http://localhost:3000/auth/callback/42';
         url += '&redirect_uri=http://localhost:8080/auth/callback/42';
         url += '&response_type=code';
         return ({ url: url });
 	}
 
 	@Get('/callback/42')
-	// // @UseGuards(IntraGuard)
+	@UseGuards(IntraGuard)
 	async callback42(@Req() req: Request, @Res() res: Response) {
-		// callback42() {
-		
-		console.log("inside");
-		
+		if (req.user == undefined)
+			throw (new UnauthorizedException('profile is undefined'));
 		const current_user = req.user as any;
 		let user = await this.userService.find42User(current_user.profile.id.toString());
 		if (!user) {
 			const new_user: Create42UserDto = {
-				name: current_user.profile.username as string,
+				name: current_user.profile.name as string,
 				oauthId: current_user.profile.id as string,
 				hash: crypto.randomBytes(50).toString('hex'),
 			};
@@ -58,14 +55,15 @@ export class AuthController {
 				hash: new_user.hash,
 			});
 		}
-		else
-			res.redirect('http://localhost:3000/home');
-		const access_token = await this.authService.sign42Token({
+		// else
+		// 	res.redirect('http://localhost:3000/home?token=' + req.cookies.access_token);
+		const token = await this.authService.sign42Token({
 			id: user.id,
 			name: user.name,
 		});
-		await this.authService.setTokenCookie(access_token, res);
-		res.redirect('http://localhost:3000/home');
+		await this.authService.setTokenCookie(token.access_token, res);
+		// res.redirect('http://localhost:3000/home?token=' + req.cookies.access_token);
+		res.redirect('http://localhost:3000/home2?token=' + token.access_token);
 	}
 
 }

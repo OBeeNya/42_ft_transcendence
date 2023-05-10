@@ -70,14 +70,21 @@ let AuthService = class AuthService {
         });
     }
     async sign42Token(user) {
-        const stringed_user = JSON.parse(JSON.stringify(user));
-        return (this.jwt.sign(stringed_user, {
-            secret: this.config.get('JWT_SECRET'),
-            expiresIn: "1h",
-        }));
+        const payload = {
+            sub: user.id,
+            name: user.name,
+        };
+        const secret = this.config.get('JWT_SECRET');
+        const token = await this.jwt.signAsync(payload, {
+            expiresIn: '15m',
+            secret: secret,
+        });
+        return ({
+            access_token: token,
+        });
     }
-    async setTokenCookie(access_token, res) {
-        res.cookie('access-token', access_token, {
+    async setTokenCookie(token, res) {
+        res.cookie('access_token', token, {
             httpOnly: true,
             secure: true,
             sameSite: 'none',

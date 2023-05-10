@@ -21,8 +21,9 @@ const SigninPage = () => {
 			};
 			const response = await ax.post('auth/signin', dto);
 			if (response.status === 200) {
-				console.log("test token: ", response.data.access_token);
+				// console.log("test token: ", response.data.access_token);
 				// setToken(response.data.access_token);
+				// navigate('/home', { state: { token: response.data.access_token} }); //passing the token as a prop to reuse it later.
 				navigate('/home', { state: { token: response.data.access_token} }); //passing the token as a prop to reuse it later.
 			}
 		} catch (error) {

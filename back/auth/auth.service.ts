@@ -29,7 +29,7 @@ export class AuthService {
 		catch (error) {
 			if (error instanceof Prisma.PrismaClientKnownRequestError) {
 				if (error.code === 'P2002')
-				throw (new ForbiddenException('Credentials taken'));
+					throw (new ForbiddenException('Credentials taken'));
 			}
 			throw (error);
 		}
@@ -65,18 +65,30 @@ export class AuthService {
 	}
 
 	async sign42Token(user: TokenInputDto) {
-		const stringed_user = JSON.parse(JSON.stringify(user));
-		return (this.jwt.sign(
-			stringed_user,
-			{
-				secret: this.config.get('JWT_SECRET'),
-				expiresIn: "1h",
-			}
-		));
+		// const stringed_user = JSON.parse(JSON.stringify(user));
+		// return (this.jwt.sign(
+		// 	stringed_user,
+		// 	{
+		// 		secret: this.config.get('JWT_SECRET'),
+		// 		expiresIn: "1h",
+		// 	}
+		// ));
+		const payload = {
+			sub: user.id,
+			name: user.name,
+		};
+		const secret = this.config.get('JWT_SECRET');
+		const token = await this.jwt.signAsync(payload, {
+			expiresIn: '15m',
+			secret: secret,
+		});
+		return ({
+			access_token: token,
+		});
 	}
 
-	async setTokenCookie(access_token: string, res: Response) {
-		res.cookie('access-token', access_token, {
+	async setTokenCookie(token: string, res: Response) {
+		res.cookie('access_token', token, {
 			httpOnly: true,
             secure: true,
             sameSite: 'none',

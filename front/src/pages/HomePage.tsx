@@ -11,12 +11,11 @@ const HomePage = () => {
 	const [userInfos, setUserInfos] = useState<UserInfos | null>(null); //creer une interface afin d'acceder a tout
 
 	const { state: { token } } = useLocation();
-	console.log("my token: ", token);
 
 	useEffect(() => {
 		const getUsers = async () => {
 		  try {
-			const response = await axios.get("http://localhost:3333/users/me", {
+			const response = await axios.get("http://localhost:8080/users/me", {
 			  headers: {
 				Authorization: `Bearer ${token}`,
 			  },
@@ -28,7 +27,6 @@ const HomePage = () => {
 		};
 		getUsers();
 	}, [token]);
-
 
 	return (
 		<div>

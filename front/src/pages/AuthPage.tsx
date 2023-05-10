@@ -4,12 +4,11 @@ import { ax } from '../axios/axios'
 
 const AuthPage = () => {
 
-	const handle42 = async (event: any) => {
+	const handle42 = async () => {
 		try {
 			ax.get('/auth/login/42')
 				.then((res) => {
 					window.location.href = res.data.url;
-					console.log(res.data.url);
 				});
 		}
 		catch {
