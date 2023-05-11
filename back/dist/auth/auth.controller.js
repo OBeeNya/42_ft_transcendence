@@ -46,8 +46,14 @@ let AuthController = class AuthController {
         const current_user = req.user;
         let user = await this.userService.find42User(current_user.profile.id.toString());
         if (!user) {
+            const prev_user = await this.userService.findOneByName(current_user.profile.name);
+            let new_name;
+            if (!prev_user)
+                new_name = current_user.profile.name;
+            else
+                new_name = current_user.profile.name + '_';
             const new_user = {
-                name: current_user.profile.name,
+                name: new_name,
                 oauthId: current_user.profile.id,
                 hash: crypto.randomBytes(50).toString('hex'),
             };

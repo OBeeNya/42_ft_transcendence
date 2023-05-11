@@ -44,8 +44,14 @@ export class AuthController {
 		const current_user = req.user as any;
 		let user = await this.userService.find42User(current_user.profile.id.toString());
 		if (!user) {
+			const prev_user = await this.userService.findOneByName(current_user.profile.name as string);
+			let new_name: string;
+			if (!prev_user)
+				new_name = current_user.profile.name as string;
+			else
+				new_name = current_user.profile.name as string + '_';
 			const new_user: Create42UserDto = {
-				name: current_user.profile.name as string,
+				name: new_name,
 				oauthId: current_user.profile.id as string,
 				hash: crypto.randomBytes(50).toString('hex'),
 			};
