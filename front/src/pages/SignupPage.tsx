@@ -20,25 +20,23 @@ const SignupPage = () => {
 					password: passwordInput,
 				};
 			const response = await ax.post('auth/signup', dto);
-			console.log("response status =====>", response.status);
 			if (response.status === 200 || response.status === 201) {
 				navigate('/');
 			}
-		} catch (error) {
+		}
+		catch (error) {
 			const axiosError = error as AxiosError<{ message: string; statusCode: number }>;
-
 			if (axiosError?.response?.data?.message === "Credentials taken") {
 				const message = document.getElementById("message");
-				
-				if (message) { message.textContent = "This userName is already taken"; }
+				if (message)
+					message.textContent = "This userName is already taken";
 				console.log("This userName is already taken");
-			
-			} else {
-				console.error('Failed to sign up');
 			}
+			else
+				console.error('Failed to sign up');
 		};
 	};
-	
+
 	return (
 		<Content>
 			<div>

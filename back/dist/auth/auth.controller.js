@@ -62,7 +62,7 @@ let AuthController = class AuthController {
             name: user.name,
         });
         await this.authService.setTokenCookie(token.access_token, res);
-        res.redirect('http://localhost:3000/home2?token=' + token.access_token);
+        res.redirect('http://localhost:3000/callback42?token=' + token.access_token);
     }
 };
 __decorate([

@@ -29,13 +29,11 @@ REACT:
 
 TO LAUNCH:
 	in /back:
-		yarn dev:db:restart
+		docker compose up dev-db -d
 		npx prisma migrate dev
-		yarn start:dev
-		npx prisma studio
+		npm run start
 	in /front:
-		npx start
-	http://localhost:3000/signup
+		npm run start
 
 FRONT: 3000;
 BACK: 8080
