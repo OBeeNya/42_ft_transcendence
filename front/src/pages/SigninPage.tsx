@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { AuthDto } from "../../../back/auth/dto";
+import { SigninDto } from "../../../back/auth/dto";
 import { ax } from '../axios/axios'
 import { AxiosError } from 'axios'
 import Content from "../components/content"
@@ -14,7 +14,7 @@ const SigninPage = () => {
 
 	const handleSignin = async () => {
 		try {
-			const dto: AuthDto = {
+			const dto: SigninDto = {
 				name: nameInput,
 				password: passwordInput,
 			};

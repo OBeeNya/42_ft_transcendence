@@ -10,6 +10,7 @@ const SignupPage = () => {
 
 	const [nameInput, setName] = useState('');
 	const [passwordInput, setPassword] = useState('');
+	const [emailInput, setEmail] = useState('');
 	
 	const navigate = useNavigate();
 	
@@ -18,6 +19,7 @@ const SignupPage = () => {
 			const dto: AuthDto = {
 					name: nameInput,
 					password: passwordInput,
+					email: emailInput,
 				};
 			const response = await ax.post('auth/signup', dto);
 			if (response.status === 200 || response.status === 201) {
@@ -55,6 +57,14 @@ const SignupPage = () => {
 						type="password"
 						value={passwordInput}
 						onChange={(event) => setPassword(event.target.value)}
+					/>
+				</div>
+				<div>
+					<label>Email:</label>
+					<input
+						type="email"
+						value={emailInput}
+						onChange={(event) => setEmail(event.target.value)}
 					/>
 				</div>
 				<button onClick={handleSignup}>Submit</button>

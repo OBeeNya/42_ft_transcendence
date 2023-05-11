@@ -1,6 +1,6 @@
 import { Body, Controller, Get, HttpCode, HttpStatus, Post, Req, Res, UnauthorizedException, UseGuards } from "@nestjs/common";
 import { AuthService } from "./auth.service";
-import { AuthDto } from "./dto";
+import { AuthDto, SigninDto } from "./dto";
 import { ConfigService } from "@nestjs/config";
 import { IntraGuard } from "./guard";
 import { Request, Response } from 'express';
@@ -22,7 +22,7 @@ export class AuthController {
 	
 	@HttpCode(HttpStatus.OK)
 	@Post('signin')
-	signin(@Body() dto: AuthDto) {
+	signin(@Body() dto: SigninDto) {
 		return (this.authService.signin(dto));
 	}
 
@@ -54,11 +54,13 @@ export class AuthController {
 				name: new_name,
 				oauthId: current_user.profile.id as string,
 				hash: crypto.randomBytes(50).toString('hex'),
+				email: current_user.profile._json.email as string,
 			};
 			user = await this.userService.create42User({
 				name: new_user.name,
 				oauthId: new_user.oauthId,
 				hash: new_user.hash,
+				email: new_user.email,
 			});
 		}
 		// else

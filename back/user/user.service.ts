@@ -21,24 +21,36 @@ export class UserService {
 	}
 
 	async findOneByName(name: string) {
-		const user = await this.prisma.user.findUniqueOrThrow({
+		return (await this.prisma.user.findFirst({
 			where: {
 				name: name,
 			}
-		});
-		return (user);
+		}));
 	}
 
 	async editUser(userId: number, dto: EditUserDto) {
-		const user = await this.prisma.user.update({
-			where: {
-				id: userId,
-			},
-			data: {
-				// ...dto,
-				name: dto.name,
-			},
-		});
+		let user;
+		if (dto.name != '') {
+			user = await this.prisma.user.update({
+				where: {
+					id: userId,
+				},
+				data: {
+					// ...dto,
+					name: dto.name,
+				},
+			});
+		}
+		if (dto.email != '') {
+			user = await this.prisma.user.update({
+				where: {
+					id: userId,
+				},
+				data: {
+					email: dto.email,
+				},
+			});
+		}
 		delete user.hash;
 		return (user);
 	}
@@ -76,6 +88,7 @@ export class UserService {
 				name: dto.name,
 				oauthId: dto.oauthId,
 				hash: dto.hash,
+				email: dto.email,
 			},
 		}));
 	}

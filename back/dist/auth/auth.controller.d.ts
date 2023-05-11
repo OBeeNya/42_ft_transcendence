@@ -1,5 +1,5 @@
 import { AuthService } from "./auth.service";
-import { AuthDto } from "./dto";
+import { AuthDto, SigninDto } from "./dto";
 import { ConfigService } from "@nestjs/config";
 import { Request, Response } from 'express';
 import { UserService } from "user/user.service";
@@ -11,7 +11,7 @@ export declare class AuthController {
     signup(dto: AuthDto): Promise<{
         access_token: string;
     }>;
-    signin(dto: AuthDto): Promise<{
+    signin(dto: SigninDto): Promise<{
         access_token: string;
     }>;
     login42(): Promise<{

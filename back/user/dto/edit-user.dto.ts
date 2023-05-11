@@ -22,4 +22,8 @@ export class EditUserDto {
 	@IsOptional()
 	ladder_level?: number;
 
+	@IsString()
+	@IsOptional()
+	email?: string;
+
 }

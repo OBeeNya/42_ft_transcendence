@@ -9,6 +9,7 @@ const ProfilePage = () => {
 
 	const [userInfos, setUserInfos] = useState<UserInfos | null>(null);
 	const [nameInput, setName] = useState('');
+	const [emailInput, setEmail] = useState('');
 	const { state: { token } } = useLocation();
 
 	useEffect(() => {
@@ -28,19 +29,30 @@ const ProfilePage = () => {
 	}, [token]);
 
 	const handleChanges = async () => {
-		if (nameInput === '')
+		if (nameInput === '' && emailInput === '')
 			return ;
 		try {
-			await ax.patch('users', {
-				name: nameInput,
-			}, {
-				headers: {
-					Authorization: `Bearer ${token}`
-				},
-			});
+			if (nameInput !== '') {
+				await ax.patch('users', {
+					name: nameInput,
+				}, {
+					headers: {
+						Authorization: `Bearer ${token}`
+					},
+				});
+			}
+			if (emailInput !== '') {
+				await ax.patch('users', {
+					email: emailInput,
+				}, {
+					headers: {
+						Authorization: `Bearer ${token}`
+					},
+				});
+			}
 			const message = document.getElementById("message");
 			if (message)
-				message.textContent = "Username updated";
+				message.textContent = "Profile updated";
 		}
 		catch {
 			const message = document.getElementById("message");
@@ -65,6 +77,16 @@ const ProfilePage = () => {
 						type="text"
 						value={nameInput}
 						onChange={(event) => setName(event.target.value)}
+					/>
+				<br></br>
+				<br></br>
+					Your email: {userInfos?.email}
+				<br></br>
+					<label>Change your email:</label>
+					<input
+						type="email"
+						value={emailInput}
+						onChange={(event) => setEmail(event.target.value)}
 					/>
 				<br></br>
 				<br></br>
