@@ -1,5 +1,5 @@
 import { PrismaService } from "../prisma_module/prisma.service";
-import { AuthDto, TokenInputDto } from "./dto";
+import { AuthDto, SigninDto, TokenInputDto } from "./dto";
 import { JwtService } from "@nestjs/jwt";
 import { ConfigService } from "@nestjs/config";
 import { Response } from 'express';
@@ -11,7 +11,7 @@ export declare class AuthService {
     signup(dto: AuthDto): Promise<{
         access_token: string;
     }>;
-    signin(dto: AuthDto): Promise<{
+    signin(dto: SigninDto): Promise<{
         access_token: string;
     }>;
     signToken(userId: number, name: string): Promise<{

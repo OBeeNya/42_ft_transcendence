@@ -5,6 +5,7 @@ export interface UserInfos {
     wins: number;
     losses: number;
     ladder_level: number;
+    email: string;
   }
   
   export {};

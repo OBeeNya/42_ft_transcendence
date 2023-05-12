@@ -4,7 +4,7 @@ import SigninPage from './pages/SigninPage';
 import AuthPage from './pages/AuthPage';
 import HomePage from './pages/HomePage';
 import ProfilePage from './pages/ProfilePage';
-import Home2 from './pages/Home2';
+import Callback42 from './pages/Callback42';
 import PongPage from './pages/PongPage';
 import ChatPage from './pages/ChatPage';
 
@@ -14,7 +14,7 @@ function App() {
       <Route path="/" element={<AuthPage/>} />
       <Route path="/signup" element={<SignupPage/>} />
       <Route path="/signin" element={<SigninPage/>} />
-      <Route path="/home2" element={<Home2/>} />
+      <Route path="/callback42" element={<Callback42/>} />
       <Route path="/home" element={<HomePage/>} />
       <Route path="/profile" element={<ProfilePage/>} />
       <Route path="/pong" element={<PongPage/>} />

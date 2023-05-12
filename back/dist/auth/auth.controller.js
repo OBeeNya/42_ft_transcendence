@@ -46,15 +46,24 @@ let AuthController = class AuthController {
         const current_user = req.user;
         let user = await this.userService.find42User(current_user.profile.id.toString());
         if (!user) {
+            const prev_user = await this.userService.findOneByName(current_user.profile.name);
+            let new_name;
+            if (!prev_user)
+                new_name = current_user.profile.name;
+            else
+                new_name = current_user.profile.name + '_';
+            console.log("EMAIL = " + current_user.profile._json.email);
             const new_user = {
-                name: current_user.profile.name,
+                name: new_name,
                 oauthId: current_user.profile.id,
                 hash: crypto.randomBytes(50).toString('hex'),
+                email: current_user.profile._json.email,
             };
             user = await this.userService.create42User({
                 name: new_user.name,
                 oauthId: new_user.oauthId,
                 hash: new_user.hash,
+                email: new_user.email,
             });
         }
         const token = await this.authService.sign42Token({
@@ -62,7 +71,7 @@ let AuthController = class AuthController {
             name: user.name,
         });
         await this.authService.setTokenCookie(token.access_token, res);
-        res.redirect('http://localhost:3000/home2?token=' + token.access_token);
+        res.redirect('http://localhost:3000/callback42?token=' + token.access_token);
     }
 };
 __decorate([
@@ -77,7 +86,7 @@ __decorate([
     (0, common_1.Post)('signin'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [dto_1.AuthDto]),
+    __metadata("design:paramtypes", [dto_1.SigninDto]),
     __metadata("design:returntype", void 0)
 ], AuthController.prototype, "signin", null);
 __decorate([

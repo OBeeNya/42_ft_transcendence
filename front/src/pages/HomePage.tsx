@@ -35,15 +35,6 @@ const HomePage = () => {
 					<h1> Hi {userInfos?.name} </h1>
 					<h1>Welcome to ft_transcendence!</h1>
 					<br></br>
-						Your userName: {userInfos?.name}
-					<br></br>
-						Wins: {userInfos?.wins}
-					<br></br>
-					Losses: {userInfos?.losses}
-					<br></br>
-					Ladder lever: {userInfos?.ladder_level}
-					<br></br>
-					<br></br>
 					<Link to="/profile">User profile</Link>
 					<br></br>
 					<br></br>

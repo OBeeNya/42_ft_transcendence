@@ -30,6 +30,7 @@ let AuthService = class AuthService {
                     name: dto.name,
                     hash,
                     oauthId: "not42",
+                    email: dto.email,
                 },
             });
             return (this.signToken(user.id, user.name));

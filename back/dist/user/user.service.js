@@ -28,22 +28,34 @@ let UserService = class UserService {
         return (user);
     }
     async findOneByName(name) {
-        const user = await this.prisma.user.findUniqueOrThrow({
+        return (await this.prisma.user.findFirst({
             where: {
                 name: name,
             }
-        });
-        return (user);
+        }));
     }
     async editUser(userId, dto) {
-        const user = await this.prisma.user.update({
-            where: {
-                id: userId,
-            },
-            data: {
-                name: dto.name,
-            },
-        });
+        let user;
+        if (dto.name != '') {
+            user = await this.prisma.user.update({
+                where: {
+                    id: userId,
+                },
+                data: {
+                    name: dto.name,
+                },
+            });
+        }
+        if (dto.email != '') {
+            user = await this.prisma.user.update({
+                where: {
+                    id: userId,
+                },
+                data: {
+                    email: dto.email,
+                },
+            });
+        }
         delete user.hash;
         return (user);
     }
@@ -77,6 +89,7 @@ let UserService = class UserService {
                 name: dto.name,
                 oauthId: dto.oauthId,
                 hash: dto.hash,
+                email: dto.email,
             },
         }));
     }

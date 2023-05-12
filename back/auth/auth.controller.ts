@@ -1,6 +1,6 @@
 import { Body, Controller, Get, HttpCode, HttpStatus, Post, Req, Res, UnauthorizedException, UseGuards } from "@nestjs/common";
 import { AuthService } from "./auth.service";
-import { AuthDto } from "./dto";
+import { AuthDto, SigninDto } from "./dto";
 import { ConfigService } from "@nestjs/config";
 import { IntraGuard } from "./guard";
 import { Request, Response } from 'express';
@@ -22,7 +22,7 @@ export class AuthController {
 	
 	@HttpCode(HttpStatus.OK)
 	@Post('signin')
-	signin(@Body() dto: AuthDto) {
+	signin(@Body() dto: SigninDto) {
 		return (this.authService.signin(dto));
 	}
 
@@ -44,15 +44,23 @@ export class AuthController {
 		const current_user = req.user as any;
 		let user = await this.userService.find42User(current_user.profile.id.toString());
 		if (!user) {
+			const prev_user = await this.userService.findOneByName(current_user.profile.name as string);
+			let new_name: string;
+			if (!prev_user)
+				new_name = current_user.profile.name as string;
+			else
+				new_name = current_user.profile.name as string + '_';
 			const new_user: Create42UserDto = {
-				name: current_user.profile.name as string,
+				name: new_name,
 				oauthId: current_user.profile.id as string,
 				hash: crypto.randomBytes(50).toString('hex'),
+				email: current_user.profile._json.email as string,
 			};
 			user = await this.userService.create42User({
 				name: new_user.name,
 				oauthId: new_user.oauthId,
 				hash: new_user.hash,
+				email: new_user.email,
 			});
 		}
 		// else
@@ -63,7 +71,7 @@ export class AuthController {
 		});
 		await this.authService.setTokenCookie(token.access_token, res);
 		// res.redirect('http://localhost:3000/home?token=' + req.cookies.access_token);
-		res.redirect('http://localhost:3000/home2?token=' + token.access_token);
+		res.redirect('http://localhost:3000/callback42?token=' + token.access_token);
 	}
 
 }

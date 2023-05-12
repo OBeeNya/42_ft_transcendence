@@ -1,6 +1,6 @@
 import { ForbiddenException, Injectable } from "@nestjs/common";
 import { PrismaService } from "../prisma_module/prisma.service";
-import { AuthDto, TokenInputDto } from "./dto";
+import { AuthDto, SigninDto, TokenInputDto } from "./dto";
 import * as argon from 'argon2';
 import { Prisma } from "@prisma/client";
 import { JwtService } from "@nestjs/jwt";
@@ -22,6 +22,7 @@ export class AuthService {
 					name: dto.name,
 					hash,
 					oauthId: "not42",
+					email: dto.email,
 				},
 			});
 			return (this.signToken(user.id, user.name)); // utile d'envoyer un token a l'inscription?
@@ -35,7 +36,7 @@ export class AuthService {
 		}
 	}
 
-	async signin(dto: AuthDto) {
+	async signin(dto: SigninDto) {
 		const user = await this.prisma.user.findUnique({
 			where: {
 				name: dto.name,

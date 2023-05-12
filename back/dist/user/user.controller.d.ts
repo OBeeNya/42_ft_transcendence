@@ -8,7 +8,7 @@ export declare class UserController {
     getMe(user: User): User;
     findOneByName(name: string): Promise<User>;
     findOneById(id: string): Promise<User>;
-    editUser(userId: number, dto: EditUserDto): Promise<User>;
+    editUser(userId: number, dto: EditUserDto): Promise<any>;
     deleteUserById(id: string): Promise<{
         deletedUsers: number;
         nbUsers: number;

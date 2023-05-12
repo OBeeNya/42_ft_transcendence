@@ -6,7 +6,7 @@ export declare class UserService {
     findAll(): import(".prisma/client").Prisma.PrismaPromise<import(".prisma/client").User[]>;
     findOneById(id: string): Promise<import(".prisma/client").User>;
     findOneByName(name: string): Promise<import(".prisma/client").User>;
-    editUser(userId: number, dto: EditUserDto): Promise<import(".prisma/client").User>;
+    editUser(userId: number, dto: EditUserDto): Promise<any>;
     deleteUserById(id: string): Promise<{
         deletedUsers: number;
         nbUsers: number;
