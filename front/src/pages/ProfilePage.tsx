@@ -1,7 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import Content from "../components/content"
 import Header from "../components/header"
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { ax } from '../axios/axios'
 import { UserInfos } from "../interfaces/userInfos.interface";
 
@@ -87,10 +87,13 @@ const ProfilePage = () => {
 						alt="avatar"
 					/>
 				<br></br>
+				<div>
 					<label>Upload a new avatar:</label>
 					<input
 						type='file'
+						// onChange={handleFileChange}
 					/>
+				</div>
 				<br></br>
 					Your name: {userInfos?.name}
 				<br></br>
