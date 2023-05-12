@@ -23,7 +23,7 @@ model User {
   ladder_level Int @default(0)
   history MatchHistory[]
   oauthId String @unique
-  email String @unique
+  email String
   
   @@map("users")
 }

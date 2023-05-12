@@ -11,7 +11,7 @@ const SignupPage = () => {
 	const [nameInput, setName] = useState('');
 	const [passwordInput, setPassword] = useState('');
 	const [emailInput, setEmail] = useState('');
-	
+
 	const navigate = useNavigate();
 	
 	const handleSignup = async () => {
@@ -21,10 +21,17 @@ const SignupPage = () => {
 					password: passwordInput,
 					email: emailInput,
 				};
+			const expression: RegExp = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+			if (!expression.test(dto.email)) {
+				const messageEmail = document.getElementById("messageEmail");
+				if (messageEmail)
+					messageEmail.textContent = "Please enter a valid email";
+				return ;
+			}
 			const response = await ax.post('auth/signup', dto);
 			if (response.status === 200 || response.status === 201) {
 				navigate('/');
-			}
+			}	
 		}
 		catch (error) {
 			const axiosError = error as AxiosError<{ message: string; statusCode: number }>;
@@ -66,6 +73,7 @@ const SignupPage = () => {
 						value={emailInput}
 						onChange={(event) => setEmail(event.target.value)}
 					/>
+					<div id="messageEmail"></div>
 				</div>
 				<button onClick={handleSignup}>Submit</button>
 				<div id="message"></div>

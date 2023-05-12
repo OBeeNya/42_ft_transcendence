@@ -3,11 +3,13 @@ import { AuthDto, SigninDto } from "./dto";
 import { ConfigService } from "@nestjs/config";
 import { Request, Response } from 'express';
 import { UserService } from "user/user.service";
+import { HttpService } from "@nestjs/axios";
 export declare class AuthController {
     private authService;
     private configService;
     private userService;
-    constructor(authService: AuthService, configService: ConfigService, userService: UserService);
+    private httpService;
+    constructor(authService: AuthService, configService: ConfigService, userService: UserService, httpService: HttpService);
     signup(dto: AuthDto): Promise<{
         access_token: string;
     }>;

@@ -20,11 +20,13 @@ const config_1 = require("@nestjs/config");
 const guard_1 = require("./guard");
 const user_service_1 = require("../user/user.service");
 const crypto = require("crypto");
+const axios_1 = require("@nestjs/axios");
 let AuthController = class AuthController {
-    constructor(authService, configService, userService) {
+    constructor(authService, configService, userService, httpService) {
         this.authService = authService;
         this.configService = configService;
         this.userService = userService;
+        this.httpService = httpService;
     }
     signup(dto) {
         return (this.authService.signup(dto));
@@ -52,7 +54,6 @@ let AuthController = class AuthController {
                 new_name = current_user.profile.name;
             else
                 new_name = current_user.profile.name + '_';
-            console.log("EMAIL = " + current_user.profile._json.email);
             const new_user = {
                 name: new_name,
                 oauthId: current_user.profile.id,
@@ -65,6 +66,15 @@ let AuthController = class AuthController {
                 hash: new_user.hash,
                 email: new_user.email,
             });
+            var fs = require('fs');
+            const writer = fs.createWriteStream('../front/public/avatar/' + new_user.name + '.png');
+            const imageUrl = JSON.parse(current_user.profile._raw).image.link;
+            const response = await this.httpService.axiosRef({
+                url: imageUrl,
+                method: 'GET',
+                responseType: 'stream',
+            });
+            response.data.pipe(writer);
         }
         const token = await this.authService.sign42Token({
             id: user.id,
@@ -108,7 +118,8 @@ AuthController = __decorate([
     (0, common_1.Controller)('auth'),
     __metadata("design:paramtypes", [auth_service_1.AuthService,
         config_1.ConfigService,
-        user_service_1.UserService])
+        user_service_1.UserService,
+        axios_1.HttpService])
 ], AuthController);
 exports.AuthController = AuthController;
 //# sourceMappingURL=auth.controller.js.map

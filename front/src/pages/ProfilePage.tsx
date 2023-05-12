@@ -41,18 +41,29 @@ const ProfilePage = () => {
 					},
 				});
 			}
+			const expression: RegExp = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+			const messageEmail = document.getElementById("messageEmail");
 			if (emailInput !== '') {
-				await ax.patch('users', {
-					email: emailInput,
-				}, {
-					headers: {
-						Authorization: `Bearer ${token}`
-					},
-				});
+				if (!expression.test(emailInput)) {
+					if (messageEmail)
+						messageEmail.textContent = "Please enter a valid email";
+				}
+				else {
+					await ax.patch('users', {
+						email: emailInput,
+					}, {
+						headers: {
+							Authorization: `Bearer ${token}`
+						},
+					});
+					if (messageEmail)
+						messageEmail.textContent = "";
+				}	
 			}
 			const message = document.getElementById("message");
 			if (message)
 				message.textContent = "Profile updated";
+			window.location.reload();
 		}
 		catch {
 			const message = document.getElementById("message");
@@ -69,6 +80,17 @@ const ProfilePage = () => {
 				<br></br>
 					<h2>Update any available field as you please</h2>
 				<br></br>
+					<label>Your avatar:</label>
+				<br></br>
+					<img
+						src={'/avatar/' + userInfos?.name + '.png'}
+						alt="avatar"
+					/>
+				<br></br>
+					<label>Upload a new avatar:</label>
+					<input
+						type='file'
+					/>
 				<br></br>
 					Your name: {userInfos?.name}
 				<br></br>
@@ -88,6 +110,7 @@ const ProfilePage = () => {
 						value={emailInput}
 						onChange={(event) => setEmail(event.target.value)}
 					/>
+					<div id="messageEmail"></div>
 				<br></br>
 				<br></br>
 					Wins: {userInfos?.wins}
