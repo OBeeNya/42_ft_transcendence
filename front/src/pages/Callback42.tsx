@@ -8,8 +8,7 @@ const Callback42 = () => {
     function redirectHome() {
         const url = window.location.href as string;
         const tokenSplit: string = url.split("=")[1];
-        // navigate('/home', { state: { token: tokenSplit} });
-        navigate('/profile', { state: { token: tokenSplit} });
+        navigate('/editprofile', { state: { token: tokenSplit} });
     }
 
     useEffect(() => { redirectHome() } );
