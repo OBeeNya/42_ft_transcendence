@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { useLocation } from 'react-router-dom';
 import axios from "axios";
 import { UserInfos } from "../interfaces/userInfos.interface"
 import Content from "../components/content"
@@ -9,8 +8,9 @@ import Header from "../components/header"
 const HomePage = () => {
 
 	const [userInfos, setUserInfos] = useState<UserInfos | null>(null); //creer une interface afin d'acceder a tout
+	const token = localStorage.getItem("token");
 
-	const { state: { token } } = useLocation();
+	console.log("homePage");
 
 	useEffect(() => {
 		const getUsers = async () => {
@@ -30,7 +30,7 @@ const HomePage = () => {
 
 	return (
 		<div>
-			<Header name={userInfos?.name}/>
+			<Header />
 				<Content>
 					<h1> Hi {userInfos?.name} </h1>
 					<h1>Welcome to ft_transcendence!</h1>

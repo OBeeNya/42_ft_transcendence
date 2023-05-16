@@ -6,7 +6,6 @@ import { AxiosError } from 'axios'
 import Content from "../components/content"
 
 const SigninPage = () => {
-
 	const [nameInput, setName] = useState('');
 	const [passwordInput, setPassword] = useState('');
 	
@@ -20,7 +19,10 @@ const SigninPage = () => {
 			};
 			const response = await ax.post('auth/signin', dto);
 			if (response.status === 200) {
-				navigate('/profile', { state: { token: response.data.access_token} });
+				localStorage.setItem("token", response.data.access_token);
+				localStorage.setItem("isConnected", "yes");
+				console.log("setting connected to TRUE");
+				navigate('/profile');
 			}
 		} catch (error) {
 			const axiosError = error as AxiosError<{ message: string; statusCode: number }>;
@@ -37,29 +39,31 @@ const SigninPage = () => {
 		};
 	};
 	return (
-		<Content>
-			<div>
-				<h1>Signin</h1>
+		// <AuthProvider>
+			<Content>
 				<div>
-					<label>Name:</label>
-					<input
-						type="text"
-						value={nameInput}
-						onChange={(event) => setName(event.target.value)}
-						/>
+					<h1>Signin</h1>
+					<div>
+						<label>Name:</label>
+						<input
+							type="text"
+							value={nameInput}
+							onChange={(event) => setName(event.target.value)}
+							/>
+					</div>
+					<div>
+						<label>Password:</label>
+						<input
+							type="password"
+							value={passwordInput}
+							onChange={(event) => setPassword(event.target.value)}
+							/>
+					</div>
+					<button onClick={handleSignin}>Submit</button>
+					<div id="message"></div>
 				</div>
-				<div>
-					<label>Password:</label>
-					<input
-						type="password"
-						value={passwordInput}
-						onChange={(event) => setPassword(event.target.value)}
-						/>
-				</div>
-				<button onClick={handleSignin}>Submit</button>
-				<div id="message"></div>
-			</div>
-		</Content>
+			</Content>
+		// {/* </AuthProvider> */}
 	);
 
 };

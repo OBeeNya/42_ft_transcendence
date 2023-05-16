@@ -1,14 +1,20 @@
+import { Link } from 'react-router-dom';
 import  "../style/components.css"
 
-type HeaderProps = {
-    name: string | undefined;
-  };
+export default function Header () {
+    
+    const logout = () => {
+        localStorage.setItem("token", "");
+        localStorage.setItem("isConnected", "no");
+        console.log("setting connected to FALSE(logout)");
+    }
 
-export default function Header ({name}: HeaderProps) {
     return (
         <div className="header-body">
-            <p>LOGO</p>
-            <p className="header-settings">userName: {name}</p>
+            <Link className="header-links" to="/home">Home</Link>
+            <Link className="header-links" to="/profile">Profile</Link>
+            <Link className="header-links" to="/pong">Pong</Link>
+            <Link className="header-links" onClick={logout} to="/">Logout</Link> 
         </div>
     )
 }
