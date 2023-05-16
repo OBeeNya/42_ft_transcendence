@@ -31,3 +31,48 @@
     padding: 10px;
 
 }
+
+.header-test {
+    margin-right: 20px;
+    text-align: right;
+    text-decoration:none;
+    padding: 10px;
+    color: rgb(6, 13, 34);
+
+}
+
+.header-status {
+    text-align: right;
+    text-decoration:none;
+    padding: 10px;
+    color: white;
+    position: relative;
+}
+  
+.connected::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: -8px;
+    transform: translateY(-50%);
+    width: 8px;
+    height: 8px;
+    background-color: green;
+    border-radius: 50%;
+}
+
+.offline {
+/* Styles for the offline status */
+}
+
+.playing::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: -8px;
+    transform: translateY(-50%);
+    width: 8px;
+    height: 8px;
+    background-color: rgb(247, 20, 20);
+    border-radius: 50%;
+}

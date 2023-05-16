@@ -21,6 +21,7 @@ const SigninPage = () => {
 			if (response.status === 200) {
 				localStorage.setItem("token", response.data.access_token);
 				localStorage.setItem("isConnected", "yes");
+				localStorage.setItem("userStatus", "connected");
 				console.log("setting connected to TRUE");
 				navigate('/profile');
 			}

@@ -7,7 +7,7 @@ const Callback42 = () => {
     function redirectHome() {
         const url = window.location.href as string;
         const tokenSplit: string = url.split("=")[1];
-        localStorage.setItem("isConnected", "yes");
+        localStorage.setItem("userStatus", "connected");
         localStorage.setItem("token", tokenSplit);
         navigate('/profile');
     }
