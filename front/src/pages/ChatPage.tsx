@@ -6,7 +6,7 @@ const ChatPage = () => {
 
 	return (
 		<div>
-			<Header name=""/>
+			<Header />
 			<Content>
 				<h1>Chat page</h1>
 				<br></br>

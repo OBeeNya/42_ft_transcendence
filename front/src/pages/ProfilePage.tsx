@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Content from "../components/content"
 import Header from "../components/header"
 import { useEffect, useState } from "react";
@@ -10,7 +10,7 @@ const ProfilePage = () => {
 	const [userInfos, setUserInfos] = useState<UserInfos | null>(null);
 	const [nameInput, setName] = useState('');
 	const [emailInput, setEmail] = useState('');
-	const { state: { token } } = useLocation();
+	const token = localStorage.getItem("token");
 
 	useEffect(() => {
 		const getUsers = async () => {
@@ -63,7 +63,7 @@ const ProfilePage = () => {
 
 	return (
 		<div>
-			<Header name=""/>
+			<Header />
 			<Content>
 				<h1>User profile</h1>
 				<br></br>
@@ -102,6 +102,8 @@ const ProfilePage = () => {
 				<br></br>
 				<br></br>
 				<Link to="/home">Home</Link>
+				<br></br>
+				<Link to="/pong">pong</Link>
 				<br></br>
 			</Content>
 		</div>

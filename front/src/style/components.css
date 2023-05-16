@@ -16,15 +16,18 @@
 .header-body {
     background-color: rgba(74, 102, 104, 0.3);
     border-radius: 20px;
-    padding: 20px;
+    padding: 30px;
     margin: 50px;
     text-align: center;
     display: flex;
-    justify-content: space-between;
+    justify-content: right;
     color: white;
 }
 
-.header-settings {
-    /* text-align: right; */
+.header-links {
+    text-align: right;
+    text-decoration:none;
+    color: rgb(162, 189, 243);
+    padding: 10px;
 
 }
