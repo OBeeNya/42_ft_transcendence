@@ -3,11 +3,13 @@ import { AuthDto, SigninDto, TokenInputDto } from "./dto";
 import { JwtService } from "@nestjs/jwt";
 import { ConfigService } from "@nestjs/config";
 import { Response } from 'express';
+import { HttpService } from "@nestjs/axios";
 export declare class AuthService {
     private prisma;
     private jwt;
     private config;
-    constructor(prisma: PrismaService, jwt: JwtService, config: ConfigService);
+    private httpService;
+    constructor(prisma: PrismaService, jwt: JwtService, config: ConfigService, httpService: HttpService);
     signup(dto: AuthDto): Promise<{
         access_token: string;
     }>;

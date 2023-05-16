@@ -1,9 +1,11 @@
-import { Body, Controller, Get, Patch, UseGuards, Param, Delete } from '@nestjs/common';
+import { Body, Controller, Get, Patch, UseGuards, Param, Delete, Post, UseInterceptors, UploadedFile } from '@nestjs/common';
 import { User } from '@prisma/client';
 import { GetUser } from '../auth/decorator';
 import { JwtGuard } from '../auth/guard';
-import { EditUserDto } from './dto';
+import { EditUserDto, UpdateAvatarDto } from './dto';
 import { UserService } from './user.service';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { MulterConfig } from './middleware/multer.config';
 
 @UseGuards(JwtGuard)
 @Controller('users')
@@ -30,7 +32,6 @@ export class UserController {
 		console.log("test findOneByName: name = ", name);
 		return this.userService.findOneByName(name);
 	}
-	
 
 	// localhost:3000/users/:id
 	@Get(":id")
@@ -53,4 +54,11 @@ export class UserController {
 	deleteMe(@GetUser() user: User) {
 		return this.userService.deleteMe(user.name);
 	}
+
+	@Post('avatar')
+	@UseInterceptors(FileInterceptor('file', MulterConfig))
+	uploadAvatar(@UploadedFile() file: any) {
+		return (file);
+	}
+
 }

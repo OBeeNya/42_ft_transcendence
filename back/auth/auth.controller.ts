@@ -7,13 +7,15 @@ import { Request, Response } from 'express';
 import { UserService } from "user/user.service";
 import { Create42UserDto } from 'user/dto';
 import * as crypto from 'crypto';
+import { HttpService } from "@nestjs/axios";
 
 @Controller('auth')
 export class AuthController {
 
 	constructor(private authService: AuthService,
 				private configService: ConfigService,
-				private userService: UserService) {}
+				private userService: UserService,
+				private httpService: HttpService) {}
 
 	@Post('signup')
 	signup(@Body() dto: AuthDto) {
@@ -47,9 +49,9 @@ export class AuthController {
 			const prev_user = await this.userService.findOneByName(current_user.profile.name as string);
 			let new_name: string;
 			if (!prev_user)
-				new_name = current_user.profile.name as string;
+			new_name = current_user.profile.name as string;
 			else
-				new_name = current_user.profile.name as string + '_';
+			new_name = current_user.profile.name as string + '_';
 			const new_user: Create42UserDto = {
 				name: new_name,
 				oauthId: current_user.profile.id as string,
@@ -62,6 +64,15 @@ export class AuthController {
 				hash: new_user.hash,
 				email: new_user.email,
 			});
+			var fs = require('fs');
+			const writer = fs.createWriteStream('../front/public/avatar/' + new_user.name + '.png');
+			const imageUrl = JSON.parse(current_user.profile._raw).image.link;
+			const response = await this.httpService.axiosRef({
+				url: imageUrl,
+				method: 'GET',
+				responseType: 'stream',
+			});
+			response.data.pipe(writer);
 		}
 		// else
 		// 	res.redirect('http://localhost:3000/home?token=' + req.cookies.access_token);

@@ -20,10 +20,10 @@ model User {
   friends String[] // not amazing
   wins Int @default(0)
   losses Int @default(0)
-  ladder_level Int @default(0)
+  ladder_level Int @default(1)
   history MatchHistory[]
   oauthId String @unique
-  email String @unique
+  email String
   
   @@map("users")
 }

@@ -18,6 +18,8 @@ const decorator_1 = require("../auth/decorator");
 const guard_1 = require("../auth/guard");
 const dto_1 = require("./dto");
 const user_service_1 = require("./user.service");
+const platform_express_1 = require("@nestjs/platform-express");
+const multer_config_1 = require("./middleware/multer.config");
 let UserController = class UserController {
     constructor(userService) {
         this.userService = userService;
@@ -45,6 +47,9 @@ let UserController = class UserController {
     }
     deleteMe(user) {
         return this.userService.deleteMe(user.name);
+    }
+    uploadAvatar(file) {
+        return (file);
     }
 };
 __decorate([
@@ -96,6 +101,14 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], UserController.prototype, "deleteMe", null);
+__decorate([
+    (0, common_1.Post)('avatar'),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('file', multer_config_1.MulterConfig)),
+    __param(0, (0, common_1.UploadedFile)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], UserController.prototype, "uploadAvatar", null);
 UserController = __decorate([
     (0, common_1.UseGuards)(guard_1.JwtGuard),
     (0, common_1.Controller)('users'),

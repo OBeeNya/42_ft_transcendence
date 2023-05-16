@@ -3,6 +3,7 @@ import SignupPage from './pages/SignupPage';
 import SigninPage from './pages/SigninPage';
 import AuthPage from './pages/AuthPage';
 import HomePage from './pages/HomePage';
+import EditProfilePage from './pages/EditProfilePage';
 import ProfilePage from './pages/ProfilePage';
 import Callback42 from './pages/Callback42';
 import PongPage from './pages/PongPage';
@@ -15,7 +16,6 @@ const defaultProtectedRouteProps: Omit<ProtectedRouteProps, 'outlet'> = {
 
 function App() {
 
-
   return (
       <Routes>
         <Route path="/" element={<AuthPage/>} />
@@ -24,9 +24,11 @@ function App() {
         <Route path="/callback42" element={<Callback42/>} />
         <Route path="/home" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<HomePage/>} />} />
         <Route path="/profile" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<ProfilePage/>} />} />
+        <Route path="/editprofile" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<EditProfilePage/>} />} />
         <Route path="/pong" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<PongPage/>} />} />
         <Route path="/chat" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<ChatPage/>} />} />
-      </Routes>
+    </Routes>
+    
   );
 }
 

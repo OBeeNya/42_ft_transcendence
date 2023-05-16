@@ -38,6 +38,9 @@ const HomePage = () => {
 					<Link to="/profile">User profile</Link>
 					<br></br>
 					<br></br>
+					<Link to="/editprofile">Edit your profile</Link>
+					<br></br>
+					<br></br>
 					<Link to="/pong">Play pong</Link>
 					<br></br>
 					<br></br>

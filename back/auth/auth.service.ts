@@ -6,13 +6,15 @@ import { Prisma } from "@prisma/client";
 import { JwtService } from "@nestjs/jwt";
 import { ConfigService } from "@nestjs/config";
 import { Response } from 'express';
+import { HttpService } from "@nestjs/axios";
 
 @Injectable()
 export class AuthService {
 
 	constructor(private prisma: PrismaService,
 		private jwt: JwtService,
-		private config: ConfigService) {}
+		private config: ConfigService,
+		private httpService: HttpService,) {}
 	
 	async signup(dto: AuthDto) {
 		const hash = await argon.hash(dto.password);
@@ -25,6 +27,14 @@ export class AuthService {
 					email: dto.email,
 				},
 			});
+			var fs = require('fs');
+			const writer = fs.createWriteStream('../front/public/avatar/' + user.name + '.png');
+			const response = await this.httpService.axiosRef({
+				url: 'https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg',
+				method: 'GET',
+				responseType: 'stream',
+			});
+			response.data.pipe(writer);
 			return (this.signToken(user.id, user.name)); // utile d'envoyer un token a l'inscription?
 		}
 		catch (error) {

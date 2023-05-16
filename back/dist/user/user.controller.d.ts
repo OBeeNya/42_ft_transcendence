@@ -17,4 +17,5 @@ export declare class UserController {
         deletedUsers: number;
         nbUsers: number;
     }>;
+    uploadAvatar(file: any): any;
 }

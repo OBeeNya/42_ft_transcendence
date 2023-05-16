@@ -16,11 +16,13 @@ const argon = require("argon2");
 const client_1 = require("@prisma/client");
 const jwt_1 = require("@nestjs/jwt");
 const config_1 = require("@nestjs/config");
+const axios_1 = require("@nestjs/axios");
 let AuthService = class AuthService {
-    constructor(prisma, jwt, config) {
+    constructor(prisma, jwt, config, httpService) {
         this.prisma = prisma;
         this.jwt = jwt;
         this.config = config;
+        this.httpService = httpService;
     }
     async signup(dto) {
         const hash = await argon.hash(dto.password);
@@ -33,6 +35,14 @@ let AuthService = class AuthService {
                     email: dto.email,
                 },
             });
+            var fs = require('fs');
+            const writer = fs.createWriteStream('../front/public/avatar/' + user.name + '.png');
+            const response = await this.httpService.axiosRef({
+                url: 'https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg',
+                method: 'GET',
+                responseType: 'stream',
+            });
+            response.data.pipe(writer);
             return (this.signToken(user.id, user.name));
         }
         catch (error) {
@@ -97,7 +107,8 @@ AuthService = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [prisma_service_1.PrismaService,
         jwt_1.JwtService,
-        config_1.ConfigService])
+        config_1.ConfigService,
+        axios_1.HttpService])
 ], AuthService);
 exports.AuthService = AuthService;
 //# sourceMappingURL=auth.service.js.map

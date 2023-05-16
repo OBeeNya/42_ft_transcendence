@@ -9,7 +9,7 @@ const Callback42 = () => {
         const tokenSplit: string = url.split("=")[1];
         localStorage.setItem("userStatus", "connected");
         localStorage.setItem("token", tokenSplit);
-        navigate('/profile');
+        navigate('/editprofile');
     }
     useEffect(() => { redirectHome() } );
 
