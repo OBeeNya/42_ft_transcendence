@@ -13,7 +13,8 @@ export default function Header () {
 
     const logout = () => {
         localStorage.setItem("token", "");
-        localStorage.setItem("userStatus", "connected");
+        localStorage.setItem("userStatus", "offline");
+        localStorage.setItem("isConnected", "no");
         console.log("setting connected to FALSE(logout)");
     }
 
