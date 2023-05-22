@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Content from "../components/content"
 import Header from "../components/header"
 import { ChangeEvent, useEffect, useState } from "react";
@@ -10,7 +10,6 @@ const EditProfilePage = () => {
 	const [userInfos, setUserInfos] = useState<UserInfos | null>(null);
 	const [nameInput, setName] = useState('');
 	const [emailInput, setEmail] = useState('');
-	// const { state: { token } } = useLocation();
 	const token = localStorage.getItem("token");
 
 	useEffect(() => {

@@ -23,7 +23,7 @@ const SigninPage = () => {
 				localStorage.setItem("isConnected", "yes");
 				localStorage.setItem("userStatus", "connected");
 				console.log("setting connected to TRUE");
-				navigate('/profile');
+				navigate('/editprofile');
 			}
 		} catch (error) {
 			const axiosError = error as AxiosError<{ message: string; statusCode: number }>;

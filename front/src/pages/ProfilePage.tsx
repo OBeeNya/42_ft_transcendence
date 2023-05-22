@@ -49,8 +49,12 @@ const ProfilePage = () => {
 				<br></br>
 					Ladder lever: {userInfos?.ladder_level}
 				<br></br>
+				<br></br>
 				<Link to="/editprofile">Edit your profile information</Link>
+				<br></br>
+				<br></br>
 				<Link to="/home">Home</Link>
+				<br></br>
 				<br></br>
 				<Link to="/pong">pong</Link>
 				<br></br>
