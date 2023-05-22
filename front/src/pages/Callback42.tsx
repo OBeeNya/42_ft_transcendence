@@ -8,6 +8,7 @@ const Callback42 = () => {
         const url = window.location.href as string;
         const tokenSplit: string = url.split("=")[1];
         localStorage.setItem("userStatus", "connected");
+        localStorage.setItem("isConnected", "yes");
         localStorage.setItem("token", tokenSplit);
         navigate('/editprofile');
     }
