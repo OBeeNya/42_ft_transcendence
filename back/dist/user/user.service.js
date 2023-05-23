@@ -58,6 +58,16 @@ let UserService = class UserService {
                 },
             });
         }
+        if (dto.tfa !== undefined) {
+            user = await this.prisma.user.update({
+                where: {
+                    id: userId,
+                },
+                data: {
+                    tfa: dto.tfa,
+                },
+            });
+        }
         delete user.hash;
         return (user);
     }

@@ -38,7 +38,6 @@ export class UserService {
 					id: userId,
 				},
 				data: {
-					// ...dto,
 					name: dto.name,
 				},
 			});
@@ -50,6 +49,16 @@ export class UserService {
 				},
 				data: {
 					email: dto.email,
+				},
+			});
+		}
+		if (dto.tfa !== undefined) {
+			user = await this.prisma.user.update({
+				where: {
+					id: userId,
+				},
+				data: {
+					tfa: dto.tfa,
 				},
 			});
 		}

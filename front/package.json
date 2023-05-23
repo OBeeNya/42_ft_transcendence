@@ -41,5 +41,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/react-native": "^0.72.1",
+    "react-native": "^0.71.8"
   }
 }

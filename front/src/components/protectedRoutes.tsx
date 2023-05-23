@@ -29,14 +29,14 @@ export type ProtectedRouteProps = {
 export function ProtectedRoute({ authenticationPath, outlet }: ProtectedRouteProps & RouteProps) {
   checkUserConnection();
 	const isConnected = localStorage.getItem("isConnected");
-  console.log("isConnected:", isConnected);
+  // console.log("isConnected:", isConnected);
 
     if (isConnected === "yes") {
-      console.log("protectedRoute: connection ok");
+      // console.log("protectedRoute: connection ok");
   
       return outlet;
     } else {
-      console.log("protectedRoute: connection KO");
+      // console.log("protectedRoute: connection KO");
       return <Navigate to={{ pathname: authenticationPath }} />;
     }
 }

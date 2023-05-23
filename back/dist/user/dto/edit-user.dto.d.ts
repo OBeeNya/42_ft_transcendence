@@ -5,4 +5,5 @@ export declare class EditUserDto {
     losses?: number;
     ladder_level?: number;
     email?: string;
+    tfa?: boolean;
 }

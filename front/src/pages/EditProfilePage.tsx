@@ -10,6 +10,7 @@ const EditProfilePage = () => {
 	const [userInfos, setUserInfos] = useState<UserInfos | null>(null);
 	const [nameInput, setName] = useState('');
 	const [emailInput, setEmail] = useState('');
+	const [tfaInput, setTfa] = useState(false);
 	const token = localStorage.getItem("token");
 
 	useEffect(() => {
@@ -93,6 +94,22 @@ const EditProfilePage = () => {
 		}
 	}
 
+	const handleTfaChange = async () => {
+		setTfa(!tfaInput);
+		try {
+			await ax.patch('users', {
+				tfa: !tfaInput,
+			}, {
+				headers: {
+					Authorization: `Bearer ${token}`
+				},
+			});
+		}
+		catch {
+			console.log("could not update tfa preferences")
+		}
+	}
+
 	return (
 		<div>
 			<Header />
@@ -116,6 +133,14 @@ const EditProfilePage = () => {
 					/>
 					<div id="messageAvatar"></div>
 				</div>
+				<br></br>
+					<label>Enable / disable two-factor authentication:</label>
+					<input
+						type="checkbox"
+						checked={tfaInput}
+						onChange={handleTfaChange}
+					/>
+				<br></br>
 				<br></br>
 					Your name: {userInfos?.name}
 				<br></br>
