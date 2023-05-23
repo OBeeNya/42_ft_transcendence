@@ -12,11 +12,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma_module/prisma.service");
-const axios_1 = require("@nestjs/axios");
 let UserService = class UserService {
-    constructor(prisma, httpService) {
+    constructor(prisma) {
         this.prisma = prisma;
-        this.httpService = httpService;
     }
     findAll() {
         return this.prisma.user.findMany();
@@ -105,8 +103,7 @@ let UserService = class UserService {
 };
 UserService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [prisma_service_1.PrismaService,
-        axios_1.HttpService])
+    __metadata("design:paramtypes", [prisma_service_1.PrismaService])
 ], UserService);
 exports.UserService = UserService;
 //# sourceMappingURL=user.service.js.map

@@ -16,7 +16,6 @@ export class UserController {
 	// localhost:3000/users
 	@Get()
 	findAll() {
-		console.log("test findAll");
 		return this.userService.findAll();
 	}
 
@@ -29,14 +28,12 @@ export class UserController {
 	// localhost:3000/users/name/:name
 	@Get("name/:name")
 	findOneByName(@Param("name") name: string) {
-		console.log("test findOneByName: name = ", name);
 		return this.userService.findOneByName(name);
 	}
 
 	// localhost:3000/users/:id
 	@Get(":id")
 	findOneById(@Param("id") id: string) {
-		console.log("test findOneById: id= ", id);
 		return this.userService.findOneById(id);
 	}
 

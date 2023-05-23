@@ -25,18 +25,15 @@ let UserController = class UserController {
         this.userService = userService;
     }
     findAll() {
-        console.log("test findAll");
         return this.userService.findAll();
     }
     getMe(user) {
         return (user);
     }
     findOneByName(name) {
-        console.log("test findOneByName: name = ", name);
         return this.userService.findOneByName(name);
     }
     findOneById(id) {
-        console.log("test findOneById: id= ", id);
         return this.userService.findOneById(id);
     }
     editUser(userId, dto) {

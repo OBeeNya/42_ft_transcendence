@@ -1,10 +1,8 @@
 import { PrismaService } from '../prisma_module/prisma.service';
 import { EditUserDto, Create42UserDto } from './dto';
-import { HttpService } from '@nestjs/axios';
 export declare class UserService {
     private prisma;
-    private httpService;
-    constructor(prisma: PrismaService, httpService: HttpService);
+    constructor(prisma: PrismaService);
     findAll(): import(".prisma/client").Prisma.PrismaPromise<import(".prisma/client").User[]>;
     findOneById(id: string): Promise<import(".prisma/client").User>;
     findOneByName(name: string): Promise<import(".prisma/client").User>;
