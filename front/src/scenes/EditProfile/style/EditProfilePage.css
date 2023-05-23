@@ -1,0 +1,43 @@
+.editUserAvatar {
+    max-width: 200px;
+    height: 200px;
+    /* max-height: 400px; */
+    border-radius: 50%;
+}
+
+.editUserProfileContainer {
+    margin: 0% 32% 1% 32%;
+}
+
+.avatarChange {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 3%;
+}
+
+.avatarChangeButton {
+    display: flex;
+    margin: 5%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.editUserInformations {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    border: solid 1px;
+    margin: 3%;
+    padding: 5%;
+    background-color: rgb(10, 37, 39);
+}
+
+.editUserInformationKey {
+    margin-bottom: 1%;
+}
+
+/* p,
+label {
+    padding: 2% 0% 2% 0%;
+} */

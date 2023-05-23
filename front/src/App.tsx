@@ -1,13 +1,13 @@
 import { Route, Routes } from 'react-router-dom';
-import SignupPage from './pages/SignupPage';
-import SigninPage from './pages/SigninPage';
-import AuthPage from './pages/AuthPage';
-import HomePage from './pages/HomePage';
-import EditProfilePage from './pages/EditProfilePage';
-import ProfilePage from './pages/ProfilePage';
-import Callback42 from './pages/Callback42';
-import PongPage from './pages/PongPage';
-import ChatPage from './pages/ChatPage';
+import SignupPage from './scenes/SignUp/SignupPage';
+import SigninPage from './scenes/SignIn/SigninPage';
+import AuthPage from './scenes/Auth/AuthPage';
+import HomePage from './scenes/HomePage/HomePage';
+import EditProfilePage from './scenes/EditProfile/EditProfilePage';
+import ProfilePage from './scenes/Profile/ProfilePage';
+import Callback42 from './scenes/CallBack42/Callback42';
+import PongPage from './scenes/Pong/PongPage';
+import ChatPage from './scenes/Chat/ChatPage';
 import { ProtectedRoute , ProtectedRouteProps } from "./components/protectedRoutes";
 
 const defaultProtectedRouteProps: Omit<ProtectedRouteProps, 'outlet'> = {
