@@ -26,4 +26,8 @@ export class EditUserDto {
 	@IsOptional()
 	email?: string;
 
+	@IsBoolean()
+	@IsOptional()
+	connected?: boolean;
+
 }

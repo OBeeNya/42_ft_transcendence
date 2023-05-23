@@ -56,6 +56,16 @@ let UserService = class UserService {
                 },
             });
         }
+        if (dto.connected !== undefined) {
+            user = await this.prisma.user.update({
+                where: {
+                    id: userId,
+                },
+                data: {
+                    connected: dto.connected,
+                },
+            });
+        }
         delete user.hash;
         return (user);
     }

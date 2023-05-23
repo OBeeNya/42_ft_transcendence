@@ -24,6 +24,7 @@ model User {
   history MatchHistory[]
   oauthId String @unique
   email String
+  connected Boolean @default(false)
   
   @@map("users")
 }
