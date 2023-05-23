@@ -21,7 +21,7 @@ const SignupPage = () => {
 					password: passwordInput,
 					email: emailInput,
 				};
-			var expression = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
+			var expression = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})");
 			if (!expression.test(dto.password)) {
 				const messagePwd = document.getElementById("messagePwd");
 				if (messagePwd)
