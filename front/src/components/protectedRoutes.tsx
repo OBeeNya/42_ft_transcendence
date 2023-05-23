@@ -1,6 +1,6 @@
 // import React, { useState, useEffect } from 'react';
 import { RouteProps, Navigate } from 'react-router-dom';
-import { ax } from '../axios/axios';
+import { ax } from '../services/axios/axios';
 
 export type ProtectedRouteProps = {
   authenticationPath: string;
