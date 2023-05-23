@@ -12,7 +12,7 @@ export const MulterConfig = {
 	storage: diskStorage({
 	  destination: '../front/public/avatar/',
 	  filename: (req, file, callback) => {
-		const filename = req.user.name + '.png';
+		const filename = req.user.id + '.png';
 		callback(null, filename);
 	  },
 	}),

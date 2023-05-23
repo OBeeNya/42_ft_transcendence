@@ -36,7 +36,7 @@ const EditProfilePage = () => {
 		};
 		getUsers();
 	}, [token]);
-			
+
 	const handleChanges = async (userInput: any) => {
 		if (userInput.name === '' && userInput.email === '')
 			return ;
@@ -112,7 +112,7 @@ const EditProfilePage = () => {
 						<div className="avatarChange">
 							<img
 								className="editUserAvatar"
-								src={'/avatar/' + userInfos?.name + '.png'}
+								src={'/avatar/' + userInfos?.id + '.png'}
 								alt="avatar"
 								onError={(event) => {
 									const target = event.target as HTMLImageElement;

@@ -33,7 +33,7 @@ const ProfilePage = () => {
 				<div className="userProfileContainer">
 					<h1>Your profile</h1>
 					<img 	className="userAvatar"
-							src={'/avatar/' + userInfos?.name + '.png'}
+							src={'/avatar/' + userInfos?.id + '.png'}
 							alt="avatar" />
 					<div className="userInformations">
 						<p className="userInformationKey">  Name: </p>

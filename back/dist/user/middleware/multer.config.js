@@ -14,7 +14,7 @@ exports.MulterConfig = {
     storage: (0, multer_1.diskStorage)({
         destination: '../front/public/avatar/',
         filename: (req, file, callback) => {
-            const filename = req.user.name + '.png';
+            const filename = req.user.id + '.png';
             callback(null, filename);
         },
     }),

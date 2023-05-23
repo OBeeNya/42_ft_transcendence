@@ -36,7 +36,7 @@ let AuthService = class AuthService {
                 },
             });
             var fs = require('fs');
-            const writer = fs.createWriteStream('../front/public/avatar/' + user.name + '.png');
+            const writer = fs.createWriteStream('../front/public/avatar/' + user.id + '.png');
             const response = await this.httpService.axiosRef({
                 url: 'https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg',
                 method: 'GET',

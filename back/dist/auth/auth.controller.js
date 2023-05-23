@@ -67,7 +67,7 @@ let AuthController = class AuthController {
                 email: new_user.email,
             });
             var fs = require('fs');
-            const writer = fs.createWriteStream('../front/public/avatar/' + new_user.name + '.png');
+            const writer = fs.createWriteStream('../front/public/avatar/' + user.id + '.png');
             const imageUrl = JSON.parse(current_user.profile._raw).image.link;
             const response = await this.httpService.axiosRef({
                 url: imageUrl,
