@@ -22,12 +22,12 @@ const SignupPage = () => {
 					email: emailInput,
 				};
 			var expression = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})");
-			if (!expression.test(dto.password)) {
-				const messagePwd = document.getElementById("messagePwd");
-				if (messagePwd)
-					messagePwd.textContent = "Your password must contain at least 8 characters, 1 lowercase and 1 uppercase alphabetical character, 1 numeric character and 1 special character";
-					return ;
-			}
+			// if (!expression.test(dto.password)) {
+			// 	const messagePwd = document.getElementById("messagePwd");
+			// 	if (messagePwd)
+			// 		messagePwd.textContent = "Your password must contain at least 8 characters, 1 lowercase and 1 uppercase alphabetical character, 1 numeric character and 1 special character";
+			// 		return ;
+			// }
 			expression = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
 			if (!expression.test(dto.email)) {
 				const messageEmail = document.getElementById("messageEmail");

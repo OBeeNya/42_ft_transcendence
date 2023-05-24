@@ -19,6 +19,11 @@ export class UserController {
 		return this.userService.findAll();
 	}
 
+	@Get()
+	findOne(@Body() name: string) {
+		return this.userService.findOneByName(name);
+	}
+
 	// localhost:3000/users/me
 	@Get('me')
 	getMe(@GetUser() user: User) {

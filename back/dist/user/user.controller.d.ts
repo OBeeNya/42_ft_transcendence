@@ -5,6 +5,7 @@ export declare class UserController {
     private userService;
     constructor(userService: UserService);
     findAll(): import(".prisma/client").Prisma.PrismaPromise<User[]>;
+    findOne(name: string): Promise<User>;
     getMe(user: User): User;
     findOneByName(name: string): Promise<User>;
     findOneById(id: string): Promise<User>;

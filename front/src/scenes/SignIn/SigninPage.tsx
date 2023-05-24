@@ -18,7 +18,7 @@ const SigninPage = () => {
 				name: nameInput,
 				password: passwordInput,
 			};
-			const response = await ax.post('auth/signin', dto);
+			let response = await ax.post('auth/signin', dto);
 			if (response.status === 200) {
 				localStorage.setItem("token", response.data.access_token);
 				localStorage.setItem("isConnected", "yes");
@@ -30,7 +30,15 @@ const SigninPage = () => {
 						Authorization: `Bearer ${token}`
 					},
 				});
-				navigate('/editprofile');
+				response = await ax.get("http://localhost:8080/users/me", {
+					headers: {
+						Authorization: `Bearer ${token}`,
+					},
+				});
+				if (response.data.tfa === true)
+					navigate('/tfa');
+				else
+					navigate('/editprofile');
 			}
 		} catch (error) {
 			const axiosError = error as AxiosError<{ message: string; statusCode: number }>;

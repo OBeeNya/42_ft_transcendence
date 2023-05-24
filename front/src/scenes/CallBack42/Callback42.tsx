@@ -21,11 +21,16 @@ const Callback42 = () => {
 					Authorization: `Bearer ${token}`
 				},
 			});
+            const response = await ax.get("http://localhost:8080/users/me", {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            navigate('/editprofile');
         }
         catch {
             console.log("could not change connected to true");
         }
-        navigate('/editprofile');
     }
     useEffect(() => { redirectHome() } );
 
