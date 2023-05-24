@@ -49,8 +49,8 @@ const SignupPage = () => {
 					message.textContent = "This userName is already taken";
 				console.log("This userName is already taken");
 			}
-			else
-				console.error('Failed to sign up');
+			// else
+			// 	console.error('Failed to sign up');
 		};
 	};
 

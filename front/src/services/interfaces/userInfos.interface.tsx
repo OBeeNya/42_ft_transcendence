@@ -6,6 +6,7 @@ export interface UserInfos {
     losses: number;
     ladder_level: number;
     email: string;
-  }
+    connected: boolean;
+}
   
-  export {};
+export {};

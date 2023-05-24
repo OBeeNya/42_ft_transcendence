@@ -29,7 +29,7 @@ const EditProfilePage = () => {
 				});
 				setUserInfos(response.data);
 				reset(response.data);
-				console.log("DATA", response.data);
+				// console.log("DATA", response.data);
 			} catch (error) {
 				console.error("Failed to fetch users.");
 			}

@@ -10,8 +10,6 @@ const HomePage = () => {
 	const [userInfos, setUserInfos] = useState<UserInfos | null>(null); //creer une interface afin d'acceder a tout
 	const token = localStorage.getItem("token");
 
-	console.log("homePage");
-
 	useEffect(() => {
 		const getUsers = async () => {
 		  try {
@@ -39,6 +37,9 @@ const HomePage = () => {
 					<br></br>
 					<br></br>
 					<Link to="/editprofile">Edit your profile</Link>
+					<br></br>
+					<br></br>
+					<Link to="/online">See who's online</Link>
 					<br></br>
 					<br></br>
 					<Link to="/pong">Play pong</Link>

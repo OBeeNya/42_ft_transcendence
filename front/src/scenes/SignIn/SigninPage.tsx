@@ -8,6 +8,7 @@ import Content from "../../components/content"
 const SigninPage = () => {
 	const [nameInput, setName] = useState('');
 	const [passwordInput, setPassword] = useState('');
+	const token = localStorage.getItem("token");
 	
 	const navigate = useNavigate();
 
@@ -22,21 +23,24 @@ const SigninPage = () => {
 				localStorage.setItem("token", response.data.access_token);
 				localStorage.setItem("isConnected", "yes");
 				localStorage.setItem("userStatus", "connected");
-				console.log("setting connected to TRUE");
+				await ax.patch("users", {
+					connected: true,
+				}, {
+					headers: {
+						Authorization: `Bearer ${token}`
+					},
+				});
 				navigate('/editprofile');
 			}
 		} catch (error) {
 			const axiosError = error as AxiosError<{ message: string; statusCode: number }>;
-			
 			if (axiosError?.response?.data?.message === "Credentials incorrect") {
 				const message = document.getElementById("message");
-				
-				if (message) { message.textContent = "Wrong userName or password"; }
-				console.error("Wrong userName or password");
-			
-			} else {
-				console.error('Failed to sign in');
+				if (message)
+					message.textContent = "Wrong userName or password";
 			}
+			else
+				console.error('Failed to sign in');
 		};
 	};
 	return (

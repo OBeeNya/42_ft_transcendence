@@ -9,6 +9,7 @@ import Callback42 from './scenes/CallBack42/Callback42';
 import PongPage from './scenes/Pong/PongPage';
 import ChatPage from './scenes/Chat/ChatPage';
 import { ProtectedRoute , ProtectedRouteProps } from "./components/protectedRoutes";
+import OnlinePage from './scenes/Online/OnlinePage';
 
 const defaultProtectedRouteProps: Omit<ProtectedRouteProps, 'outlet'> = {
   authenticationPath: '/',
@@ -27,6 +28,7 @@ function App() {
         <Route path="/editprofile" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<EditProfilePage/>} />} />
         <Route path="/pong" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<PongPage/>} />} />
         <Route path="/chat" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<ChatPage/>} />} />
+        <Route path="/online" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<OnlinePage/>} />} />
     </Routes>
     
   );

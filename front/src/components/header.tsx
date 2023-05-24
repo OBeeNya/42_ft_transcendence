@@ -1,8 +1,10 @@
 import { Link } from 'react-router-dom';
 import  "../style/components.css"
+import { ax } from '../services/axios/axios';
 
 export default function Header () {
     const userStatus = localStorage.getItem("userStatus");
+	const token = localStorage.getItem("token");
 
     const myTest = () => {
         if (userStatus === "connected")
@@ -11,11 +13,22 @@ export default function Header () {
             localStorage.setItem("userStatus", "connected");
     }
 
-    const logout = () => {
+    const logout = async() => {
         localStorage.setItem("token", "");
         localStorage.setItem("userStatus", "offline");
         localStorage.setItem("isConnected", "no");
-        console.log("setting connected to FALSE(logout)");
+        try {
+            await ax.patch("users", {
+                connected: false,
+            }, {
+				headers: {
+					Authorization: `Bearer ${token}`
+				},
+			});
+        }
+        catch {
+            console.log("could not change connected to false");
+        }
     }
 
     return (
