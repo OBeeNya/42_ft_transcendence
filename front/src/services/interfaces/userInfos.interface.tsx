@@ -7,6 +7,7 @@ export interface UserInfos {
     ladder_level: number;
     email: string;
     connected: boolean;
+    tfa: boolean;
 }
   
 export {};

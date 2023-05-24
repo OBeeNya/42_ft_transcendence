@@ -101,6 +101,22 @@ const EditProfilePage = () => {
 				messageAvatar.textContent = "Could not upload avatar, please make sure an .jpg, .jpeg or .png file was used";
 		}
 	}
+
+	const handleTfaChange = async () => {
+		try {
+			await ax.patch('users', {
+				tfa: !userInfos?.tfa,
+			}, {
+				headers: {
+					Authorization: `Bearer ${token}`
+				},
+			});
+		}
+		catch {
+			console.log("could not update tfa preferences")
+		}
+	}
+
 	return (
 		<div>
 			<Header />
@@ -128,6 +144,12 @@ const EditProfilePage = () => {
 								<div id="messageAvatar"></div>
 							</div>
 						</div>
+						<label className="editUserInformationKey">Enable two-factor authentication:</label>
+						<input
+							type="checkbox"
+							checked={userInfos?.tfa}
+							onChange={handleTfaChange}
+						/>
 						<label className="editUserInformationKey">Change your name:</label>
 						<input className="editUserInformationKey"
 							type="text"
