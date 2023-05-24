@@ -51,6 +51,9 @@ let UserController = class UserController {
     uploadAvatar(file) {
         return (file);
     }
+    qrcode(user) {
+        return ("test");
+    }
 };
 __decorate([
     (0, common_1.Get)(),
@@ -116,6 +119,13 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], UserController.prototype, "uploadAvatar", null);
+__decorate([
+    (0, common_1.Get)('qrcode'),
+    __param(0, (0, decorator_1.GetUser)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], UserController.prototype, "qrcode", null);
 UserController = __decorate([
     (0, common_1.UseGuards)(guard_1.JwtGuard),
     (0, common_1.Controller)('users'),

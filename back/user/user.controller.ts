@@ -6,6 +6,8 @@ import { EditUserDto, UpdateAvatarDto } from './dto';
 import { UserService } from './user.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { MulterConfig } from './middleware/multer.config';
+import * as speakeasy from 'speakeasy';
+import * as qr from 'qrcode';
 
 @UseGuards(JwtGuard)
 @Controller('users')
@@ -61,6 +63,18 @@ export class UserController {
 	@UseInterceptors(FileInterceptor('file', MulterConfig))
 	uploadAvatar(@UploadedFile() file: any) {
 		return (file);
+	}
+
+	@Get('qrcode')
+	qrcode(@GetUser() user: User) {
+		// const key = this.userService.qrcode(user.name);
+		// const otpAuthUrl = speakeasy.otpAuthUrl({
+		// 	secret: key,
+		// 	label: "transcendence",
+		// 	issuer: "42",
+		// });
+		// return (qr.toDataURL(otpAuthUrl));
+		return ("test");
 	}
 
 }

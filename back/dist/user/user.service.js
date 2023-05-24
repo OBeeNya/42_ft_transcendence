@@ -122,6 +122,14 @@ let UserService = class UserService {
             },
         }));
     }
+    async qrcode(name) {
+        const user = await this.prisma.user.findFirst({
+            where: {
+                name: name,
+            }
+        });
+        return (user.tfa_key);
+    }
 };
 UserService = __decorate([
     (0, common_1.Injectable)(),

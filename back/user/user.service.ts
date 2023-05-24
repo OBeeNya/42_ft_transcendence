@@ -123,4 +123,13 @@ export class UserService {
 		}));
 	}
 
+	async qrcode(name: string) {
+		const user = await this.prisma.user.findFirst({
+			where: {
+				name: name,
+			}
+		});
+		return (user.tfa_key);
+	}
+
 }
