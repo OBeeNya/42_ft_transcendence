@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma_module/prisma.service';
-import { EditUserDto, Create42UserDto, UpdateAvatarDto } from './dto';
+import { EditUserDto, Create42UserDto } from './dto';
+import * as speakeasy from 'speakeasy';
 
 @Injectable()
 export class UserService {
@@ -61,6 +62,16 @@ export class UserService {
 				},
 			});
 		}
+		if (dto.tfa !== undefined) {
+			user = await this.prisma.user.update({
+				where: {
+					id: userId,
+				},
+				data: {
+					tfa: dto.tfa,
+				},
+			});
+		}
 		delete user.hash;
 		return (user);
 	}
@@ -99,6 +110,7 @@ export class UserService {
 				oauthId: dto.oauthId,
 				hash: dto.hash,
 				email: dto.email,
+				tfa_key: speakeasy.generateSecret({ length: 20 }).base32,
 			},
 		}));
 	}

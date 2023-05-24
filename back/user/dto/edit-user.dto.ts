@@ -30,4 +30,8 @@ export class EditUserDto {
 	@IsOptional()
 	connected?: boolean;
 
+	@IsBoolean()
+	@IsOptional()
+	tfa?: boolean;
+
 }

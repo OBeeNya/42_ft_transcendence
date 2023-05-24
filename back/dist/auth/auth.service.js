@@ -17,6 +17,7 @@ const client_1 = require("@prisma/client");
 const jwt_1 = require("@nestjs/jwt");
 const config_1 = require("@nestjs/config");
 const axios_1 = require("@nestjs/axios");
+const speakeasy = require("speakeasy");
 let AuthService = class AuthService {
     constructor(prisma, jwt, config, httpService) {
         this.prisma = prisma;
@@ -33,6 +34,7 @@ let AuthService = class AuthService {
                     hash,
                     oauthId: "not42",
                     email: dto.email,
+                    tfa_key: speakeasy.generateSecret({ length: 20 }).base32,
                 },
             });
             var fs = require('fs');

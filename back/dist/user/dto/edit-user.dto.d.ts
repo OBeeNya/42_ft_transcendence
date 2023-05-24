@@ -6,4 +6,5 @@ export declare class EditUserDto {
     ladder_level?: number;
     email?: string;
     connected?: boolean;
+    tfa?: boolean;
 }

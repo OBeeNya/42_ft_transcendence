@@ -25,6 +25,8 @@ model User {
   oauthId String @unique
   email String
   connected Boolean @default(false)
+  tfa Boolean @default(false)
+  tfa_key String
   
   @@map("users")
 }

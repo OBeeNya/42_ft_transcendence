@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma_module/prisma.service");
+const speakeasy = require("speakeasy");
 let UserService = class UserService {
     constructor(prisma) {
         this.prisma = prisma;
@@ -66,6 +67,16 @@ let UserService = class UserService {
                 },
             });
         }
+        if (dto.tfa !== undefined) {
+            user = await this.prisma.user.update({
+                where: {
+                    id: userId,
+                },
+                data: {
+                    tfa: dto.tfa,
+                },
+            });
+        }
         delete user.hash;
         return (user);
     }
@@ -100,6 +111,7 @@ let UserService = class UserService {
                 oauthId: dto.oauthId,
                 hash: dto.hash,
                 email: dto.email,
+                tfa_key: speakeasy.generateSecret({ length: 20 }).base32,
             },
         }));
     }

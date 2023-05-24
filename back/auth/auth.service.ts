@@ -7,6 +7,7 @@ import { JwtService } from "@nestjs/jwt";
 import { ConfigService } from "@nestjs/config";
 import { Response } from 'express';
 import { HttpService } from "@nestjs/axios";
+import * as speakeasy from 'speakeasy';
 
 @Injectable()
 export class AuthService {
@@ -25,6 +26,7 @@ export class AuthService {
 					hash,
 					oauthId: "not42",
 					email: dto.email,
+					tfa_key: speakeasy.generateSecret({ length: 20 }).base32,
 				},
 			});
 			var fs = require('fs');
