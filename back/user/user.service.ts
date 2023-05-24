@@ -111,4 +111,15 @@ export class UserService {
 		}));
 	}
 
+	// renvoie la liste des utilisateurs triée par nombre de victoires
+	async	findAllSortedByWins()
+	{
+		return (await this.prisma.user.findMany(
+		{
+			orderBy:
+			{
+				wins: 'desc',
+			},
+		}));
+	}
 }
