@@ -7,18 +7,18 @@ import { ax } from '../../services/axios/axios'
 import { UserInfos } from "../../services/interfaces/userInfos.interface";
 // import { GetUserInfos } from "../../services/axios/getUsers";
 import "./style/EditProfilePage.css";
+// import { userInfo } from "os";
 
 
 const EditProfilePage = () => {
 	const navigate = useNavigate();
 	const [userInfos, setUserInfos] = useState<UserInfos | null>();
-	// const [nameInput, setName] = useState('');
-	// const [emailInput, setEmail] = useState('');
+	
 	const token = localStorage.getItem("token");
 	const { register, handleSubmit, reset } = useForm({defaultValues: {	name: userInfos?.name, 
-																		email: userInfos?.email
+																		email: userInfos?.email,
+																		// tfa: userInfos?.tfa || false
 																								}});
-	
 	useEffect(() => {
 		const getUsers = async () => {
 			try {
@@ -35,7 +35,7 @@ const EditProfilePage = () => {
 			}
 		};
 		getUsers();
-	}, [token]);
+	}, [token, reset]);
 
 	const handleChanges = async (userInput: any) => {
 		if (userInput.name === '' && userInput.email === '')
@@ -69,6 +69,19 @@ const EditProfilePage = () => {
 						messageEmail.textContent = "";
 				}	
 			}
+			try {
+				await ax.patch('users', {
+					tfa: userInfos?.tfa,
+				}, {
+					headers: {
+						Authorization: `Bearer ${token}`
+					},
+				});
+			}
+			catch {
+				console.log("could not update tfa preferences")
+			}
+
 			const message = document.getElementById("message");
 			if (message)
 				message.textContent = "Profile updated";
@@ -103,17 +116,11 @@ const EditProfilePage = () => {
 	}
 
 	const handleTfaChange = async () => {
-		try {
-			await ax.patch('users', {
-				tfa: !userInfos?.tfa,
-			}, {
-				headers: {
-					Authorization: `Bearer ${token}`
-				},
+		if (userInfos?.tfa !== undefined) {
+			setUserInfos({...userInfos,
+				tfa: !userInfos?.tfa
+				
 			});
-		}
-		catch {
-			console.log("could not update tfa preferences")
 		}
 	}
 
