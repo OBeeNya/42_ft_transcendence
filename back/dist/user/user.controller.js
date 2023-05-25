@@ -20,6 +20,8 @@ const dto_1 = require("./dto");
 const user_service_1 = require("./user.service");
 const platform_express_1 = require("@nestjs/platform-express");
 const multer_config_1 = require("./middleware/multer.config");
+const speakeasy = require("speakeasy");
+const qr = require("qrcode");
 let UserController = class UserController {
     constructor(userService) {
         this.userService = userService;
@@ -51,8 +53,14 @@ let UserController = class UserController {
     uploadAvatar(file) {
         return (file);
     }
-    qrcode(user) {
-        return ("test");
+    async qrcode(name) {
+        const key = await this.userService.qrcode(name.name);
+        const otpAuthUrl = speakeasy.otpauthURL({
+            secret: key,
+            label: "transcendence",
+            issuer: "42",
+        });
+        return (qr.toDataURL(otpAuthUrl));
     }
 };
 __decorate([
@@ -120,11 +128,11 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], UserController.prototype, "uploadAvatar", null);
 __decorate([
-    (0, common_1.Get)('qrcode'),
-    __param(0, (0, decorator_1.GetUser)()),
+    (0, common_1.Post)('qrcode'),
+    __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], UserController.prototype, "qrcode", null);
 UserController = __decorate([
     (0, common_1.UseGuards)(guard_1.JwtGuard),

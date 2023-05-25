@@ -19,5 +19,5 @@ export declare class UserController {
         nbUsers: number;
     }>;
     uploadAvatar(file: any): any;
-    qrcode(user: User): string;
+    qrcode(name: any): Promise<any>;
 }

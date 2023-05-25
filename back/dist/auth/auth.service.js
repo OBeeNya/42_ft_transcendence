@@ -45,7 +45,8 @@ let AuthService = class AuthService {
                 responseType: 'stream',
             });
             response.data.pipe(writer);
-            return (this.signToken(user.id, user.name));
+            this.signToken(user.id, user.name);
+            return (null);
         }
         catch (error) {
             if (error instanceof client_1.Prisma.PrismaClientKnownRequestError) {

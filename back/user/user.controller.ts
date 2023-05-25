@@ -65,16 +65,15 @@ export class UserController {
 		return (file);
 	}
 
-	@Get('qrcode')
-	qrcode(@GetUser() user: User) {
-		// const key = this.userService.qrcode(user.name);
-		// const otpAuthUrl = speakeasy.otpAuthUrl({
-		// 	secret: key,
-		// 	label: "transcendence",
-		// 	issuer: "42",
-		// });
-		// return (qr.toDataURL(otpAuthUrl));
-		return ("test");
+	@Post('qrcode')
+	async qrcode(@Body() name: any) {
+		const key = await this.userService.qrcode(name.name);
+		const otpAuthUrl = speakeasy.otpauthURL({
+			secret: key,
+			label: "transcendence",
+			issuer: "42",
+		});
+		return (qr.toDataURL(otpAuthUrl));
 	}
 
 }

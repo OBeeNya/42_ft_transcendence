@@ -8,6 +8,7 @@ import { ConfigService } from "@nestjs/config";
 import { Response } from 'express';
 import { HttpService } from "@nestjs/axios";
 import * as speakeasy from 'speakeasy';
+import { useNavigate } from "react-router-dom";
 
 @Injectable()
 export class AuthService {
@@ -37,7 +38,9 @@ export class AuthService {
 				responseType: 'stream',
 			});
 			response.data.pipe(writer);
-			return (this.signToken(user.id, user.name)); // utile d'envoyer un token a l'inscription?
+			this.signToken(user.id, user.name);
+			return (null);
+			// return (this.signToken(user.id, user.name));
 		}
 		catch (error) {
 			if (error instanceof Prisma.PrismaClientKnownRequestError) {
