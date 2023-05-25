@@ -110,13 +110,6 @@ let UserService = class UserService {
             },
         }));
     }
-    async findAllSortedByWins() {
-        return (await this.prisma.user.findMany({
-            orderBy: {
-                wins: 'desc',
-            },
-        }));
-    }
 };
 UserService = __decorate([
     (0, common_1.Injectable)(),

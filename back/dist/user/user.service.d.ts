@@ -17,5 +17,4 @@ export declare class UserService {
     }>;
     create42User(dto: Create42UserDto): Promise<import(".prisma/client").User>;
     find42User(id: string): Promise<import(".prisma/client").User>;
-    findAllSortedByWins(): Promise<import(".prisma/client").User[]>;
 }

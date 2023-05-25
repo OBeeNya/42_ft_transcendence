@@ -1,51 +1,51 @@
-.leaderboard-container {
-    background-color: rgba(74, 102, 104, 0.3);
-    color: white;
-    border-radius: 20px;
-    padding: 20px;
-    margin: 2% 3% 1% 3%;
-}
+.leaderboard {
+	width: 95%;
+	margin: 0 auto;
+  }
+  
+  .leaderboard table {
+	width: 100%;
+	border-collapse: collapse;
+	table-layout: fixed;
+  }
+	
+  .leaderboard th,
+  .leaderboard td {
+	border: 1px solid #fff;
+	border-top: none;
+	padding: 20px;
+	text-align: left;
+	word-wrap: break-word;
+  }
 
-.leaderboard-table {
-    width: 100%;
-    text-align: center;
-    border-collapse: collapse;
-    color: white;
-}
-
-.leaderboard-table th, .leaderboard-table td {
-    padding: 10px;
-    border: 1px solid white;
-}
-
-.leaderboard-table a {
-    color: rgb(162, 189, 243);
-}
-
-.leaderboard-status {
-    position: relative;
-    padding: 10px;
-}
-
-.leaderboard-status::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: -8px;
-    transform: translateY(-50%);
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-}
-
-.leaderboard-online::before {
-    background-color: green;
-}
-
-.leaderboard-offline::before {
-    background-color: grey;
-}
-
-.leaderboard-in-game::before {
-    background-color: rgb(247, 20, 20);
-}
+  .leaderboard th {
+	border-top: none;
+	padding-top: 0;
+  }
+  
+  .online-indicator {
+	background-color: green;
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+	display: inline-block;
+	margin-right: 5px;
+  }
+	
+  .offline-indicator {
+	background-color: red;
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+	display: inline-block;
+	margin-right: 5px;
+  }
+  
+  .leaderboard table {
+	border: 1px solid #fff;
+  }
+  
+  .leaderboard th:first-child {
+	border-top: none;
+  }
+  

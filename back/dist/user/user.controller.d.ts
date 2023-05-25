@@ -18,5 +18,4 @@ export declare class UserController {
         nbUsers: number;
     }>;
     uploadAvatar(file: any): any;
-    findAllSortedByWins(): Promise<User[]>;
 }

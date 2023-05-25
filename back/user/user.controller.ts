@@ -58,9 +58,9 @@ export class UserController {
 		return (file);
 	}
 
-	@Get("leaderboard") // route GET /users/leaderboard
-	findAllSortedByWins()
-	{
-		return (this.userService.findAllSortedByWins());
-	}
+	// @Get("leaderboard") // route GET /users/leaderboard
+	// findAllSortedByWins()
+	// {
+	// 	return (this.userService.findAllSortedByWins());
+	// }
 }
