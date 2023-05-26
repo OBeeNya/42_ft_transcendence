@@ -36,6 +36,8 @@ const SignupPage = () => {
 				return ;
 			}
 			const response = await ax.post('auth/signup', dto);
+			console.log("signup: request done");
+			console.log("signup: response.status", response.status);
 			if (response.status === 200 || response.status === 201) {
 				navigate('/');
 			}
@@ -47,7 +49,8 @@ const SignupPage = () => {
 				const message = document.getElementById("message");
 				if (message)
 					message.textContent = "This userName is already taken";
-				console.log("This userName is already taken");
+				console.error("Failed signin up.");
+				console.error("axiosError?.response?.data?.message: ", axiosError?.response?.data?.message);
 			}
 			// else
 			// 	console.error('Failed to sign up');

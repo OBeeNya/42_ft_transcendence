@@ -24,6 +24,21 @@ v0.1:
 REACT:
 	yarn add axios
 
+/ ********************************************* /
+
+TO CHANGE PRISMA SCHEMA:
+	in /back:
+
+		docker stop $(docker ps -qa);
+		docker rm $(docker ps -qa);
+		docker rmi -f $(docker images -qa);
+		docker volume rm $(docker volume ls -q);
+		docker network rm $(docker network ls -q) 2>/dev/null
+
+		docker compose up dev-db -d
+
+		npx prisma migrate dev
+
 
 / ********************************************* /
 

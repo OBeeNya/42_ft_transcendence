@@ -8,7 +8,7 @@ import Content from "../../components/content"
 const SigninPage = () => {
 	const [nameInput, setName] = useState('');
 	const [passwordInput, setPassword] = useState('');
-	const token = localStorage.getItem("token");
+	// const token = localStorage.getItem("token");
 	
 	const navigate = useNavigate();
 
@@ -27,12 +27,12 @@ const SigninPage = () => {
 					connected: true,
 				}, {
 					headers: {
-						Authorization: `Bearer ${token}`
+						Authorization: `Bearer ${response.data.access_token}`
 					},
 				});
 				response = await ax.get("http://localhost:8080/users/me", {
 					headers: {
-						Authorization: `Bearer ${token}`,
+						Authorization: `Bearer ${response.data.access_token}`,
 					},
 				});
 				if (response.data.tfa === true)
