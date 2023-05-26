@@ -18,12 +18,12 @@ const Callback42 = () => {
                 connected: true,
             }, {
 				headers: {
-					Authorization: `Bearer ${token}`
+					Authorization: `Bearer ${tokenSplit}`
 				},
 			});
             const response = await ax.get("http://localhost:8080/users/me", {
                 headers: {
-                    Authorization: `Bearer ${token}`,
+                    Authorization: `Bearer ${tokenSplit}`,
                 },
             });
             navigate('/editprofile');
