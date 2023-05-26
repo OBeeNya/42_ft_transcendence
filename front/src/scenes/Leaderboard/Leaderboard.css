@@ -1,51 +1,46 @@
 .leaderboard {
 	width: 95%;
 	margin: 0 auto;
-  }
-  
-  .leaderboard table {
-	width: 100%;
-	border-collapse: collapse;
-	table-layout: fixed;
-  }
-	
-  .leaderboard th,
-  .leaderboard td {
-	border: 1px solid #fff;
-	border-top: none;
-	padding: 20px;
-	text-align: left;
-	word-wrap: break-word;
-  }
+}
 
-  .leaderboard th {
-	border-top: none;
-	padding-top: 0;
-  }
-  
-  .online-indicator {
+.leaderboard table {
+	width: 100%;
+	border-collapse: separate;
+	border-spacing: 0;
+	table-layout: fixed;
+	border-radius: 15px;
+	overflow: hidden;
+	border: 1px solid #fff;
+}
+
+.leaderboard th {
+	border: none;
+	padding: 20px;
+	text-align: center;
+	word-wrap: break-word;
+}
+
+.leaderboard td {
+	border: 1px solid #fff;
+	padding: 20px;
+	text-align: center;
+	word-wrap: break-word;
+}
+
+.online-indicator {
 	background-color: green;
 	width: 10px;
 	height: 10px;
 	border-radius: 50%;
 	display: inline-block;
 	margin-right: 5px;
-  }
-	
-  .offline-indicator {
+}
+
+.offline-indicator {
 	background-color: red;
 	width: 10px;
 	height: 10px;
 	border-radius: 50%;
 	display: inline-block;
 	margin-right: 5px;
-  }
-  
-  .leaderboard table {
-	border: 1px solid #fff;
-  }
-  
-  .leaderboard th:first-child {
-	border-top: none;
-  }
-  
+}
