@@ -17,4 +17,5 @@ Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./edit-user.dto"), exports);
 __exportStar(require("./create-user.dto"), exports);
 __exportStar(require("./update-avatar.dto"), exports);
+__exportStar(require("./qrcode-verify.dto"), exports);
 //# sourceMappingURL=index.js.map

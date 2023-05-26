@@ -37,10 +37,12 @@ const SignupPage = () => {
 			}
 			const response = await ax.post('auth/signup', dto);
 			if (response.status === 200 || response.status === 201)
-				navigate('/signin');
+				// navigate('/signin');
+				navigate('/');
 			// window.location.reload();
 		}
 		catch (error) {
+			console.log(error);
 			const axiosError = error as AxiosError<{ message: string; statusCode: number }>;
 			if (axiosError?.response?.data?.message === "Credentials taken") {
 				const message = document.getElementById("message");

@@ -21,7 +21,7 @@ const user_service_1 = require("./user.service");
 const platform_express_1 = require("@nestjs/platform-express");
 const multer_config_1 = require("./middleware/multer.config");
 const speakeasy = require("speakeasy");
-const qr = require("qrcode");
+var QRCode = require('qrcode');
 let UserController = class UserController {
     constructor(userService) {
         this.userService = userService;
@@ -60,14 +60,22 @@ let UserController = class UserController {
             label: "transcendence",
             issuer: "42",
         });
-        return (qr.toDataURL(otpAuthUrl));
+        return (QRCode.toDataURL(otpAuthUrl));
     }
-    async verifyCode(name, otp) {
-        const key = await this.userService.qrcode(name.name);
+    async verifyCode(elements) {
+        const key = await this.userService.qrcode(elements.name);
+        const user = await this.userService.findOneByName(elements.name);
+        const secret = user.tfa_key;
+        var token = speakeasy.totp({
+            secret: secret,
+            encoding: 'base32'
+        });
+        console.log("TOKEN: ", token);
         return (speakeasy.totp.verify({
             secret: key,
             encoding: 'base32',
-            token: otp,
+            token: elements.otp,
+            window: 6,
         }));
     }
 };
@@ -146,7 +154,7 @@ __decorate([
     (0, common_1.Post)('qrcode/verify'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, String]),
+    __metadata("design:paramtypes", [dto_1.QrcodeVerifyDto]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "verifyCode", null);
 UserController = __decorate([

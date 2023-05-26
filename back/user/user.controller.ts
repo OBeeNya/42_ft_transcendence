@@ -2,12 +2,13 @@ import { Body, Controller, Get, Patch, UseGuards, Param, Delete, Post, UseInterc
 import { User } from '@prisma/client';
 import { GetUser } from '../auth/decorator';
 import { JwtGuard } from '../auth/guard';
-import { EditUserDto, UpdateAvatarDto } from './dto';
+import { EditUserDto, QrcodeVerifyDto } from './dto';
 import { UserService } from './user.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { MulterConfig } from './middleware/multer.config';
 import * as speakeasy from 'speakeasy';
-import * as qr from 'qrcode';
+
+var QRCode = require('qrcode');
 
 @UseGuards(JwtGuard)
 @Controller('users')
@@ -73,16 +74,26 @@ export class UserController {
 			label: "transcendence",
 			issuer: "42",
 		});
-		return (qr.toDataURL(otpAuthUrl));
+		return (QRCode.toDataURL(otpAuthUrl));
 	}
 
 	@Post('qrcode/verify')
-	async verifyCode(@Body() name: any, otp: string) {
-		const key = await this.userService.qrcode(name.name);
+	async verifyCode(@Body() elements: QrcodeVerifyDto) {
+		const key = await this.userService.qrcode(elements.name);
+		
+		const user = await this.userService.findOneByName(elements.name);
+		const secret = user.tfa_key;
+		var token = speakeasy.totp({
+			secret: secret,
+			encoding: 'base32'
+		});
+		console.log("TOKEN: ", token);
+
 		return (speakeasy.totp.verify({
 			secret: key,
 			encoding: 'base32',
-			token: otp,
+			token: elements.otp,
+			window: 6,
 		}));
 	}
 

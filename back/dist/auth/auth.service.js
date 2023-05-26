@@ -45,7 +45,6 @@ let AuthService = class AuthService {
                 responseType: 'stream',
             });
             response.data.pipe(writer);
-            this.signToken(user.id, user.name);
             return (null);
         }
         catch (error) {

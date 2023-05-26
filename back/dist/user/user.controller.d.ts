@@ -1,5 +1,5 @@
 import { User } from '@prisma/client';
-import { EditUserDto } from './dto';
+import { EditUserDto, QrcodeVerifyDto } from './dto';
 import { UserService } from './user.service';
 export declare class UserController {
     private userService;
@@ -20,5 +20,5 @@ export declare class UserController {
     }>;
     uploadAvatar(file: any): any;
     qrcode(name: any): Promise<any>;
-    verifyCode(name: any, otp: string): Promise<any>;
+    verifyCode(elements: QrcodeVerifyDto): Promise<any>;
 }

@@ -38,7 +38,7 @@ export class AuthService {
 				responseType: 'stream',
 			});
 			response.data.pipe(writer);
-			this.signToken(user.id, user.name);
+			// this.signToken(user.id, user.name);
 			return (null);
 			// return (this.signToken(user.id, user.name));
 		}
