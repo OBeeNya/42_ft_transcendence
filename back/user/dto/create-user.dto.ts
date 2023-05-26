@@ -17,5 +17,4 @@ export class Create42UserDto {
 	@IsString()
 	@IsNotEmpty()
 	email: string;
-
 }

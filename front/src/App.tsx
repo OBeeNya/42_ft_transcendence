@@ -17,7 +17,6 @@ const defaultProtectedRouteProps: Omit<ProtectedRouteProps, 'outlet'> = {
 };
 
 function App() {
-
   return (
       <Routes>
         <Route path="/" element={<AuthPage/>} />
@@ -32,7 +31,6 @@ function App() {
         <Route path="/online" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<OnlinePage/>} />} />
         <Route path="/leaderboard" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<Leaderboard/>} />} />
     </Routes>
-
   );
 }
 

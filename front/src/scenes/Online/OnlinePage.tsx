@@ -32,7 +32,7 @@ const OnlinePage = () =>
 			{
 			  const	response = await axios.get("http://localhost:8080/users",
 			  {
-				headers: 
+				headers:
 				{
 					Authorization: `Bearer ${token}`,
 				},

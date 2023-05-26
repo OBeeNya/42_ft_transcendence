@@ -11,34 +11,32 @@ datasource db {
 }
 
 model User {
-  
-  id Int @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  name String @unique
-  hash String
-  friends String[] // not amazing
-  wins Int @default(0)
-  losses Int @default(0)
-  ladder_level Int @default(1)
-  history MatchHistory[]
-  oauthId String @unique
-  email String
-  connected Boolean @default(false)
+  id			Int @id @default(autoincrement())
+  createdAt		DateTime @default(now())
+  updatedAt		DateTime @updatedAt
+  name			String @unique
+  hash			String
+  friends		String[] // not amazing
+  wins			Int @default(0)
+  losses 		Int @default(0)
+  ladder_level	Int @default(1)
+  history		MatchHistory[]
+  oauthId 		String @unique
+  email 		String
+  connected 	Boolean @default(false)
   
   @@map("users")
 }
 
 model MatchHistory {
-  
-  id Int @id @default(autoincrement())
-  user User @relation(fields: [userId], references: [id])
-  userId Int
-  userName String
-  opponentName String
-  createdAt DateTime @default(now())
-  ladder Int
-  won Boolean @default(false)
+  id			Int @id @default(autoincrement())
+  user 			User @relation(fields: [userId], references: [id])
+  userId 		Int
+  userName 		String
+  opponentName	String
+  createdAt		DateTime @default(now())
+  ladder		Int
+  won			Boolean @default(false)
 
   @@map("matchhistory")
 }

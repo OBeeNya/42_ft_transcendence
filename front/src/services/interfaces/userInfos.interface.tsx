@@ -8,5 +8,5 @@ export interface UserInfos {
     email: string;
     connected: boolean;
 }
-  
+
 export {};
