@@ -29,18 +29,19 @@ export class AuthService {
 					tfa_key: speakeasy.generateSecret({ length: 20 }).base32,
 				},
 			});
-			var fs = require('fs');
-			const writer = fs.createWriteStream('../front/public/avatar/' + user.id + '.png');
-			const response = await this.httpService.axiosRef({
-				url: 'https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg',
-				method: 'GET',
-				responseType: 'stream',
-			});
-			response.data.pipe(writer);
-			return (this.signToken(user.id, user.name)); // utile d'envoyer un token a l'inscription?
+			// var fs = require('fs');
+			// const writer = fs.createWriteStream('../front/public/avatar/' + user.id + '.png');
+			// const response = await this.httpService.axiosRef({
+			// 	url: 'https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg',
+			// 	method: 'GET',
+			// 	responseType: 'stream',
+			// });
+			// response.data.pipe(writer);
+			return (null);
 		}
 		catch (error) {
 			if (error instanceof Prisma.PrismaClientKnownRequestError) {
+				console.error("sign UP error: ", error);
 				if (error.code === 'P2002')
 					throw (new ForbiddenException('Credentials taken'));
 			}

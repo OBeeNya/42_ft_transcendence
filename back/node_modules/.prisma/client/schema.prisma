@@ -22,7 +22,7 @@ model User {
   losses Int @default(0)
   ladder_level Int @default(1)
   history MatchHistory[]
-  oauthId String @unique
+  oauthId String
   email String
   connected Boolean @default(false)
   tfa Boolean @default(false)
