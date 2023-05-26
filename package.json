@@ -6,6 +6,6 @@
     "concurrently": "^8.0.1"
   },
   "scripts": {
-    "my_script": "concurrently \"cd back && npm run dev:db:up && sleep 5 && npx prisma migrate dev && npm run start:dev\" \"cd front && npm start\""
+    "start": "concurrently \"cd back && npm run dev:db:up && sleep 5 && npx prisma migrate dev && npm run start:dev\" \"cd front && npm start\""
   }
 }
