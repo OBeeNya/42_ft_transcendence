@@ -7,7 +7,6 @@ import { ax } from '../../services/axios/axios'
 import { UserInfos } from "../../services/interfaces/userInfos.interface";
 // import { GetUserInfos } from "../../services/axios/getUsers";
 import "./style/EditProfilePage.css";
-// import { userInfo } from "os";
 
 
 const EditProfilePage = () => {
@@ -29,7 +28,6 @@ const EditProfilePage = () => {
 				});
 				setUserInfos(response.data);
 				reset(response.data);
-				// console.log("DATA", response.data);
 			} catch (error) {
 				console.error("Failed to fetch users.");
 			}
@@ -161,12 +159,12 @@ const EditProfilePage = () => {
 						<input className="editUserInformationKey"
 							type="text"
 							{...register("name")}
-							/>
+						/>
 						<label className="editUserInformationKey">Change your email:</label>
 						<input  className="editUserInformationKey"
 							type="email"
 							{...register("email")}
-							/>
+						/>
 						<p id="messageEmail"> </p>
 						<button type="submit" value="submit" >Submit</button>
 						<div id="message"></div>

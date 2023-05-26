@@ -36,10 +36,9 @@ const SignupPage = () => {
 				return ;
 			}
 			const response = await ax.post('auth/signup', dto);
-			if (response.status === 200 || response.status === 201) {
-				navigate('/');
-			}
-			window.location.reload();
+			if (response.status === 200 || response.status === 201)
+				navigate('/signin');
+			// window.location.reload();
 		}
 		catch (error) {
 			const axiosError = error as AxiosError<{ message: string; statusCode: number }>;

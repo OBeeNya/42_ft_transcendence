@@ -20,4 +20,5 @@ export declare class UserController {
     }>;
     uploadAvatar(file: any): any;
     qrcode(name: any): Promise<any>;
+    verifyCode(name: any, otp: string): Promise<any>;
 }

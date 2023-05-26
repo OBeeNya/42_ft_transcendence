@@ -62,6 +62,14 @@ let UserController = class UserController {
         });
         return (qr.toDataURL(otpAuthUrl));
     }
+    async verifyCode(name, otp) {
+        const key = await this.userService.qrcode(name.name);
+        return (speakeasy.totp.verify({
+            secret: key,
+            encoding: 'base32',
+            token: otp,
+        }));
+    }
 };
 __decorate([
     (0, common_1.Get)(),
@@ -134,6 +142,13 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "qrcode", null);
+__decorate([
+    (0, common_1.Post)('qrcode/verify'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, String]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "verifyCode", null);
 UserController = __decorate([
     (0, common_1.UseGuards)(guard_1.JwtGuard),
     (0, common_1.Controller)('users'),

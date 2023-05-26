@@ -76,4 +76,14 @@ export class UserController {
 		return (qr.toDataURL(otpAuthUrl));
 	}
 
+	@Post('qrcode/verify')
+	async verifyCode(@Body() name: any, otp: string) {
+		const key = await this.userService.qrcode(name.name);
+		return (speakeasy.totp.verify({
+			secret: key,
+			encoding: 'base32',
+			token: otp,
+		}));
+	}
+
 }
