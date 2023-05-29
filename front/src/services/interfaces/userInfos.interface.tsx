@@ -8,6 +8,7 @@ export interface UserInfos {
     email: string;
     connected: boolean;
     tfa: boolean;
+    tfa_key: string;
 }
   
 export {};

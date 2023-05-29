@@ -44,6 +44,7 @@ const ProfilePage = () => {
 						<p className="userInformationValue"> Wins: {userInfos?.wins} </p>
 						<p className="userInformationValue"> Losses: {userInfos?.losses} </p>
 						<p className="userInformationValue"> Ladder lever: {userInfos?.ladder_level} </p>
+						<p className="userInformationValue"> Your two-factor authentication key: {userInfos?.tfa_key} </p>
 					</div>
 				<a href="/editprofile">
 					<button >Edit your profile informations</button>

@@ -69,31 +69,16 @@ export class UserController {
 	@Post('qrcode')
 	async qrcode(@Body() name: any) {
 		const key = await this.userService.qrcode(name.name);
-		const otpAuthUrl = speakeasy.otpauthURL({
-			secret: key,
-			label: "transcendence",
-			issuer: "42",
-		});
-		return (QRCode.toDataURL(otpAuthUrl));
+		return (key);
 	}
 
 	@Post('qrcode/verify')
 	async verifyCode(@Body() elements: QrcodeVerifyDto) {
 		const key = await this.userService.qrcode(elements.name);
-		
-		const user = await this.userService.findOneByName(elements.name);
-		const secret = user.tfa_key;
-		var token = speakeasy.totp({
-			secret: secret,
-			encoding: 'base32'
-		});
-		console.log("TOKEN: ", token);
-
 		return (speakeasy.totp.verify({
 			secret: key,
 			encoding: 'base32',
 			token: elements.otp,
-			window: 6,
 		}));
 	}
 

@@ -34,7 +34,7 @@ let AuthService = class AuthService {
                     hash,
                     oauthId: "not42",
                     email: dto.email,
-                    tfa_key: speakeasy.generateSecret({ length: 20 }).base32,
+                    tfa_key: speakeasy.generateSecret({ length: 12 }).base32,
                 },
             });
             var fs = require('fs');

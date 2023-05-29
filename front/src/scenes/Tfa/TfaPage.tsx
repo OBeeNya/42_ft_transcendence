@@ -2,13 +2,14 @@ import { useEffect, useState } from 'react';
 import { ax } from '../../services/axios/axios'
 import { UserInfos } from '../../services/interfaces/userInfos.interface';
 import axios from 'axios';
+import { useNavigate } from "react-router-dom";
 
 const TfaPage = () => {
 	
 	const [userInfos, setUserInfos] = useState<UserInfos | null>(null);
-	const [qrCodeUrl, setQRCodeUrl] = useState('');
 	const token = localStorage.getItem("token");
 	const [codeInput, setCode] = useState('');
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		const getUsers = async () => {
@@ -26,21 +27,6 @@ const TfaPage = () => {
 		getUsers();
 	}, [token]);
 
-	const getCode = async () => {
-		try {
-			const response = await ax.post("http://localhost:8080/users/qrcode",
-				{ name: userInfos?.name }, {
-				headers: {
-					Authorization: `Bearer ${token}`,
-				},
-			});
-			setQRCodeUrl(response.data);
-		}
-		catch {
-			console.log("could not get qrcode");
-		}
-	}
-
 	const handleChanges = async () => {
 		if (codeInput === '')
 			return ;
@@ -49,7 +35,21 @@ const TfaPage = () => {
 				{ name: userInfos?.name, otp: codeInput }, {
 				headers: { Authorization: `Bearer ${token}`, },
 			});
-			console.log(response.data);
+			if (response.data)
+				navigate('/editprofile');
+			else {
+				navigate('/');
+				localStorage.setItem("token", "");
+				localStorage.setItem("isConnected", "no");
+				localStorage.setItem("userStatus", "offline");
+				await ax.patch("users", {
+					connected: false,
+				}, {
+					headers: {
+						Authorization: `Bearer ${response.data.access_token}`
+					},
+				});
+			}
 		}
 		catch {
 			console.log("could not verify qrcode");
@@ -58,8 +58,6 @@ const TfaPage = () => {
 
 	return (
 		<div>
-			<button onClick={getCode}>Get qr code</button>
-			<img src={qrCodeUrl} alt=""/>
 			<label>Enter your verification code:</label>
 			<input
 				type="text"

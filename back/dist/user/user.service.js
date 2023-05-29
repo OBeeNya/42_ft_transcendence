@@ -111,7 +111,7 @@ let UserService = class UserService {
                 oauthId: dto.oauthId,
                 hash: dto.hash,
                 email: dto.email,
-                tfa_key: speakeasy.generateSecret({ length: 20 }).base32,
+                tfa_key: speakeasy.generateSecret({ length: 12 }).base32,
             },
         }));
     }

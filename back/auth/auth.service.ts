@@ -8,7 +8,6 @@ import { ConfigService } from "@nestjs/config";
 import { Response } from 'express';
 import { HttpService } from "@nestjs/axios";
 import * as speakeasy from 'speakeasy';
-import { useNavigate } from "react-router-dom";
 
 @Injectable()
 export class AuthService {
@@ -27,7 +26,7 @@ export class AuthService {
 					hash,
 					oauthId: "not42",
 					email: dto.email,
-					tfa_key: speakeasy.generateSecret({ length: 20 }).base32,
+					tfa_key: speakeasy.generateSecret({ length: 12 }).base32,
 				},
 			});
 			var fs = require('fs');
@@ -38,9 +37,7 @@ export class AuthService {
 				responseType: 'stream',
 			});
 			response.data.pipe(writer);
-			// this.signToken(user.id, user.name);
 			return (null);
-			// return (this.signToken(user.id, user.name));
 		}
 		catch (error) {
 			if (error instanceof Prisma.PrismaClientKnownRequestError) {
@@ -81,14 +78,6 @@ export class AuthService {
 	}
 
 	async sign42Token(user: TokenInputDto) {
-		// const stringed_user = JSON.parse(JSON.stringify(user));
-		// return (this.jwt.sign(
-		// 	stringed_user,
-		// 	{
-		// 		secret: this.config.get('JWT_SECRET'),
-		// 		expiresIn: "1h",
-		// 	}
-		// ));
 		const payload = {
 			sub: user.id,
 			name: user.name,

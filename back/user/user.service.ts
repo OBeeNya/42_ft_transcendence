@@ -100,7 +100,7 @@ export class UserService {
 			}
 		})
 		const nbOfUsersAfterDelete = await this.prisma.user.count();
-			return { deletedUsers: 1, nbUsers: Number(nbOfUsersAfterDelete) };
+		return { deletedUsers: 1, nbUsers: Number(nbOfUsersAfterDelete) };
 	}
 
 	async create42User(dto: Create42UserDto) {
@@ -110,7 +110,7 @@ export class UserService {
 				oauthId: dto.oauthId,
 				hash: dto.hash,
 				email: dto.email,
-				tfa_key: speakeasy.generateSecret({ length: 20 }).base32,
+				tfa_key: speakeasy.generateSecret({ length: 12 }).base32,
 			},
 		}));
 	}
