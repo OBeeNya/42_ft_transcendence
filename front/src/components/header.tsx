@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import  "../style/components.css"
+import '../scenes/Chat/Chat'
 import { ax } from '../services/axios/axios';
 
 export default function Header () {
@@ -42,8 +43,8 @@ export default function Header () {
             <Link className="header-links" to="/home">Home</Link>
             <Link className="header-links" to="/profile">Profile</Link>
             <Link className="header-links" to="/pong">Pong</Link>
-            <Link className="header-links" onClick={logout} to="/">Logout</Link> 
-
+            <Link className="header-links" to="/chat">Chat</Link>
+            <Link className="header-links" onClick={logout} to="/">Logout</Link>
         </div>
     )
 }

@@ -57,10 +57,4 @@ export class UserController {
 	uploadAvatar(@UploadedFile() file: any) {
 		return (file);
 	}
-
-	// @Get("leaderboard") // route GET /users/leaderboard
-	// findAllSortedByWins()
-	// {
-	// 	return (this.userService.findAllSortedByWins());
-	// }
 }
