@@ -34,7 +34,12 @@ const ProfilePage = () => {
 					<h1>Your profile</h1>
 					<img 	className="userAvatar"
 							src={'/avatar/' + userInfos?.id + '.png'}
-							alt="avatar" />
+							alt="avatar"
+							onError={(event) => {
+								const target = event.target as HTMLImageElement;
+								target.src = '/avatar/auto.png';
+							  }}
+					/>
 					<div className="userInformations">
 						<p className="userInformationKey">  Name: </p>
 						<p className="userInformationValue"> {userInfos?.name} </p>
