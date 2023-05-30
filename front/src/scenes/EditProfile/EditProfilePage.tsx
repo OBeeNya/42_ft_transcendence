@@ -5,9 +5,7 @@ import { useForm } from "react-hook-form";
 import { ChangeEvent, useEffect, useState } from "react";
 import { ax } from '../../services/axios/axios'
 import { UserInfos } from "../../services/interfaces/userInfos.interface";
-// import { GetUserInfos } from "../../services/axios/getUsers";
 import "./style/EditProfilePage.css";
-
 
 const EditProfilePage = () => {
 	const navigate = useNavigate();
@@ -16,7 +14,6 @@ const EditProfilePage = () => {
 	const token = localStorage.getItem("token");
 	const { register, handleSubmit, reset } = useForm({defaultValues: {	name: userInfos?.name, 
 																		email: userInfos?.email,
-																		// tfa: userInfos?.tfa || false
 																								}});
 	useEffect(() => {
 		const getUsers = async () => {
@@ -152,7 +149,7 @@ const EditProfilePage = () => {
 						<label className="editUserInformationKey">Enable two-factor authentication:</label>
 						<input
 							type="checkbox"
-							checked={userInfos?.tfa}
+							checked={userInfos?.tfa || false}
 							onChange={handleTfaChange}
 						/>
 						<label className="editUserInformationKey">Change your name:</label>
