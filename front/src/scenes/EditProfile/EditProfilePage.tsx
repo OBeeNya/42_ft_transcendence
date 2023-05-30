@@ -12,9 +12,7 @@ const EditProfilePage = () => {
 	const [userInfos, setUserInfos] = useState<UserInfos | null>();
 	
 	const token = localStorage.getItem("token");
-	const { register, handleSubmit, reset } = useForm({defaultValues: {	name: userInfos?.name, 
-																		email: userInfos?.email,
-																								}});
+	const { register, handleSubmit, reset } = useForm({defaultValues: {	name: userInfos?.name, }});
 	useEffect(() => {
 		const getUsers = async () => {
 			try {
@@ -33,7 +31,7 @@ const EditProfilePage = () => {
 	}, [token, reset]);
 
 	const handleChanges = async (userInput: any) => {
-		if (userInput.name === '' && userInput.email === '')
+		if (userInput.name === '')
 			return ;
 		try {
 			if (userInput.name !== '') {
@@ -44,25 +42,6 @@ const EditProfilePage = () => {
 						Authorization: `Bearer ${token}`
 					},
 				});
-			}
-			const expression: RegExp = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
-			const messageEmail = document.getElementById("messageEmail");
-			if (userInput.email !== '') {
-				if (!expression.test(userInput.email)) {
-					if (messageEmail)
-						messageEmail.textContent = "Please enter a valid email";
-				}
-				else {
-					await ax.patch('users', {
-						email: userInput.email,
-					}, {
-						headers: {
-							Authorization: `Bearer ${token}`
-						},
-					});
-					if (messageEmail)
-						messageEmail.textContent = "";
-				}	
 			}
 			try {
 				await ax.patch('users', {
@@ -157,12 +136,6 @@ const EditProfilePage = () => {
 							type="text"
 							{...register("name")}
 						/>
-						<label className="editUserInformationKey">Change your email:</label>
-						<input  className="editUserInformationKey"
-							type="email"
-							{...register("email")}
-						/>
-						<p id="messageEmail"> </p>
 						<button type="submit" value="submit" >Submit</button>
 						<div id="message"></div>
 					</form>

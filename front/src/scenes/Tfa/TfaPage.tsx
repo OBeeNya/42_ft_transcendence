@@ -46,7 +46,7 @@ const TfaPage = () => {
 					connected: false,
 				}, {
 					headers: {
-						Authorization: `Bearer ${response.data.access_token}`
+						Authorization: `Bearer ${token}`
 					},
 				});
 			}

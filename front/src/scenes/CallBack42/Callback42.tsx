@@ -25,7 +25,10 @@ const Callback42 = () => {
                     Authorization: `Bearer ${tokenSplit}`,
                 },
             });
-            navigate('/editprofile');
+            if (response.data.tfa === true)
+				navigate('/tfa');
+            else
+                navigate('/editprofile');
         }
         catch {
             console.log("could not change connected to true");

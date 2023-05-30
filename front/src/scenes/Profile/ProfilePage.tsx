@@ -38,8 +38,6 @@ const ProfilePage = () => {
 					<div className="userInformations">
 						<p className="userInformationKey">  Name: </p>
 						<p className="userInformationValue"> {userInfos?.name} </p>
-						<p className="userInformationKey"> Mail: </p>
-						<p className="userInformationValue"> {userInfos?.email} </p>
 						<p className="userInformationKey"> Statistiques: </p>
 						<p className="userInformationValue"> Wins: {userInfos?.wins} </p>
 						<p className="userInformationValue"> Losses: {userInfos?.losses} </p>
