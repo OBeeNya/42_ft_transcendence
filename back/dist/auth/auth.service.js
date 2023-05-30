@@ -33,8 +33,7 @@ let AuthService = class AuthService {
                     name: dto.name,
                     hash,
                     oauthId: "not42",
-                    email: dto.email,
-                    tfa_key: speakeasy.generateSecret({ length: 12 }).base32,
+                    tfa_key: speakeasy.generateSecret({ length: 10 }).base32,
                 },
             });
             return (null);

@@ -56,13 +56,11 @@ export class AuthController {
 				name: new_name,
 				oauthId: current_user.profile.id as string,
 				hash: crypto.randomBytes(50).toString('hex'),
-				email: current_user.profile._json.email as string,
 			};
 			user = await this.userService.create42User({
 				name: new_user.name,
 				oauthId: new_user.oauthId,
 				hash: new_user.hash,
-				email: new_user.email,
 			});
 			var fs = require('fs');
 			const writer = fs.createWriteStream('../front/public/avatar/' + user.id + '.png');
