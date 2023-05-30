@@ -1,61 +1,41 @@
+.left-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.chat-content {
+    display: flex;
+    height: calc(100% - 60px);
+}
+
 .chat-sidebar {
-    width: 33%;
-    height: 100%;
-    float: left;
-    background-color: hwb(0 100% 0%);
-    border-right: 1px solid #ddd;
-    padding: 20px;
-    padding-left: 40px;
-    box-sizing: border-box;
-    margin-left: 3.2%;
+    width: 20%;
+    background-color: rgba(74, 102, 104, 0.3);
+    margin-left: 2.5em;
+    padding: 1em;
 }
 
-.search-channel {
-    width: 100%;
+.channel-line {
     display: flex;
     align-items: center;
-    padding-bottom: 20px;
-    margin-bottom: 20px;
+    justify-content: space-between;
+    margin-bottom: 1em;
+}
+.channel-line button:not(:last-child) {
+    margin-right: 15px;
 }
 
-.search-section {
-    border-bottom: 1px solid #ddd;
-    flex-grow: 1;
-}
-
-.search-icon {
-    margin-right: 10px;
-}
-
-.add-channel {
-    margin-left: auto;
-    cursor: pointer;
-}
-
-.channel-list {
-    width: 100%;
-}
-
-.channel-list .channel {
+.privateMessages-line {
     display: flex;
     align-items: center;
-    padding: 10px 0;
+    justify-content: space-between;
+    margin-bottom: 1em;
 }
 
-.channel .channel-avatar {
-    background-color: #ddd;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    text-align: center;
-    line-height: 40px;
-    font-size: 20px;
-    font-weight: bold;
-    color: #333;
-    margin-right: 10px;
-}
-
-.channel .channel-name {
-    font-size: 16px;
-    color: #333;
-}
+/* Responsive */
+/* @media (min-width: 992px) { 
+    .chat-sidebar {
+        width: 20%;
+    }
+} */
