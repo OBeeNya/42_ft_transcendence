@@ -13,6 +13,8 @@ const SigninPage = () => {
 
 	const handleSignin = async () => {
 		try {
+			if (!nameInput || !passwordInput)
+				return ;
 			const dto: SigninDto = {
 				name: nameInput,
 				password: passwordInput,
@@ -39,12 +41,13 @@ const SigninPage = () => {
 				else
 					navigate('/editprofile');
 			}
-		} catch (error) {
+		}
+		catch (error) {
 			const axiosError = error as AxiosError<{ message: string; statusCode: number }>;
 			if (axiosError?.response?.data?.message === "Credentials incorrect") {
 				const message = document.getElementById("message");
 				if (message)
-					message.textContent = "Wrong userName or password";
+					message.textContent = "Wrong Name or Password";
 			}
 			else
 				console.error('Failed to sign in');

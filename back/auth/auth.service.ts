@@ -6,7 +6,6 @@ import { Prisma } from "@prisma/client";
 import { JwtService } from "@nestjs/jwt";
 import { ConfigService } from "@nestjs/config";
 import { Response } from 'express';
-import { HttpService } from "@nestjs/axios";
 import * as speakeasy from 'speakeasy';
 
 @Injectable()
@@ -14,13 +13,12 @@ export class AuthService {
 
 	constructor(private prisma: PrismaService,
 		private jwt: JwtService,
-		private config: ConfigService,
-		private httpService: HttpService,) {}
+		private config: ConfigService,) {}
 	
 	async signup(dto: AuthDto) {
 		const hash = await argon.hash(dto.password);
 		try {
-			const user = await this.prisma.user.create({
+			await this.prisma.user.create({
 				data: {
 					name: dto.name,
 					hash,
@@ -28,14 +26,6 @@ export class AuthService {
 					tfa_key: speakeasy.generateSecret({ length: 10 }).base32,
 				},
 			});
-			// var fs = require('fs');
-			// const writer = fs.createWriteStream('../front/public/avatar/' + user.id + '.png');
-			// const response = await this.httpService.axiosRef({
-			// 	url: 'https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg',
-			// 	method: 'GET',
-			// 	responseType: 'stream',
-			// });
-			// response.data.pipe(writer);
 			return (null);
 		}
 		catch (error) {

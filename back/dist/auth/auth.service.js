@@ -16,19 +16,17 @@ const argon = require("argon2");
 const client_1 = require("@prisma/client");
 const jwt_1 = require("@nestjs/jwt");
 const config_1 = require("@nestjs/config");
-const axios_1 = require("@nestjs/axios");
 const speakeasy = require("speakeasy");
 let AuthService = class AuthService {
-    constructor(prisma, jwt, config, httpService) {
+    constructor(prisma, jwt, config) {
         this.prisma = prisma;
         this.jwt = jwt;
         this.config = config;
-        this.httpService = httpService;
     }
     async signup(dto) {
         const hash = await argon.hash(dto.password);
         try {
-            const user = await this.prisma.user.create({
+            await this.prisma.user.create({
                 data: {
                     name: dto.name,
                     hash,
@@ -101,8 +99,7 @@ AuthService = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [prisma_service_1.PrismaService,
         jwt_1.JwtService,
-        config_1.ConfigService,
-        axios_1.HttpService])
+        config_1.ConfigService])
 ], AuthService);
 exports.AuthService = AuthService;
 //# sourceMappingURL=auth.service.js.map
