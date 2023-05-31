@@ -1,15 +1,15 @@
 import Header from "../../components/header"
-import ChatSidebar from "./ChatSideBar";
+import ChatSidebar from "./ChatSidebar";
 import './ChatPage.css';
 
 const ChatPage = () =>
 {
 	return (
-		<div className="left-container">
+		<div className="chat-page">
 			<Header />
-			<div className="chat-content">
+
+			<div className="sidebar">
 				<ChatSidebar />
-				{/* Reste du contenu principal de la page ici */}
 			</div>
 		</div>
 	);
