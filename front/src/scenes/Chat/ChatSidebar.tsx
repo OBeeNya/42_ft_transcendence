@@ -17,10 +17,8 @@ const ChatSideBar = () =>
 					setIsSearchOpen(false);
 			}
 			
-			// Ajoute l'écouteur d'événements au document
 			document.addEventListener("mousedown", handleClickOutside);
 
-			// Nettoie l'écouteur d'événements lorsque le composant se démonte ou lorsque `isSearchOpen` change
 			return () =>
 			{
 				document.removeEventListener("mousedown", handleClickOutside);

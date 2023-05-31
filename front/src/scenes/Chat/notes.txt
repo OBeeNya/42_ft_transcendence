@@ -1,0 +1,6 @@
+Recherche de channel
+
+L'utilisateur va taper le nom d'un channel. S'il existe --> il le rejoint, sinon message d'erreur.
+Messages d'erreurs :
+- si le nom de channel ne correspond a aucun channel existant
+- si channel private
