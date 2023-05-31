@@ -1,9 +1,32 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 
-const ChatSidebar = () =>
+const ChatSideBar = () =>
 {
 	const [searchChannel, setSearchChannel] = useState(false);
 	const [addChannel, setAddChannel] = useState(false);
+	const [isSearchOpen, setIsSearchOpen] = useState(false);
+	const searchInputRef = useRef<HTMLInputElement>(null);
+
+	useEffect(() =>
+	{
+		if (isSearchOpen)
+		{
+			const handleClickOutside = (event: MouseEvent) =>
+			{
+				if (searchInputRef.current && !searchInputRef.current.contains(event.target as Node))
+					setIsSearchOpen(false);
+			}
+			
+			// Ajoute l'écouteur d'événements au document
+			document.addEventListener("mousedown", handleClickOutside);
+
+			// Nettoie l'écouteur d'événements lorsque le composant se démonte ou lorsque `isSearchOpen` change
+			return () =>
+			{
+				document.removeEventListener("mousedown", handleClickOutside);
+			};
+		}
+	}, [isSearchOpen]);
 
 	return (
 		<div className="channel-search-add">
@@ -15,13 +38,17 @@ const ChatSidebar = () =>
 				</div>
 
 				<div className="icons">
-					<button onClick={() => setSearchChannel(!searchChannel)}>
+
+					<button onClick={() => setIsSearchOpen(!isSearchOpen)}>
 						<i className="fas fa-search"></i>
 					</button>
+
+					{isSearchOpen ? <input ref={searchInputRef} type="text" placeholder="Search..." /> : null}
 
 					<button onClick={() => setAddChannel(!addChannel)}>
 						<i className="fas fa-plus"></i>
 					</button>
+
 				</div>
 
 			</div>
@@ -30,4 +57,4 @@ const ChatSidebar = () =>
 	);
 };
 
-export default ChatSidebar;
+export default ChatSideBar;
