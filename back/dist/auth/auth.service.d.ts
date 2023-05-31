@@ -11,9 +11,11 @@ export declare class AuthService {
     signup(dto: AuthDto): Promise<any>;
     signin(dto: SigninDto): Promise<{
         access_token: string;
+        tfa: boolean;
     }>;
     signToken(userId: number, name: string): Promise<{
         access_token: string;
+        tfa: boolean;
     }>;
     sign42Token(user: TokenInputDto): Promise<{
         access_token: string;

@@ -1,1 +1,0 @@
-{"version":3,"file":"forbidden.interceptor.js","sourceRoot":"","sources":["../../../auth/middleware/forbidden.interceptor.ts"],"names":[],"mappings":";;;;;;;;;AAAA,2CAAwG;AAKjG,IAAM,oBAAoB,GAA1B,MAAM,oBAAoB;IAChC,SAAS,CAAC,OAAyB,EAAE,IAAsB;QAS1D,MAAM,CAAC,uBAAuB,CAAC,CAAC;IACjC,CAAC;CACD,CAAA;AAZY,oBAAoB;IADhC,IAAA,mBAAU,GAAE;GACA,oBAAoB,CAYhC;AAZY,oDAAoB"}

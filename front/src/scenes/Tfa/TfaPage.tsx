@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 const TfaPage = () => {
 	
 	const [userInfos, setUserInfos] = useState<UserInfos | null>(null);
-	const token = localStorage.getItem("token");
+	const token = localStorage.getItem("tokentfa");
 	const [codeInput, setCode] = useState('');
 	const navigate = useNavigate();
 
@@ -35,20 +35,25 @@ const TfaPage = () => {
 				{ name: userInfos?.name, otp: codeInput }, {
 				headers: { Authorization: `Bearer ${token}`, },
 			});
-			if (response.data)
+			if (response.data) {
 				navigate('/editprofile');
-			else {
-				navigate('/');
-				localStorage.setItem("token", "");
-				localStorage.setItem("isConnected", "no");
-				localStorage.setItem("userStatus", "offline");
+				let tokentfa = localStorage.getItem('tokentfa');
+				if (!tokentfa)
+					tokentfa = '';
+				localStorage.setItem("token", tokentfa);
+				localStorage.setItem("isConnected", "yes");
+				localStorage.setItem("userStatus", "connected");
 				await ax.patch("users", {
-					connected: false,
-				}, {
-					headers: {
-						Authorization: `Bearer ${token}`
+						connected: true,
+					}, {
+						headers: {
+						Authorization: `Bearer ${localStorage.getItem('token')}`
 					},
 				});
+			}
+			else {
+				localStorage.setItem('tokentfa', '');
+				navigate('/');
 			}
 		}
 		catch {

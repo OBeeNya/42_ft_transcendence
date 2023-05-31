@@ -21,25 +21,28 @@ const SigninPage = () => {
 			};
 			let response = await ax.post('auth/signin', dto);
 			if (response.status === 200) {
-				localStorage.setItem("token", response.data.access_token);
-				localStorage.setItem("isConnected", "yes");
-				localStorage.setItem("userStatus", "connected");
-				await ax.patch("users", {
-					connected: true,
-				}, {
-					headers: {
-						Authorization: `Bearer ${response.data.access_token}`
-					},
-				});
-				response = await ax.get("http://localhost:8080/users/me", {
-					headers: {
-						Authorization: `Bearer ${response.data.access_token}`,
-					},
-				});
-				if (response.data.tfa === true)
+				if (response.data.tfa === true) {
+					localStorage.setItem("tokentfa", response.data.access_token);
 					navigate('/tfa');
-				else
+				}
+				else {
+					localStorage.setItem("token", response.data.access_token);
+					localStorage.setItem("isConnected", "yes");
+					localStorage.setItem("userStatus", "connected");
+					await ax.patch("users", {
+							connected: true,
+						}, {
+							headers: {
+							Authorization: `Bearer ${response.data.access_token}`
+						},
+					});
+					response = await ax.get("http://localhost:8080/users/me", {
+						headers: {
+							Authorization: `Bearer ${response.data.access_token}`,
+						},
+					});
 					navigate('/editprofile');
+				}
 			}
 		}
 		catch (error) {

@@ -31,7 +31,7 @@ const HomePage = () => {
 			<Header />
 				<Content>
 					<h1> Hi {userInfos?.name} </h1>
-					<h1>Welcome to ft_!</h1>
+					<h1>Welcome to ft_transcendence!</h1>
 					<br></br>
 					<Link to="/profile">User profile</Link>
 					<br></br>

@@ -24,7 +24,7 @@ function App() {
         <Route path="/signup" element={<SignupPage/>} />
         <Route path="/signin" element={<SigninPage/>} />
         <Route path="/callback42" element={<Callback42/>} />
-        <Route path="/tfa" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<TfaPage/>} />} />
+        <Route path="/tfa" element={<TfaPage/>} />
         <Route path="/home" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<HomePage/>} />} />
         <Route path="/profile" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<ProfilePage/>} />} />
         <Route path="/editprofile" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<EditProfilePage/>} />} />

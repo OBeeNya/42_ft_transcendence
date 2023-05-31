@@ -13,6 +13,7 @@ export declare class AuthController {
     signup(dto: AuthDto): Promise<any>;
     signin(dto: SigninDto): Promise<{
         access_token: string;
+        tfa: boolean;
     }>;
     login42(): Promise<{
         url: string;

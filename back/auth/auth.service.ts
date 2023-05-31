@@ -52,19 +52,20 @@ export class AuthService {
 		return (this.signToken(user.id, user.name));
 	}
 
-	async signToken(userId: number, name: string): Promise<{access_token: string}> {
-		const payload = {
-			sub: userId,
-			name,
-		};
-		const secret = this.config.get('JWT_SECRET');
-		const token = await this.jwt.signAsync(payload, {
-			expiresIn: '15m',
-			secret: secret,
+	async signToken(userId: number, name: string) {
+		const token = await this.jwt.signAsync({
+				sub: userId,
+				name,
+			}, {
+				expiresIn: '15m',
+				secret: this.config.get('JWT_SECRET'),
 		});
-		return ({
-			access_token: token,
+		const user = await this.prisma.user.findUnique({
+			where: {
+				name: name,
+			},
 		});
+		return ({ access_token: token, tfa: user.tfa });
 	}
 
 	async sign42Token(user: TokenInputDto) {

@@ -9,26 +9,29 @@ const Callback42 = () => {
     const redirectHome = async() => {
         const url = window.location.href as string;
         const tokenSplit: string = url.split("=")[1];
-        localStorage.setItem("userStatus", "connected");
-        localStorage.setItem("isConnected", "yes");
-        localStorage.setItem("token", tokenSplit);
         try {
-            await ax.patch("users", {
-                connected: true,
-            }, {
-				headers: {
-					Authorization: `Bearer ${tokenSplit}`
-				},
-			});
             const response = await ax.get("http://localhost:8080/users/me", {
                 headers: {
                     Authorization: `Bearer ${tokenSplit}`,
                 },
             });
-            if (response.data.tfa === true)
-				navigate('/tfa');
-            else
+            if (response.data.tfa === true) {
+                localStorage.setItem("tokentfa", tokenSplit);
+                navigate('/tfa');
+            }
+            else {
+                localStorage.setItem("userStatus", "connected");
+                localStorage.setItem("isConnected", "yes");
+                localStorage.setItem("token", tokenSplit);
+                await ax.patch("users", {
+                    connected: true,
+                    }, {
+	    			headers: {
+	    				Authorization: `Bearer ${tokenSplit}`
+	    			},
+	    		});
                 navigate('/editprofile');
+            }
         }
         catch {
             console.log("could not change connected to true");
