@@ -9,6 +9,7 @@ const ProfilePage = () => {
 
 	const [userInfos, setUserInfos] = useState<UserInfos | null>(null);
 	const token = localStorage.getItem("token");
+	const [showTFAKey, setShowTFAKey] = useState(false);
 
 	useEffect(() => {
 		const getUsers = async () => {
@@ -19,12 +20,18 @@ const ProfilePage = () => {
 					},
 				});
 				setUserInfos(response.data);
+				// console.log(userInfos?.tfa);
+				// console.log(userInfos?.name);
 			} catch (error) {
 				console.error("Failed to fetch users.");
 			}
 		};
 		getUsers();
 	}, [token]);
+
+	const toggleTFAKey = () => {
+		setShowTFAKey(!showTFAKey);
+	  };
 
 	return (
 		<div>
@@ -47,7 +54,17 @@ const ProfilePage = () => {
 						<p className="userInformationValue"> Wins: {userInfos?.wins} </p>
 						<p className="userInformationValue"> Losses: {userInfos?.losses} </p>
 						<p className="userInformationValue"> Ladder lever: {userInfos?.ladder_level} </p>
-						<p className="userInformationValue"> Your two-factor authentication key: {userInfos?.tfa_key} </p>
+
+						{userInfos?.tfa && (
+							  <button onClick={toggleTFAKey}>View your 2FA key</button>
+						)}
+						{showTFAKey && userInfos?.tfa_key && (
+							<div className="tfaKeyContainer">
+								<p className="tfaKeyText">
+									Your two-factor authentication key: {userInfos?.tfa_key}
+								</p>
+							</div>
+						)}
 					</div>
 				<a href="/editprofile">
 					<button >Edit your profile informations</button>

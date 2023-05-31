@@ -28,3 +28,41 @@
     font-size: large;
     font-weight: bold;
 }
+
+/************* TFA *************/
+
+.tfaKeyContainer {
+    position: fixed;
+    top: 40%;
+    left: 50%;
+    border: solid 1px;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    padding: 10px;
+    background-color: rgb(10, 37, 39);
+    border-radius: 4px;
+    opacity: 0;
+    animation: fade-in 0.7s ease-in-out forwards;
+  }
+  
+  @keyframes fade-in {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  
+  @keyframes fade-out {
+    0% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+
+.tfaKeyText {
+    font-weight: bold;
+}
