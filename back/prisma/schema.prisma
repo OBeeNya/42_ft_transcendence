@@ -13,16 +13,15 @@ model User {
   updatedAt		DateTime @updatedAt
   name			String @unique
   hash			String
-  userFriends	UserFriend[] @relation("UserFriendUser")
-  friendUsers	UserFriend[] @relation("UserFriendFriend")
-  userBlocks	UserBlock[] @relation("UserBlockUser")
-  blockedUsers	UserBlock[] @relation("UserBlockBlocked")
+  userFriends	UserFriend[] @relation("UserFriendUser")	// user actuel a init la demande d'ami
+  friendUsers	UserFriend[] @relation("UserFriendFriend")	// user actuel est le destinataire de la demande
+  userBlocks	UserBlock[] @relation("UserBlockUser")		// liste des users que l'user actuel a bloqués
+  blockedUsers	UserBlock[] @relation("UserBlockBlocked")	// liste des users qui ont bloqué l'user actuel
   wins			Int @default(0)
   losses		Int @default(0)
   ladder_level	Int @default(1)
   history		MatchHistory[]
   oauthId		String @unique
-  email			String
   connected		Boolean @default(false)
   chats			UserChat[]
   messages		Message[] @relation("UserMessage")
@@ -41,7 +40,6 @@ model UserBlock {
   @@map("user_blocks")
 }
 
-
 model UserFriend {
   id		Int @id @default(autoincrement())
   userId	Int
@@ -52,7 +50,6 @@ model UserFriend {
 
   @@map("user_friends")
 }
-
 
 model MatchHistory {
   id			Int @id @default(autoincrement())
