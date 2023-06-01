@@ -1,6 +1,23 @@
-Recherche de channel
+Un utilisateur essaye de rejoindre un channel :
 
-L'utilisateur va taper le nom d'un channel. S'il existe --> il le rejoint, sinon message d'erreur.
-Messages d'erreurs :
-- si le nom de channel ne correspond a aucun channel existant
-- si channel private
+- l'utilisateur n'est pas membre du channel et ce dernier est public --> il le rejoint
+
+- le channel est privé --> l'utilisateur a besoin d'une invitation 
+  ET/OU le propriétaire du channel doit approuver la demande pour rejoindre
+
+- le channel est protégé par mot de passe : l'utilisateur doit fournir le bon mdp pour rejoindre
+
+- l'utilisateur est deja membre du channel
+
+- Le channel est plein
+
+- L'utilisateur a ete bloque par le propriétaire du channel ou par l'administrateur
+
+- L'utilisateur a été banni du channel
+
+------------------------------------------------------------------------------------------------------------ 
+
+Code :
+- fonction qui recherche un channel dans notre db 
+- fonction qui verifie si le nom du channel existe deja dans la db --> si oui le rejoint (si pas private)
+                                                                       sinon msg d'erreur
