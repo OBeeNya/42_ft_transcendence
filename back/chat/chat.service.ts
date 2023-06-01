@@ -6,6 +6,43 @@ export class ChatService
 {
 	constructor(private prisma: PrismaService) {} // injection de PrismaService dans ChatService --> permet d'interagir avec la db
 
+	async searchChannel(channelName: string)
+	{
+		return (this.prisma.chat.findMany(
+		{
+			where:
+			{
+				name:
+				{
+					contains: channelName,
+					mode: 'insensitive', // Pour une recherche insensible à la casse
+				},
+			},
+		}));
+	}
+
+	async setChatPassword(userId: number, chatId: number, password: string)
+	{
+		const chat = await this.prisma.chat.findUnique({ where:{id: chatId} });
+
+		if (!chat)
+			throw new BadRequestException(`Chat with id ${chatId} does not exist`);
+
+		const owner = await this.prisma.userChat.findFirst(
+		{
+			where: {chatId, isOwner: true},
+		});
+
+		if (owner.userId !== userId)
+			throw new ForbiddenException(`Only the owner can set the password for chat with id ${chatId}`);
+
+		await this.prisma.chat.update(
+		{
+			where: {id: chatId},
+			data: {password},
+		});
+	}
+
 	async joinChannel(userId: number, chatId: number, password?: string)
 	{
 		// Vérifie si l'utilisateur existe
@@ -31,7 +68,7 @@ export class ChatService
 
 		// Vérifie si l'utilisateur est déjà membre du chat
 		const userChat = await this.prisma.userChat.findUnique({ where: {userId_chatId: {userId, chatId}} });
-		
+
 		if (userChat)
 			throw new BadRequestException(`User with id ${userId} is already a member of chat with id ${chatId}`);
 
@@ -57,34 +94,12 @@ export class ChatService
 			{
 				userId,
 				chatId,
-				isOwner: false, // L'utilisateur n'est pas propriétaire du chat par défaut
-				isBlocked: false, // L'utilisateur n'est pas bloqué par défaut
-				permissions: 'default', // Permissions par défaut
+				isOwner: false,			// L'utilisateur n'est pas propriétaire du chat par défaut
+				isBlocked: false,		// L'utilisateur n'est pas bloqué par défaut
+				permissions: 'default',	// Permissions par défaut
 			},
 		});
 
 		return (newUserChat);
-	}
-
-	async setChatPassword(userId: number, chatId: number, password: string)
-	{
-		const chat = await this.prisma.chat.findUnique({ where:{id: chatId} });
-
-		if (!chat)
-			throw new BadRequestException(`Chat with id ${chatId} does not exist`);
-	
-		const owner = await this.prisma.userChat.findFirst(
-		{
-			where: {chatId, isOwner: true},
-		});
-
-		if (owner.userId !== userId)
-			throw new ForbiddenException(`Only the owner can set the password for chat with id ${chatId}`);
-	
-		await this.prisma.chat.update(
-		{
-			where: {id: chatId},
-			data: {password},
-		});
 	}
 }

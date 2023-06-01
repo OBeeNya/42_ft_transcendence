@@ -4,6 +4,9 @@ import { PrismaClient } from '@prisma/client';
 
 @Injectable()
 export class PrismaService extends PrismaClient {
+	chat: any;
+	userBlock: any;
+	userChat: any;
 
 	constructor(config: ConfigService) {
 		super({
