@@ -103,8 +103,8 @@ const EditProfilePage = () => {
 			<Header />
 			<Content>
 				<div className="editUserProfileContainer">
-					<h1>User profile</h1>
-						<h2>Verify your information and update any available field as necessary</h2>
+					{/* <h1>User profile</h1> */}
+						<h2>Update your informations</h2>
 					<form className="editUserInformations" onSubmit={handleSubmit(handleChanges)}>
 						<div className="avatarChange">
 							<img
@@ -116,22 +116,25 @@ const EditProfilePage = () => {
 									target.src = '/avatar/auto.png';
 								  }}
 								/>
-							<div className="avatarChangeButton">
-								<label className="editUserInformationKey">Upload a new avatar:</label>
+							<div className="avatarChangeButtonContainer">
+								{/* <label className="avatarChangeButtonLabel">Change avatar:</label> */}
 								<input
 									type='file'
+									className="avatarChangeButton"
 									onChange={handleAvatarChange}
 									/>
 								<div id="messageAvatar"></div>
 							</div>
 						</div>
-						<label className="editUserInformationKey">Enable two-factor authentication:</label>
-						<input
-							type="checkbox"
-							checked={userInfos?.tfa || false}
-							onChange={handleTfaChange}
-						/>
-						<label className="editUserInformationKey">Change your name:</label>
+						<div className="tfaContainer">
+							<label className="editUserInformationKey">Enable two-factor authentication</label>
+							<input
+								type="checkbox"
+								checked={userInfos?.tfa || false}
+								onChange={handleTfaChange}
+								/>
+						</div>
+						<label className="editUserInformationKey">Change name:</label>
 						<input className="editUserInformationKey"
 							type="text"
 							{...register("name")}

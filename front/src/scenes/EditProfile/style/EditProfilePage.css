@@ -1,6 +1,7 @@
 .editUserAvatar {
-    max-width: 200px;
-    height: 200px;
+    /* max-width: 200px; */
+    max-width: 45%;
+    height: auto;
     /* max-height: 400px; */
     border-radius: 50%;
 }
@@ -15,12 +16,36 @@
     margin-bottom: 3%;
 }
 
-.avatarChangeButton {
+.avatarChangeButtonContainer {
     display: flex;
     margin: 5%;
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
+}
+
+.avatarChangeButton {
+    color: transparent;
+}
+
+.avatarChangeButton::-webkit-file-upload-button {
+    visibility: hidden;
+  }
+
+.avatarChangeButton::before {
+    content: 'Change avatar';
+    color: black;
+    display: inline-block;
+    background: -webkit-linear-gradient(top, #f9f9f9, #e3e3e3);
+    border: 1px solid #999;
+    border-radius: 3px;
+    padding: 5px 8px;
+    cursor: pointer;
+    font-weight: 700;
+}
+
+.avatarChangeButton:hover::before {
+    border-color: black;
 }
 
 .editUserInformations {
@@ -37,7 +62,8 @@
     margin-bottom: 1%;
 }
 
-/* p,
-label {
-    padding: 2% 0% 2% 0%;
-} */
+.tfaContainer {
+    margin: 3% 0% 3% 0%;
+    display: flex;
+    justify-content: space-between;
+}
