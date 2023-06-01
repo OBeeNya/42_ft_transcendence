@@ -3,6 +3,8 @@ import { ax } from '../../services/axios/axios'
 import { UserInfos } from '../../services/interfaces/userInfos.interface';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
+import "./style/TfaPage.css";
+
 
 const TfaPage = () => {
 	
@@ -62,9 +64,9 @@ const TfaPage = () => {
 	}
 
 	return (
-		<div>
-			<label>Enter your verification code:</label>
-			<input
+		<div className='tfaInformations'>
+			<label className="tfaInformationKey">Enter your TFA verification code:</label>
+			<input className="tfaInformationKey"
 				type="text"
 				value={codeInput}
 				onChange={(event) => setCode(event.target.value)}
