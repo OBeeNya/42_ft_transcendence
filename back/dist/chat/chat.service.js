@@ -16,6 +16,30 @@ let ChatService = class ChatService {
     constructor(prisma) {
         this.prisma = prisma;
     }
+    async searchChannel(channelName) {
+        return (this.prisma.chat.findMany({
+            where: {
+                name: {
+                    contains: channelName,
+                    mode: 'insensitive',
+                },
+            },
+        }));
+    }
+    async setChatPassword(userId, chatId, password) {
+        const chat = await this.prisma.chat.findUnique({ where: { id: chatId } });
+        if (!chat)
+            throw new common_1.BadRequestException(`Chat with id ${chatId} does not exist`);
+        const owner = await this.prisma.userChat.findFirst({
+            where: { chatId, isOwner: true },
+        });
+        if (owner.userId !== userId)
+            throw new common_1.ForbiddenException(`Only the owner can set the password for chat with id ${chatId}`);
+        await this.prisma.chat.update({
+            where: { id: chatId },
+            data: { password },
+        });
+    }
     async joinChannel(userId, chatId, password) {
         const user = await this.prisma.user.findUnique({ where: { id: userId } });
         if (!user)
@@ -50,20 +74,6 @@ let ChatService = class ChatService {
             },
         });
         return (newUserChat);
-    }
-    async setChatPassword(userId, chatId, password) {
-        const chat = await this.prisma.chat.findUnique({ where: { id: chatId } });
-        if (!chat)
-            throw new common_1.BadRequestException(`Chat with id ${chatId} does not exist`);
-        const owner = await this.prisma.userChat.findFirst({
-            where: { chatId, isOwner: true },
-        });
-        if (owner.userId !== userId)
-            throw new common_1.ForbiddenException(`Only the owner can set the password for chat with id ${chatId}`);
-        await this.prisma.chat.update({
-            where: { id: chatId },
-            data: { password },
-        });
     }
 };
 ChatService = __decorate([

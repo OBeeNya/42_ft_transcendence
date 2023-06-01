@@ -26,54 +26,56 @@ const ChatSideBar = () =>
 		}
 	}, [isSearchOpen]);
 
-	const handleKeyPress = async (event: React.KeyboardEvent<HTMLInputElement>) => 
-	{
-		if (event.key === "Enter")
-		{
-			const channelName = searchInputRef.current.value;
-			await joinChannel(channelName);
-		}
-	}
+	// const handleKeyPress = async (event: React.KeyboardEvent<HTMLInputElement>) => 
+	// {
+	// 	if (event.key === "Enter")
+	// 	{
+	// 		const channelName = searchInputRef.current.value;
+	// 		await joinChannel(channelName);
+	// 	}
+	// }
 
 	const handleSearchClick = async () =>
 	{
-		const channelName = searchInputRef.current.value;
-		await joinChannel(channelName);
-    }
+		if (searchInputRef.current)
+		{
+			const channelName = searchInputRef.current.value;
+			// await joinChannel(channelName);
+		}
+}
 
-	const joinChannel = async (channelName: string) =>
-	{
-        // TODO: Appel API pour rejoindre le channel
-    }
+	// const joinChannel = async (channelName: string) =>
+	// {
+	//     // TODO: Appel API pour rejoindre le channel
+	// }
 
 	return (
-        <div className="channel-search-add">
+		<div className="channel-search-add">
 
-            <div className="first-line">
+			<div className="first-line">
 
-                <div className="channels-text">
-                    <p>CHANNELS</p>
-                </div>
+				<div className="channels-text">
+					<p>CHANNELS</p>
+				</div>
 
-                <div className="icons">
+				<div className="icons">
 
-                    <button onClick={handleSearchClick}>
-                        <i className="fas fa-search"></i>
-                    </button>
+					<button onClick={handleSearchClick}>
+						<i className="fas fa-search"></i>
+					</button>
 
-                    {isSearchOpen ? <input ref={searchInputRef} type="text" placeholder="Search..." onKeyPress={handleKeyPress}/> : null}
+					{/* {isSearchOpen ? <input ref={searchInputRef} type="text" placeholder="Search..." onKeyPress={handleKeyPress}/> : null} */}
 
-                    <button onClick={() => setAddChannel(!addChannel)}>
-                        <i className="fas fa-plus"></i>
-                    </button>
+					<button onClick={() => setAddChannel(!addChannel)}>
+						<i className="fas fa-plus"></i>
+					</button>
 
-                </div>
+				</div>
 
-            </div>
+			</div>
 
-        </div>
-    );
+		</div>
+	);
 };
 
 export default ChatSideBar;
-

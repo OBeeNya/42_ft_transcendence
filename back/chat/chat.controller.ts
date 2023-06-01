@@ -27,7 +27,7 @@ export class ChatController
 	{
 		return this.chatService.setChatPassword(userId, chatId, password);
 	}
-	
+
 	@Get('search')
 	async searchChannel(@Query('channelName') channelName: string)
 	{
