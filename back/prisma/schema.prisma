@@ -72,6 +72,7 @@ model Chat {
   messages		Message[]
   type			ChatType @default(PUBLIC)
   users			UserChat[]
+  password		String?
 
   @@map("chats")
 }
