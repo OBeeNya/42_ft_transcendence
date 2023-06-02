@@ -1,5 +1,13 @@
 {
   "dependencies": {
+    "axios": "^1.4.0",
     "js-cookie": "^3.0.5"
+  },
+  "devDependencies": {
+    "concurrently": "^8.0.1",
+    "prisma": "^4.14.1"
+  },
+  "scripts": {
+    "start": "concurrently \"cd back && npm run dev:db:up && sleep 5 && npx prisma migrate deploy && npm run start:dev\" \"cd front && npm start\""
   }
 }

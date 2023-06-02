@@ -1,0 +1,46 @@
+.leaderboard {
+	width: 95%;
+	margin: 0 auto;
+}
+
+.leaderboard table {
+	width: 100%;
+	border-collapse: separate;
+	border-spacing: 0;
+	table-layout: fixed;
+	border-radius: 15px;
+	overflow: hidden;
+	border: 1px solid #fff;
+}
+
+.leaderboard th {
+	border: none;
+	padding: 20px;
+	text-align: center;
+	word-wrap: break-word;
+}
+
+.leaderboard td {
+	border: 1px solid #fff;
+	padding: 20px;
+	text-align: center;
+	word-wrap: break-word;
+}
+
+.online-indicator {
+	background-color: green;
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+	display: inline-block;
+	margin-right: 5px;
+}
+
+.offline-indicator {
+	background-color: red;
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+	display: inline-block;
+	margin-right: 5px;
+}

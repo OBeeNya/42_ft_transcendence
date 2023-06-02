@@ -81,5 +81,4 @@ export class UserController {
 			token: elements.otp,
 		}));
 	}
-
 }

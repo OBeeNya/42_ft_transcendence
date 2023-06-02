@@ -9,5 +9,5 @@ export interface UserInfos {
     tfa: boolean;
     tfa_key: string;
 }
-  
+
 export {};

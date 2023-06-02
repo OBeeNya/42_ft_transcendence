@@ -120,5 +120,4 @@ export class UserService {
 		});
 		return (user.tfa_key);
 	}
-
 }

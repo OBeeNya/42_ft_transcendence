@@ -14,6 +14,24 @@ const common_1 = require("@nestjs/common");
 const config_1 = require("@nestjs/config");
 const client_1 = require("@prisma/client");
 let PrismaService = class PrismaService extends client_1.PrismaClient {
+    get chat() {
+        return this._chat;
+    }
+    set chat(value) {
+        this._chat = value;
+    }
+    get userBlock() {
+        return this._userBlock;
+    }
+    set userBlock(value) {
+        this._userBlock = value;
+    }
+    get userChat() {
+        return this._userChat;
+    }
+    set userChat(value) {
+        this._userChat = value;
+    }
     constructor(config) {
         super({
             datasources: {

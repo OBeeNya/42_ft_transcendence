@@ -1,45 +1,112 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider	= "postgresql"
+  url		= env("DATABASE_URL")
 }
 
 model User {
-  
-  id Int @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  name String @unique
-  hash String
-  friends String[] // not amazing
-  wins Int @default(0)
-  losses Int @default(0)
-  ladder_level Int @default(1)
-  history MatchHistory[]
-  oauthId String
-  connected Boolean @default(false)
+  id			Int @id @default(autoincrement())
+  createdAt		DateTime @default(now())
+  updatedAt		DateTime @updatedAt
+  name			String @unique
+  hash			String
+  userFriends	UserFriend[] @relation("UserFriendUser")	// user actuel a init la demande d'ami
+  friendUsers	UserFriend[] @relation("UserFriendFriend")	// user actuel est le destinataire de la demande
+  userBlocks	UserBlock[] @relation("UserBlockUser")		// liste des users que l'user actuel a bloqués
+  blockedUsers	UserBlock[] @relation("UserBlockBlocked")	// liste des users qui ont bloqué l'user actuel
+  wins			Int @default(0)
+  losses		Int @default(0)
+  ladder_level	Int @default(1)
+  history		MatchHistory[]
+  oauthId		String @unique
+  connected		Boolean @default(false)
+  chats			UserChat[]
+  messages		Message[] @relation("UserMessage")
+
   tfa Boolean @default(false)
   tfa_key String
   
   @@map("users")
 }
 
+model UserBlock {
+  id			Int @id @default(autoincrement())
+  userId		Int
+  blockedId		Int
+  createdAt		DateTime @default(now())
+  user			User @relation("UserBlockUser", fields: [userId], references: [id])
+  blockedUser	User @relation("UserBlockBlocked", fields: [blockedId], references: [id])
+
+  @@map("user_blocks")
+}
+
+model UserFriend {
+  id		Int @id @default(autoincrement())
+  userId	Int
+  friendId	Int
+  createdAt	DateTime @default(now())
+  user		User @relation("UserFriendUser", fields: [userId], references: [id])
+  friend	User @relation("UserFriendFriend", fields: [friendId], references: [id])
+
+  @@map("user_friends")
+}
+
 model MatchHistory {
-  
-  id Int @id @default(autoincrement())
-  user User @relation(fields: [userId], references: [id])
-  userId Int
-  userName String
-  opponentName String
-  createdAt DateTime @default(now())
-  ladder Int
-  won Boolean @default(false)
+  id			Int @id @default(autoincrement())
+  user 			User @relation(fields: [userId], references: [id])
+  userId 		Int
+  userName 		String
+  opponentName	String
+  createdAt		DateTime @default(now())
+  ladder		Int
+  won			Boolean @default(false)
 
   @@map("matchhistory")
+}
+
+model Chat {
+  id			Int @id @default(autoincrement())
+  createdAt		DateTime @default(now())
+  updatedAt		DateTime @updatedAt
+  name			String @unique
+  messages		Message[]
+  type			ChatType @default(PUBLIC)
+  users			UserChat[]
+  password		String?
+
+  @@map("chats")
+}
+
+model Message {
+  id		Int @id @default(autoincrement())
+  createdAt	DateTime @default(now())
+  content	String
+  sender	User @relation("UserMessage", fields: [userId], references: [id])
+  userId	Int
+  chat		Chat @relation(fields: [chatId], references: [id])
+  chatId	Int
+
+  @@map("messages")
+}
+
+model UserChat {
+  userId		Int
+  chatId		Int
+  user			User @relation(fields: [userId], references: [id])
+  chat			Chat @relation(fields: [chatId], references: [id])
+  isOwner		Boolean
+  isBlocked		Boolean
+  permissions	String
+
+  @@id([userId, chatId])
+  @@map("user_chats")
+}
+
+enum ChatType {
+  PUBLIC
+  PRIVATE
+  PASSWORD
 }
