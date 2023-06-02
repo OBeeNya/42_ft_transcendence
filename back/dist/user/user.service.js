@@ -46,16 +46,6 @@ let UserService = class UserService {
                 },
             });
         }
-        if (dto.email != '') {
-            user = await this.prisma.user.update({
-                where: {
-                    id: userId,
-                },
-                data: {
-                    email: dto.email,
-                },
-            });
-        }
         if (dto.connected !== undefined) {
             user = await this.prisma.user.update({
                 where: {
@@ -99,7 +89,6 @@ let UserService = class UserService {
                 name: dto.name,
                 oauthId: dto.oauthId,
                 hash: dto.hash,
-                email: dto.email,
             },
         }));
     }

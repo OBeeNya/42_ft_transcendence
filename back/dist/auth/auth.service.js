@@ -32,7 +32,6 @@ let AuthService = class AuthService {
                     name: dto.name,
                     hash,
                     oauthId: "not42",
-                    email: dto.email,
                 },
             });
             var fs = require('fs');

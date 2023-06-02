@@ -24,7 +24,7 @@ export class AuthService {
 					name: dto.name,
 					hash,
 					oauthId: "not42",
-					email: dto.email,
+					// email: dto.email,
 				},
 			});
 			var fs = require('fs');

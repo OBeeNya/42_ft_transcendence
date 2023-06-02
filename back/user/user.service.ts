@@ -41,16 +41,16 @@ export class UserService {
 				},
 			});
 		}
-		if (dto.email != '') {
-			user = await this.prisma.user.update({
-				where: {
-					id: userId,
-				},
-				data: {
-					email: dto.email,
-				},
-			});
-		}
+		// if (dto.email != '') {
+		// 	user = await this.prisma.user.update({
+		// 		where: {
+		// 			id: userId,
+		// 		},
+		// 		data: {
+		// 			email: dto.email,
+		// 		},
+		// 	});
+		// }
 		if (dto.connected !== undefined) {
 			user = await this.prisma.user.update({
 				where: {
@@ -98,7 +98,7 @@ export class UserService {
 				name: dto.name,
 				oauthId: dto.oauthId,
 				hash: dto.hash,
-				email: dto.email,
+				// email: dto.email,
 			},
 		}));
 	}
