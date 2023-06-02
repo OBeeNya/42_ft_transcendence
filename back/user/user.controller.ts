@@ -2,10 +2,13 @@ import { Body, Controller, Get, Patch, UseGuards, Param, Delete, Post, UseInterc
 import { User } from '@prisma/client';
 import { GetUser } from '../auth/decorator';
 import { JwtGuard } from '../auth/guard';
-import { EditUserDto, UpdateAvatarDto } from './dto';
+import { EditUserDto, QrcodeVerifyDto } from './dto';
 import { UserService } from './user.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { MulterConfig } from './middleware/multer.config';
+import * as speakeasy from 'speakeasy';
+
+var QRCode = require('qrcode');
 
 @UseGuards(JwtGuard)
 @Controller('users')
@@ -17,6 +20,11 @@ export class UserController {
 	@Get()
 	findAll() {
 		return this.userService.findAll();
+	}
+
+	@Get()
+	findOne(@Body() name: string) {
+		return this.userService.findOneByName(name);
 	}
 
 	// localhost:3000/users/me
@@ -56,5 +64,21 @@ export class UserController {
 	@UseInterceptors(FileInterceptor('file', MulterConfig))
 	uploadAvatar(@UploadedFile() file: any) {
 		return (file);
+	}
+
+	@Post('qrcode')
+	async qrcode(@Body() name: any) {
+		const key = await this.userService.qrcode(name.name);
+		return (key);
+	}
+
+	@Post('qrcode/verify')
+	async verifyCode(@Body() elements: QrcodeVerifyDto) {
+		const key = await this.userService.qrcode(elements.name);
+		return (speakeasy.totp.verify({
+			secret: key,
+			encoding: 'base32',
+			token: elements.otp,
+		}));
 	}
 }

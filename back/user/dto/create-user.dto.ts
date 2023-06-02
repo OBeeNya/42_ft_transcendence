@@ -12,9 +12,5 @@ export class Create42UserDto {
 
 	@IsString()
 	@IsNotEmpty()
-	oauthId: string;
-
-	@IsString()
-	@IsNotEmpty()
-	email: string;
+	oauthId: string;	
 }

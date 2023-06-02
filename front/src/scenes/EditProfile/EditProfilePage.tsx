@@ -5,20 +5,14 @@ import { useForm } from "react-hook-form";
 import { ChangeEvent, useEffect, useState } from "react";
 import { ax } from '../../services/axios/axios'
 import { UserInfos } from "../../services/interfaces/userInfos.interface";
-// import { GetUserInfos } from "../../services/axios/getUsers";
 import "./style/EditProfilePage.css";
-
 
 const EditProfilePage = () => {
 	const navigate = useNavigate();
 	const [userInfos, setUserInfos] = useState<UserInfos | null>();
-	// const [nameInput, setName] = useState('');
-	// const [emailInput, setEmail] = useState('');
-	const token = localStorage.getItem("token");
-	const { register, handleSubmit, reset } = useForm({defaultValues: {	name: userInfos?.name, 
-																		email: userInfos?.email
-																								}});
 	
+	const token = localStorage.getItem("token");
+	const { register, handleSubmit, reset } = useForm({defaultValues: {	name: userInfos?.name, }});
 	useEffect(() => {
 		const getUsers = async () => {
 			try {
@@ -29,16 +23,15 @@ const EditProfilePage = () => {
 				});
 				setUserInfos(response.data);
 				reset(response.data);
-				// console.log("DATA", response.data);
 			} catch (error) {
 				console.error("Failed to fetch users.");
 			}
 		};
 		getUsers();
-	}, [token]);
+	}, [token, reset]);
 
 	const handleChanges = async (userInput: any) => {
-		if (userInput.name === '' && userInput.email === '')
+		if (userInput.name === '')
 			return ;
 		try {
 			if (userInput.name !== '') {
@@ -50,25 +43,19 @@ const EditProfilePage = () => {
 					},
 				});
 			}
-			const expression: RegExp = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
-			const messageEmail = document.getElementById("messageEmail");
-			if (userInput.email !== '') {
-				if (!expression.test(userInput.email)) {
-					if (messageEmail)
-						messageEmail.textContent = "Please enter a valid email";
-				}
-				else {
-					await ax.patch('users', {
-						email: userInput.email,
-					}, {
-						headers: {
-							Authorization: `Bearer ${token}`
-						},
-					});
-					if (messageEmail)
-						messageEmail.textContent = "";
-				}	
+			try {
+				await ax.patch('users', {
+					tfa: userInfos?.tfa,
+				}, {
+					headers: {
+						Authorization: `Bearer ${token}`
+					},
+				});
 			}
+			catch {
+				console.log("could not update tfa preferences")
+			}
+
 			const message = document.getElementById("message");
 			if (message)
 				message.textContent = "Profile updated";
@@ -101,13 +88,23 @@ const EditProfilePage = () => {
 				messageAvatar.textContent = "Could not upload avatar, please make sure an .jpg, .jpeg or .png file was used";
 		}
 	}
+
+	const handleTfaChange = async () => {
+		if (userInfos?.tfa !== undefined) {
+			setUserInfos({...userInfos,
+				tfa: !userInfos?.tfa
+				
+			});
+		}
+	}
+
 	return (
 		<div>
 			<Header />
 			<Content>
 				<div className="editUserProfileContainer">
-					<h1>User profile</h1>
-						<h2>Verify your information and update any available field as necessary</h2>
+					{/* <h1>User profile</h1> */}
+						<h2>Update your informations</h2>
 					<form className="editUserInformations" onSubmit={handleSubmit(handleChanges)}>
 						<div className="avatarChange">
 							<img
@@ -119,26 +116,29 @@ const EditProfilePage = () => {
 									target.src = '/avatar/auto.png';
 								  }}
 								/>
-							<div className="avatarChangeButton">
-								<label className="editUserInformationKey">Upload a new avatar:</label>
+							<div className="avatarChangeButtonContainer">
+								{/* <label className="avatarChangeButtonLabel">Change avatar:</label> */}
 								<input
 									type='file'
+									className="avatarChangeButton"
 									onChange={handleAvatarChange}
 									/>
 								<div id="messageAvatar"></div>
 							</div>
 						</div>
-						<label className="editUserInformationKey">Change your name:</label>
+						<div className="tfaContainer">
+							<label className="editUserInformationKey">Enable two-factor authentication</label>
+							<input
+								type="checkbox"
+								checked={userInfos?.tfa || false}
+								onChange={handleTfaChange}
+								/>
+						</div>
+						<label className="editUserInformationKey">Change name:</label>
 						<input className="editUserInformationKey"
 							type="text"
 							{...register("name")}
-							/>
-						<label className="editUserInformationKey">Change your email:</label>
-						<input  className="editUserInformationKey"
-							type="email"
-							{...register("email")}
-							/>
-						<p id="messageEmail"> </p>
+						/>
 						<button type="submit" value="submit" >Submit</button>
 						<div id="message"></div>
 					</form>

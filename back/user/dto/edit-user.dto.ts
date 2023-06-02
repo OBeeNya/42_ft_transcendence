@@ -22,12 +22,12 @@ export class EditUserDto {
 	@IsOptional()
 	ladder_level?: number;
 
-	@IsString()
-	@IsOptional()
-	email?: string;
-
 	@IsBoolean()
 	@IsOptional()
 	connected?: boolean;
+
+	@IsBoolean()
+	@IsOptional()
+	tfa?: boolean;
 
 }

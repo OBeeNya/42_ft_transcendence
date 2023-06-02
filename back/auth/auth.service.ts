@@ -6,39 +6,31 @@ import { Prisma } from "@prisma/client";
 import { JwtService } from "@nestjs/jwt";
 import { ConfigService } from "@nestjs/config";
 import { Response } from 'express';
-import { HttpService } from "@nestjs/axios";
+import * as speakeasy from 'speakeasy';
 
 @Injectable()
 export class AuthService {
 
 	constructor(private prisma: PrismaService,
 		private jwt: JwtService,
-		private config: ConfigService,
-		private httpService: HttpService,) {}
+		private config: ConfigService,) {}
 	
 	async signup(dto: AuthDto) {
 		const hash = await argon.hash(dto.password);
 		try {
-			const user = await this.prisma.user.create({
+			await this.prisma.user.create({
 				data: {
 					name: dto.name,
 					hash,
 					oauthId: "not42",
-					// email: dto.email,
+					tfa_key: speakeasy.generateSecret({ length: 10 }).base32,
 				},
 			});
-			var fs = require('fs');
-			const writer = fs.createWriteStream('../front/public/avatar/' + user.id + '.png');
-			const response = await this.httpService.axiosRef({
-				url: 'https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg',
-				method: 'GET',
-				responseType: 'stream',
-			});
-			response.data.pipe(writer);
-			return (this.signToken(user.id, user.name)); // utile d'envoyer un token a l'inscription?
+			return (null);
 		}
 		catch (error) {
 			if (error instanceof Prisma.PrismaClientKnownRequestError) {
+				console.error("sign UP error: ", error);
 				if (error.code === 'P2002')
 					throw (new ForbiddenException('Credentials taken'));
 			}
@@ -60,30 +52,23 @@ export class AuthService {
 		return (this.signToken(user.id, user.name));
 	}
 
-	async signToken(userId: number, name: string): Promise<{access_token: string}> {
-		const payload = {
-			sub: userId,
-			name,
-		};
-		const secret = this.config.get('JWT_SECRET');
-		const token = await this.jwt.signAsync(payload, {
-			expiresIn: '15m',
-			secret: secret,
+	async signToken(userId: number, name: string) {
+		const token = await this.jwt.signAsync({
+				sub: userId,
+				name,
+			}, {
+				expiresIn: '15m',
+				secret: this.config.get('JWT_SECRET'),
 		});
-		return ({
-			access_token: token,
+		const user = await this.prisma.user.findUnique({
+			where: {
+				name: name,
+			},
 		});
+		return ({ access_token: token, tfa: user.tfa });
 	}
 
 	async sign42Token(user: TokenInputDto) {
-		// const stringed_user = JSON.parse(JSON.stringify(user));
-		// return (this.jwt.sign(
-		// 	stringed_user,
-		// 	{
-		// 		secret: this.config.get('JWT_SECRET'),
-		// 		expiresIn: "1h",
-		// 	}
-		// ));
 		const payload = {
 			sub: user.id,
 			name: user.name,

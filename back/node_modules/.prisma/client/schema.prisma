@@ -26,6 +26,9 @@ model User {
   chats			UserChat[]
   messages		Message[] @relation("UserMessage")
 
+  tfa Boolean @default(false)
+  tfa_key String
+  
   @@map("users")
 }
 

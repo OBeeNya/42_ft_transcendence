@@ -20,12 +20,17 @@ const dto_1 = require("./dto");
 const user_service_1 = require("./user.service");
 const platform_express_1 = require("@nestjs/platform-express");
 const multer_config_1 = require("./middleware/multer.config");
+const speakeasy = require("speakeasy");
+var QRCode = require('qrcode');
 let UserController = class UserController {
     constructor(userService) {
         this.userService = userService;
     }
     findAll() {
         return this.userService.findAll();
+    }
+    findOne(name) {
+        return this.userService.findOneByName(name);
     }
     getMe(user) {
         return (user);
@@ -48,6 +53,18 @@ let UserController = class UserController {
     uploadAvatar(file) {
         return (file);
     }
+    async qrcode(name) {
+        const key = await this.userService.qrcode(name.name);
+        return (key);
+    }
+    async verifyCode(elements) {
+        const key = await this.userService.qrcode(elements.name);
+        return (speakeasy.totp.verify({
+            secret: key,
+            encoding: 'base32',
+            token: elements.otp,
+        }));
+    }
 };
 __decorate([
     (0, common_1.Get)(),
@@ -55,6 +72,13 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], UserController.prototype, "findAll", null);
+__decorate([
+    (0, common_1.Get)(),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], UserController.prototype, "findOne", null);
 __decorate([
     (0, common_1.Get)('me'),
     __param(0, (0, decorator_1.GetUser)()),
@@ -106,6 +130,20 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], UserController.prototype, "uploadAvatar", null);
+__decorate([
+    (0, common_1.Post)('qrcode'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "qrcode", null);
+__decorate([
+    (0, common_1.Post)('qrcode/verify'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [dto_1.QrcodeVerifyDto]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "verifyCode", null);
 UserController = __decorate([
     (0, common_1.UseGuards)(guard_1.JwtGuard),
     (0, common_1.Controller)('users'),

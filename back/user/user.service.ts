@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma_module/prisma.service';
-import { EditUserDto, Create42UserDto, UpdateAvatarDto } from './dto';
+import { EditUserDto, Create42UserDto } from './dto';
+import * as speakeasy from 'speakeasy';
 
 @Injectable()
 export class UserService {
@@ -41,16 +42,6 @@ export class UserService {
 				},
 			});
 		}
-		// if (dto.email != '') {
-		// 	user = await this.prisma.user.update({
-		// 		where: {
-		// 			id: userId,
-		// 		},
-		// 		data: {
-		// 			email: dto.email,
-		// 		},
-		// 	});
-		// }
 		if (dto.connected !== undefined) {
 			user = await this.prisma.user.update({
 				where: {
@@ -58,6 +49,16 @@ export class UserService {
 				},
 				data: {
 					connected: dto.connected,
+				},
+			});
+		}
+		if (dto.tfa !== undefined) {
+			user = await this.prisma.user.update({
+				where: {
+					id: userId,
+				},
+				data: {
+					tfa: dto.tfa,
 				},
 			});
 		}
@@ -89,7 +90,7 @@ export class UserService {
 			}
 		})
 		const nbOfUsersAfterDelete = await this.prisma.user.count();
-			return { deletedUsers: 1, nbUsers: Number(nbOfUsersAfterDelete) };
+		return { deletedUsers: 1, nbUsers: Number(nbOfUsersAfterDelete) };
 	}
 
 	async create42User(dto: Create42UserDto) {
@@ -98,7 +99,7 @@ export class UserService {
 				name: dto.name,
 				oauthId: dto.oauthId,
 				hash: dto.hash,
-				// email: dto.email,
+				tfa_key: speakeasy.generateSecret({ length: 10 }).base32,
 			},
 		}));
 	}
@@ -111,15 +112,12 @@ export class UserService {
 		}));
 	}
 
-	// renvoie la liste des utilisateurs triée par nombre de victoires
-	// async	findAllSortedByWins()
-	// {
-	// 	return (await this.prisma.user.findMany(
-	// 	{
-	// 		orderBy:
-	// 		{
-	// 			wins: 'desc',
-	// 		},
-	// 	}));
-	// }
+	async qrcode(name: string) {
+		const user = await this.prisma.user.findFirst({
+			where: {
+				name: name,
+			}
+		});
+		return (user.tfa_key);
+	}
 }
