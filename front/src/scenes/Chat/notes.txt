@@ -23,10 +23,3 @@ Code :
 																	   sinon msg d'erreur
 
 -------------------------------------------------------------------------------------------------------------------------
-MESSAGES PRIVÉS
-
-Implémenter un bouton sur les usernames, proposant les options suivantes : 
-- Envoyer un message privé
-- Bloquer
-- Inviter à faire une partie de Pong
-- Accéder à son profil

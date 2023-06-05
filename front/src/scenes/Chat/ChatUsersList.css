@@ -3,7 +3,7 @@
 	color: white;
 	padding: 1em;
 	background-color: #2f3136;
-	overflow-y: auto;
+	overflow-y: visible;
 }
 
 .user {
@@ -26,23 +26,32 @@
 	cursor: pointer;
 }
 
-.user .user-actions {
+.user .dropdown-menu {
 	position: absolute;
 	top: 100%;
 	left: 0;
-	display: flex;
-	flex-direction: column;
+	list-style: none;
+	font-size: 14px;
+	text-align: left;
 	background-color: #2f3136;
+	border-radius: 0px;
 	border: 1px solid #b9bbbe;
-	padding: 5px;
+	box-shadow: 0px 1px 1px rgba(0,0,0,0.1);
+	padding: 0.5em;
+	display: none;
 }
 
-.user .user-action {
-	background: none;
-	border: none;
+.user.show-menu .dropdown-menu {
+	display: block;
+	z-index: 1;
+}
+
+.user .dropdown-item {
 	color: #b9bbbe;
 	padding: 5px;
 	cursor: pointer;
+	text-decoration: none;
+	display: block;
 }
 
 .user .status {

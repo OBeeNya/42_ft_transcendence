@@ -1,13 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, MouseEvent } from "react";
 import { UserInfos } from "../../services/interfaces/userInfos.interface"
 import axios from "axios";
 import './ChatUsersList.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEnvelope, faBan, faGamepad, faUser } from '@fortawesome/free-solid-svg-icons';
 
 const ChatUsersList = () => 
 {
 	const [users, setUsers] = useState([]);
+	const [clickedUser, setClickedUser] = useState(-1); 
 	const token = localStorage.getItem("token");
 
 	useEffect(() =>
@@ -36,36 +35,28 @@ const ChatUsersList = () =>
 
 	}, [token]);
 
-	return (
-		<div className="users-list">
-			{users.map((user: UserInfos) =>
-			(
-				<User user={user} />
-			))}
-		</div>
-	);
-};
-
-const User = ({ user }: { user: UserInfos }) =>
-{
-	const [isClicked, setIsClicked] = useState(false);
-
-	const handleClick = (event: React.MouseEvent) =>
-	{
-		event.stopPropagation();
-		setIsClicked(!isClicked);
-	};
-
-	useEffect(() =>
-	{
-		const clickHandler = () => setIsClicked(false);
+	useEffect(() => {
+		const clickHandler = () => setClickedUser(-1);
 		window.addEventListener('click', clickHandler);
 
 		return () => window.removeEventListener('click', clickHandler);
 	}, []);
 
 	return (
-		<div key={user.id} className="user">
+		<div className="users-list">
+			{users.map((user: UserInfos, index) =>
+			(
+				<User user={user} isActive={clickedUser === index} onClick={(event: MouseEvent<HTMLElement>) => { event.stopPropagation(); setClickedUser(index); }} />
+			))}
+		</div>
+	);
+};
+
+const User = ({ user, isActive, onClick }: { user: UserInfos, isActive: boolean, onClick: (event: MouseEvent<HTMLElement>) => void }) =>
+{
+
+	return (
+		<div key={user.id} className={`user ${isActive ? 'show-menu' : ''}`}>
 			<img src={`/avatar/${user.id}.png`} alt="avatar" className="avatar" 
 				onError={(event) =>
 				{
@@ -73,23 +64,23 @@ const User = ({ user }: { user: UserInfos }) =>
 					target.src = '/avatar/auto.png';
 				}}
 			/>
-			<p className="username" onClick={handleClick}>{user.name}</p>
-			{isClicked &&
+			<p className="username" onClick={onClick}>{user.name}</p>
+			{isActive &&
 			(
-				<div className="user-actions">
-					<button className="user-action">
-						<FontAwesomeIcon icon={faEnvelope} />
-					</button>
-					<button className="user-action">
-						<FontAwesomeIcon icon={faBan} />
-					</button>
-					<button className="user-action">
-						<FontAwesomeIcon icon={faGamepad} />
-					</button>
-					<button className="user-action">
-						<FontAwesomeIcon icon={faUser} />
-					</button>
-				</div>
+				<ul className="dropdown-menu">
+					<li className="dropdown-item" onClick={() => console.log('Private Message clicked')}>
+						Private Message
+					</li>
+					<li className="dropdown-item" onClick={() => console.log('Block clicked')}>
+						Block
+					</li>
+					<li className="dropdown-item" onClick={() => console.log('Invite to Pong clicked')}>
+						Invite to Pong
+					</li>
+					<li className="dropdown-item" onClick={() => console.log('Profile clicked')}>
+						Profile
+					</li>
+				</ul>
 			)}
 			<p className={user.connected ? 'online' : 'offline'}>
 				{user.isPlaying ?
