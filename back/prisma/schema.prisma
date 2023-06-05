@@ -23,11 +23,13 @@ model User {
   history		MatchHistory[]
   oauthId		String @unique
   connected		Boolean @default(false)
+  isPlaying		Boolean @default(false)
   chats			UserChat[]
   messages		Message[] @relation("UserMessage")
 
-  tfa Boolean @default(false)
-  tfa_key String
+  tfa				Boolean @default(false)
+  tfa_key			String
+  avatar_url		String
   
   @@map("users")
 }
