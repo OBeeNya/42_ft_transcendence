@@ -9,19 +9,45 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 123
       POSTGRES_DB: nest
-    networks:
-      - transcendence
-  test-db:
-    image: postgres:latest
-    ports:
-      - 5433:5432
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 123
-      POSTGRES_DB: nest
+    restart: unless-stopped
     networks:
       - transcendence
   
+  backend:
+    build: ./back
+    volumes:
+      - ./back:/app
+    ports:
+      - 8080:8080
+    depends_on:
+      - dev-db
+    restart: unless-stopped
+    networks:
+      - transcendence
+##
+#  frontend:
+#    build: ./front
+#    volumes:
+#      - ./front:/app
+#    expose:
+#      - 3000
+#    depends_on:
+#      - backend
+#    restart: unless-stopped
+#    networks:
+#      - transcendence
+#
+#  nginx:
+#    build: app/nginx/
+#    depends_on:
+#      - frontend
+#      - backend
+#    ports:
+#      - 443:443
+#    restart: unless-stopped
+#    networks:
+#      -transcendence
+    
+
 networks:
   transcendence:
-  
