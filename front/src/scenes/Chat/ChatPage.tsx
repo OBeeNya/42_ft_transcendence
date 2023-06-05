@@ -1,5 +1,6 @@
 import Header from "../../components/header"
 import ChatSidebar from "./ChatSidebar";
+import ChatUsersList from "./ChatUsersList";
 import './ChatPage.css';
 
 const ChatPage = () =>
@@ -8,9 +9,16 @@ const ChatPage = () =>
 		<div className="chat-page">
 			<Header />
 
-			<div className="sidebar">
-				<ChatSidebar />
+			<div className="content">
+				<div className="sidebar">
+					<ChatSidebar />
+				</div>
+
+				<div className="users-list">
+					<ChatUsersList />
+				</div>
 			</div>
+
 		</div>
 	);
 };

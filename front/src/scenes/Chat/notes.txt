@@ -15,9 +15,20 @@ Un utilisateur essaye de rejoindre un channel :
 
 - L'utilisateur a été banni du channel
 
------------------------------------------------------------------------------------------------------------- 
+-------------------------------------------------------------------------------------------------------------------------
 
 Code :
 - fonction qui recherche un channel dans notre db 
 - fonction qui verifie si le nom du channel existe deja dans la db --> si oui le rejoint (si pas private)
-                                                                       sinon msg d'erreur
+																	   sinon msg d'erreur
+
+-------------------------------------------------------------------------------------------------------------------------
+MESSAGES PRIVÉS
+
+Section à droite de la page Chat où on verra tous les utilisateurs et où on pourra cliquer sur les usernames pour voir
+plusieurs choses :
+- Envoyer un message privé
+- Bloquer
+- Inviter à faire une partie de Pong
+- Accéder à son profil
+
