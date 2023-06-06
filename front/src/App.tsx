@@ -10,10 +10,12 @@ import PongPage from './scenes/Pong/PongPage';
 import { ProtectedRoute , ProtectedRouteProps } from "./components/protectedRoutes";
 import OnlinePage from './scenes/Online/OnlinePage';
 import Leaderboard from './scenes/Leaderboard/Leaderboard';
+import OtherUserProfilePage from './scenes/Chat/OtherUserProfilePage';
 import ChatPage from './scenes/Chat/ChatPage';
 import TfaPage from './scenes/Tfa/TfaPage';
 
-const defaultProtectedRouteProps: Omit<ProtectedRouteProps, 'outlet'> = {
+const defaultProtectedRouteProps: Omit<ProtectedRouteProps, 'outlet'> =
+{
   authenticationPath: '/',
 };
 
@@ -32,6 +34,7 @@ function App() {
         <Route path="/chat" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<ChatPage/>} />} />
         <Route path="/online" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<OnlinePage/>} />} />
         <Route path="/leaderboard" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<Leaderboard/>} />} />
+        <Route path="/profile/:userId" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<OtherUserProfilePage/>} />} />
     </Routes>
   );
 }

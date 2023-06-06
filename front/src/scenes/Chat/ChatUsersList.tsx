@@ -1,10 +1,13 @@
 import { useEffect, useState, MouseEvent } from "react";
+import { useNavigate } from 'react-router-dom';
 import { UserInfos } from "../../services/interfaces/userInfos.interface"
 import axios from "axios";
 import './ChatUsersList.css';
 
 const ChatUsersList = () => 
 {
+	const navigate = useNavigate();
+
 	const [users, setUsers] = useState([]);
 	const [clickedUser, setClickedUser] = useState(-1); 
 	const token = localStorage.getItem("token");
@@ -46,15 +49,19 @@ const ChatUsersList = () =>
 		<div className="users-list">
 			{users.map((user: UserInfos, index) =>
 			(
-				<User user={user} isActive={clickedUser === index} onClick={(event: MouseEvent<HTMLElement>) => { event.stopPropagation(); setClickedUser(index); }} />
+				<User 
+					user={user} 
+					isActive={clickedUser === index} 
+					onClick={(event: MouseEvent<HTMLElement>) => { event.stopPropagation(); setClickedUser(index); }} 
+					navigate={navigate}
+				/>
 			))}
 		</div>
 	);
 };
 
-const User = ({ user, isActive, onClick }: { user: UserInfos, isActive: boolean, onClick: (event: MouseEvent<HTMLElement>) => void }) =>
+const User = ({ user, isActive, onClick, navigate }: { user: UserInfos, isActive: boolean, onClick: (event: MouseEvent<HTMLElement>) => void, navigate: (path: string) => void }) =>
 {
-
 	return (
 		<div key={user.id} className={`user ${isActive ? 'show-menu' : ''}`}>
 			<img src={`/avatar/${user.id}.png`} alt="avatar" className="avatar" 
@@ -68,17 +75,24 @@ const User = ({ user, isActive, onClick }: { user: UserInfos, isActive: boolean,
 			{isActive &&
 			(
 				<ul className="dropdown-menu">
+					<li className="dropdown-item" onClick={() => navigate(`/profile/${user.id}`)}>
+						Profile
+					</li>
+
 					<li className="dropdown-item" onClick={() => console.log('Private Message clicked')}>
 						Private Message
 					</li>
+
+					<li className="dropdown-item" onClick={() => console.log('Profile clicked')}>
+						Add friend
+					</li>
+
 					<li className="dropdown-item" onClick={() => console.log('Block clicked')}>
 						Block
 					</li>
+
 					<li className="dropdown-item" onClick={() => console.log('Invite to Pong clicked')}>
 						Invite to Pong
-					</li>
-					<li className="dropdown-item" onClick={() => console.log('Profile clicked')}>
-						Profile
 					</li>
 				</ul>
 			)}
