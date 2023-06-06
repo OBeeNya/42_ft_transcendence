@@ -10,8 +10,8 @@ import PongPage from './scenes/Pong/PongPage';
 import { ProtectedRoute , ProtectedRouteProps } from "./components/protectedRoutes";
 import OnlinePage from './scenes/Online/OnlinePage';
 import Leaderboard from './scenes/Leaderboard/Leaderboard';
-import OtherUserProfilePage from './scenes/Chat/OtherUserProfilePage';
-import ChatPage from './scenes/Chat/ChatPage';
+import OtherUserProfilePage from './scenes/OtherUserProfilePage/OtherUserProfilePage';
+import ChatPage from './scenes/Chat/ChatPage/ChatPage';
 import TfaPage from './scenes/Tfa/TfaPage';
 
 const defaultProtectedRouteProps: Omit<ProtectedRouteProps, 'outlet'> =
