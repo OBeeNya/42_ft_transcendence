@@ -10,7 +10,6 @@ import * as speakeasy from 'speakeasy';
 
 @Injectable()
 export class AuthService {
-
 	constructor(private prisma: PrismaService,
 		private jwt: JwtService,
 		private config: ConfigService,) {}

@@ -32,7 +32,7 @@ export class UserController {
 	getMe(@GetUser() user: User) {
 		return (user);
 	}
-	
+
 	// localhost:3000/users/name/:name
 	@Get("name/:name")
 	findOneByName(@Param("name") name: string) {
