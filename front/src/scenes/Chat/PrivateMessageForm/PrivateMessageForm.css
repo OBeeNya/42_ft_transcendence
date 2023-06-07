@@ -11,6 +11,14 @@
 	padding: 8px 35px 8px 16px;
 }
 
+.private-message-form-messages {
+	display: flex;
+	flex-direction: column;
+	padding: 10px;
+	height: calc(100% - 50px); /* Adjust as needed */
+	overflow-y: auto;
+}
+
 .message-input {
 	width: 100%;
 	background: inherit;

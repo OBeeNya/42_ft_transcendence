@@ -21,6 +21,7 @@ const user_service_1 = require("./user.service");
 const platform_express_1 = require("@nestjs/platform-express");
 const multer_config_1 = require("./middleware/multer.config");
 const speakeasy = require("speakeasy");
+const create_direct_message_dto_1 = require("./dto/create-direct-message.dto");
 var QRCode = require('qrcode');
 let UserController = class UserController {
     constructor(userService) {
@@ -49,6 +50,12 @@ let UserController = class UserController {
     }
     deleteMe(user) {
         return this.userService.deleteMe(user.name);
+    }
+    sendDirectMessage(user, receiverId, createDMdto) {
+        return this.userService.sendDirectMessage(user, receiverId, createDMdto);
+    }
+    getDirectMessages(user, receiverId) {
+        return this.userService.getDirectMessages(user, receiverId);
     }
     uploadAvatar(file) {
         return (file);
@@ -122,6 +129,23 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], UserController.prototype, "deleteMe", null);
+__decorate([
+    (0, common_1.Post)(':id/dm'),
+    __param(0, (0, decorator_1.GetUser)()),
+    __param(1, (0, common_1.Param)('id')),
+    __param(2, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Number, create_direct_message_dto_1.CreateDirectMessageDto]),
+    __metadata("design:returntype", void 0)
+], UserController.prototype, "sendDirectMessage", null);
+__decorate([
+    (0, common_1.Get)(':id/dm'),
+    __param(0, (0, decorator_1.GetUser)()),
+    __param(1, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Number]),
+    __metadata("design:returntype", void 0)
+], UserController.prototype, "getDirectMessages", null);
 __decorate([
     (0, common_1.Post)('avatar'),
     (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('file', multer_config_1.MulterConfig)),

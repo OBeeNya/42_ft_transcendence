@@ -3,87 +3,87 @@ CREATE TYPE "ChatType" AS ENUM ('PUBLIC', 'PRIVATE', 'PASSWORD');
 
 -- CreateTable
 CREATE TABLE "users" (
-    "id" SERIAL NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
-    "name" TEXT NOT NULL,
-    "hash" TEXT NOT NULL,
-    "wins" INTEGER NOT NULL DEFAULT 0,
-    "losses" INTEGER NOT NULL DEFAULT 0,
-    "ladder_level" INTEGER NOT NULL DEFAULT 1,
-    "oauthId" TEXT NOT NULL,
-    "connected" BOOLEAN NOT NULL DEFAULT false,
-    "tfa" BOOLEAN NOT NULL DEFAULT false,
-    "tfa_key" TEXT NOT NULL,
+	"id" SERIAL NOT NULL,
+	"createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	"updatedAt" TIMESTAMP(3) NOT NULL,
+	"name" TEXT NOT NULL,
+	"hash" TEXT NOT NULL,
+	"wins" INTEGER NOT NULL DEFAULT 0,
+	"losses" INTEGER NOT NULL DEFAULT 0,
+	"ladder_level" INTEGER NOT NULL DEFAULT 1,
+	"oauthId" TEXT NOT NULL,
+	"connected" BOOLEAN NOT NULL DEFAULT false,
+	"tfa" BOOLEAN NOT NULL DEFAULT false,
+	"tfa_key" TEXT NOT NULL,
 
-    CONSTRAINT "users_pkey" PRIMARY KEY ("id")
+	CONSTRAINT "users_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "user_blocks" (
-    "id" SERIAL NOT NULL,
-    "userId" INTEGER NOT NULL,
-    "blockedId" INTEGER NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	"id" SERIAL NOT NULL,
+	"userId" INTEGER NOT NULL,
+	"blockedId" INTEGER NOT NULL,
+	"createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    CONSTRAINT "user_blocks_pkey" PRIMARY KEY ("id")
+	CONSTRAINT "user_blocks_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "user_friends" (
-    "id" SERIAL NOT NULL,
-    "userId" INTEGER NOT NULL,
-    "friendId" INTEGER NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	"id" SERIAL NOT NULL,
+	"userId" INTEGER NOT NULL,
+	"friendId" INTEGER NOT NULL,
+	"createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    CONSTRAINT "user_friends_pkey" PRIMARY KEY ("id")
+	CONSTRAINT "user_friends_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "matchhistory" (
-    "id" SERIAL NOT NULL,
-    "userId" INTEGER NOT NULL,
-    "userName" TEXT NOT NULL,
-    "opponentName" TEXT NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "ladder" INTEGER NOT NULL,
-    "won" BOOLEAN NOT NULL DEFAULT false,
+	"id" SERIAL NOT NULL,
+	"userId" INTEGER NOT NULL,
+	"userName" TEXT NOT NULL,
+	"opponentName" TEXT NOT NULL,
+	"createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	"ladder" INTEGER NOT NULL,
+	"won" BOOLEAN NOT NULL DEFAULT false,
 
-    CONSTRAINT "matchhistory_pkey" PRIMARY KEY ("id")
+	CONSTRAINT "matchhistory_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "chats" (
-    "id" SERIAL NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
-    "name" TEXT NOT NULL,
-    "type" "ChatType" NOT NULL DEFAULT 'PUBLIC',
-    "password" TEXT,
+	"id" SERIAL NOT NULL,
+	"createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	"updatedAt" TIMESTAMP(3) NOT NULL,
+	"name" TEXT NOT NULL,
+	"type" "ChatType" NOT NULL DEFAULT 'PUBLIC',
+	"password" TEXT,
 
-    CONSTRAINT "chats_pkey" PRIMARY KEY ("id")
+	CONSTRAINT "chats_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "messages" (
-    "id" SERIAL NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "content" TEXT NOT NULL,
-    "userId" INTEGER NOT NULL,
-    "chatId" INTEGER NOT NULL,
+	"id" SERIAL NOT NULL,
+	"createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	"content" TEXT NOT NULL,
+	"userId" INTEGER NOT NULL,
+	"chatId" INTEGER NOT NULL,
 
-    CONSTRAINT "messages_pkey" PRIMARY KEY ("id")
+	CONSTRAINT "messages_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "user_chats" (
-    "userId" INTEGER NOT NULL,
-    "chatId" INTEGER NOT NULL,
-    "isOwner" BOOLEAN NOT NULL,
-    "isBlocked" BOOLEAN NOT NULL,
-    "permissions" TEXT NOT NULL,
+	"userId" INTEGER NOT NULL,
+	"chatId" INTEGER NOT NULL,
+	"isOwner" BOOLEAN NOT NULL,
+	"isBlocked" BOOLEAN NOT NULL,
+	"permissions" TEXT NOT NULL,
 
-    CONSTRAINT "user_chats_pkey" PRIMARY KEY ("userId","chatId")
+	CONSTRAINT "user_chats_pkey" PRIMARY KEY ("userId","chatId")
 );
 
 -- CreateIndex

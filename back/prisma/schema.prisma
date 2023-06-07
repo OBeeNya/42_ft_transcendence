@@ -26,11 +26,13 @@ model User {
   isPlaying		Boolean @default(false)
   chats			UserChat[]
   messages		Message[] @relation("UserMessage")
+  sentDMs		DirectMessage[] @relation("UserDMs")
+  receivedDMs	DirectMessage[] @relation("UserDMsReceived")
 
   tfa				Boolean @default(false)
   tfa_key			String
-  avatar_url		String
-  
+  // avatar_url		String
+
   @@map("users")
 }
 
@@ -111,4 +113,16 @@ enum ChatType {
   PUBLIC
   PRIVATE
   PASSWORD
+}
+
+model DirectMessage {
+  id			Int @id @default(autoincrement())
+  createdAt		DateTime @default(now())
+  content		String
+  senderId		Int
+  receiverId	Int
+  sender		User @relation("UserDMs", fields: [senderId], references: [id])
+  receiver		User @relation("UserDMsReceived", fields: [receiverId], references: [id])
+
+  @@map("direct_messages")
 }

@@ -7,13 +7,13 @@ import { UserService } from './user.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { MulterConfig } from './middleware/multer.config';
 import * as speakeasy from 'speakeasy';
+import { CreateDirectMessageDto } from './dto/create-direct-message.dto';
 
 var QRCode = require('qrcode');
 
 @UseGuards(JwtGuard)
 @Controller('users')
 export class UserController {
-
 	constructor(private userService: UserService) {}
 
 	// localhost:3000/users
@@ -58,6 +58,18 @@ export class UserController {
 	@Delete("me/me")
 	deleteMe(@GetUser() user: User) {
 		return this.userService.deleteMe(user.name);
+	}
+
+	@Post(':id/dm')
+	sendDirectMessage(@GetUser() user: User, @Param('id') receiverId: number, @Body() createDMdto: CreateDirectMessageDto)
+	{
+	  return this.userService.sendDirectMessage(user, receiverId, createDMdto);
+	}
+  
+	@Get(':id/dm')
+	getDirectMessages(@GetUser() user: User, @Param('id') receiverId: number)
+	{
+	  return this.userService.getDirectMessages(user, receiverId);
 	}
 
 	@Post('avatar')

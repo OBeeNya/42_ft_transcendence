@@ -24,6 +24,7 @@ export class AuthService {
 					hash,
 					oauthId: "not42",
 					tfa_key: speakeasy.generateSecret({ length: 10 }).base32,
+					// avatar_url: '/avatar/auto.png'
 				},
 			});
 			return (null);

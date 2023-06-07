@@ -12,7 +12,6 @@ export interface UserInfos
 	tfa_key: string;
 	status: string;
 	avatar_url: string;
-	// defaultAvatarUrl: string;
 }
 
 export {};

@@ -26,6 +26,6 @@ const PrivateMessageForm = () =>
 		  />
 		</form>
 	  );
-	};
+};
 
 export default PrivateMessageForm;
