@@ -4413,7 +4413,7 @@ pretty-format@^29.0.0, pretty-format@^29.5.0:
     ansi-styles "^5.0.0"
     react-is "^18.0.0"
 
-prisma@*, prisma@4.13.0:
+prisma@*, prisma@^4.13.0:
   version "4.13.0"
   resolved "https://registry.npmjs.org/prisma/-/prisma-4.13.0.tgz"
   integrity sha512-L9mqjnSmvWIRCYJ9mQkwCtj4+JDYYTdhoyo8hlsHNDXaZLh/b4hR0IoKIBbTKxZuyHQzLopb/+0Rvb69uGV7uA==
