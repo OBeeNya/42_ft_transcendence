@@ -23,6 +23,7 @@ const PongPage = () => {
 			<Content>
 				<h1>Pong page</h1>
 				<br></br>
+				<button onClick={() => navigate("/pongGame")}>Game</button>
 				<button onClick={() => navigate("/home")}>Home</button>
 				<br></br>
 			</Content>
