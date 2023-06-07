@@ -8,7 +8,11 @@ CREATE TABLE "users" (
     "friends" TEXT[],
     "wins" INTEGER NOT NULL DEFAULT 0,
     "losses" INTEGER NOT NULL DEFAULT 0,
-    "ladder_level" INTEGER NOT NULL DEFAULT 0,
+    "ladder_level" INTEGER NOT NULL DEFAULT 1,
+    "oauthId" TEXT NOT NULL,
+    "connected" BOOLEAN NOT NULL DEFAULT false,
+    "tfa" BOOLEAN NOT NULL DEFAULT false,
+    "tfa_key" TEXT NOT NULL,
 
     CONSTRAINT "users_pkey" PRIMARY KEY ("id")
 );
@@ -21,7 +25,7 @@ CREATE TABLE "matchhistory" (
     "opponentName" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "ladder" INTEGER NOT NULL,
-    "winner" TEXT NOT NULL,
+    "won" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "matchhistory_pkey" PRIMARY KEY ("id")
 );
