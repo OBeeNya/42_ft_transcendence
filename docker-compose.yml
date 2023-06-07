@@ -19,6 +19,7 @@ services:
       - ./back:/app
     ports:
       - 8080:8080
+      - 5555:5555
     depends_on:
       - dev-db
     restart: unless-stopped
