@@ -5,23 +5,17 @@ import { CreateDirectMessageDto } from './dto/create-direct-message.dto';
 export declare class UserController {
     private userService;
     constructor(userService: UserService);
-    findAll(): import(".prisma/client").Prisma.PrismaPromise<User[]>;
-    findOne(name: string): Promise<User>;
+    findAll(): any;
+    findOne(name: string): unknown;
     getMe(user: User): User;
-    findOneByName(name: string): Promise<User>;
-    findOneById(id: string): Promise<User>;
-    editUser(userId: number, dto: EditUserDto): Promise<any>;
-    deleteUserById(id: string): Promise<{
-        deletedUsers: number;
-        nbUsers: number;
-    }>;
-    deleteMe(user: User): Promise<{
-        deletedUsers: number;
-        nbUsers: number;
-    }>;
-    sendDirectMessage(user: User, receiverId: number, createDMdto: CreateDirectMessageDto): Promise<import(".prisma/client").DirectMessage>;
-    getDirectMessages(user: User, receiverId: number): Promise<import(".prisma/client").DirectMessage[]>;
+    findOneByName(name: string): unknown;
+    findOneById(id: string): unknown;
+    editUser(userId: number, dto: EditUserDto): unknown;
+    deleteUserById(id: string): unknown;
+    deleteMe(user: User): unknown;
+    sendDirectMessage(user: User, receiverId: number, createDMdto: CreateDirectMessageDto): Promise<DirectMessage>;
+    getDirectMessages(user: User, receiverId: number): Promise<{}>;
     uploadAvatar(file: any): any;
-    qrcode(name: any): Promise<string>;
-    verifyCode(elements: QrcodeVerifyDto): Promise<any>;
+    qrcode(name: any): unknown;
+    verifyCode(elements: QrcodeVerifyDto): unknown;
 }

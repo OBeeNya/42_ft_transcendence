@@ -8,17 +8,9 @@ export declare class AuthService {
     private jwt;
     private config;
     constructor(prisma: PrismaService, jwt: JwtService, config: ConfigService);
-    signup(dto: AuthDto): Promise<any>;
-    signin(dto: SigninDto): Promise<{
-        access_token: string;
-        tfa: boolean;
-    }>;
-    signToken(userId: number, name: string): Promise<{
-        access_token: string;
-        tfa: boolean;
-    }>;
-    sign42Token(user: TokenInputDto): Promise<{
-        access_token: string;
-    }>;
-    setTokenCookie(token: string, res: Response): Promise<void>;
+    signup(dto: AuthDto): unknown;
+    signin(dto: SigninDto): unknown;
+    signToken(userId: number, name: string): unknown;
+    sign42Token(user: TokenInputDto): unknown;
+    setTokenCookie(token: string, res: Response): any;
 }
