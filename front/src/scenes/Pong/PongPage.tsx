@@ -1,21 +1,14 @@
 import { useNavigate } from "react-router-dom";
 import Content from "../../components/content"
 import Header from "../../components/header"
-// import { useAuth } from "../context/AuthContext";
+import { useLayoutEffect } from "react";
 
 const PongPage = () => {
 	const navigate = useNavigate();
-	// const { checkUserConnection, isConnected } = useAuth();
 
-	// const handleClick = async (destination: string) => {
-	// 	await checkUserConnection();
+	useLayoutEffect(() => {
 		
-		
-	// 	if (isConnected) {
-	// 		console.log("user is not connected");
-	// 		navigate(destination);
-	// 	}
-	//   };
+	})
 
 	return (
 		<div>
