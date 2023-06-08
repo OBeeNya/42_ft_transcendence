@@ -6,6 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 import { MatchHistoryModule } from './match-history/match-history.module';
 import { ChatModule } from './chat/chat.module';
 import { PongModule } from './pong/pong.module';
+import { SocketModule } from 'pong/socket/pong.socket.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { PongModule } from './pong/pong.module';
     MatchHistoryModule,
     ChatModule,
     PongModule,
+    SocketModule,
   ],
 })
 export class AppModule {}
