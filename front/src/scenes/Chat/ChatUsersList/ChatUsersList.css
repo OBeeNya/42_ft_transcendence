@@ -78,3 +78,24 @@
 	border-radius: 50%;
 	background-color: yellow;
 }
+
+.incoming {
+	max-width: 80%;
+	margin-left: auto;
+	background-color: #E1FCEF;
+	padding: 10px 20px;
+	margin-bottom: 10px;
+	border-radius: 20px;
+	position: relative;
+  }
+  
+  .outgoing {
+	max-width: 80%;
+	margin-right: auto;
+	background-color: #DCF8C6;
+	padding: 10px 20px;
+	margin-bottom: 10px;
+	border-radius: 20px;
+	position: relative;
+  }
+  

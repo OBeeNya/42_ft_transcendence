@@ -3,12 +3,17 @@
     "@fortawesome/fontawesome-svg-core": "^6.4.0",
     "@fortawesome/free-solid-svg-icons": "^6.4.0",
     "@fortawesome/react-fontawesome": "^0.2.0",
+    "@nestjs/platform-socket.io": "^9.4.2",
+    "@nestjs/websockets": "^9.4.2",
+    "@prisma/client": "^4.15.0",
     "axios": "^1.4.0",
-    "js-cookie": "^3.0.5"
+    "js-cookie": "^3.0.5",
+    "socket.io": "^4.6.2",
+    "socket.io-client": "^4.6.2"
   },
   "devDependencies": {
     "concurrently": "^8.0.1",
-    "prisma": "^4.14.1"
+    "prisma": "^4.15.0"
   },
   "scripts": {
     "start": "concurrently \"cd back && npm run dev:db:up && sleep 5 && npx prisma migrate dev && npm run start:dev\" \"cd front && npm start\""

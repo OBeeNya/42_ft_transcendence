@@ -7,7 +7,7 @@ import { UserService } from './user.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { MulterConfig } from './middleware/multer.config';
 import * as speakeasy from 'speakeasy';
-import { CreateDirectMessageDto } from './dto/create-direct-message.dto';
+// import { CreateDirectMessageDto } from './dto/create-direct-message.dto';
 
 var QRCode = require('qrcode');
 
@@ -60,17 +60,17 @@ export class UserController {
 		return this.userService.deleteMe(user.name);
 	}
 
-	@Post(':id/dm')
-	sendDirectMessage(@GetUser() user: User, @Param('id') receiverId: number, @Body() createDMdto: CreateDirectMessageDto)
-	{
-	  return this.userService.sendDirectMessage(user, receiverId, createDMdto);
-	}
+	// @Post(':id/dm')
+	// sendDirectMessage(@GetUser() user: User, @Param('id') receiverId: number, @Body() createDMdto: CreateDirectMessageDto)
+	// {
+	//   return this.userService.sendDirectMessage(user, receiverId, createDMdto);
+	// }
   
-	@Get(':id/dm')
-	getDirectMessages(@GetUser() user: User, @Param('id') receiverId: number)
-	{
-	  return this.userService.getDirectMessages(user, receiverId);
-	}
+	// @Get(':id/dm')
+	// getDirectMessages(@GetUser() user: User, @Param('id') receiverId: number)
+	// {
+	//   return this.userService.getDirectMessages(user, receiverId);
+	// }
 
 	@Post('avatar')
 	@UseInterceptors(FileInterceptor('file', MulterConfig))

@@ -124,46 +124,46 @@ export class UserService
 		return (user.tfa_key);
 	}
 
-	async sendDirectMessage(sender: User, receiverId: number, createDMdto: CreateDirectMessageDto): Promise<DirectMessage>
-	{
-		const newDirectMessage = await this.prisma.directMessage.create(
-		{
-			data:
-			{
-				senderId: sender.id,
-				receiverId: receiverId,
-				content: createDMdto.content,
-			},
-		});
+	// async sendDirectMessage(sender: User, receiverId: number, createDMdto: CreateDirectMessageDto): Promise<DirectMessage>
+	// {
+	// 	const newDirectMessage = await this.prisma.directMessage.create(
+	// 	{
+	// 		data:
+	// 		{
+	// 			senderId: sender.id,
+	// 			receiverId: receiverId,
+	// 			content: createDMdto.content,
+	// 		},
+	// 	});
 
-		return (newDirectMessage);
-	}
+	// 	return (newDirectMessage);
+	// }
 
-	async getDirectMessages(user: User, receiverId: number): Promise<DirectMessage[]> 
-	{	  
-		const directMessages = await this.prisma.directMessage.findMany( // findMany() trouve tous les dms entre l'user connecté et le destinataire
-		{
-			where:
-			{
-				AND: 
-				[{
-					OR:
-					[{
-						senderId: user.id,
-						receiverId: receiverId,
-					 },
-					 {
-						senderId: receiverId,
-						receiverId: user.id,
-					 },],
-				 },],
-			},
-		  orderBy:
-		  {
-			createdAt: 'asc', // trie les dms par ordre de création du plus ancien au plus récent
-		  },
-		});
+	// async getDirectMessages(user: User, receiverId: number): Promise<DirectMessage[]> 
+	// {	  
+	// 	const directMessages = await this.prisma.directMessage.findMany( // findMany() trouve tous les dms entre l'user connecté et le destinataire
+	// 	{
+	// 		where:
+	// 		{
+	// 			AND: 
+	// 			[{
+	// 				OR:
+	// 				[{
+	// 					senderId: user.id,
+	// 					receiverId: receiverId,
+	// 				 },
+	// 				 {
+	// 					senderId: receiverId,
+	// 					receiverId: user.id,
+	// 				 },],
+	// 			 },],
+	// 		},
+	// 	  orderBy:
+	// 	  {
+	// 		createdAt: 'asc', // trie les dms par ordre de création du plus ancien au plus récent
+	// 	  },
+	// 	});
 
-		return (directMessages);
-	}
+	// 	return (directMessages);
+	// }
 }

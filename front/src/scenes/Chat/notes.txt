@@ -25,4 +25,3 @@ Code :
 -------------------------------------------------------------------------------------------------------------------------
 Direct Messages
 
-L'utilisateur clique sur "Direct Messages" --> ça ouvre la barre de message en bas

@@ -3,7 +3,15 @@ import { useNavigate } from 'react-router-dom';
 import { UserInfos } from "../../../services/interfaces/userInfos.interface"
 import axios from "axios";
 import PrivateMessageForm from "../PrivateMessageForm/PrivateMessageForm";
+import useSocket from "../PrivateMessageForm/useSocket";
 import './ChatUsersList.css';
+
+interface ClientDirectMessage
+{
+	senderId: number;
+	receiverId: number;
+	content: string;
+}
 
 const ChatUsersList = () => 
 {
@@ -12,6 +20,56 @@ const ChatUsersList = () =>
 	const [users, setUsers] = useState([]);
 	const [clickedUser, setClickedUser] = useState(-1); 
 	const token = localStorage.getItem("token");
+	const socket = useSocket('http://localhost:8080');
+	const [messages, setMessages] = useState<ClientDirectMessage[]>([]);
+
+	// gère la connexion du socket et écoute les events provenant du serveur
+	useEffect(() =>
+	{
+		if (!socket) return;
+	  
+		socket.connect();
+
+		// Lors de la réception d'un nouveau message du serveur, ajoutez-le à l'état local
+		socket.on('dmToClient', (newMessage) =>
+		{
+			setMessages([...messages, newMessage]);
+		});
+
+		// socket.on('dmToClient', (payload) =>
+		// {
+		// 	if (payload.receiverId === privateMessageUserId || payload.senderId === privateMessageUserId)
+		// 	setMessages(prevMessages => [...prevMessages, payload]);
+		// });
+
+		socket.on('history', (history) =>
+		{
+			setMessages(history);
+		});
+
+		socket.on('error', (error) =>
+		{
+			console.error('There was an error with the socket connection:', error);
+		});
+
+		return () =>
+		{
+			socket.off('dmToClient');
+			socket.off('history');
+			socket.off('error');
+		};
+
+	}, [socket, privateMessageUserId]);
+
+	useEffect(() =>
+	{
+		if (!socket || privateMessageUserId === null)
+			return;
+	
+		const senderId = parseInt(localStorage.getItem("userId") || '0');
+		socket.emit('getHistory', { senderId, receiverId: privateMessageUserId });
+	  
+	}, [socket, privateMessageUserId]);
 
 	useEffect(() =>
 	{
@@ -53,18 +111,35 @@ const ChatUsersList = () =>
 			(
 				<User 
 					user={user} 
-					isActive={clickedUser === index} 
-					onClick={(event: MouseEvent<HTMLElement>) => { event.stopPropagation(); setClickedUser(index); }}
+					isActive={clickedUser === index}
+
+					onClick={(event: MouseEvent<HTMLElement>) =>
+						{event.stopPropagation(); setClickedUser(index);}}
+
 					onDirectMessageClick={() => setPrivateMessageUserId(user.id)} 
 					navigate={navigate}
 				/>
 			))}
-			{privateMessageUserId !== null && <PrivateMessageForm />}
+			{privateMessageUserId !== null &&
+			<PrivateMessageForm receiverId={privateMessageUserId} />}
+
+			<div className="messages">
+				{messages.map((message, index) =>
+				(
+					<p key={index} className={message.senderId === privateMessageUserId ? 'incoming' : 'outgoing'}>
+						{message.senderId === privateMessageUserId ?
+							`${message.senderId}: ${message.content}` : `You: ${message.content}`}
+					</p>
+				))}
+
+			</div>
 		</div>
 	);
 };
 
-const User = ({ user, isActive, onClick, onDirectMessageClick, navigate }: { user: UserInfos, isActive: boolean, onClick: (event: MouseEvent<HTMLElement>) => void, onDirectMessageClick: () => void, navigate: (path: string) => void }) =>
+const User = ({user, isActive, onClick, onDirectMessageClick, navigate}:
+			  {user: UserInfos, isActive: boolean, onClick: (event: MouseEvent<HTMLElement>) =>
+			  void, onDirectMessageClick: () => void, navigate: (path: string) => void}) =>
 {
 	return (
 		<div key={user.id} className={`user ${isActive ? 'show-menu' : ''}`}>

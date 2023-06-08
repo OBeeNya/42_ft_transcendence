@@ -119,36 +119,6 @@ let UserService = class UserService {
         });
         return (user.tfa_key);
     }
-    async sendDirectMessage(sender, receiverId, createDMdto) {
-        const newDirectMessage = await this.prisma.directMessage.create({
-            data: {
-                senderId: sender.id,
-                receiverId: receiverId,
-                content: createDMdto.content,
-            },
-        });
-        return (newDirectMessage);
-    }
-    async getDirectMessages(user, receiverId) {
-        const directMessages = await this.prisma.directMessage.findMany({
-            where: {
-                AND: [{
-                        OR: [{
-                                senderId: user.id,
-                                receiverId: receiverId,
-                            },
-                            {
-                                senderId: receiverId,
-                                receiverId: user.id,
-                            },],
-                    },],
-            },
-            orderBy: {
-                createdAt: 'asc',
-            },
-        });
-        return (directMessages);
-    }
 };
 UserService = __decorate([
     (0, common_1.Injectable)(),

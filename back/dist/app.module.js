@@ -13,7 +13,6 @@ const user_module_1 = require("./user/user.module");
 const prisma_module_1 = require("./prisma_module/prisma.module");
 const config_1 = require("@nestjs/config");
 const match_history_module_1 = require("./match-history/match-history.module");
-const chat_module_1 = require("./chat/chat.module");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -26,7 +25,6 @@ AppModule = __decorate([
             user_module_1.UserModule,
             prisma_module_1.PrismaModule,
             match_history_module_1.MatchHistoryModule,
-            chat_module_1.ChatModule,
         ],
     })
 ], AppModule);

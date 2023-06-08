@@ -1,7 +1,6 @@
 import { User } from '@prisma/client';
 import { EditUserDto, QrcodeVerifyDto } from './dto';
 import { UserService } from './user.service';
-import { CreateDirectMessageDto } from './dto/create-direct-message.dto';
 export declare class UserController {
     private userService;
     constructor(userService: UserService);
@@ -19,8 +18,6 @@ export declare class UserController {
         deletedUsers: number;
         nbUsers: number;
     }>;
-    sendDirectMessage(user: User, receiverId: number, createDMdto: CreateDirectMessageDto): Promise<import(".prisma/client").DirectMessage>;
-    getDirectMessages(user: User, receiverId: number): Promise<import(".prisma/client").DirectMessage[]>;
     uploadAvatar(file: any): any;
     qrcode(name: any): Promise<string>;
     verifyCode(elements: QrcodeVerifyDto): Promise<any>;

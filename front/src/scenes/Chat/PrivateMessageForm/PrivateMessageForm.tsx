@@ -1,16 +1,26 @@
 import React, { useState } from 'react';
+import useSocket from './useSocket';
 import './PrivateMessageForm.css';
 
-const PrivateMessageForm = () =>
+type Props =
+{
+	receiverId: number;
+};
+
+const PrivateMessageForm: React.FC<Props> = ({receiverId}) =>
 {
 	const [message, setMessage] = useState('');
-
+	const socket = useSocket('http://localhost:8080');
+  
 	const handleSubmit = (e: React.FormEvent) =>
 	{
 		e.preventDefault();
 
-		// logic to send dm
-
+		if (!socket) return;
+  
+		const senderId = parseInt(localStorage.getItem("userId") || '0');
+		socket.emit('dmToServer', {senderId, receiverId, content: message});
+		
 		setMessage('');
 	};
 
