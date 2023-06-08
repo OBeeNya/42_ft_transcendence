@@ -1,5 +1,8 @@
 import * as React from "react";
 import { ReactP5Wrapper, Sketch } from "@p5-wrapper/react";
+import io from "socket.io-client"
+
+
 
 const sketch: Sketch = p5 => {
 
@@ -11,11 +14,13 @@ const sketch: Sketch = p5 => {
     let gameStarted = false;
     let counter = 0;
     let opponentPoints = 0;
-    let players = [];
+    let players: any[] = [];
     let balls = [];
     let b: Ball;
     let lastPos;
-    let socket;
+    let socket: any;
+    let playerSize = 20;
+    let ballSize = 15;
 
 
 /******************************** PLAYER ********************************/
@@ -57,19 +62,20 @@ class Player {
 class Ball {
     x: number; 
     y: number; 
+    r: number;
     xv: number;  
     yv: number; 
 
     constructor() {
         this.x = p5.width/2;;
         this.y = p5.height/2;
-        let r = p5.floor(p5.random(2));
-        this.xv = (r === 0)?-5:5;
+        this.r = p5.floor(p5.random(2));
+        this.xv = (this.r === 0)?-5:5;
         this.yv = 5;
     }
 
     show(): void{
-        p5.ellipse(this.x, this.y, 15, 15);
+        p5.ellipse(this.x, this.y, ballSize, ballSize);
     }
 
     move(): void{
@@ -103,13 +109,65 @@ class Ball {
 /******************************** SKETCH ********************************/
 
     p5.setup = () => {
+        const socket = io('http://localhost:8080');
+
+        socket.on('connect', () => console.log("connected"));
         p5.createCanvas(750,600);
         b = new Ball();
-        p = new Player(0);
-        master = true;
+
+        socket.on('getCounter', function(data) {
+            counter = data;
+            console.log("counter:", counter);
+            // if(p === null) {
+                if (counter % 2 !== 0) {
+                    p = new Player(0);
+                    master = true;
+                } else {
+                    p = new Player(p5.width - playerSize);
+                    master = false;
+                }
+                console.log("p: ", p);
+            // } 
+            let infosPlayer = {
+                x:p.x,
+                y:p.y,
+                v:p.v,
+                w:p.w,
+                h:p.h,
+                p:p.p
+            };
+            socket.emit('start', infosPlayer);
+
+            // utile?
+            let infosBall = {
+                x:p.x,
+                y:p.y,
+                v:p.v,
+                w:p.w,
+                h:p.h,
+                p:p.p
+            };
+            socket.emit('startBall', infosBall);
+        });
+        if (counter === 2) {
+            gameStarted = true;
+        }
+
+        socket.on('heartBeat', function(data){
+            players = data;
+        });
+
+        socket.on('heartBeatBall', function(data){
+            if (data !== null) {
+                b.x = data.x;
+                b.y = data.y;
+                b.xv = data.xv;
+                b.yv = data.yv;
+                b.r = data.r;
+            }
+        });
     }
-    // if(p === undefined) {
-    // }
+
 
     p5.draw = () => {
         p5.background(0);
@@ -133,8 +191,8 @@ class Ball {
         b.move();
         if(b.collision(p) && p.x === 0)
             b.xv = 5;
-        // if(b.collision(p) && p.x === p5.width)
-        //     b.xv = -5;
+        if(b.collision(p) && p.x === p5.width - playerSize)
+            b.xv = -5;
         if(b.x < 0){
             if (master === false)
                 p.p++;
@@ -148,6 +206,38 @@ class Ball {
             else
                 opponentPoints++;
             throwBall();
+        }
+        for (var i = 0; i < players.length; i++) {
+            var id = players[i].id;
+            if (id !== socket.id) {
+                p5.fill(255,0,0);
+                p5.rectMode(p5.CENTER);
+                p5.rect(players[i].x, players[i].y, players[i].w, players[i].h);
+            }
+        }
+
+        let updateInfoPlayer = {
+            x:p.x,
+            y:p.y,
+            v:p.v,
+            w:p.w,
+            h:p.h,
+            p:p.p
+        };
+        if (socket !== undefined) {
+            socket.emit('update', updateInfoPlayer);
+        }
+
+        let updateInfoBall = {
+            x:p.x,
+            y:p.y,
+            v:p.v,
+            w:p.w,
+            h:p.h,
+            p:p.p
+        };
+        if (socket !== undefined) {
+            socket.emit('update', updateInfoBall);
         }
     };
 
