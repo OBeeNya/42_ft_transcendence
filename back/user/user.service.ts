@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma_module/prisma.service';
 import { User, DirectMessage } from '@prisma/client';
 import { EditUserDto, Create42UserDto} from './dto';
-import { CreateDirectMessageDto } from './dto/create-direct-message.dto';
+// import { CreateDirectMessageDto } from './dto/create-direct-message.dto';
 import * as speakeasy from 'speakeasy';
 
 @Injectable()

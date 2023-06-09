@@ -5,6 +5,7 @@ import { PrismaModule } from './prisma_module/prisma.module';
 import { ConfigModule } from '@nestjs/config';
 import { MatchHistoryModule } from './match-history/match-history.module';
 // import { ChatModule } from './chat/chat.module';
+import { DirectMessageModule } from "./chat/directMessage/directMessage.module"
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { MatchHistoryModule } from './match-history/match-history.module';
     PrismaModule,
     MatchHistoryModule,
     // ChatModule,
+    DirectMessageModule,
   ],
 })
 export class AppModule {}

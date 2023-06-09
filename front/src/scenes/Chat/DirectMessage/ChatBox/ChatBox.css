@@ -1,0 +1,27 @@
+.message-container {
+    display: flex;
+    flex-direction: column;
+    margin: 5px;
+  }
+  
+  .message {
+    max-width: 60%;
+    line-height: 1.5;
+    margin: 5px;
+    padding: 10px;
+    border-radius: 15px;
+    font-size: 1em;
+  }
+  
+  .message.sent {
+    align-self: flex-end;
+    background-color: #0b93f6;
+    color: white;
+  }
+  
+  .message.received {
+    align-self: flex-start;
+    background-color: #e5e5ea;
+    color: black;
+  }
+  
