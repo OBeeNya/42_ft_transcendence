@@ -21,7 +21,7 @@ model User {
   losses		Int @default(0)
   ladder_level	Int @default(1)
   history		MatchHistory[]
-  oauthId		String @unique
+  oauthId		String
   connected		Boolean @default(false)
   isPlaying		Boolean @default(false)
   chats			UserChat[]

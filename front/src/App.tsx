@@ -10,6 +10,7 @@ import EditProfilePage from './scenes/EditProfile/EditProfilePage';
 import ProfilePage from './scenes/Profile/ProfilePage';
 import Callback42 from './scenes/CallBack42/Callback42';
 import PongPage from './scenes/Pong/PongPage';
+import PongPageGame from './scenes/Pong/PongPageGame';
 import { ProtectedRoute , ProtectedRouteProps } from "./components/protectedRoutes";
 import OnlinePage from './scenes/Online/OnlinePage';
 import Leaderboard from './scenes/Leaderboard/Leaderboard';
@@ -38,6 +39,7 @@ function App()
 	}, []);
 
   return (
+<<<<<<< HEAD
 	// tous les composants enfants peuvent accéder à une instance de socket grâce au context
 	<SocketContext.Provider value={socket}> 
 	  <Routes>
@@ -56,6 +58,23 @@ function App()
 		<Route path="/profile/:userId" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<OtherUserProfilePage/>} />} />
 	</Routes>
 	</SocketContext.Provider>
+=======
+      <Routes>
+        <Route path="/" element={<AuthPage/>} />
+        <Route path="/signup" element={<SignupPage/>} />
+        <Route path="/signin" element={<SigninPage/>} />
+        <Route path="/callback42" element={<Callback42/>} />
+        <Route path="/tfa" element={<TfaPage/>} />
+        <Route path="/home" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<HomePage/>} />} />
+        <Route path="/profile" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<ProfilePage/>} />} />
+        <Route path="/editprofile" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<EditProfilePage/>} />} />
+        <Route path="/pong" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<PongPage/>} />} />
+        <Route path="/pongGame" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<PongPageGame/>} />} />
+        <Route path="/chat" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<ChatPage/>} />} />
+        <Route path="/online" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<OnlinePage/>} />} />
+        <Route path="/leaderboard" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<Leaderboard/>} />} />
+    </Routes>
+>>>>>>> main
   );
 }
 
