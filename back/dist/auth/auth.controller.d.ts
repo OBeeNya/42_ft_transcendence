@@ -10,8 +10,13 @@ export declare class AuthController {
     private userService;
     private httpService;
     constructor(authService: AuthService, configService: ConfigService, userService: UserService, httpService: HttpService);
-    signup(dto: AuthDto): unknown;
-    signin(dto: SigninDto): unknown;
-    login42(): unknown;
-    callback42(req: Request, res: Response): any;
+    signup(dto: AuthDto): Promise<any>;
+    signin(dto: SigninDto): Promise<{
+        access_token: string;
+        tfa: boolean;
+    }>;
+    login42(): Promise<{
+        url: string;
+    }>;
+    callback42(req: Request, res: Response): Promise<void>;
 }

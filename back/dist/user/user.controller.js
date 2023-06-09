@@ -11,11 +11,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var _a, _b;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserController = void 0;
 const common_1 = require("@nestjs/common");
-const client_1 = require("@prisma/client");
 const decorator_1 = require("../auth/decorator");
 const guard_1 = require("../auth/guard");
 const dto_1 = require("./dto");
@@ -85,7 +83,7 @@ __decorate([
     (0, common_1.Get)('me'),
     __param(0, (0, decorator_1.GetUser)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [typeof (_a = typeof client_1.User !== "undefined" && client_1.User) === "function" ? _a : Object]),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], UserController.prototype, "getMe", null);
 __decorate([
@@ -121,7 +119,7 @@ __decorate([
     (0, common_1.Delete)("me/me"),
     __param(0, (0, decorator_1.GetUser)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [typeof (_b = typeof client_1.User !== "undefined" && client_1.User) === "function" ? _b : Object]),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], UserController.prototype, "deleteMe", null);
 __decorate([

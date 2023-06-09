@@ -3,8 +3,8 @@ import { MatchHistoryService } from './match-history.service';
 export declare class MatchHistoryController {
     private historyService;
     constructor(historyService: MatchHistoryService);
-    findAll(): unknown;
-    findMyMatches(user: User): unknown;
-    findByUserId(id: string): unknown;
-    findByUserName(name: string): unknown;
+    findAll(): Promise<import(".prisma/client").MatchHistory[]>;
+    findMyMatches(user: User): Promise<import(".prisma/client").MatchHistory[]>;
+    findByUserId(id: string): Promise<import(".prisma/client").MatchHistory[]>;
+    findByUserName(name: string): Promise<import(".prisma/client").MatchHistory[]>;
 }

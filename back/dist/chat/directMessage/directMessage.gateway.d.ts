@@ -8,9 +8,9 @@ export declare class DirectMessageGateway {
     afterInit(server: Server): void;
     handleConnection(client: Socket): void;
     handleDisconnect(client: Socket): void;
-    handlePrivateMessage(data: DirectMessageDto, client: Socket): any;
+    handlePrivateMessage(data: DirectMessageDto, client: Socket): Promise<void>;
     handleGetConversation(data: {
         senderId: number;
         receiverId: number;
-    }, client: Socket): any;
+    }, client: Socket): Promise<void>;
 }
