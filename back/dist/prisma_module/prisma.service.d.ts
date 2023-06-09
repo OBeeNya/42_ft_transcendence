@@ -11,5 +11,5 @@ export declare class PrismaService extends PrismaClient {
     get userChat(): any;
     set userChat(value: any);
     constructor(config: ConfigService);
-    cleanDb(): Promise<[import(".prisma/client").Prisma.BatchPayload, import(".prisma/client").Prisma.BatchPayload]>;
+    cleanDb(): any;
 }
