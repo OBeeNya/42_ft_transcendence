@@ -10,32 +10,89 @@ export class DirectMessageService
 
 	async create(data: DirectMessageDto): Promise<DirectMessage>
 	{
-		return this.prisma.directMessage.create(
+		console.log('Creating direct message with data:', data);
+
+		try
 		{
-			data:
+			const createdMessage = await this.prisma.directMessage.create(
 			{
-				senderId: data.senderId,
-				receiverId: data.receiverId,
-				content: data.content,
-			},
-		});
+				data:
+				{
+					senderId: data.senderId,
+					receiverId: data.receiverId,
+					content: data.content,
+				},
+			});
+
+			console.log('Direct message created:', createdMessage);
+			return (createdMessage);
+		}
+		catch (error)
+		{
+			console.error('Error while creating direct message:', error);
+			throw error;
+		}
 	}
+
+	// async create(data: DirectMessageDto): Promise<DirectMessage>
+	// {
+	// 	return this.prisma.directMessage.create(
+	// 	{
+	// 		data:
+	// 		{
+	// 			senderId: data.senderId,
+	// 			receiverId: data.receiverId,
+	// 			content: data.content,
+	// 		},
+	// 	});
+	// }
 
 	async getConversation(senderId: number, receiverId: number): Promise<DirectMessage[]>
 	{
-		return this.prisma.directMessage.findMany(
+		console.log(`Getting conversation between ${senderId} and ${receiverId}`);
+
+		try
 		{
-			where:
+			const messages = await this.prisma.directMessage.findMany(
 			{
-				OR: [
-					{ senderId: senderId, receiverId: receiverId },
-					{ senderId: receiverId, receiverId: senderId }
-				]
-			},
-			orderBy:
-			{
-				createdAt: 'asc',
-			}
-		});
+				where:
+				{
+					OR: [
+						{ senderId: senderId, receiverId: receiverId },
+						{ senderId: receiverId, receiverId: senderId }
+					]
+				},
+				orderBy:
+				{
+					createdAt: 'asc',
+				}
+			});
+
+			console.log(`Got ${messages.length} messages`);
+			return (messages);
+		}
+		catch (error)
+		{
+			console.error('Error while getting conversation:', error);
+			throw error;
+		}
 	}
+
+	// async getConversation(senderId: number, receiverId: number): Promise<DirectMessage[]>
+	// {
+	// 	return this.prisma.directMessage.findMany(
+	// 	{
+	// 		where:
+	// 		{
+	// 			OR: [
+	// 				{ senderId: senderId, receiverId: receiverId },
+	// 				{ senderId: receiverId, receiverId: senderId }
+	// 			]
+	// 		},
+	// 		orderBy:
+	// 		{
+	// 			createdAt: 'asc',
+	// 		}
+	// 	});
+	// }
 }

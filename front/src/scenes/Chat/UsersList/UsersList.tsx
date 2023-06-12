@@ -5,6 +5,7 @@ import axios from "axios";
 import DirectMessageForm from "../DirectMessage/DirectMessageForm/DirectMessageForm";
 import './UsersList.css';
 import User from './User';
+import ChatBox from "../DirectMessage/ChatBox/ChatBox"
 
 const UsersList = () =>
 {
@@ -110,8 +111,10 @@ const UsersList = () =>
 			))}
 			{privateMessageUserId !== null && currentUser
 			&& <DirectMessageForm senderId={currentUser.id} receiverId={privateMessageUserId} />}
+			   <ChatBox senderId={currentUser ? currentUser.id : -1} receiverId={privateMessageUserId ? privateMessageUserId : -1} />
 		</div>
 	);
 };
 
 export default UsersList;
+

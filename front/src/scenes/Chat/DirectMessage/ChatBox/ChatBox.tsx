@@ -5,11 +5,13 @@ import "./ChatBox.css"
 interface Message
 {
 	senderId: number;
+	// receiverId: number;
 	content: string;
 }
 
 const ChatBox = ({senderId, receiverId}: {senderId: number, receiverId: number}) =>
 {
+	console.log('Rendering ChatBox with senderId:', senderId, 'and receiverId:', receiverId);
 	const [messages, setMessages] = useState<Message[]>([]);
 	const socket = useContext(SocketContext);
 
@@ -28,6 +30,8 @@ const ChatBox = ({senderId, receiverId}: {senderId: number, receiverId: number})
 		socket.on('privateMessage', newMessage =>
 		{
 			setMessages(messages => [...messages, newMessage]);
+			console.log('Updated messages:', newMessage);
+			// return updatedMessages;
 		});
 
 		return () =>

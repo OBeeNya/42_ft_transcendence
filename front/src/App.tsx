@@ -30,10 +30,23 @@ function App()
 	useEffect(() =>
 	{
 		const newSocket = io('http://localhost:3000');
+
+		newSocket.on('connect', () =>
+		{
+			console.log('WebSocket connecté');
+		});
+	
+		newSocket.on('disconnect', (reason: string) =>
+		{
+			console.log('WebSocket déconnecté, raison:', reason);
+		});
+
 		setSocket(newSocket);
 
 		return () =>
 		{
+			newSocket.off('connect');
+			newSocket.off('disconnect');
 			newSocket.close();
 		};
 	}, []);

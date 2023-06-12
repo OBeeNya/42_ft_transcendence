@@ -36,6 +36,7 @@ export class DirectMessageGateway
 		try
 		{
 			const newMessage = await this.directMessageService.create(data);
+			console.log('Emitting privateMessage with data:', newMessage);
 			this.server.to(data.receiverId.toString()).emit('privateMessage', newMessage);
 		}
 		catch (error)

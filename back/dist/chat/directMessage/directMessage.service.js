@@ -17,26 +17,44 @@ let DirectMessageService = class DirectMessageService {
         this.prisma = prisma;
     }
     async create(data) {
-        return this.prisma.directMessage.create({
-            data: {
-                senderId: data.senderId,
-                receiverId: data.receiverId,
-                content: data.content,
-            },
-        });
+        console.log('Creating direct message with data:', data);
+        try {
+            const createdMessage = await this.prisma.directMessage.create({
+                data: {
+                    senderId: data.senderId,
+                    receiverId: data.receiverId,
+                    content: data.content,
+                },
+            });
+            console.log('Direct message created:', createdMessage);
+            return (createdMessage);
+        }
+        catch (error) {
+            console.error('Error while creating direct message:', error);
+            throw error;
+        }
     }
     async getConversation(senderId, receiverId) {
-        return this.prisma.directMessage.findMany({
-            where: {
-                OR: [
-                    { senderId: senderId, receiverId: receiverId },
-                    { senderId: receiverId, receiverId: senderId }
-                ]
-            },
-            orderBy: {
-                createdAt: 'asc',
-            }
-        });
+        console.log(`Getting conversation between ${senderId} and ${receiverId}`);
+        try {
+            const messages = await this.prisma.directMessage.findMany({
+                where: {
+                    OR: [
+                        { senderId: senderId, receiverId: receiverId },
+                        { senderId: receiverId, receiverId: senderId }
+                    ]
+                },
+                orderBy: {
+                    createdAt: 'asc',
+                }
+            });
+            console.log(`Got ${messages.length} messages`);
+            return (messages);
+        }
+        catch (error) {
+            console.error('Error while getting conversation:', error);
+            throw error;
+        }
     }
 };
 DirectMessageService = __decorate([
