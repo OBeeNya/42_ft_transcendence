@@ -3,7 +3,7 @@ import { Server, Socket } from "socket.io";
 import { DirectMessageService } from "./directMessage.service";
 import { DirectMessageDto } from "./directMessage.dto";
 
-@WebSocketGateway({cors: {origin: "*"} })
+@WebSocketGateway({cors: {origin: "*"}})
 export class DirectMessageGateway
 {
 	constructor(private directMessageService: DirectMessageService) {}

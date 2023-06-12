@@ -1,6 +1,6 @@
 import { useContext, useState, useEffect } from "react";
 import { SocketContext } from "../../../../socketContext";
-import "./ChatBox.css"
+import "./ChatBox.css";
 
 interface Message
 {

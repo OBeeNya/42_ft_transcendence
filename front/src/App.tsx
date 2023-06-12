@@ -29,13 +29,13 @@ function App()
 
 	useEffect(() =>
 	{
-		const newSocket = io('http://localhost:3000');
+		const newSocket = io('http://localhost:8080');
 
 		newSocket.on('connect', () =>
 		{
 			console.log('WebSocket connecté');
 		});
-	
+
 		newSocket.on('disconnect', (reason: string) =>
 		{
 			console.log('WebSocket déconnecté, raison:', reason);
@@ -53,7 +53,7 @@ function App()
 
   return (
 	// tous les composants enfants peuvent accéder à une instance de socket grâce au context
-	<SocketContext.Provider value={socket}> 
+	<SocketContext.Provider value={socket}>
 		<Routes>
 			<Route path="/" element={<AuthPage/>} />
 			<Route path="/signup" element={<SignupPage/>} />
