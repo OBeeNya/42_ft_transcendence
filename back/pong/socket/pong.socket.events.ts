@@ -64,12 +64,14 @@ export class SocketEvents {
                 if (client.id === players[i].id)
                     pl = players[i];
             }
-            pl.x = data.x;
-            pl.y = data.y;
-            pl.v = data.v;
-            pl.w = data.w;
-            pl.h = data.h;
-            pl.p = data.p;
+            if (pl !== undefined) {
+                pl.x = data.x;
+                pl.y = data.y;
+                pl.v = data.v;
+                pl.w = data.w;
+                pl.h = data.h;
+                pl.p = data.p;
+            }
         })
 
         client.on('updateBall', function(data) {
@@ -90,7 +92,7 @@ export class SocketEvents {
     }
     
     heartBeatBall() {
-        this.server.emit('heartBeatBall', b);
+        this.server.emit('heartBeatBall', b); 
     }
     
     startHeartbeat() {
@@ -111,31 +113,9 @@ export class SocketEvents {
     }
     
     //deconnexion
-    handleDisconnection(client: Socket) {
+    handleDisconnect(client: Socket) {
         console.log('client disconnected: ', client.id);
-        connections--;
-    }
+        connections = 0;
+        players = [];
+    } 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// recevoir un event (s'abonner à un message)
-/*     @SubscribeMessage('message')
-handleEvent(@MessageBody() data: string, @ConnectedSocket() client: Socket) {
-    // envoyer un event
-    this.server.emit('message', client.id, data);
-} */

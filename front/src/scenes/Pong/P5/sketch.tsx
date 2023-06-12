@@ -1,4 +1,4 @@
-import * as React from "react";
+// import * as React from "react";
 import { ReactP5Wrapper, Sketch } from "@p5-wrapper/react";
 import io from "socket.io-client"
 
@@ -10,6 +10,7 @@ const sketch: Sketch = p5 => {
     let p: Player;
     let master = false;
     let gameOn = false;
+    let gameEnded = false;
     let opponentPoints = 0;
     let players: any[] = [];
     let counter = 0;
@@ -66,8 +67,8 @@ class Ball {
         this.x = p5.width/2;
         this.y = p5.height/2;
         this.r = p5.floor(p5.random(2));
-        this.xv = (this.r === 0)?-3:3;
-        this.yv = 3;
+        this.xv = (this.r === 0)?-5:5;
+        this.yv = 5;
     }
 
     show(): void{
@@ -78,29 +79,24 @@ class Ball {
         if(this.y < 1)
             this.yv = 3;
         if(this.y >= p5.height)
-            this.yv = -3;
+            this.yv = -5;
         this.y += this.yv;
         this.x += this.xv;
     }
 
     collision(p: Player){
-        console.log("checking collision");
         let d = p5.dist(this.x, this.y, p.x, p.y);
-        // let r = p5.floor(p5.random(2));
         if(d < ballSize + playerSize + 5) {
-            // if(r === 1) {
                 if(this.y - p.y < 0) {
-                    this.yv = 3;
+                    this.yv = 5;
                 }
                 else if(this.y - p.y === 0) {
                     this.yv = 0;
                 }
                 else {
-                    this.yv = -3;
+                    this.yv = -5;
                 }
-                console.log("collision");
                 return true;
-            // }
         }
         else
             return false;
@@ -116,6 +112,8 @@ class Ball {
         socket.on('connect', () => console.log("connected"));
         p5.createCanvas(750,600);
         b = new Ball();
+
+
 
         socket.on('getCounter', function(data: number) {
             counter = data;
@@ -178,9 +176,10 @@ class Ball {
             p5.text("0", 20, 50);
             p5.text("0", 705, 50);
         }
+        if (gameEnded === true) {
+            showWinner();
+        }
         if(gameOn === true) {
-            console.log("gameStarted");
-
             if (master === true) {
                 p5.text(p.p, 20, 40);
                 p5.text(opponentPoints, 620, 50);
@@ -240,15 +239,29 @@ class Ball {
 
     function throwBall(){
         if (p.p >= 3 || opponentPoints >= 3) {
-            gameOn = false;
-            alert("The game is over. Do you want to play again?");
-            counter = 0;
             // socket.disconnectSockets();
-            
-            return;
+            gameOn = false;
+            gameEnded = true;
         }
         b.x = p5.width/2;
         b.y = p5.height/2;
+    }
+
+    function showWinner(){
+        p5.background(0);
+        p5.textSize(80);
+        p5.fill(0, 102, 153);
+        if (p.p >= 3) {
+            p5.text("YOU WON!", p5.width/2 - 180, p5.height/2);
+            p5.textSize(30);
+            p5.text("reloading the page...", p5.width/2 - 130, p5.height/2 + 100);
+        } else if (opponentPoints >= 3) {
+            p5.text("YOU LOST...", p5.width/2 - 210, p5.height/2);
+            p5.textSize(30);
+            p5.text("reloading the page...", p5.width/2 - 130, p5.height/2 + 100);
+        }
+        socket.on('disconnect', () => console.log("testing disconnection front"));
+        setTimeout(() => {  window.location.href = "/pong"; }, 3000);
     }
 };
 
