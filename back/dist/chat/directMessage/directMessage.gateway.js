@@ -37,7 +37,8 @@ let DirectMessageGateway = class DirectMessageGateway {
         }
         catch (error) {
             console.error('Error while handling private message:', error);
-            client.emit('error', { message: 'There was an error sending your message.', error: error.message });
+            client.emit('error', { message: 'There was an error sending your message.',
+                error: error.message });
         }
     }
     async handleGetConversation(data, client) {
@@ -47,7 +48,8 @@ let DirectMessageGateway = class DirectMessageGateway {
         }
         catch (error) {
             console.error('Error while getting conversation:', error);
-            client.emit('error', { message: 'There was an error getting your conversation.', error: error.message });
+            client.emit('error', { message: 'There was an error getting your conversation.',
+                error: error.message });
         }
     }
 };
@@ -60,7 +62,8 @@ __decorate([
     __param(0, (0, websockets_1.MessageBody)()),
     __param(1, (0, websockets_1.ConnectedSocket)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [directMessage_dto_1.DirectMessageDto, socket_io_1.Socket]),
+    __metadata("design:paramtypes", [directMessage_dto_1.DirectMessageDto,
+        socket_io_1.Socket]),
     __metadata("design:returntype", Promise)
 ], DirectMessageGateway.prototype, "handlePrivateMessage", null);
 __decorate([

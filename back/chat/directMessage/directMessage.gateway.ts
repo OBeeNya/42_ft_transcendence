@@ -9,7 +9,7 @@ export class DirectMessageGateway
 	constructor(private directMessageService: DirectMessageService) {}
 
 	@WebSocketServer()
-	server: Server;
+	server: Server; // this.server pour accéder aux méthodes propres aux websockets
 
 	afterInit(server: Server)
 	{
@@ -26,8 +26,12 @@ export class DirectMessageGateway
 		console.log(`Client disconnected: ${client.id}`);
 	}
 
+	// est call chaque fois qu'un message avec l'event "privateMessage"
+	// est reçu par le serveur Websocket
+
 	@SubscribeMessage('privateMessage')
-	async handlePrivateMessage(@MessageBody() data: DirectMessageDto, @ConnectedSocket() client: Socket)
+	async handlePrivateMessage(@MessageBody() data: DirectMessageDto,
+							   @ConnectedSocket() client: Socket)
 	{
 		try
 		{
@@ -37,22 +41,26 @@ export class DirectMessageGateway
 		catch (error)
 		{
 			console.error('Error while handling private message:', error);
-			client.emit('error', {message: 'There was an error sending your message.', error: error.message});
+			client.emit('error', {message: 'There was an error sending your message.',
+								  error: error.message});
 		}
 	}
 
 	@SubscribeMessage('getConversation')
-	async handleGetConversation(@MessageBody() data: {senderId: number, receiverId: number}, @ConnectedSocket() client: Socket)
+	async handleGetConversation(@MessageBody() data: {senderId: number, receiverId: number},
+								@ConnectedSocket() client: Socket)
 	{
 		try
 		{
-			const messages = await this.directMessageService.getConversation(data.senderId, data.receiverId);
+			const messages = await this.directMessageService.getConversation(data.senderId,
+																			 data.receiverId);
 			client.emit('conversation', messages);
 		}
 		catch (error)
 		{
 			console.error('Error while getting conversation:', error);
-			client.emit('error', {message: 'There was an error getting your conversation.', error: error.message});
+			client.emit('error', {message: 'There was an error getting your conversation.',
+								  error: error.message});
 		}
 	}
 }

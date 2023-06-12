@@ -84,6 +84,12 @@ model Chat {
   @@map("chats")
 }
 
+enum ChatType {
+  PUBLIC
+  PRIVATE
+  PASSWORD
+}
+
 model Message {
   id		Int @id @default(autoincrement())
   createdAt	DateTime @default(now())
@@ -107,12 +113,6 @@ model UserChat {
 
   @@id([userId, chatId])
   @@map("user_chats")
-}
-
-enum ChatType {
-  PUBLIC
-  PRIVATE
-  PASSWORD
 }
 
 model DirectMessage {

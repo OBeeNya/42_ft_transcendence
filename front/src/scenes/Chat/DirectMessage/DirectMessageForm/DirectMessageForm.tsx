@@ -11,8 +11,8 @@ type Props =
 
 const DirectMessageForm: React.FC<Props> = ({senderId, receiverId}) =>
 {
-	console.log('senderId:', senderId); // Add this line
-	console.log('receiverId:', receiverId); // And this line
+	console.log('senderId:', senderId);
+	console.log('receiverId:', receiverId);
 	
 	const [message, setMessage] = useState('');
 	const [error, setError] = useState('');

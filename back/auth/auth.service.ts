@@ -91,5 +91,4 @@ export class AuthService {
             expires: new Date(Date.now() + (5 *  24 * 3600 * 1000)),
 		});
 	}
-
 }

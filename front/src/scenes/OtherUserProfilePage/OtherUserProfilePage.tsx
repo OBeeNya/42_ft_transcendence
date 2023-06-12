@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { ax } from "../../services/axios/axios";
 import Content from "../../components/content";
 import { UserInfos } from "../../services/interfaces/userInfos.interface";
-import "/Users/lucas/42_ft_transcendence/front/src/scenes/Profile/style/ProfilePage.css"
+import "../Profile/style/ProfilePage.css"
 
 const OtherUserProfilePage = () =>
 {

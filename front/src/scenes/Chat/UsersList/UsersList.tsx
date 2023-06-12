@@ -6,14 +6,59 @@ import DirectMessageForm from "../DirectMessage/DirectMessageForm/DirectMessageF
 import './UsersList.css';
 import User from './User';
 
-const UsersList = () => 
+const UsersList = () =>
 {
 	const navigate = useNavigate();
+	
+	// privateMessageUserId contiendra l'id de l'user auquel on veut envoyer
+	// un mp (initialement défini sur null)
+	// quand on clique sur un bouton pour envoyer un mp (onDirectMessageClick),
+	// setPrivateMessageUserId() est call avec l'id de cet utilisateur et
+	// privateMessageUserId est m.a.j avec l'id en question
+	
 	const [privateMessageUserId, setPrivateMessageUserId] = useState<number | null>(null);
 	const [users, setUsers] = useState([]);
-	const [clickedUser, setClickedUser] = useState(-1); 
+	const [clickedUser, setClickedUser] = useState(-1);
 	const token = localStorage.getItem("token");
-	const userId = Number(localStorage.getItem("userId"));
+	// console.log(localStorage.getItem('userId'))
+	// const userId = Number(localStorage.getItem("userId"));
+	const [currentUser, setCurrentUser] = useState<UserInfos | null>(null);
+
+	// useEffect(() =>
+	// {
+	// 	if (userId === 0)
+	// 		navigate('/');
+
+	//   }, [userId, navigate]);
+
+	useEffect(() =>
+	{
+		const fetchCurrentUser = async () =>
+		{
+			try
+			{
+				const response = await axios.get("http://localhost:8080/users/me",
+				{
+					headers:
+					{
+						Authorization: `Bearer ${token}`,
+					},
+				});
+	
+				setCurrentUser(response.data);
+
+				console.log('Current user:', response.data);
+				console.log('Current user ID:', response.data.id);
+			}
+			catch (error)
+			{
+				console.error('Error fetching current user:', error);
+			}
+		};
+	
+		fetchCurrentUser();
+	
+	}, [token]);
 
 	useEffect(() =>
 	{
@@ -57,12 +102,14 @@ const UsersList = () =>
 					key={user.id}
 					user={user} 
 					isActive={clickedUser === index} 
-					onClick={(event: MouseEvent<HTMLElement>) => { event.stopPropagation(); setClickedUser(index); }}
+					onClick={(event: MouseEvent<HTMLElement>) =>
+						{event.stopPropagation(); setClickedUser(index);}}
 					onDirectMessageClick={() => setPrivateMessageUserId(user.id)} 
 					navigate={navigate}
 				/>
 			))}
-			{privateMessageUserId !== null && <DirectMessageForm senderId={userId} receiverId={privateMessageUserId} />}
+			{privateMessageUserId !== null && currentUser
+			&& <DirectMessageForm senderId={currentUser.id} receiverId={privateMessageUserId} />}
 		</div>
 	);
 };

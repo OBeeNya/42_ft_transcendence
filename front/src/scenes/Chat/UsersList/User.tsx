@@ -1,7 +1,10 @@
 import React, { MouseEvent } from 'react';
 import { UserInfos } from "../../../services/interfaces/userInfos.interface";
 
-const User = ({ user, isActive, onClick, onDirectMessageClick, navigate }: { user: UserInfos, isActive: boolean, onClick: (event: MouseEvent<HTMLElement>) => void, onDirectMessageClick: () => void, navigate: (path: string) => void }) =>
+const User = ({ user, isActive, onClick, onDirectMessageClick, navigate }:
+			  { user: UserInfos, isActive: boolean, onClick:
+				(event: MouseEvent<HTMLElement>) => void, onDirectMessageClick:
+				() => void, navigate: (path: string) => void }) =>
 {
 	return (
 		<div key={user.id} className={`user ${isActive ? 'show-menu' : ''}`}>
