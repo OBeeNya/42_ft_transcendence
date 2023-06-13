@@ -13,7 +13,13 @@ const user_module_1 = require("./user/user.module");
 const prisma_module_1 = require("./prisma_module/prisma.module");
 const config_1 = require("@nestjs/config");
 const match_history_module_1 = require("./match-history/match-history.module");
+<<<<<<< HEAD
 const directMessage_module_1 = require("./chat/directMessage/directMessage.module");
+=======
+const chat_module_1 = require("./chat/chat.module");
+const pong_module_1 = require("./pong/pong.module");
+const pong_socket_module_1 = require("./pong/socket/pong.socket.module");
+>>>>>>> d18ca83a021e8566cf46a2820079e1b7ef2af7c1
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -26,7 +32,13 @@ AppModule = __decorate([
             user_module_1.UserModule,
             prisma_module_1.PrismaModule,
             match_history_module_1.MatchHistoryModule,
+<<<<<<< HEAD
             directMessage_module_1.DirectMessageModule,
+=======
+            chat_module_1.ChatModule,
+            pong_module_1.PongModule,
+            pong_socket_module_1.SocketModule,
+>>>>>>> d18ca83a021e8566cf46a2820079e1b7ef2af7c1
         ],
     })
 ], AppModule);
