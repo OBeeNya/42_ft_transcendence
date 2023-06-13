@@ -3,7 +3,7 @@
     flex-direction: column;
     margin: 5px;
   }
-  
+
   .message {
     max-width: 60%;
     line-height: 1.5;
@@ -23,5 +23,4 @@
     align-self: flex-start;
     background-color: #e5e5ea;
     color: black;
-  }
-  
+}
