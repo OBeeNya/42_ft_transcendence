@@ -1,33 +1,47 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useContext } from "react";
+import { buttonChannelContext } from "./ChatPage"
+import './ChatSidebar.css';
+
 
 const ChatSideBar = () =>
 {
-	const [searchChannel, setSearchChannel] = useState(false);
-	const [addChannel, setAddChannel] = useState(false);
-	const [isSearchOpen, setIsSearchOpen] = useState(false);
+	const { displayPopup } = useContext(buttonChannelContext);
+	const { channelsName } = useContext(buttonChannelContext);
+	const [channel, searchChannel] = useState('');
 	const searchInputRef = useRef<HTMLInputElement>(null);
-
-	useEffect(() =>
-	{
-		if (isSearchOpen)
-		{
-			const handleClickOutside = (event: MouseEvent) =>
-			{
-				if (searchInputRef.current && !searchInputRef.current.contains(event.target as Node))
-					setIsSearchOpen(false);
-			}
-			
-			document.addEventListener("mousedown", handleClickOutside);
-
-			return () =>
-			{
-				document.removeEventListener("mousedown", handleClickOutside);
-			};
+	
+	const handleChange = () => {
+		if (searchInputRef.current) {
+			const value = searchInputRef.current.value;
+			searchChannel(value);
 		}
-	}, [isSearchOpen]);
+	};
+
+	const ifchan = (name: string) => {
+		for (let i = 0; i <channelsName.length; i++) {
+			if (channelsName[i] === channel)
+				return true;
+		}
+		return false;
+	};
+
+	const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>): void => {
+		const key = event.key;
+		const letters = /^[A-Za-z]+$/;
+
+		if (searchInputRef.current && searchInputRef.current.value.length >= 20 && key !== 'Backspace' && key !== 'Delete') {
+			event.preventDefault();
+		} else if (!letters.test(key)) {
+		  event.preventDefault();
+		} else if (searchInputRef.current && searchInputRef.current.value.length > 0  && key === 'Enter') {
+			event.preventDefault();
+			if (ifchan(searchInputRef.current.value) === true)
+				searchChannel('');
+		}
+	  };
 
 	return (
-		<div className="channel-search-add">
+		<div className="search-add">
 
 			<div className="first-line">
 
@@ -36,105 +50,19 @@ const ChatSideBar = () =>
 				</div>
 
 				<div className="icons">
-
-					<button onClick={() => setIsSearchOpen(!isSearchOpen)}>
-						<i className="fas fa-search"></i>
-					</button>
-
-					{isSearchOpen ? <input ref={searchInputRef} type="text" placeholder="Search..." /> : null}
-
-					<button onClick={() => setAddChannel(!addChannel)}>
+					<button onClick={displayPopup}>
 						<i className="fas fa-plus"></i>
 					</button>
-
 				</div>
-
 			</div>
-
+			<input className="search-bar" ref={searchInputRef} placeholder="Search channel..." value={channel} onChange={handleChange} onKeyDown={handleKeyDown}/>
+			<div className="chanbutton-container">
+				{channelsName.map((name, index) => (
+					<button key={index} className="chanbutton">{name}</button>
+				))}
+			</div>
 		</div>
 	);
 };
 
 export default ChatSideBar;
-
-// import { useState, useRef, useEffect } from "react";
-
-// const ChatSideBar = () =>
-// {
-// 	const [searchChannel, setSearchChannel] = useState(false);
-// 	const [addChannel, setAddChannel] = useState(false);
-// 	const [isSearchOpen, setIsSearchOpen] = useState(false);
-// 	const searchInputRef = useRef<HTMLInputElement>(null);
-
-// 	useEffect(() =>
-// 	{
-// 		if (isSearchOpen)
-// 		{
-// 			const handleClickOutside = (event: MouseEvent) =>
-// 			{
-// 				if (searchInputRef.current && !searchInputRef.current.contains(event.target as Node))
-// 					setIsSearchOpen(false);
-// 			}
-
-// 			document.addEventListener("mousedown", handleClickOutside);
-
-// 			return () =>
-// 			{
-// 				document.removeEventListener("mousedown", handleClickOutside);
-// 			};
-// 		}
-// 	}, [isSearchOpen]);
-
-// 	// const handleKeyPress = async (event: React.KeyboardEvent<HTMLInputElement>) => 
-// 	// {
-// 	// 	if (event.key === "Enter")
-// 	// 	{
-// 	// 		const channelName = searchInputRef.current.value;
-// 	// 		await joinChannel(channelName);
-// 	// 	}
-// 	// }
-
-// 	const handleSearchClick = async () =>
-// 	{
-// 		if (searchInputRef.current)
-// 		{
-// 			const channelName = searchInputRef.current.value;
-// 			// await joinChannel(channelName);
-// 		}
-// }
-
-// 	// const joinChannel = async (channelName: string) =>
-// 	// {
-// 	//     // TODO: Appel API pour rejoindre le channel
-// 	// }
-
-// 	return (
-// 		<div className="channel-search-add">
-
-// 			<div className="first-line">
-
-// 				<div className="channels-text">
-// 					<p>CHANNELS</p>
-// 				</div>
-
-// 				<div className="icons">
-
-// 					<button onClick={handleSearchClick}>
-// 						<i className="fas fa-search"></i>
-// 					</button>
-
-// 					{/* {isSearchOpen ? <input ref={searchInputRef} type="text" placeholder="Search..." onKeyPress={handleKeyPress}/> : null} */}
-
-// 					<button onClick={() => setAddChannel(!addChannel)}>
-// 						<i className="fas fa-plus"></i>
-// 					</button>
-
-// 				</div>
-
-// 			</div>
-
-// 		</div>
-// 	);
-// };
-
-// export default ChatSideBar;
