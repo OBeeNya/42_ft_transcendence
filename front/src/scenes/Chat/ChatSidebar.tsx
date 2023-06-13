@@ -2,7 +2,6 @@ import { useState, useRef, useContext } from "react";
 import { buttonChannelContext } from "./ChatPage"
 import './ChatSidebar.css';
 
-
 const ChatSideBar = () =>
 {
 	const { displayPopup } = useContext(buttonChannelContext);

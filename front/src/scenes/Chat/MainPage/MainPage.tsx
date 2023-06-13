@@ -1,31 +1,40 @@
 import Header from "../../../components/header"
-import ChatBox from "../DirectMessage/ChatBox/ChatBox";
 import Sidebar from "../Sidebar/Sidebar";
 import UsersList from "../UsersList/UsersList";
+import ChatBox from "../DirectMessage/ChatBox/ChatBox"
+import DirectMessageForm from "../DirectMessage/DirectMessageForm/DirectMessageForm";
 import './MainPage.css';
+import { useState } from 'react';
 
 const MainPage = () =>
 {
-    return (
-        <div className="chat-page">
-            <Header />
+    const [currentUser, setCurrentUser] = useState<any>(null);
+    const [privateMessageUserId, setPrivateMessageUserId] = useState(null);
 
-            <div className="content">
-                <div className="sidebar">
-                    <Sidebar />
-                </div>
+	return (
+		<div className="chat-page">
+			<Header />
 
-                <div className="chat-box">
-                    <ChatBox senderId={2} receiverId={1} />
-                </div>
+			<div className="content">
+				<div className="sidebar">
+					<Sidebar />
+				</div>
 
-                <div className="users-list">
-                    <UsersList />
-                </div>
-            </div>
+				<div className="chat-section">
+					{privateMessageUserId && currentUser &&
+						<DirectMessageForm senderId={currentUser.id} receiverId={privateMessageUserId} />
+					}
+					<ChatBox senderId={currentUser ? currentUser.id : -1} receiverId={privateMessageUserId ? privateMessageUserId : -1} />
+				</div>
 
-        </div>
-    );
+				<div className="users-list">
+					<UsersList setCurrentUser={setCurrentUser} setPrivateMessageUserId={setPrivateMessageUserId} />
+				</div>
+
+			</div>
+
+		</div>
+	);
 };
 
 export default MainPage;

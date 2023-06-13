@@ -1,4 +1,5 @@
 import { useEffect, useState, MouseEvent } from "react";
+import React, { Dispatch, SetStateAction } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { UserInfos } from "../../../services/interfaces/userInfos.interface"
 import axios from "axios";
@@ -7,30 +8,19 @@ import './UsersList.css';
 import User from './User';
 import ChatBox from "../DirectMessage/ChatBox/ChatBox"
 
-const UsersList = () =>
+interface UsersListProps
+{
+    setCurrentUser: Dispatch<SetStateAction<any>>;
+    setPrivateMessageUserId: Dispatch<SetStateAction<any>>;
+}
+
+const UsersList = ({setCurrentUser, setPrivateMessageUserId}: UsersListProps) =>
 {
 	const navigate = useNavigate();
 	
-	// privateMessageUserId contiendra l'id de l'user auquel on veut envoyer
-	// un mp (initialement défini sur null)
-	// quand on clique sur un bouton pour envoyer un mp (onDirectMessageClick),
-	// setPrivateMessageUserId() est call avec l'id de cet utilisateur et
-	// privateMessageUserId est m.a.j avec l'id en question
-	
-	const [privateMessageUserId, setPrivateMessageUserId] = useState<number | null>(null);
 	const [users, setUsers] = useState([]);
 	const [clickedUser, setClickedUser] = useState(-1);
 	const token = localStorage.getItem("token");
-	// console.log(localStorage.getItem('userId'))
-	// const userId = Number(localStorage.getItem("userId"));
-	const [currentUser, setCurrentUser] = useState<UserInfos | null>(null);
-
-	// useEffect(() =>
-	// {
-	// 	if (userId === 0)
-	// 		navigate('/');
-
-	//   }, [userId, navigate]);
 
 	useEffect(() =>
 	{
@@ -59,7 +49,7 @@ const UsersList = () =>
 	
 		fetchCurrentUser();
 	
-	}, [token]);
+	}, [token, setCurrentUser]);
 
 	useEffect(() =>
 	{
@@ -109,9 +99,6 @@ const UsersList = () =>
 					navigate={navigate}
 				/>
 			))}
-			{privateMessageUserId !== null && currentUser
-			&& <DirectMessageForm senderId={currentUser.id} receiverId={privateMessageUserId} />}
-			   <ChatBox senderId={currentUser ? currentUser.id : -1} receiverId={privateMessageUserId ? privateMessageUserId : -1} />
 		</div>
 	);
 };
