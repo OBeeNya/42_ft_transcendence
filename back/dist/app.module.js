@@ -15,6 +15,7 @@ const config_1 = require("@nestjs/config");
 const match_history_module_1 = require("./match-history/match-history.module");
 const chat_module_1 = require("./chat/chat.module");
 const pong_module_1 = require("./pong/pong.module");
+const pong_socket_module_1 = require("./pong/socket/pong.socket.module");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -29,6 +30,7 @@ AppModule = __decorate([
             match_history_module_1.MatchHistoryModule,
             chat_module_1.ChatModule,
             pong_module_1.PongModule,
+            pong_socket_module_1.SocketModule,
         ],
     })
 ], AppModule);
