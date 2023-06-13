@@ -17,8 +17,9 @@ const sketch: Sketch = p5 => {
     let b: Ball;
     let socket: any;
     let playerSize = 20;
+    let playerSpeed = 20;
     let ballSize = 15;
-
+    let ballSpeed = 3;
 
 /******************************** PLAYER ********************************/
 
@@ -67,8 +68,8 @@ class Ball {
         this.x = p5.width/2;
         this.y = p5.height/2;
         this.r = p5.floor(p5.random(2));
-        this.xv = (this.r === 0)?-5:5;
-        this.yv = 5;
+        this.xv = (this.r === 0)?-ballSpeed:ballSpeed;
+        this.yv = ballSpeed;
     }
 
     show(): void{
@@ -77,9 +78,9 @@ class Ball {
 
     move(): void{
         if(this.y < 1)
-            this.yv = 3;
+            this.yv = ballSpeed;
         if(this.y >= p5.height)
-            this.yv = -5;
+            this.yv = -ballSpeed;
         this.y += this.yv;
         this.x += this.xv;
     }
@@ -88,14 +89,14 @@ class Ball {
         let d = p5.dist(this.x, this.y, p.x, p.y);
         if(d < ballSize + playerSize + 5) {
                 if(this.y - p.y < 0) {
-                    this.yv = 5;
-                }
-                else if(this.y - p.y === 0) {
-                    this.yv = 0;
+                    this.yv = ballSpeed;
                 }
                 else {
-                    this.yv = -5;
+                    this.yv = -ballSpeed;
                 }
+                // else if(this.y - p.y === 0) {
+                //     this.yv = 0;
+                // }
                 return true;
         }
         else
@@ -110,10 +111,9 @@ class Ball {
         socket = io('http://localhost:8080');
 
         socket.on('connect', () => console.log("connected"));
+
         p5.createCanvas(750,600);
         b = new Ball();
-
-
 
         socket.on('getCounter', function(data: number) {
             counter = data;
@@ -169,22 +169,28 @@ class Ball {
 
     p5.draw = () => {
         p5.background(0);
-        p5.rect(p5.width/2, 0, 10, 1200);
-        p5.textSize(48);
+        p5.textFont('Courier New');
         p5.fill(0, 102, 153);
         if(gameOn === false) {
-            p5.text("0", 20, 50);
-            p5.text("0", 705, 50);
+            p5.textSize(48);
+            p5.text("0", 25, 50);
+            p5.text("0", 710, 50);
+
+            p5.textAlign(p5.CENTER); 
+            p5.textSize(40); 
+            p5.text("Waiting for an opponent", p5.width/2, p5.height/2); 
         }
         if (gameEnded === true) {
+            p5.noLoop();
             showWinner();
         }
         if(gameOn === true) {
-            if (master === true) {
+          p5.rect(p5.width/2, 0, 5, 1200);
+            if (master === true) { 
                 p5.text(p.p, 20, 40);
-                p5.text(opponentPoints, 620, 50);
+                p5.text(opponentPoints, 710, 50);
             } else {
-                p5.text(p.p, 620, 40);
+                p5.text(p.p, 710, 40);
                 p5.text(opponentPoints, 20, 50);
             }
             p.show();
@@ -195,18 +201,25 @@ class Ball {
                 b.xv = 3;
             if(b.collision(p) && p.x === p5.width)
                 b.xv = -3;
-            if(b.x < 0){
-                if (master === false)
+            if(b.x === 0){
+                p5.noLoop();
+
+                console.log("b.x < 0");
+                if (master === false) {
                     p.p++;
-                else
+
+                } else {
                     opponentPoints++;
+                }
                 throwBall();
-            } 
-            if(b.x > p5.width){
-                if (master === true)
+            } else if(b.x === p5.width){
+                p5.noLoop();
+                console.log("b.x > p5.width");
+                if (master === true) {
                     p.p++;
-                else
+                } else {
                     opponentPoints++;
+                }
                 throwBall();
             }
             if (players.length === 2) {
@@ -237,32 +250,37 @@ class Ball {
         }
     };
 
-    function throwBall(){
+    function throwBall() {
         if (p.p >= 3 || opponentPoints >= 3) {
-            // socket.disconnectSockets();
             gameOn = false;
             gameEnded = true;
         }
+        p5.loop();
         b.x = p5.width/2;
         b.y = p5.height/2;
     }
 
-    function showWinner(){
+    function showWinner() {
         p5.background(0);
+        p5.textFont('Courier New');
+        p5.textAlign(p5.CENTER); 
         p5.textSize(80);
         p5.fill(0, 102, 153);
         if (p.p >= 3) {
-            p5.text("YOU WON!", p5.width/2 - 180, p5.height/2);
+            p5.textFont('Courier New');
+            p5.text("You WON!", p5.width/2, p5.height/2); 
             p5.textSize(30);
-            p5.text("reloading the page...", p5.width/2 - 130, p5.height/2 + 100);
+            p5.text("reloading the page...", p5.width/2, p5.height/2 + 100); 
         } else if (opponentPoints >= 3) {
-            p5.text("YOU LOST...", p5.width/2 - 210, p5.height/2);
+            p5.textFont('Courier New');
+            p5.text("You LOST...", p5.width/2, p5.height/2);
             p5.textSize(30);
-            p5.text("reloading the page...", p5.width/2 - 130, p5.height/2 + 100);
-        }
+            p5.text("reloading the page...", p5.width/2, p5.height/2 + 100);
+        } 
         socket.on('disconnect', () => console.log("testing disconnection front"));
-        setTimeout(() => {  window.location.href = "/pong"; }, 3000);
+        setTimeout(() => {  window.location.href = "/pong"; }, 5000);
     }
+
 };
 
 export function SketchComponent() {
