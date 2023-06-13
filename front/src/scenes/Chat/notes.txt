@@ -23,5 +23,11 @@ Code :
 																	   sinon msg d'erreur
 
 -------------------------------------------------------------------------------------------------------------------------
-Direct Messages
+Ce qui ne va pas :
 
+- le formulaire pour ecrire un message doit toujours rester en dessous du dernier message le
+  plus recent
+- Lorsque l'utilisateur reouvre une discussion avec d'anciens messages, il doit pouvoir defiler
+  vers le haut pour voir les anciens messages. Actuellement c'est l'inverse qui se produit :
+  Si je reouvre une discussion entre deux users, je vois les messages les plus anciens et je dois
+  defiler vers le bas pour voir les messages les plus recents...
