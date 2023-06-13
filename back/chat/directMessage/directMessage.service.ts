@@ -34,19 +34,6 @@ export class DirectMessageService
 		}
 	}
 
-	// async create(data: DirectMessageDto): Promise<DirectMessage>
-	// {
-	// 	return this.prisma.directMessage.create(
-	// 	{
-	// 		data:
-	// 		{
-	// 			senderId: data.senderId,
-	// 			receiverId: data.receiverId,
-	// 			content: data.content,
-	// 		},
-	// 	});
-	// }
-
 	async getConversation(senderId: number, receiverId: number): Promise<DirectMessage[]>
 	{
 		console.log(`Getting conversation between ${senderId} and ${receiverId}`);
@@ -77,22 +64,4 @@ export class DirectMessageService
 			throw error;
 		}
 	}
-
-	// async getConversation(senderId: number, receiverId: number): Promise<DirectMessage[]>
-	// {
-	// 	return this.prisma.directMessage.findMany(
-	// 	{
-	// 		where:
-	// 		{
-	// 			OR: [
-	// 				{ senderId: senderId, receiverId: receiverId },
-	// 				{ senderId: receiverId, receiverId: senderId }
-	// 			]
-	// 		},
-	// 		orderBy:
-	// 		{
-	// 			createdAt: 'asc',
-	// 		}
-	// 	});
-	// }
 }

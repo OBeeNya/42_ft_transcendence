@@ -16,12 +16,12 @@
     overflow: auto;
 }
 
-.btn-test {
+/* .btn-test {
 	padding: 10px 20px;
 	display: block;
 	margin: 100px auto 0;
 	size: 18px;
-}
+} */
 
 .popup, .overlay {
 	width: 100vw;
