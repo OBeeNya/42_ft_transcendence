@@ -11,13 +11,14 @@ const sketch: Sketch = p5 => {
     let master = false;
     let gameOn = false;
     let gameEnded = false;
+    let spectator = false;
     let opponentPoints = 0;
     let players: any[] = [];
     let counter = 0;
     let b: Ball;
     let socket: any;
     let playerSize = 20;
-    let playerSpeed = 20;
+    let playerSpeed = 6;
     let ballSize = 15;
     let ballSpeed = 3;
 
@@ -35,7 +36,7 @@ class Player {
     constructor(x:number) {
         this.x = x;
         this.y = p5.height/2;
-        this.v = 4;
+        this.v = playerSpeed;
         this.w = 20;
         this.h = 80;
         this.p = 0;
@@ -119,33 +120,38 @@ class Ball {
             counter = data;
             console.log("counter:", counter);
             if(p === undefined) {
-                if (counter % 2 !== 0) {
+                if (counter === 1) {
                     p = new Player(0);
                     master = true;
-                } else {
+                } else if (counter === 2){
                     p = new Player(p5.width);
                     master = false;
+                } else if (counter >= 3) {
+                    console.log("spectator mode");
+
+                    spectator = true; //inutile
                 }
             } 
-            let infosPlayer = {
-                x:p.x,
-                y:p.y,
-                v:p.v,
-                w:p.w,
-                h:p.h,
-                p:p.p
-            };
-            socket.emit('start', infosPlayer);
+            // if (p !== undefined) {
+                let infosPlayer = {
+                    x:p.x,
+                    y:p.y,
+                    v:p.v,
+                    w:p.w,
+                    h:p.h,
+                    p:p.p
+                };
+                socket.emit('start', infosPlayer);
 
-            let infosBall = {
-                x:b.x,
-                y:b.y,
-                xv:b.xv,
-                yv:b.yv,
-                r:b.r
-            };
-            socket.emit('startBall', infosBall);
-            
+                let infosBall = {
+                    x:b.x,
+                    y:b.y,
+                    xv:b.xv,
+                    yv:b.yv,
+                    r:b.r
+                };
+                socket.emit('startBall', infosBall);
+            // }   
             if (counter >= 2) {
                 gameOn = true;
             }
@@ -168,9 +174,13 @@ class Ball {
 
 
     p5.draw = () => {
+        p5.noCursor();
         p5.background(0);
         p5.textFont('Courier New');
         p5.fill(0, 102, 153);
+
+
+
         if(gameOn === false) {
             p5.textSize(48);
             p5.text("0", 25, 50);
@@ -180,53 +190,50 @@ class Ball {
             p5.textSize(40); 
             p5.text("Waiting for an opponent", p5.width/2, p5.height/2); 
         }
+        
         if (gameEnded === true) {
             p5.noLoop();
             showWinner();
         }
-        if(gameOn === true) {
-          p5.rect(p5.width/2, 0, 5, 1200);
-            if (master === true) { 
-                p5.text(p.p, 20, 40);
-                p5.text(opponentPoints, 710, 50);
-            } else {
-                p5.text(p.p, 710, 40);
-                p5.text(opponentPoints, 20, 50);
-            }
-            p.show();
-            p.move(b);
-            b.show();
-            b.move();
-            if(b.collision(p) && p.x === 0)
-                b.xv = 3;
-            if(b.collision(p) && p.x === p5.width)
-                b.xv = -3;
-            if(b.x === 0){
-                p5.noLoop();
 
-                console.log("b.x < 0");
-                if (master === false) {
-                    p.p++;
-
+        if(gameOn === true && p !== undefined) {
+            p5.rect(p5.width/2, 0, 5, 1200);
+                if (master === true) { 
+                    p5.text(p.p, 20, 40);
+                    p5.text(opponentPoints, 710, 50);
                 } else {
-                    opponentPoints++;
+                    p5.text(p.p, 710, 40);
+                    p5.text(opponentPoints, 20, 50);
                 }
-                throwBall();
-            } else if(b.x === p5.width){
-                p5.noLoop();
-                console.log("b.x > p5.width");
-                if (master === true) {
-                    p.p++;
-                } else {
-                    opponentPoints++;
+                p.show();
+                p.move(b);
+                b.show();
+                b.move();
+                if (b.collision(p) && p.x === 0)
+                    b.xv = 3;
+                if (b.collision(p) && p.x === p5.width)
+                    b.xv = -3;
+                if (b.x === 0) {
+                    if (master === false) {
+                        p.p++;
+                    } else {
+                        opponentPoints++;
+                    }
+                    throwBall();
+                } else if(b.x === p5.width){
+                    if (master === true) {
+                        p.p++;
+                    } else {
+                        opponentPoints++;
+                    }
+                    throwBall();
                 }
-                throwBall();
-            }
-            if (players.length === 2) {
+            
+            if (players.length === 2 && p !== undefined) {
                 let i = master === true  ? 1 : 0;
-                    p5.fill(255,0,0);
-                    p5.rectMode(p5.CENTER);
-                    p5.rect(players[i].x, players[i].y, players[i].w, players[i].h);
+                p5.fill(255,0,0);
+                p5.rectMode(p5.CENTER);
+                p5.rect(players[i].x, players[i].y, players[i].w, players[i].h);
             }
             
             let updateInfoPlayer = {
@@ -247,6 +254,9 @@ class Ball {
                 r:b.r
             };
             socket.emit('updateBall', updateInfoBall);
+        } 
+        else if (gameOn === true && p === undefined) {
+            drawSpectator();
         }
     };
 
@@ -255,7 +265,6 @@ class Ball {
             gameOn = false;
             gameEnded = true;
         }
-        p5.loop();
         b.x = p5.width/2;
         b.y = p5.height/2;
     }
@@ -266,19 +275,40 @@ class Ball {
         p5.textAlign(p5.CENTER); 
         p5.textSize(80);
         p5.fill(0, 102, 153);
-        if (p.p >= 3) {
+        if (p !== undefined && p.p >= 3) {
             p5.textFont('Courier New');
             p5.text("You WON!", p5.width/2, p5.height/2); 
             p5.textSize(30);
             p5.text("reloading the page...", p5.width/2, p5.height/2 + 100); 
-        } else if (opponentPoints >= 3) {
+        } else if (p !== undefined && opponentPoints >= 3) {
             p5.textFont('Courier New');
             p5.text("You LOST...", p5.width/2, p5.height/2);
             p5.textSize(30);
             p5.text("reloading the page...", p5.width/2, p5.height/2 + 100);
-        } 
+        } else if (p === undefined ) {
+            p5.textFont('Courier New');
+            p5.text("Match is over!", p5.width/2, p5.height/2);
+            p5.textSize(30);
+            p5.text("reloading the page...", p5.width/2, p5.height/2 + 100);
+        }
         socket.on('disconnect', () => console.log("testing disconnection front"));
         setTimeout(() => {  window.location.href = "/pong"; }, 5000);
+    }
+
+    function drawSpectator() {
+        b.show();
+        b.move();
+        if (players !== undefined) {
+            // for (let i of players) {
+            for (let i = 0; i < 2; i++) {
+                p5.fill(255,0,0);
+                p5.rectMode(p5.CENTER);
+                p5.rect(players[i].x, players[i].y, players[i].w, players[i].h);
+            }
+        }
+        if (gameEnded === true) {
+            showWinner();
+        }
     }
 
 };
