@@ -27,6 +27,7 @@ function App()
 {
 	const [socket, setSocket] = useState<Socket | null>(null);
 	const [userId, setUserId] = useState<number | null>(null);
+	
 	const token = localStorage.getItem("token");
 
 	useEffect(() =>

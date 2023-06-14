@@ -1,5 +1,5 @@
 .users-list {
-    /* flex-basis: 12%; */
+    flex-basis: 12%;
     color: white;
     padding: 1em;
     background-color: #2f3136;
