@@ -113,7 +113,7 @@ class Ball {
 /******************************** SKETCH ********************************/
 
     p5.setup = () => {
-        socket = io('http://localhost:8081');
+        socket = io('http://localhost:8080/pong');
 
         socket.on('connect', () => console.log("connected"));
 

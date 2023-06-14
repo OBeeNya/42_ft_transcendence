@@ -34,6 +34,7 @@ function Ball(id, x, y, xv, yv, r){
 /*********************** SERVER SOCKET ***********************/
 
 @WebSocketGateway({
+    namespace: 'pong',
     cors: {
         origin: '*',
     },
