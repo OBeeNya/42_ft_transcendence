@@ -3,15 +3,13 @@ import React, { Dispatch, SetStateAction } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { UserInfos } from "../../../services/interfaces/userInfos.interface"
 import axios from "axios";
-import DirectMessageForm from "../DirectMessage/DirectMessageForm/DirectMessageForm";
 import './UsersList.css';
 import User from './User';
-import ChatBox from "../DirectMessage/ChatBox/ChatBox"
 
 interface UsersListProps
 {
-    setCurrentUser: Dispatch<SetStateAction<any>>;
-    setPrivateMessageUserId: Dispatch<SetStateAction<any>>;
+	setCurrentUser: Dispatch<SetStateAction<any>>;
+	setPrivateMessageUserId: Dispatch<SetStateAction<any>>;
 }
 
 const UsersList = ({setCurrentUser, setPrivateMessageUserId}: UsersListProps) =>

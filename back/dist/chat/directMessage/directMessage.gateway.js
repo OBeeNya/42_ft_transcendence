@@ -20,6 +20,7 @@ const directMessage_dto_1 = require("./directMessage.dto");
 let DirectMessageGateway = class DirectMessageGateway {
     constructor(directMessageService) {
         this.directMessageService = directMessageService;
+        this.userSocketMap = new Map();
     }
     afterInit(server) {
         console.log('Initialized!');
@@ -30,10 +31,17 @@ let DirectMessageGateway = class DirectMessageGateway {
     handleDisconnect(client) {
         console.log(`Client disconnected: ${client.id}`);
     }
+    handleUserConnected(userId, client) {
+        this.userSocketMap.set(userId, client.id);
+        console.log(`User ${userId} connected with socket id ${client.id}`);
+    }
     async handlePrivateMessage(data, client) {
         try {
             const newMessage = await this.directMessageService.create(data);
             console.log('Emitting privateMessage with data:', newMessage);
+            const receiverSocketId = this.userSocketMap.get(data.receiverId);
+            if (receiverSocketId)
+                this.server.to(receiverSocketId).emit('privateMessage', newMessage);
             this.server.to(data.receiverId.toString()).emit('privateMessage', newMessage);
             client.emit('privateMessage', newMessage);
         }
@@ -57,6 +65,14 @@ __decorate([
     (0, websockets_1.WebSocketServer)(),
     __metadata("design:type", socket_io_1.Server)
 ], DirectMessageGateway.prototype, "server", void 0);
+__decorate([
+    (0, websockets_1.SubscribeMessage)('userConnected'),
+    __param(0, (0, websockets_1.MessageBody)()),
+    __param(1, (0, websockets_1.ConnectedSocket)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, socket_io_1.Socket]),
+    __metadata("design:returntype", void 0)
+], DirectMessageGateway.prototype, "handleUserConnected", null);
 __decorate([
     (0, websockets_1.SubscribeMessage)('privateMessage'),
     __param(0, (0, websockets_1.MessageBody)()),

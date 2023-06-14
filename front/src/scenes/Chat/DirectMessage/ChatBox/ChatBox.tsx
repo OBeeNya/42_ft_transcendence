@@ -29,9 +29,13 @@ const ChatBox = ({senderId, receiverId}: {senderId: number, receiverId: number})
 
 		socket.on('privateMessage', newMessage =>
 		{
-			setMessages(messages => [...messages, newMessage]);
-			console.log('Updated messages:', newMessage);
-			// return updatedMessages;
+			// on m.a.j l'etat uniquement si le receveur du nouveau message
+			// est l'utilisateur actuel
+			if (newMessage.receiverId === receiverId)
+			{
+				setMessages(messages => [...messages, newMessage]);
+				console.log('Updated messages:', newMessage);
+			}
 		});
 
 		return () =>

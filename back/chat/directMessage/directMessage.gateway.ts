@@ -6,13 +6,12 @@ import { DirectMessageDto } from "./directMessage.dto";
 @WebSocketGateway({cors: {origin: "*"}})
 export class DirectMessageGateway
 {
-	// Stocke les user ids mappés aux sockets ids
-	// private userSocketMap = new Map<number, string>();
+	private userSocketMap = new Map<number, string>();
 
 	constructor(private directMessageService: DirectMessageService) {}
 
 	@WebSocketServer()
-	server: Server; // this.server pour accéder aux méthodes propres aux websockets
+	server: Server;
 
 	afterInit(server: Server)
 	{
@@ -29,16 +28,12 @@ export class DirectMessageGateway
 		console.log(`Client disconnected: ${client.id}`);
 	}
 
-	// établie une connexion entre un user id et son socket id respectif
-	// @SubscribeMessage('userConnected')
-	// handleUserConnected(@MessageBody() userId: number, @ConnectedSocket() client: Socket)
-	// {
-	// 	this.userSocketMap.set(userId, client.id);
-	// 	console.log(`User ${userId} connected with socket id ${client.id}`);
-	// }
-
-	// est call chaque fois qu'un message avec l'event "privateMessage"
-	// est reçu par le serveur Websocket
+	@SubscribeMessage('userConnected')
+	handleUserConnected(@MessageBody() userId: number, @ConnectedSocket() client: Socket)
+	{
+		this.userSocketMap.set(userId, client.id);
+		console.log(`User ${userId} connected with socket id ${client.id}`);
+	}
 
 	@SubscribeMessage('privateMessage')
 	async handlePrivateMessage(@MessageBody() data: DirectMessageDto, @ConnectedSocket() client: Socket)
@@ -48,11 +43,10 @@ export class DirectMessageGateway
 			const newMessage = await this.directMessageService.create(data);
 			console.log('Emitting privateMessage with data:', newMessage);
 
-			// Use the userSocketMap to find the socket id for the receiver
-			// const receiverSocketId = this.userSocketMap.get(data.receiverId);
+			const receiverSocketId = this.userSocketMap.get(data.receiverId);
 
-			// if (receiverSocketId)
-			// 	this.server.to(receiverSocketId).emit('privateMessage', newMessage);
+			if (receiverSocketId)
+				this.server.to(receiverSocketId).emit('privateMessage', newMessage);
 
 			this.server.to(data.receiverId.toString()).emit('privateMessage', newMessage);
 			client.emit('privateMessage', newMessage);
