@@ -48,11 +48,23 @@ class Player {
     }
 
     move = (b: Ball): void => {
-        if (this.y < p5.mouseY)
-            this.y += this.v;
-        else if (this.y > p5.mouseY)
-            this.y -= this.v;
+        if (p5.keyIsPressed) {
+            if (p5.keyCode == p5.UP_ARROW) { 
+                this.y -= this.v;
+            } else if (p5.keyCode == p5.DOWN_ARROW) { 
+                this.y += this.v;
+            }
+          }
     }
+
+    // move = (b: Ball): void => {
+    //     if (this.y < p5.mouseY)
+    //         this.y += this.v;
+    //     else if (this.y > p5.mouseY)
+    //         this.y -= this.v;
+    // }
+
+    
 }
 
 
@@ -88,7 +100,7 @@ class Ball {
 
     collision(p: Player){
         let d = p5.dist(this.x, this.y, p.x, p.y);
-        if(d < ballSize + playerSize + 5) {
+        if(d < ballSize + playerSize) {
                 if(this.y - p.y < 0) {
                     this.yv = ballSpeed;
                 }
@@ -299,7 +311,7 @@ class Ball {
     function drawSpectator() {
         b.show();
         b.move();
-        console.log("players.length:", players.length);
+        // console.log("players.length:", players.length);
         if (players.length === 2) {
             for (let i = 0; i < 2; i++) {
                 p5.fill(255,0,0);
