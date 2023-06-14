@@ -11,8 +11,11 @@ import PongPageGame from './scenes/Pong/PongPageGame';
 import { ProtectedRoute , ProtectedRouteProps } from "./components/protectedRoutes";
 import OnlinePage from './scenes/Online/OnlinePage';
 import Leaderboard from './scenes/Leaderboard/Leaderboard';
-import ChatPage from './scenes/Chat/ChatPage';
 import TfaPage from './scenes/Tfa/TfaPage';
+import MainPage from './scenes/Chat/MainPage/MainPage';
+import { SocketContext } from './socketContext';
+import { useState } from 'react';
+import { Socket } from 'socket.io-client';
 
 const defaultProtectedRouteProps: Omit<ProtectedRouteProps, 'outlet'> = {
   authenticationPath: '/',
@@ -20,7 +23,7 @@ const defaultProtectedRouteProps: Omit<ProtectedRouteProps, 'outlet'> = {
 
 function App() {
   return (
-      <Routes>
+  <Routes>
         <Route path="/" element={<AuthPage/>} />
         <Route path="/signup" element={<SignupPage/>} />
         <Route path="/signin" element={<SigninPage/>} />
@@ -31,7 +34,7 @@ function App() {
         <Route path="/editprofile" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<EditProfilePage/>} />} />
         <Route path="/pong" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<PongPage/>} />} />
         <Route path="/pongGame" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<PongPageGame/>} />} />
-        <Route path="/chat" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<ChatPage/>} />} />
+        <Route path="/chat" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<MainPage/>} />} />
         <Route path="/online" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<OnlinePage/>} />} />
         <Route path="/leaderboard" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<Leaderboard/>} />} />
     </Routes>
