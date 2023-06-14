@@ -23,12 +23,16 @@ model User {
   history		MatchHistory[]
   oauthId		String
   connected		Boolean @default(false)
+  isPlaying		Boolean @default(false)
   chats			UserChat[]
   messages		Message[] @relation("UserMessage")
+  sentDMs		DirectMessage[] @relation("UserDMs")
+  receivedDMs	DirectMessage[] @relation("UserDMsReceived")
 
-  tfa Boolean @default(false)
-  tfa_key String
-  
+  tfa				Boolean @default(false)
+  tfa_key			String
+  // avatar_url		String
+
   @@map("users")
 }
 
@@ -80,6 +84,12 @@ model Chat {
   @@map("chats")
 }
 
+enum ChatType {
+  PUBLIC
+  PRIVATE
+  PASSWORD
+}
+
 model Message {
   id		Int @id @default(autoincrement())
   createdAt	DateTime @default(now())
@@ -105,8 +115,14 @@ model UserChat {
   @@map("user_chats")
 }
 
-enum ChatType {
-  PUBLIC
-  PRIVATE
-  PASSWORD
+model DirectMessage {
+  id			Int @id @default(autoincrement())
+  createdAt		DateTime @default(now())
+  content		String
+  senderId		Int
+  receiverId	Int
+  sender		User @relation("UserDMs", fields: [senderId], references: [id])
+  receiver		User @relation("UserDMsReceived", fields: [receiverId], references: [id])
+
+  @@map("direct_messages")
 }
