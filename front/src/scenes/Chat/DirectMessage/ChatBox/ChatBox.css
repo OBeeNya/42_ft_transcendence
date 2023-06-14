@@ -25,15 +25,14 @@
 	  background-color: #e5e5ea;
 	  color: black;
   }
-  
+
   .chat-box {
 	padding-bottom: 55px;
 	overflow-y: scroll;
 	-ms-overflow-style: none;  /* IE and Edge */
 	scrollbar-width: none; /* Firefox */
   }
-  
+
   .chat-box::-webkit-scrollbar {
 	display: none;  /* Chrome, Safari and Opera */
   }
-  

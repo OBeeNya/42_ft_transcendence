@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma_module/prisma.service';
 import { User, DirectMessage } from '@prisma/client';
 import { EditUserDto, Create42UserDto} from './dto';
-// import { CreateDirectMessageDto } from './dto/create-direct-message.dto';
 import * as speakeasy from 'speakeasy';
 
 @Injectable()
@@ -124,46 +123,52 @@ export class UserService
 		return (user.tfa_key);
 	}
 
-	// async sendDirectMessage(sender: User, receiverId: number, createDMdto: CreateDirectMessageDto): Promise<DirectMessage>
-	// {
-	// 	const newDirectMessage = await this.prisma.directMessage.create(
-	// 	{
-	// 		data:
-	// 		{
-	// 			senderId: sender.id,
-	// 			receiverId: receiverId,
-	// 			content: createDMdto.content,
-	// 		},
-	// 	});
+	// créer un nouvel enregistrement dans la table UserBlock de Prisma avec blockerId et blockedId
+	async blockUser(blockerId: number, blockedId: number)
+	{
+		return this.prisma.userBlock.create(
+		{
+			data:
+			{
+				userId: blockerId,
+				blockedId: blockedId
+			}
+		});
+	}
 
-	// 	return (newDirectMessage);
-	// }
+	async unblockUser(blockerId: number, blockedId: number)
+	{
+		return this.prisma.userBlock.delete(
+		{
+			where:
+			{
+				userId_blockedId:
+				{
+					userId: blockerId,
+					blockedId: blockedId
+				}
+			}
+		});
+	}
 
-	// async getDirectMessages(user: User, receiverId: number): Promise<DirectMessage[]> 
-	// {	  
-	// 	const directMessages = await this.prisma.directMessage.findMany( // findMany() trouve tous les dms entre l'user connecté et le destinataire
-	// 	{
-	// 		where:
-	// 		{
-	// 			AND: 
-	// 			[{
-	// 				OR:
-	// 				[{
-	// 					senderId: user.id,
-	// 					receiverId: receiverId,
-	// 				 },
-	// 				 {
-	// 					senderId: receiverId,
-	// 					receiverId: user.id,
-	// 				 },],
-	// 			 },],
-	// 		},
-	// 	  orderBy:
-	// 	  {
-	// 		createdAt: 'asc', // trie les dms par ordre de création du plus ancien au plus récent
-	// 	  },
-	// 	});
+	// userId_blockedId = contrainte composite
+	// combine les deux colonnes userId et blockedId qui forment ensemble un id unique
+	// pour voir s'il existe un enregistrement correspondant à la fois à userId et blockedId
+	// renvoie true si l'utilisateur est bloqué, sinon false
+	async isUserBlocked(blockerId: number, blockedId: number)
+	{
+		const block = await this.prisma.userBlock.findUnique(
+		{
+			where:
+			{
+				userId_blockedId:
+				{
+					userId: blockerId,
+					blockedId: blockedId
+				}
+			}
+		});
 
-	// 	return (directMessages);
-	// }
+		return (block !== null);
+	}
 }

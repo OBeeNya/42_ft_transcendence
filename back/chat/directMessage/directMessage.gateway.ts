@@ -2,13 +2,14 @@ import { ConnectedSocket, MessageBody, SubscribeMessage, WebSocketGateway, WebSo
 import { Server, Socket } from "socket.io";
 import { DirectMessageService } from "./directMessage.service";
 import { DirectMessageDto } from "./directMessage.dto";
+import { UserService } from "user/user.service";
 
 @WebSocketGateway({cors: {origin: "*"}})
 export class DirectMessageGateway
 {
 	private userSocketMap = new Map<number, string>();
 
-	constructor(private directMessageService: DirectMessageService) {}
+	constructor(private directMessageService: DirectMessageService, private userService: UserService) {}
 
 	@WebSocketServer()
 	server: Server;
@@ -33,6 +34,38 @@ export class DirectMessageGateway
 	{
 		this.userSocketMap.set(userId, client.id);
 		console.log(`User ${userId} connected with socket id ${client.id}`);
+	}
+
+	@SubscribeMessage('blockUser')
+	async handleBlockUser(@MessageBody() data: {blockerId: number, blockedId: number},
+						  @ConnectedSocket() client: Socket)
+	{
+		try
+		{
+			await this.userService.blockUser(data.blockerId, data.blockedId);
+			client.emit('userBlocked', {blockerId: data.blockerId, blockedId: data.blockedId});
+		}
+		catch (error)
+		{
+			console.error('Error while blocking user:', error);
+			client.emit('error', {message: 'There was an error blocking the user.', error: error.message});
+		}
+	}
+
+	@SubscribeMessage('unblockUser')
+	async handleUnblockUser(@MessageBody() data: {blockerId: number, blockedId: number},
+							@ConnectedSocket() client: Socket)
+	{
+		try
+		{
+			await this.userService.unblockUser(data.blockerId, data.blockedId);
+			client.emit('userUnblocked', {blockerId: data.blockerId, blockedId: data.blockedId});
+		}
+		catch (error)
+		{
+			console.error('Error while unblocking user:', error);
+			client.emit('error', {message: 'There was an error unblocking the user.', error: error.message});
+		}
 	}
 
 	@SubscribeMessage('privateMessage')
