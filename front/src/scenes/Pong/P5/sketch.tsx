@@ -126,13 +126,14 @@ class Ball {
                 } else if (counter === 2){
                     p = new Player(p5.width);
                     master = false;
-                } else if (counter >= 3) {
-                    console.log("spectator mode");
+                } 
+                // else if (counter >= 3) {
+                //     console.log("spectator mode");
 
-                    spectator = true; //inutile
-                }
+                //     spectator = true; //inutile
+                // }
             } 
-            // if (p !== undefined) {
+            if (p !== undefined) {
                 let infosPlayer = {
                     x:p.x,
                     y:p.y,
@@ -151,7 +152,7 @@ class Ball {
                     r:b.r
                 };
                 socket.emit('startBall', infosBall);
-            // }   
+            }   
             if (counter >= 2) {
                 gameOn = true;
             }
@@ -179,9 +180,8 @@ class Ball {
         p5.textFont('Courier New');
         p5.fill(0, 102, 153);
 
-
-
         if(gameOn === false) {
+            
             p5.textSize(48);
             p5.text("0", 25, 50);
             p5.text("0", 710, 50);
@@ -197,6 +197,7 @@ class Ball {
         }
 
         if(gameOn === true && p !== undefined) {
+            p5.textSize(48);
             p5.rect(p5.width/2, 0, 5, 1200);
                 if (master === true) { 
                     p5.text(p.p, 20, 40);
@@ -298,15 +299,14 @@ class Ball {
     function drawSpectator() {
         b.show();
         b.move();
-        if (players !== undefined) {
-            // for (let i of players) {
+        console.log("players.length:", players.length);
+        if (players.length === 2) {
             for (let i = 0; i < 2; i++) {
                 p5.fill(255,0,0);
                 p5.rectMode(p5.CENTER);
                 p5.rect(players[i].x, players[i].y, players[i].w, players[i].h);
             }
-        }
-        if (gameEnded === true) {
+        } else if (players.length === 0){
             showWinner();
         }
     }

@@ -57,7 +57,7 @@ export class SocketEvents {
             if (players.length > 0 && players[players.length - 1].id === client.id) {
                 return;
             }
-            if (players.length <= 2) {
+            if (players.length < 2) {
                 let p = new Player(client.id, data.x, data.y, data.v, data.w, data.h, data.p);
                 players.push(p);
             }
