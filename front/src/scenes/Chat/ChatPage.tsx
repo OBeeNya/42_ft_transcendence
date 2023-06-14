@@ -3,7 +3,6 @@ import ChatSidebar from "./ChatSidebar";
 import './ChatPage.css';
 import { useState, useRef, createContext, useEffect } from "react";
 
-
 interface ButtonChannelContextValue {
 	displayPopup: () => void;
 	channelsName: string[];

@@ -43,8 +43,10 @@ let SocketEvents = class SocketEvents {
             if (players.length > 0 && players[players.length - 1].id === client.id) {
                 return;
             }
-            let p = new Player(client.id, data.x, data.y, data.v, data.w, data.h, data.p);
-            players.push(p);
+            if (players.length <= 2) {
+                let p = new Player(client.id, data.x, data.y, data.v, data.w, data.h, data.p);
+                players.push(p);
+            }
         });
         client.on("startBall", function (data) {
             b = new Ball(client.id, data.x, data.y, data.xv, data.yv, data.r);
