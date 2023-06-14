@@ -20,7 +20,7 @@ import TfaPage from './scenes/Tfa/TfaPage';
 
 const defaultProtectedRouteProps: Omit<ProtectedRouteProps, 'outlet'> =
 {
-  authenticationPath: '/',
+	authenticationPath: '/',
 };
 
 function App()
