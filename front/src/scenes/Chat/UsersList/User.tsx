@@ -8,31 +8,14 @@ const User = ({ user, isActive, onClick, onDirectMessageClick, navigate }:
 	  () => void, navigate: (path: string) => void }) =>
 {
 	const [showNotification, setShowNotification] = useState(false);
-	const [notificationMessage, setNotificationMessage] = useState('');
-	const [notificationIconColor, setNotificationIconColor] = useState('');
-
-	const handleBlockClick = () => // New handler function
-	{
-		if (userIsAlreadyBlocked)
-		{
-			setNotificationMessage('User is already blocked');
-			setNotificationIconColor('orange');
-		}
-		else 
-		{
-			setNotificationMessage('User has been blocked');
-			setNotificationIconColor('red');
-		}
-		setShowNotification(true);
-	};
 
 	return (
 		<div key={user.id} className={`user ${isActive ? 'show-menu' : ''}`}>
-			{showNotification &&
-			(
-				<Block
-					message="User has been blocked"
-					onClose={() => setShowNotification(false)} iconColor={''}/>
+            {showNotification && (
+                <Block
+                    message="User has been blocked"
+                    onClose={() => setShowNotification(false)}
+                />
 			)}
 			<p className="username" onClick={onClick}>{user.name}</p>
 			{isActive &&

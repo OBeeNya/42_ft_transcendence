@@ -2,7 +2,6 @@ import { ConnectedSocket, MessageBody, SubscribeMessage, WebSocketGateway, WebSo
 import { Server, Socket } from "socket.io";
 import { DirectMessageService } from "./directMessage.service";
 import { DirectMessageDto } from "./directMessage.dto";
-// import { UserService } from "user/user.service";
 
 @WebSocketGateway({cors: {origin: "*"}})
 export class DirectMessageGateway
