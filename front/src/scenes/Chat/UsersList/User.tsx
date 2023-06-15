@@ -1,21 +1,37 @@
-import React, { MouseEvent, useState } from 'react';
+import { MouseEvent, useState, useContext } from 'react';
 import { UserInfos } from "../../../services/interfaces/userInfos.interface";
+// import { SocketContext } from "../../../../socketContext";
 import Block from "../Block/Block";
 
-const User = ({ user, isActive, onClick, onDirectMessageClick, navigate }:
-	{ user: UserInfos, isActive: boolean, onClick:
-	  (event: MouseEvent<HTMLElement>) => void, onDirectMessageClick:
-	  () => void, navigate: (path: string) => void }) =>
+const User = ({user, isActive, onClick, onDirectMessageClick, navigate}:
+	{user: UserInfos, isActive: boolean, onClick:
+	(event: MouseEvent<HTMLElement>) => void, onDirectMessageClick:
+	() => void, navigate: (path: string) => void}) =>
 {
 	const [showNotification, setShowNotification] = useState(false);
 
+	const handleBlockClick = async () =>
+	{
+		try
+		{
+			// Bloquer l'utilisateur
+			await blockUserService(user.id);
+			console.log(`User ${user.id} has been blocked`);
+			setShowNotification(true);
+		}
+		catch (error)
+		{
+			console.error('Error blocking user:', error);
+		}
+	};
+
 	return (
 		<div key={user.id} className={`user ${isActive ? 'show-menu' : ''}`}>
-            {showNotification && (
-                <Block
-                    message="User has been blocked"
-                    onClose={() => setShowNotification(false)}
-                />
+			{showNotification && (
+				<Block
+					message="User has been blocked"
+					onClose={() => setShowNotification(false)}
+				/>
 			)}
 			<p className="username" onClick={onClick}>{user.name}</p>
 			{isActive &&
@@ -33,7 +49,7 @@ const User = ({ user, isActive, onClick, onDirectMessageClick, navigate }:
 						Add friend
 					</li>
 
-					<li className="dropdown-item" onClick={() => {console.log('Block clicked'); setShowNotification(true);}}>
+					<li className="dropdown-item" onClick={handleBlockClick}>
 						Block
 					</li>
 

@@ -68,6 +68,8 @@ export class DirectMessageService
 	// créer un nouvel enregistrement dans la table UserBlock de Prisma avec blockerId et blockedId
 	async blockUser(blockerId: number, blockedId: number)
 	{
+		console.log(`Blocking user ${blockedId} for user ${blockerId}`);
+
 		return this.prisma.userBlock.create(
 		{
 			data:
@@ -99,6 +101,8 @@ export class DirectMessageService
 	// renvoie true si l'utilisateur est bloqué, sinon false
 	async isUserBlocked(blockerId: number, blockedId: number)
 	{
+		console.log(`Checking if user ${blockerId} has blocked user ${blockedId}`);
+
 		const block = await this.prisma.userBlock.findUnique(
 		{
 			where:
@@ -110,6 +114,11 @@ export class DirectMessageService
 				}
 			}
 		});
+
+		if (block !== null)
+			console.log(`User ${blockerId} has blocked user ${blockedId}`);
+		else 
+			console.log(`User ${blockerId} has not blocked user ${blockedId}`);
 
 		return (block !== null);
 	}

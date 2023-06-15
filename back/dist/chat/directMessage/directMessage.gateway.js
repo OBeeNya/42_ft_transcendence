@@ -36,8 +36,10 @@ let DirectMessageGateway = class DirectMessageGateway {
         console.log(`User ${userId} connected with socket id ${client.id}`);
     }
     async handleBlockUser(data, client) {
+        console.log(`Attempting to block user: ${data.blockedId} by user: ${data.blockerId}`);
         try {
             await this.directMessageService.blockUser(data.blockerId, data.blockedId);
+            console.log(`User ${data.blockedId} has been blocked by ${data.blockerId}`);
             client.emit('userBlocked', { blockerId: data.blockerId, blockedId: data.blockedId });
         }
         catch (error) {
@@ -56,8 +58,10 @@ let DirectMessageGateway = class DirectMessageGateway {
         }
     }
     async handlePrivateMessage(data, client) {
+        console.log(`Message sent from ${data.senderId} to ${data.receiverId}`);
         try {
             if (await this.directMessageService.isUserBlocked(data.receiverId, data.senderId)) {
+                console.log(`User ${data.receiverId} has blocked user ${data.senderId}`);
                 client.emit('error', { message: 'You have been blocked by this user and cannot send them a message.' });
                 return;
             }

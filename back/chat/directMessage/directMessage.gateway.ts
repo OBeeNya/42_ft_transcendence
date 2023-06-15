@@ -39,9 +39,12 @@ export class DirectMessageGateway
 	async handleBlockUser(@MessageBody() data: {blockerId: number, blockedId: number},
 						  @ConnectedSocket() client: Socket)
 	{
+		console.log(`Attempting to block user: ${data.blockedId} by user: ${data.blockerId}`);
+
 		try
 		{
 			await this.directMessageService.blockUser(data.blockerId, data.blockedId);
+			console.log(`User ${data.blockedId} has been blocked by ${data.blockerId}`);
 			client.emit('userBlocked', {blockerId: data.blockerId, blockedId: data.blockedId});
 		}
 		catch (error)
@@ -70,11 +73,14 @@ export class DirectMessageGateway
 	@SubscribeMessage('privateMessage')
 	async handlePrivateMessage(@MessageBody() data: DirectMessageDto, @ConnectedSocket() client: Socket)
 	{
+		console.log(`Message sent from ${data.senderId} to ${data.receiverId}`);
+
 		try
 		{
-			// Vérifier si l'utilisateur destinataire a bloqué l'utilisateur émetteur
+			// Vérifie si le receveur a bloqué l'expéditeur du message
 			if (await this.directMessageService.isUserBlocked(data.receiverId, data.senderId))
 			{
+				console.log(`User ${data.receiverId} has blocked user ${data.senderId}`);
 				client.emit('error', {message: 'You have been blocked by this user and cannot send them a message.'});
 				return;
 			}
@@ -95,7 +101,7 @@ export class DirectMessageGateway
 			console.error('Error while handling private message:', error);
 			client.emit('error', {message: 'There was an error sending your message.', error: error.message});
 		}
-	}
+}
 
 	@SubscribeMessage('getConversation')
 	async handleGetConversation(@MessageBody() data: {senderId: number, receiverId: number},

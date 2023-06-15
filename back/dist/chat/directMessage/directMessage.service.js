@@ -57,6 +57,7 @@ let DirectMessageService = class DirectMessageService {
         }
     }
     async blockUser(blockerId, blockedId) {
+        console.log(`Blocking user ${blockedId} for user ${blockerId}`);
         return this.prisma.userBlock.create({
             data: {
                 userId: blockerId,
@@ -75,6 +76,7 @@ let DirectMessageService = class DirectMessageService {
         });
     }
     async isUserBlocked(blockerId, blockedId) {
+        console.log(`Checking if user ${blockerId} has blocked user ${blockedId}`);
         const block = await this.prisma.userBlock.findUnique({
             where: {
                 userId_blockedId: {
@@ -83,6 +85,10 @@ let DirectMessageService = class DirectMessageService {
                 }
             }
         });
+        if (block !== null)
+            console.log(`User ${blockerId} has blocked user ${blockedId}`);
+        else
+            console.log(`User ${blockerId} has not blocked user ${blockedId}`);
         return (block !== null);
     }
 };
