@@ -6,4 +6,7 @@ export declare class DirectMessageService {
     constructor(prisma: PrismaService);
     create(data: DirectMessageDto): Promise<DirectMessage>;
     getConversation(senderId: number, receiverId: number): Promise<DirectMessage[]>;
+    blockUser(blockerId: number, blockedId: number): Promise<any>;
+    unblockUser(blockerId: number, blockedId: number): Promise<any>;
+    isUserBlocked(blockerId: number, blockedId: number): Promise<boolean>;
 }

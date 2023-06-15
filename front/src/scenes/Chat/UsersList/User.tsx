@@ -1,20 +1,39 @@
-import React, { MouseEvent } from 'react';
+import React, { MouseEvent, useState } from 'react';
 import { UserInfos } from "../../../services/interfaces/userInfos.interface";
+import Block from "../Block/Block";
 
 const User = ({ user, isActive, onClick, onDirectMessageClick, navigate }:
-			  { user: UserInfos, isActive: boolean, onClick:
-				(event: MouseEvent<HTMLElement>) => void, onDirectMessageClick:
-				() => void, navigate: (path: string) => void }) =>
+	{ user: UserInfos, isActive: boolean, onClick:
+	  (event: MouseEvent<HTMLElement>) => void, onDirectMessageClick:
+	  () => void, navigate: (path: string) => void }) =>
 {
+	const [showNotification, setShowNotification] = useState(false);
+	const [notificationMessage, setNotificationMessage] = useState('');
+	const [notificationIconColor, setNotificationIconColor] = useState('');
+
+	const handleBlockClick = () => // New handler function
+	{
+		if (userIsAlreadyBlocked)
+		{
+			setNotificationMessage('User is already blocked');
+			setNotificationIconColor('orange');
+		}
+		else 
+		{
+			setNotificationMessage('User has been blocked');
+			setNotificationIconColor('red');
+		}
+		setShowNotification(true);
+	};
+
 	return (
 		<div key={user.id} className={`user ${isActive ? 'show-menu' : ''}`}>
-			<img src={`/avatar/${user.id}.png`} alt="avatar" className="avatar" 
-				onError={(event) =>
-				{
-					const target = event.target as HTMLImageElement;
-					target.src = '/avatar/auto.png';
-				}}
-			/>
+			{showNotification &&
+			(
+				<Block
+					message="User has been blocked"
+					onClose={() => setShowNotification(false)} iconColor={''}/>
+			)}
 			<p className="username" onClick={onClick}>{user.name}</p>
 			{isActive &&
 			(
@@ -31,7 +50,7 @@ const User = ({ user, isActive, onClick, onDirectMessageClick, navigate }:
 						Add friend
 					</li>
 
-					<li className="dropdown-item" onClick={() => console.log('Block clicked')}>
+					<li className="dropdown-item" onClick={() => {console.log('Block clicked'); setShowNotification(true);}}>
 						Block
 					</li>
 

@@ -31,7 +31,6 @@ model User {
 
   tfa				Boolean @default(false)
   tfa_key			String
-  // avatar_url		String
 
   @@map("users")
 }

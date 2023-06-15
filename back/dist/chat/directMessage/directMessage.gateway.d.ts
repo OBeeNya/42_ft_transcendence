@@ -10,6 +10,14 @@ export declare class DirectMessageGateway {
     handleConnection(client: Socket): void;
     handleDisconnect(client: Socket): void;
     handleUserConnected(userId: number, client: Socket): void;
+    handleBlockUser(data: {
+        blockerId: number;
+        blockedId: number;
+    }, client: Socket): Promise<void>;
+    handleUnblockUser(data: {
+        blockerId: number;
+        blockedId: number;
+    }, client: Socket): Promise<void>;
     handlePrivateMessage(data: DirectMessageDto, client: Socket): Promise<void>;
     handleGetConversation(data: {
         senderId: number;

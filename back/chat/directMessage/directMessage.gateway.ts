@@ -2,14 +2,14 @@ import { ConnectedSocket, MessageBody, SubscribeMessage, WebSocketGateway, WebSo
 import { Server, Socket } from "socket.io";
 import { DirectMessageService } from "./directMessage.service";
 import { DirectMessageDto } from "./directMessage.dto";
-import { UserService } from "user/user.service";
+// import { UserService } from "user/user.service";
 
 @WebSocketGateway({cors: {origin: "*"}})
 export class DirectMessageGateway
 {
 	private userSocketMap = new Map<number, string>();
 
-	constructor(private directMessageService: DirectMessageService, private userService: UserService) {}
+	constructor(private directMessageService: DirectMessageService) {}
 
 	@WebSocketServer()
 	server: Server;
@@ -42,7 +42,7 @@ export class DirectMessageGateway
 	{
 		try
 		{
-			await this.userService.blockUser(data.blockerId, data.blockedId);
+			await this.directMessageService.blockUser(data.blockerId, data.blockedId);
 			client.emit('userBlocked', {blockerId: data.blockerId, blockedId: data.blockedId});
 		}
 		catch (error)
@@ -58,7 +58,7 @@ export class DirectMessageGateway
 	{
 		try
 		{
-			await this.userService.unblockUser(data.blockerId, data.blockedId);
+			await this.directMessageService.unblockUser(data.blockerId, data.blockedId);
 			client.emit('userUnblocked', {blockerId: data.blockerId, blockedId: data.blockedId});
 		}
 		catch (error)
@@ -73,6 +73,13 @@ export class DirectMessageGateway
 	{
 		try
 		{
+			// Vérifier si l'utilisateur destinataire a bloqué l'utilisateur émetteur
+			if (await this.directMessageService.isUserBlocked(data.receiverId, data.senderId))
+			{
+				client.emit('error', {message: 'You have been blocked by this user and cannot send them a message.'});
+				return;
+			}
+
 			const newMessage = await this.directMessageService.create(data);
 			console.log('Emitting privateMessage with data:', newMessage);
 
@@ -97,6 +104,13 @@ export class DirectMessageGateway
 	{
 		try
 		{
+			// Vérifier si l'utilisateur destinataire a bloqué l'utilisateur émetteur
+			if (await this.directMessageService.isUserBlocked(data.receiverId, data.senderId))
+			{
+				client.emit('error', {message: 'You have been blocked by this user and cannot access the conversation.'});
+				return;
+			}
+
 			const messages = await this.directMessageService.getConversation(data.senderId, data.receiverId);
 			client.emit('conversation', messages);
 		}

@@ -56,6 +56,35 @@ let DirectMessageService = class DirectMessageService {
             throw error;
         }
     }
+    async blockUser(blockerId, blockedId) {
+        return this.prisma.userBlock.create({
+            data: {
+                userId: blockerId,
+                blockedId: blockedId
+            }
+        });
+    }
+    async unblockUser(blockerId, blockedId) {
+        return this.prisma.userBlock.delete({
+            where: {
+                userId_blockedId: {
+                    userId: blockerId,
+                    blockedId: blockedId
+                }
+            }
+        });
+    }
+    async isUserBlocked(blockerId, blockedId) {
+        const block = await this.prisma.userBlock.findUnique({
+            where: {
+                userId_blockedId: {
+                    userId: blockerId,
+                    blockedId: blockedId
+                }
+            }
+        });
+        return (block !== null);
+    }
 };
 DirectMessageService = __decorate([
     (0, common_1.Injectable)(),
