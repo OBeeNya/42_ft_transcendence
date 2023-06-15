@@ -30,7 +30,7 @@ const ChatBox = ({senderId, receiverId}: {senderId: number, receiverId: number})
 		if (socket == null)
 			return () => {};
 
-			socket.emit('getConversation', {senderId, receiverId});
+		socket.emit('getConversation', {senderId, receiverId});
 
 		socket.on('conversation', (conversation: Message[]) =>
 		{
