@@ -41,20 +41,16 @@ function Ball(id, x, y, xv, yv, r){
 })
 export class SocketEvents {
 
-	private userSocketMap = new Map<number, string>();
-
-	constructor(private directMessageService: DirectMessageService) {}
-
     @WebSocketServer()
     server: Server;
 
     //connexion
     handleConnection(client: Socket) {
-        console.log('client connected: ', client.id);
+        // console.log('client connected: ', client.id);
         connections++;
         this.getCounter();
         client.on("start", (data) => {
-            console.log("A user just connected: " + client.id + "; connexion number: " + connections);
+            // console.log("A user just connected: " + client.id + "; connexion number: " + connections);
             if (players.length > 0 && players[players.length - 1].id === client.id) {
                 return;
             }
@@ -124,57 +120,9 @@ export class SocketEvents {
     
     //deconnexion
     handleDisconnect(client: Socket) {
-        console.log('client disconnected: ', client.id);
+        // console.log('client disconnected: ', client.id);
         connections = 0;
         players = [];
     }
-
-    /*** CHAT ***/
-
-    @SubscribeMessage('userConnected')
-	handleUserConnected(@MessageBody() userId: number, @ConnectedSocket() client: Socket)
-	{
-		this.userSocketMap.set(userId, client.id);
-		console.log(`User ${userId} connected with socket id ${client.id}`);
-	}
-
-	@SubscribeMessage('privateMessage')
-	async handlePrivateMessage(@MessageBody() data: DirectMessageDto, @ConnectedSocket() client: Socket)
-	{
-		try
-		{
-			const newMessage = await this.directMessageService.create(data);
-			console.log('Emitting privateMessage with data:', newMessage);
-
-			const receiverSocketId = this.userSocketMap.get(data.receiverId);
-
-			if (receiverSocketId)
-				this.server.to(receiverSocketId).emit('privateMessage', newMessage);
-
-			this.server.to(data.receiverId.toString()).emit('privateMessage', newMessage);
-			client.emit('privateMessage', newMessage);
-		}
-		catch (error)
-		{
-			console.error('Error while handling private message:', error);
-			client.emit('error', {message: 'There was an error sending your message.', error: error.message});
-		}
-	}
-
-	@SubscribeMessage('getConversation')
-	async handleGetConversation(@MessageBody() data: {senderId: number, receiverId: number},
-								@ConnectedSocket() client: Socket)
-	{
-		try
-		{
-			const messages = await this.directMessageService.getConversation(data.senderId, data.receiverId);
-			client.emit('conversation', messages);
-		}
-		catch (error)
-		{
-			console.error('Error while getting conversation:', error);
-			client.emit('error', {message: 'There was an error getting your conversation.', error: error.message});
-		}
-	}
 
 }
