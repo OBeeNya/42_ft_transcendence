@@ -1,29 +1,14 @@
 import { MouseEvent, useState, useContext } from 'react';
+import axios from "axios";
 import { UserInfos } from "../../../services/interfaces/userInfos.interface";
-// import { SocketContext } from "../../../../socketContext";
 import Block from "../Block/Block";
 
 const User = ({user, isActive, onClick, onDirectMessageClick, navigate}:
-	{user: UserInfos, isActive: boolean, onClick:
-	(event: MouseEvent<HTMLElement>) => void, onDirectMessageClick:
-	() => void, navigate: (path: string) => void}) =>
+			  {user: UserInfos, isActive: boolean, onClick:
+			  (event: MouseEvent<HTMLElement>) => void, onDirectMessageClick:
+			  () => void, navigate: (path: string) => void}) =>
 {
 	const [showNotification, setShowNotification] = useState(false);
-
-	const handleBlockClick = async () =>
-	{
-		try
-		{
-			// Bloquer l'utilisateur
-			await blockUserService(user.id);
-			console.log(`User ${user.id} has been blocked`);
-			setShowNotification(true);
-		}
-		catch (error)
-		{
-			console.error('Error blocking user:', error);
-		}
-	};
 
 	return (
 		<div key={user.id} className={`user ${isActive ? 'show-menu' : ''}`}>

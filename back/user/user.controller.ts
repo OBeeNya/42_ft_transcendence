@@ -60,18 +60,6 @@ export class UserController {
 		return this.userService.deleteMe(user.name);
 	}
 
-	// @Post(':id/dm')
-	// sendDirectMessage(@GetUser() user: User, @Param('id') receiverId: number, @Body() createDMdto: CreateDirectMessageDto)
-	// {
-	//   return this.userService.sendDirectMessage(user, receiverId, createDMdto);
-	// }
-  
-	// @Get(':id/dm')
-	// getDirectMessages(@GetUser() user: User, @Param('id') receiverId: number)
-	// {
-	//   return this.userService.getDirectMessages(user, receiverId);
-	// }
-
 	@Post('avatar')
 	@UseInterceptors(FileInterceptor('file', MulterConfig))
 	uploadAvatar(@UploadedFile() file: any) {
