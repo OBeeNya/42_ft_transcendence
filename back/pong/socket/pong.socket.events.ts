@@ -1,9 +1,5 @@
-import { ConnectedSocket, MessageBody, SubscribeMessage, WebSocketGateway, WebSocketServer } from "@nestjs/websockets";
+import { WebSocketGateway, WebSocketServer } from "@nestjs/websockets";
 import { Server, Socket } from "socket.io";
-import { Interval } from '@nestjs/schedule';
-import { DirectMessageService } from "./directMessage.service";
-import { DirectMessageDto } from "./directMessage.dto";
-
 
 /******************** VARIABLES ******************/
 
@@ -92,21 +88,21 @@ export class SocketEvents {
     getCounter() {
         this.server.emit('getCounter', connections);
     }
-    
+
     heartBeat() {
         this.server.emit('heartBeat', players);
     }
-    
+
     heartBeatBall() {
         this.server.emit('heartBeatBall', b); 
     }
-    
+
     startHeartbeat() {
         setInterval(() => {
           this.heartBeat();
         }, interval);
     }
-    
+
     startBallHeartbeat() {
         setInterval(() => {
             this.heartBeatBall();
@@ -117,7 +113,7 @@ export class SocketEvents {
         this.startHeartbeat();
         this.startBallHeartbeat();
     }
-    
+
     //deconnexion
     handleDisconnect(client: Socket) {
         // console.log('client disconnected: ', client.id);
