@@ -9,5 +9,4 @@ export declare class DirectMessageService {
     blockUser(blockerId: number, blockedId: number): Promise<any>;
     unblockUser(blockerId: number, blockedId: number): Promise<any>;
     isUserBlocked(blockerId: number, blockedId: number): Promise<boolean>;
-    getBlockedUsers(userId: number): Promise<any>;
 }

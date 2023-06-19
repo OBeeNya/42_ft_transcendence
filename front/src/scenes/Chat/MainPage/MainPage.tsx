@@ -11,21 +11,6 @@ const MainPage = () =>
 {
 	const [currentUser, setCurrentUser] = useState<any>(null);
 	const [privateMessageUserId, setPrivateMessageUserId] = useState<number | null>(null);
-	const [blockedUserId, setBlockedUserId] = useState<number | null>(null);
-	const socket = useContext(SocketContext);
-
-	useEffect(() =>
-	{
-		if (blockedUserId === null)
-			return;
-
-		if (socket)
-		{
-			socket.emit('blockUser', {blockerId: currentUser.id, blockedId: blockedUserId});
-			console.log(`${currentUser.id} blocked ${blockedUserId}`);
-		}
-
-	}, [socket, blockedUserId, currentUser]);
 
 	return (
 		<div className="chat-page">
@@ -48,7 +33,7 @@ const MainPage = () =>
 				<div className="users-list">
 					<UsersList setCurrentUser={setCurrentUser}
 							   setPrivateMessageUserId={setPrivateMessageUserId}
-							   setBlockedUserId={setBlockedUserId} />
+							   /*setBlockedUserId={setBlockedUserId}*/ />
 				</div>
 			</div>
 		</div>

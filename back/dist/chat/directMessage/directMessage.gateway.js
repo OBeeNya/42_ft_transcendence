@@ -18,6 +18,7 @@ const socket_io_1 = require("socket.io");
 const directMessage_service_1 = require("./directMessage.service");
 const directMessage_dto_1 = require("./directMessage.dto");
 const prisma_service_1 = require("../../prisma_module/prisma.service");
+const blockage_dto_1 = require("./blockage.dto");
 let DirectMessageGateway = class DirectMessageGateway {
     constructor(directMessageService, prisma) {
         this.directMessageService = directMessageService;
@@ -36,8 +37,6 @@ let DirectMessageGateway = class DirectMessageGateway {
     async handleUserConnected(userId, client) {
         this.userSocketMap.set(userId, client.id);
         console.log(`User ${userId} connected with socket id ${client.id}`);
-        const blockedUsers = await this.directMessageService.getBlockedUsers(userId);
-        client.emit('blockedUsers', blockedUsers);
     }
     async handleBlockUser(data, client) {
         console.log(`Attempting to block user: ${data.blockedId} by user: ${data.blockerId}`);
@@ -129,7 +128,8 @@ __decorate([
     __param(0, (0, websockets_1.MessageBody)()),
     __param(1, (0, websockets_1.ConnectedSocket)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, socket_io_1.Socket]),
+    __metadata("design:paramtypes", [blockage_dto_1.BlockageDto,
+        socket_io_1.Socket]),
     __metadata("design:returntype", Promise)
 ], DirectMessageGateway.prototype, "handleBlockUser", null);
 __decorate([
@@ -137,7 +137,8 @@ __decorate([
     __param(0, (0, websockets_1.MessageBody)()),
     __param(1, (0, websockets_1.ConnectedSocket)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, socket_io_1.Socket]),
+    __metadata("design:paramtypes", [blockage_dto_1.BlockageDto,
+        socket_io_1.Socket]),
     __metadata("design:returntype", Promise)
 ], DirectMessageGateway.prototype, "handleUnblockUser", null);
 __decorate([

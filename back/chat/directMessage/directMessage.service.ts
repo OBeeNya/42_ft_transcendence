@@ -68,8 +68,6 @@ export class DirectMessageService
 	// créer un nouvel enregistrement dans la table UserBlock de Prisma avec blockerId et blockedId
 	async blockUser(blockerId: number, blockedId: number)
 	{
-		console.log(`Blocking user ${blockedId} for user ${blockerId}`);
-
 		return this.prisma.userBlock.create(
 		{
 			data:
@@ -95,10 +93,6 @@ export class DirectMessageService
 		});
 	}
 
-	// userId_blockedId = contrainte composite
-	// combine les deux colonnes userId et blockedId qui forment ensemble un id unique
-	// pour voir s'il existe un enregistrement correspondant à la fois à userId et blockedId
-	// renvoie true si l'utilisateur est bloqué, sinon false
 	async isUserBlocked(blockerId: number, blockedId: number)
 	{
 		console.log(`Checking if user ${blockerId} has blocked user ${blockedId}`);
@@ -121,23 +115,5 @@ export class DirectMessageService
 			console.log(`User ${blockerId} has not blocked user ${blockedId}`);
 
 		return (block !== null);
-	}
-
-	// Retourne une liste de tous les utilisateurs bloqués par un certain utilisateur
-	async getBlockedUsers(userId: number)
-	{
-		const blockedUsers = await this.prisma.userBlock.findMany(
-		{
-			where:
-			{
-				userId: userId
-			},
-			select:
-			{
-				blockedId: true
-			}
-		});
-
-		return (blockedUsers.map((user: {blockedId: number;}) => user.blockedId));
 	}
 }

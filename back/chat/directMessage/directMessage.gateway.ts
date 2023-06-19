@@ -4,6 +4,7 @@ import { Server, Socket } from "socket.io";
 import { DirectMessageService } from "./directMessage.service";
 import { DirectMessageDto } from "./directMessage.dto";
 import { PrismaService } from "prisma_module/prisma.service";
+import { BlockageDto } from "./blockage.dto";
 
 @WebSocketGateway({cors: {origin: "*"}})
 export class DirectMessageGateway
@@ -37,13 +38,12 @@ export class DirectMessageGateway
 	{
 		this.userSocketMap.set(userId, client.id);
 		console.log(`User ${userId} connected with socket id ${client.id}`);
-
-		const blockedUsers = await this.directMessageService.getBlockedUsers(userId); // new
-		client.emit('blockedUsers', blockedUsers); // new
 	}
 
+	// -------------------------------------------BLOCAGE-------------------------------------------//
+
 	@SubscribeMessage('blockUser')
-	async handleBlockUser(@MessageBody() data: {blockerId: number, blockedId: number},
+	async handleBlockUser(@MessageBody() data: BlockageDto,
 						  @ConnectedSocket() client: Socket)
 	{
 		console.log(`Attempting to block user: ${data.blockedId} by user: ${data.blockerId}`);
@@ -78,14 +78,14 @@ export class DirectMessageGateway
 		}
 	}
 
-	@SubscribeMessage('unblockUser')
-	async handleUnblockUser(@MessageBody() data: {blockerId: number, blockedId: number},
+	@SubscribeMessage('unblockUser') // unblockUser est l'événement que frontend utilise pour interagir avec le backend
+	async handleUnblockUser(@MessageBody() data: BlockageDto,
 							@ConnectedSocket() client: Socket)
 	{
 		try
 		{
 			await this.directMessageService.unblockUser(data.blockerId, data.blockedId);
-			client.emit('userUnblocked', {blockerId: data.blockerId, blockedId: data.blockedId});
+			client.emit('userUnblocked', {blockerId: data.blockerId, blockedId: data.blockedId}); // userUnblocked est l'événement que le back envoie au front si succès
 		}
 		catch (error)
 		{
@@ -94,6 +94,8 @@ export class DirectMessageGateway
 								  error: error.message});
 		}
 	}
+
+	// -------------------------------------------DM-------------------------------------------//
 
 	@SubscribeMessage('privateMessage')
 	async handlePrivateMessage(@MessageBody() data: DirectMessageDto,

@@ -9,7 +9,7 @@ const User = (
 		onClick,
 		onDirectMessageClick,
 		navigate,
-		handleBlockClick
+		// handleBlockClick
   	}:
 	{
 		user: UserInfos;
@@ -17,16 +17,10 @@ const User = (
 		onClick: (event: MouseEvent<HTMLElement>) => void;
 		onDirectMessageClick: () => void;
 		navigate: (path: string) => void;
-		handleBlockClick: () => void;
+		// handleBlockClick: () => void;
 	}) =>
 {
 	const [showNotification, setShowNotification] = useState(false);
-
-	const onBlockClick = () =>
-	{
-		handleBlockClick();
-		setShowNotification(true);
-	};
 
 	return (
 		<div key={user.id} className={`user ${isActive ? 'show-menu' : ''}`}>
@@ -52,7 +46,7 @@ const User = (
 						Add friend
 					</li>
 
-					<li className="dropdown-item" onClick={onBlockClick}>
+					<li className="dropdown-item" onClick={() => {console.log('Block clicked'); setShowNotification(true);}}>
 						Block
 					</li>
 
