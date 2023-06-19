@@ -34,7 +34,7 @@ const Callback42 = () => {
             }
         }
         catch {
-            console.log("could not change connected to true");
+            console.error("could not change connected to true");
         }
     }
     useEffect(() => { redirectHome() } );
