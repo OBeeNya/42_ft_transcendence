@@ -1,14 +1,17 @@
-import { ConnectedSocket, MessageBody, SubscribeMessage, WebSocketGateway, WebSocketServer } from "@nestjs/websockets";
+import { ConnectedSocket, MessageBody, SubscribeMessage,
+		 WebSocketGateway, WebSocketServer } from "@nestjs/websockets";
 import { Server, Socket } from "socket.io";
 import { DirectMessageService } from "./directMessage.service";
 import { DirectMessageDto } from "./directMessage.dto";
+import { PrismaService } from "prisma_module/prisma.service";
 
 @WebSocketGateway({cors: {origin: "*"}})
 export class DirectMessageGateway
 {
 	private userSocketMap = new Map<number, string>();
 
-	constructor(private directMessageService: DirectMessageService) {}
+	constructor(private directMessageService: DirectMessageService,
+				private prisma: PrismaService) {}
 
 	@WebSocketServer()
 	server: Server;
@@ -29,10 +32,14 @@ export class DirectMessageGateway
 	}
 
 	@SubscribeMessage('userConnected')
-	handleUserConnected(@MessageBody() userId: number, @ConnectedSocket() client: Socket)
+	async handleUserConnected(@MessageBody() userId: number,
+							  @ConnectedSocket() client: Socket)
 	{
 		this.userSocketMap.set(userId, client.id);
 		console.log(`User ${userId} connected with socket id ${client.id}`);
+
+		const blockedUsers = await this.directMessageService.getBlockedUsers(userId); // new
+		client.emit('blockedUsers', blockedUsers); // new
 	}
 
 	@SubscribeMessage('blockUser')
@@ -41,20 +48,33 @@ export class DirectMessageGateway
 	{
 		console.log(`Attempting to block user: ${data.blockedId} by user: ${data.blockerId}`);
 
+		// Vérifie si l'utilisateur à bloquer existe
+		const userToBlock = await this.prisma.user.findUnique({where: {id: data.blockedId}});
+	
+		if (!userToBlock)
+		{
+			client.emit('error', {message: 'The user you are trying to block does not exist.'});
+			return;
+		}
+
+		// Vérifie si l'utilisateur est déjà bloqué
+		if (await this.directMessageService.isUserBlocked(data.blockerId, data.blockedId))
+		{
+			client.emit('error', {message: 'You have already blocked this user.'});
+			return;
+		}
+
 		try
 		{
 			await this.directMessageService.blockUser(data.blockerId, data.blockedId);
 			console.log(`User ${data.blockedId} has been blocked by ${data.blockerId}`);
-			// emit() permet d'envoyer des messages d'un serveur a un client
-			// ici, le message sera envoye au client ayant declenche handleBlockUser()
-			// userBlocked est l'event que le serveur envoie au client
-			// {...} est le payload, c'est a dire les informations envoyees avec l'event
 			client.emit('userBlocked', {blockerId: data.blockerId, blockedId: data.blockedId});
 		}
 		catch (error)
 		{
 			console.error('Error while blocking user:', error);
-			client.emit('error', {message: 'There was an error blocking the user.', error: error.message});
+			client.emit('error', {message: 'There was an error blocking the user.',
+								  error: error.message});
 		}
 	}
 
@@ -70,12 +90,14 @@ export class DirectMessageGateway
 		catch (error)
 		{
 			console.error('Error while unblocking user:', error);
-			client.emit('error', {message: 'There was an error unblocking the user.', error: error.message});
+			client.emit('error', {message: 'There was an error unblocking the user.',
+								  error: error.message});
 		}
 	}
 
 	@SubscribeMessage('privateMessage')
-	async handlePrivateMessage(@MessageBody() data: DirectMessageDto, @ConnectedSocket() client: Socket)
+	async handlePrivateMessage(@MessageBody() data: DirectMessageDto,
+							   @ConnectedSocket() client: Socket)
 	{
 		console.log(`Message sent from ${data.senderId} to ${data.receiverId}`);
 
@@ -85,7 +107,8 @@ export class DirectMessageGateway
 			if (await this.directMessageService.isUserBlocked(data.receiverId, data.senderId))
 			{
 				console.log(`User ${data.receiverId} has blocked user ${data.senderId}`);
-				client.emit('error', {message: 'You have been blocked by this user and cannot send them a message.'});
+				client.emit('error', {message: 'You have been blocked by this user and \
+											    cannot send them a message.'});
 				return;
 			}
 
@@ -103,7 +126,8 @@ export class DirectMessageGateway
 		catch (error)
 		{
 			console.error('Error while handling private message:', error);
-			client.emit('error', {message: 'There was an error sending your message.', error: error.message});
+			client.emit('error', {message: 'There was an error sending your message.',
+								  error: error.message});
 		}
 	}
 
@@ -113,10 +137,11 @@ export class DirectMessageGateway
 	{
 		try
 		{
-			// Vérifier si l'utilisateur destinataire a bloqué l'utilisateur émetteur
+			// Vérifie si l'utilisateur destinataire a bloqué l'utilisateur émetteur
 			if (await this.directMessageService.isUserBlocked(data.receiverId, data.senderId))
 			{
-				client.emit('error', {message: 'You have been blocked by this user and cannot access the conversation.'});
+				client.emit('error', {message: 'You have been blocked by this user \
+												and cannot access the conversation.'});
 				return;
 			}
 
@@ -126,7 +151,8 @@ export class DirectMessageGateway
 		catch (error)
 		{
 			console.error('Error while getting conversation:', error);
-			client.emit('error', {message: 'There was an error getting your conversation.', error: error.message});
+			client.emit('error', {message: 'There was an error getting your conversation.',
+								  error: error.message});
 		}
 	}
 }

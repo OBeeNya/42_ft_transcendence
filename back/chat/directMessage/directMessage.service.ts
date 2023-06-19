@@ -122,4 +122,22 @@ export class DirectMessageService
 
 		return (block !== null);
 	}
+
+	// Retourne une liste de tous les utilisateurs bloqués par un certain utilisateur
+	async getBlockedUsers(userId: number)
+	{
+		const blockedUsers = await this.prisma.userBlock.findMany(
+		{
+			where:
+			{
+				userId: userId
+			},
+			select:
+			{
+				blockedId: true
+			}
+		});
+
+		return (blockedUsers.map((user: {blockedId: number;}) => user.blockedId));
+	}
 }

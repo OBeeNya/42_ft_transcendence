@@ -11,17 +11,34 @@ Un utilisateur essaye de rejoindre un channel :
 
 - Le channel est plein
 
-- L'utilisateur a ete bloque par le propriétaire du channel ou par l'administrateur
+- L'utilisateur a ete bloque par le propriétaire du channel ou
+  par l'administrateur
 
 - L'utilisateur a été banni du channel
 
--------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
 
 Code :
 - fonction qui recherche un channel dans notre db 
-- fonction qui verifie si le nom du channel existe deja dans la db --> si oui le rejoint (si pas private)
-																	   sinon msg d'erreur
+- fonction qui verifie si le nom du channel existe deja dans la db
+--> si oui le rejoint (si pas private), sinon msg d'erreur
 
--------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
 Blocage
+
+-------------------------------------------------------------------------------
+DM logique
+
+L'utilisateur actuel clique sur "Direct Message" dans le menu deroulant
+--> declenche onDirectMessageClick() definie dans UsersList.tsx (composant parent de User)
+
+"1. Assurez-vous que les événements émis par le client dans le front-end correspondent
+exactement à ceux que le serveur attend. Par exemple, si vous envoyez
+socket.emit('userConnected', userId) dans le front-end, assurez-vous que vous avez un
+gestionnaire pour 'userConnected' dans le back-end, ce qui est bien le cas dans
+votre code." : FAIT
+
+"2. Assurez-vous que les données envoyées correspondent à ce que le back-end attend.
+Par exemple, dans votre back-end, pour 'blockUser', vous attendez un objet avec
+blockerId et blockedId. Assurez-vous que le front-end envoie ces mêmes données." : FAIT
 

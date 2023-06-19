@@ -17,9 +17,11 @@ const websockets_1 = require("@nestjs/websockets");
 const socket_io_1 = require("socket.io");
 const directMessage_service_1 = require("./directMessage.service");
 const directMessage_dto_1 = require("./directMessage.dto");
+const prisma_service_1 = require("../../prisma_module/prisma.service");
 let DirectMessageGateway = class DirectMessageGateway {
-    constructor(directMessageService) {
+    constructor(directMessageService, prisma) {
         this.directMessageService = directMessageService;
+        this.prisma = prisma;
         this.userSocketMap = new Map();
     }
     afterInit(server) {
@@ -31,12 +33,23 @@ let DirectMessageGateway = class DirectMessageGateway {
     handleDisconnect(client) {
         console.log(`Client disconnected: ${client.id}`);
     }
-    handleUserConnected(userId, client) {
+    async handleUserConnected(userId, client) {
         this.userSocketMap.set(userId, client.id);
         console.log(`User ${userId} connected with socket id ${client.id}`);
+        const blockedUsers = await this.directMessageService.getBlockedUsers(userId);
+        client.emit('blockedUsers', blockedUsers);
     }
     async handleBlockUser(data, client) {
         console.log(`Attempting to block user: ${data.blockedId} by user: ${data.blockerId}`);
+        const userToBlock = await this.prisma.user.findUnique({ where: { id: data.blockedId } });
+        if (!userToBlock) {
+            client.emit('error', { message: 'The user you are trying to block does not exist.' });
+            return;
+        }
+        if (await this.directMessageService.isUserBlocked(data.blockerId, data.blockedId)) {
+            client.emit('error', { message: 'You have already blocked this user.' });
+            return;
+        }
         try {
             await this.directMessageService.blockUser(data.blockerId, data.blockedId);
             console.log(`User ${data.blockedId} has been blocked by ${data.blockerId}`);
@@ -44,7 +57,8 @@ let DirectMessageGateway = class DirectMessageGateway {
         }
         catch (error) {
             console.error('Error while blocking user:', error);
-            client.emit('error', { message: 'There was an error blocking the user.', error: error.message });
+            client.emit('error', { message: 'There was an error blocking the user.',
+                error: error.message });
         }
     }
     async handleUnblockUser(data, client) {
@@ -54,7 +68,8 @@ let DirectMessageGateway = class DirectMessageGateway {
         }
         catch (error) {
             console.error('Error while unblocking user:', error);
-            client.emit('error', { message: 'There was an error unblocking the user.', error: error.message });
+            client.emit('error', { message: 'There was an error unblocking the user.',
+                error: error.message });
         }
     }
     async handlePrivateMessage(data, client) {
@@ -62,7 +77,8 @@ let DirectMessageGateway = class DirectMessageGateway {
         try {
             if (await this.directMessageService.isUserBlocked(data.receiverId, data.senderId)) {
                 console.log(`User ${data.receiverId} has blocked user ${data.senderId}`);
-                client.emit('error', { message: 'You have been blocked by this user and cannot send them a message.' });
+                client.emit('error', { message: 'You have been blocked by this user and \
+											    cannot send them a message.' });
                 return;
             }
             const newMessage = await this.directMessageService.create(data);
@@ -75,13 +91,15 @@ let DirectMessageGateway = class DirectMessageGateway {
         }
         catch (error) {
             console.error('Error while handling private message:', error);
-            client.emit('error', { message: 'There was an error sending your message.', error: error.message });
+            client.emit('error', { message: 'There was an error sending your message.',
+                error: error.message });
         }
     }
     async handleGetConversation(data, client) {
         try {
             if (await this.directMessageService.isUserBlocked(data.receiverId, data.senderId)) {
-                client.emit('error', { message: 'You have been blocked by this user and cannot access the conversation.' });
+                client.emit('error', { message: 'You have been blocked by this user \
+												and cannot access the conversation.' });
                 return;
             }
             const messages = await this.directMessageService.getConversation(data.senderId, data.receiverId);
@@ -89,7 +107,8 @@ let DirectMessageGateway = class DirectMessageGateway {
         }
         catch (error) {
             console.error('Error while getting conversation:', error);
-            client.emit('error', { message: 'There was an error getting your conversation.', error: error.message });
+            client.emit('error', { message: 'There was an error getting your conversation.',
+                error: error.message });
         }
     }
 };
@@ -103,7 +122,7 @@ __decorate([
     __param(1, (0, websockets_1.ConnectedSocket)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number, socket_io_1.Socket]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], DirectMessageGateway.prototype, "handleUserConnected", null);
 __decorate([
     (0, websockets_1.SubscribeMessage)('blockUser'),
@@ -126,7 +145,8 @@ __decorate([
     __param(0, (0, websockets_1.MessageBody)()),
     __param(1, (0, websockets_1.ConnectedSocket)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [directMessage_dto_1.DirectMessageDto, socket_io_1.Socket]),
+    __metadata("design:paramtypes", [directMessage_dto_1.DirectMessageDto,
+        socket_io_1.Socket]),
     __metadata("design:returntype", Promise)
 ], DirectMessageGateway.prototype, "handlePrivateMessage", null);
 __decorate([
@@ -139,7 +159,8 @@ __decorate([
 ], DirectMessageGateway.prototype, "handleGetConversation", null);
 DirectMessageGateway = __decorate([
     (0, websockets_1.WebSocketGateway)({ cors: { origin: "*" } }),
-    __metadata("design:paramtypes", [directMessage_service_1.DirectMessageService])
+    __metadata("design:paramtypes", [directMessage_service_1.DirectMessageService,
+        prisma_service_1.PrismaService])
 ], DirectMessageGateway);
 exports.DirectMessageGateway = DirectMessageGateway;
 //# sourceMappingURL=directMessage.gateway.js.map

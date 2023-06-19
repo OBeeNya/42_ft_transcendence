@@ -91,6 +91,17 @@ let DirectMessageService = class DirectMessageService {
             console.log(`User ${blockerId} has not blocked user ${blockedId}`);
         return (block !== null);
     }
+    async getBlockedUsers(userId) {
+        const blockedUsers = await this.prisma.userBlock.findMany({
+            where: {
+                userId: userId
+            },
+            select: {
+                blockedId: true
+            }
+        });
+        return (blockedUsers.map((user) => user.blockedId));
+    }
 };
 DirectMessageService = __decorate([
     (0, common_1.Injectable)(),

@@ -85,8 +85,6 @@ function App()
 	}, [userId]);
 
   return (
-	// tous les composants enfants peuvent accéder à une instance de socket
-	// grâce a un contexte de socket, via useContext
 	<SocketContext.Provider value={socket}>
 		<Routes>
 			<Route path="/" element={<AuthPage/>} />

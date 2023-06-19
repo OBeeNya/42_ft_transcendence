@@ -1,15 +1,31 @@
+import { useContext, useEffect, useState } from 'react';
 import Header from "../../../components/header"
 import Sidebar from "../Sidebar/Sidebar";
 import UsersList from "../UsersList/UsersList";
 import ChatBox from "../DirectMessage/ChatBox/ChatBox"
 import DirectMessageForm from "../DirectMessage/DirectMessageForm/DirectMessageForm";
+import { SocketContext } from "../../../socketContext";
 import './MainPage.css';
-import { useState } from 'react';
 
 const MainPage = () =>
 {
-    const [currentUser, setCurrentUser] = useState<any>(null);
-    const [privateMessageUserId, setPrivateMessageUserId] = useState(null);
+	const [currentUser, setCurrentUser] = useState<any>(null);
+	const [privateMessageUserId, setPrivateMessageUserId] = useState<number | null>(null);
+	const [blockedUserId, setBlockedUserId] = useState<number | null>(null);
+	const socket = useContext(SocketContext);
+
+	useEffect(() =>
+	{
+		if (blockedUserId === null)
+			return;
+
+		if (socket)
+		{
+			socket.emit('blockUser', {blockerId: currentUser.id, blockedId: blockedUserId});
+			console.log(`${currentUser.id} blocked ${blockedUserId}`);
+		}
+
+	}, [socket, blockedUserId, currentUser]);
 
 	return (
 		<div className="chat-page">
@@ -22,17 +38,19 @@ const MainPage = () =>
 
 				<div className="chat-section">
 					{privateMessageUserId && currentUser &&
-						<DirectMessageForm senderId={currentUser.id} receiverId={privateMessageUserId} />
+						<DirectMessageForm senderId={currentUser.id}
+										   receiverId={privateMessageUserId} />
 					}
-					<ChatBox senderId={currentUser ? currentUser.id : -1} receiverId={privateMessageUserId ? privateMessageUserId : -1} />
+					<ChatBox senderId={currentUser ? currentUser.id : -1}
+							 receiverId={privateMessageUserId ? privateMessageUserId : -1} />
 				</div>
 
 				<div className="users-list">
-					<UsersList setCurrentUser={setCurrentUser} setPrivateMessageUserId={setPrivateMessageUserId} />
+					<UsersList setCurrentUser={setCurrentUser}
+							   setPrivateMessageUserId={setPrivateMessageUserId}
+							   setBlockedUserId={setBlockedUserId} />
 				</div>
-
 			</div>
-
 		</div>
 	);
 };

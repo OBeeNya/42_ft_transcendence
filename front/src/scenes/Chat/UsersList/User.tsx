@@ -1,23 +1,41 @@
 import { MouseEvent, useState, useContext } from 'react';
-import axios from "axios";
 import { UserInfos } from "../../../services/interfaces/userInfos.interface";
 import Block from "../Block/Block";
 
-const User = ({user, isActive, onClick, onDirectMessageClick, navigate}:
-			  {user: UserInfos, isActive: boolean, onClick:
-			  (event: MouseEvent<HTMLElement>) => void, onDirectMessageClick:
-			  () => void, navigate: (path: string) => void}) =>
+const User = (
+	{
+		user,
+		isActive,
+		onClick,
+		onDirectMessageClick,
+		navigate,
+		handleBlockClick
+  	}:
+	{
+		user: UserInfos;
+		isActive: boolean;
+		onClick: (event: MouseEvent<HTMLElement>) => void;
+		onDirectMessageClick: () => void;
+		navigate: (path: string) => void;
+		handleBlockClick: () => void;
+	}) =>
 {
 	const [showNotification, setShowNotification] = useState(false);
 
+	const onBlockClick = () =>
+	{
+		handleBlockClick();
+		setShowNotification(true);
+	};
+
 	return (
-        <div key={user.id} className={`user ${isActive ? 'show-menu' : ''}`}>
-            {showNotification && (
-                <Block
-                    message="User has been blocked"
-                    onClose={() => setShowNotification(false)}
-                />
-            )}
+		<div key={user.id} className={`user ${isActive ? 'show-menu' : ''}`}>
+			{showNotification && (
+				<Block
+					message="User has been blocked"
+					onClose={() => setShowNotification(false)}
+				/>
+			)}
 			<p className="username" onClick={onClick}>{user.name}</p>
 			{isActive &&
 			(
@@ -34,7 +52,7 @@ const User = ({user, isActive, onClick, onDirectMessageClick, navigate}:
 						Add friend
 					</li>
 
-					<li className="dropdown-item" onClick={() => {console.log('Block clicked'); setShowNotification(true);}}>
+					<li className="dropdown-item" onClick={onBlockClick}>
 						Block
 					</li>
 
