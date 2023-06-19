@@ -45,6 +45,10 @@ export class DirectMessageGateway
 		{
 			await this.directMessageService.blockUser(data.blockerId, data.blockedId);
 			console.log(`User ${data.blockedId} has been blocked by ${data.blockerId}`);
+			// emit() permet d'envoyer des messages d'un serveur a un client
+			// ici, le message sera envoye au client ayant declenche handleBlockUser()
+			// userBlocked est l'event que le serveur envoie au client
+			// {...} est le payload, c'est a dire les informations envoyees avec l'event
 			client.emit('userBlocked', {blockerId: data.blockerId, blockedId: data.blockedId});
 		}
 		catch (error)
@@ -101,7 +105,7 @@ export class DirectMessageGateway
 			console.error('Error while handling private message:', error);
 			client.emit('error', {message: 'There was an error sending your message.', error: error.message});
 		}
-}
+	}
 
 	@SubscribeMessage('getConversation')
 	async handleGetConversation(@MessageBody() data: {senderId: number, receiverId: number},

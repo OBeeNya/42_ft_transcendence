@@ -11,13 +11,13 @@ const User = ({user, isActive, onClick, onDirectMessageClick, navigate}:
 	const [showNotification, setShowNotification] = useState(false);
 
 	return (
-		<div key={user.id} className={`user ${isActive ? 'show-menu' : ''}`}>
-			{showNotification && (
-				<Block
-					message="User has been blocked"
-					onClose={() => setShowNotification(false)}
-				/>
-			)}
+        <div key={user.id} className={`user ${isActive ? 'show-menu' : ''}`}>
+            {showNotification && (
+                <Block
+                    message="User has been blocked"
+                    onClose={() => setShowNotification(false)}
+                />
+            )}
 			<p className="username" onClick={onClick}>{user.name}</p>
 			{isActive &&
 			(
@@ -34,7 +34,7 @@ const User = ({user, isActive, onClick, onDirectMessageClick, navigate}:
 						Add friend
 					</li>
 
-					<li className="dropdown-item" onClick={handleBlockClick}>
+					<li className="dropdown-item" onClick={() => {console.log('Block clicked'); setShowNotification(true);}}>
 						Block
 					</li>
 
