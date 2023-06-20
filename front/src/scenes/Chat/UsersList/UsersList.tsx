@@ -11,11 +11,11 @@ interface UsersListProps
 {
 	setCurrentUser: Dispatch<SetStateAction<any>>;
 	setPrivateMessageUserId: Dispatch<SetStateAction<any>>;
-	// setBlockedUserId: Dispatch<SetStateAction<number | null>>;
+	setBlockedUserId: Dispatch<SetStateAction<number | null>>;
 }
 
 const UsersList = ({setCurrentUser, setPrivateMessageUserId,
-					/*setBlockedUserId*/}: UsersListProps) =>
+					setBlockedUserId}: UsersListProps) =>
 {
 	const navigate = useNavigate();
 	const [users, setUsers] = useState([]);
@@ -89,15 +89,16 @@ const UsersList = ({setCurrentUser, setPrivateMessageUserId,
 		<div className="users-list">
 			{users.map((user: UserInfos, index) =>
 			(
-				<User 
+				<User
 					key={user.id}
 					user={user} 
 					isActive={clickedUser === index} 
 					onClick={(event: MouseEvent<HTMLElement>) =>
 					{event.stopPropagation(); setClickedUser(index);}}
-					onDirectMessageClick={() => setPrivateMessageUserId(user.id)} 
+					// onDirectMessageClick() est passee en tant que prop au composant User
+					onDirectMessageClick={() => setPrivateMessageUserId(user.id)}
 					navigate={navigate}
-					// handleBlockClick={() => setBlockedUserId(user.id)}
+					handleBlockClick={() => setBlockedUserId(user.id)}
 				/>
 			))}
 		</div>

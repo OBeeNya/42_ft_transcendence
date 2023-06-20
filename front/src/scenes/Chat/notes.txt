@@ -17,35 +17,13 @@ Un utilisateur essaye de rejoindre un channel :
 - L'utilisateur a été banni du channel
 
 -------------------------------------------------------------------------------
-
-Code :
-- fonction qui recherche un channel dans notre db 
-- fonction qui verifie si le nom du channel existe deja dans la db
---> si oui le rejoint (si pas private), sinon msg d'erreur
-
--------------------------------------------------------------------------------
-Blocage
-
--------------------------------------------------------------------------------
-DM logique
-
-L'utilisateur actuel clique sur "Direct Message" dans le menu deroulant
---> declenche onDirectMessageClick() definie dans UsersList.tsx (composant parent de User)
-
-"1. Assurez-vous que les événements émis par le client dans le front-end correspondent
-exactement à ceux que le serveur attend. Par exemple, si vous envoyez
-socket.emit('userConnected', userId) dans le front-end, assurez-vous que vous avez un
-gestionnaire pour 'userConnected' dans le back-end, ce qui est bien le cas dans
-votre code." : FAIT
-
-"2. Assurez-vous que les données envoyées correspondent à ce que le back-end attend.
-Par exemple, dans votre back-end, pour 'blockUser', vous attendez un objet avec
-blockerId et blockedId. Assurez-vous que le front-end envoie ces mêmes données." : FAIT
-
 TODO :
-1) Gérer le cas de l'utilisateur débloqué
-2) Empêcher l'utilisateur bloqué d'envoyer des messages si la conversation est ouverte
 
+1) Je ne dois pas pouvoir m'envoyer un message
+2) Gérer le cas de l'utilisateur débloqué
+3) Empêcher l'utilisateur bloqué d'envoyer des messages si la conversation est ouverte
+
+------------------------------------------------------------------------------------------------
 Comment connecter le backend avec le frontend ?
 
 Je dois socket.emit() les événements blockUser et unblockUser dans le front.
@@ -71,3 +49,152 @@ socket.on('error', function(data)
   console.log('Une erreur s'est produite : ', data);
 });
 
+------------------------------------------------------------------------------------------------
+Logique des DM 
+
+1) L'utilisateur enclenche onDirectMessageClick() en cliquant sur "Direct Message" dans User.
+
+2) onDirectMessageClick() est passee en tant que prop au composant User dans UsersList.
+
+3) Elle met a jour la fonction setPrivateMessageUserId avec l'id de l'user actuel.
+
+4) setPrivateMessageUserId est une fonction de maj. d'etat definie dans MainPage.tsx
+   Elle est passee en tant que prop a UsersList.
+   Donc onDirectMessageClick, une fois enclenchee, utilise setPrivateMessageUserId pour maj.
+   l'etat de privateMessageUserId avec l'id de l'user actuel.
+
+Voici a quoi ressemble mon composant User : "import { MouseEvent, useState, useContext, useEffect } from 'react';
+import { io } from "socket.io-client";
+import { UserInfos } from "../../../services/interfaces/userInfos.interface";
+import Block from "../Block/Block";
+import axios from 'axios';
+
+const User = (
+	{
+		user,
+		isActive,
+		onClick,
+		onDirectMessageClick,
+		navigate,
+		// handleBlockClick // POUR LE BLOCAGE
+  	}:
+	{
+		user: UserInfos;
+		isActive: boolean;
+		onClick: (event: MouseEvent<HTMLElement>) => void;
+		onDirectMessageClick: () => void;
+		navigate: (path: string) => void;
+		// handleBlockClick: () => void; // POUR LE BLOCAGE
+	}) =>
+{
+	const [userInfos, setUserInfos] = useState<UserInfos | null>(null);
+	const [showNotification, setShowNotification] = useState(false);
+	const token = localStorage.getItem("token");
+	const socket = io("http://localhost:8080");
+
+	useEffect(() =>
+	{
+		const getCurrentUser = async () =>
+		{
+			try
+			{
+				const response = await axios.get("http://localhost:8080/users/me",
+				{
+				  headers:
+				  {
+					Authorization: `Bearer ${token}`,
+				  },
+				});
+
+				setUserInfos(response.data);
+			  }
+			  catch (error)
+			  {
+				console.error("Failed to fetch users.");
+			  }
+			};
+
+			getCurrentUser();
+		}, [token]);
+
+	const handleBlockClick = () =>
+	{
+		socket.emit('blockUser', {blockerId: user.id, blockedId: blockedId });
+		setShowNotification(true);
+	}
+
+	useEffect(() =>
+	{
+		socket.on('userBlocked', () =>
+		{
+			console.log('User blocked successfully');
+			// Vous pouvez ajouter ici d'autres actions à effectuer lorsque l'utilisateur est bloqué avec succès
+		});
+	
+		return () =>
+		{
+			socket.off('userBlocked');
+		};
+	}, []);
+
+	return (
+		<div key={user.id} className={`user ${isActive ? 'show-menu' : ''}`}>
+			{showNotification && (
+				<Block
+					message="User has been blocked"
+					onClose={() => setShowNotification(false)}
+				/>
+			)}
+			<p className="username" onClick={onClick}>{user.name}</p>
+			{isActive &&
+			(
+				<ul className="dropdown-menu">
+					<li className="dropdown-item" onClick={() => navigate(`/profile/${user.id}`)}>
+						Profile
+					</li>
+
+					<li className="dropdown-item" onClick={onDirectMessageClick}>
+  						Direct Message
+					</li>
+
+					<li className="dropdown-item" onClick={() => console.log('Profile clicked')}>
+						Add friend
+					</li>
+
+					<li className="dropdown-item" onClick={handleBlockClick}>
+						Block
+					</li>
+
+					<li className="dropdown-item" onClick={() => console.log('Invite to Pong clicked')}>
+						Invite to Pong
+					</li>
+				</ul>
+			)}
+			<div className={user.connected ? 'online' : 'offline'}>
+				{user.isPlaying ?
+					<>
+						<div className="playing-indicator" />
+						<span>Playing</span>
+					</> :
+					(user.connected ?
+					<>
+						<div className="online-indicator" />
+						<span>Online</span>
+					</> :
+					<>
+						<div className="offline-indicator" />
+						<span>Offline</span>
+					</>)
+				}
+			</div>
+		</div>
+	);
+};
+
+export default User;". Avec la requete Get a la route 'http://localhost:8080/users/me", je recupere l'id de l'user actuellement connecte, donc je l'utilise comme blockerId. Par contre comment je recupere l'id de l'user qui s'est fait bloquer ("blockedId") ? 
+
+La logique pour recuperer blockedId doit etre semblable a celle pour recuperer 
+
+N'hesite pas a modifier User.tsx si j'ai fais quelque chose de mal.
+
+Tu penses pas que je devrais definir handleBlockClick dans un autre fichier ?

@@ -65,6 +65,8 @@ export class DirectMessageService
 		}
 	}
 
+	// -------------------------------------------BLOCAGE-------------------------------------------//
+
 	// créer un nouvel enregistrement dans la table UserBlock de Prisma avec blockerId et blockedId
 	async blockUser(blockerId: number, blockedId: number)
 	{
