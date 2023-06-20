@@ -6,16 +6,13 @@ import axios from "axios";
 import './UsersList.css';
 import User from './User';
 
-// type les props qu'attend le composant UsersList
 interface UsersListProps
 {
 	setCurrentUser: Dispatch<SetStateAction<any>>;
 	setPrivateMessageUserId: Dispatch<SetStateAction<any>>;
-	setBlockedUserId: Dispatch<SetStateAction<number | null>>;
 }
 
-const UsersList = ({setCurrentUser, setPrivateMessageUserId,
-					setBlockedUserId}: UsersListProps) =>
+const UsersList = ({setCurrentUser, setPrivateMessageUserId}: UsersListProps) =>
 {
 	const navigate = useNavigate();
 	const [users, setUsers] = useState([]);
@@ -95,10 +92,8 @@ const UsersList = ({setCurrentUser, setPrivateMessageUserId,
 					isActive={clickedUser === index} 
 					onClick={(event: MouseEvent<HTMLElement>) =>
 					{event.stopPropagation(); setClickedUser(index);}}
-					// onDirectMessageClick() est passee en tant que prop au composant User
 					onDirectMessageClick={() => setPrivateMessageUserId(user.id)}
 					navigate={navigate}
-					handleBlockClick={() => setBlockedUserId(user.id)}
 				/>
 			))}
 		</div>

@@ -14,7 +14,7 @@ type Props =
 const Block: React.FC<Props> = ({blockerId, blockedId, message, onClose}) =>
 {
 	const socket = useContext(SocketContext);
-	
+
 	const blockUser = () =>
 	{
 		if (socket)

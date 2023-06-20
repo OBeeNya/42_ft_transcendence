@@ -1,52 +1,19 @@
-import { MouseEvent, useState, useContext, useEffect } from 'react';
-import { io } from "socket.io-client";
+import { MouseEvent, useState} from 'react';
 import { UserInfos } from "../../../services/interfaces/userInfos.interface";
 import Block from "../Block/Block";
-import axios from 'axios';
-import { SocketContext } from "../../../socketContext";
 
-const User = ({user, isActive, onClick, onDirectMessageClick, navigate, handleBlockClick}:
+const User = ({user, isActive, onClick, onDirectMessageClick, navigate}:
 			  {user: UserInfos; isActive: boolean;
 			   onClick: (event: MouseEvent<HTMLElement>) => void;
 			   onDirectMessageClick: () => void;
-			   navigate: (path: string) => void;
-			   handleBlockClick: () => void;}) =>
+			   navigate: (path: string) => void;}) =>
 {
-	// const [userInfos, setUserInfos] = useState<UserInfos | null>(null);
-	// const [showNotification, setShowNotification] = useState(false);
-	// const socket = useContext(SocketContext);
-	// const token = localStorage.getItem("token");
+	const [showNotification, setShowNotification] = useState(false);
 
-	// useEffect(() =>
-	// {
-	// 	const getCurrentUser = async () =>
-	// 	{
-	// 		try
-	// 		{
-	// 			const response = await axios.get("http://localhost:8080/users/me",
-	// 			{
-	// 			  headers:
-	// 			  {
-	// 				Authorization: `Bearer ${token}`,
-	// 			  },
-	// 			});
-
-	// 			setUserInfos(response.data);
-	// 		  }
-	// 		  catch (error)
-	// 		  {
-	// 			console.error("Failed to fetch users.");
-	// 		  }
-	// 		};
-
-	// 		getCurrentUser();
-	// 	}, [token]);
-
-	// const handleBlockClick = ({blockerId, blockedId}: {blockerId: number, blockedId: number}) =>
-	// {
-	// 	setShowNotification(true);
-	// }
-
+	const handleBlockClick = () =>
+	{
+		setShowNotification(true);
+	};
 
 	return (
 		<div key={user.id} className={`user ${isActive ? 'show-menu' : ''}`}>
