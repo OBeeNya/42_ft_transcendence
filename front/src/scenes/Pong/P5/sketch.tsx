@@ -10,7 +10,6 @@ const sketch: Sketch = p5 => {
     let master = false;
     let gameOn = false;
     let gameEnded = false;
-    // let spectator = false;
     let opponentPoints = 0;
     let players: any[] = [];
     let counter = 0;
@@ -22,6 +21,7 @@ const sketch: Sketch = p5 => {
     let ballSpeed = 5; // 3 ou 5
     let pointsToWin = 5;
     let paused = 1;
+    let drawLoops = 0;
 
 /******************************** PLAYER ********************************/
 
@@ -159,6 +159,7 @@ class Ball {
 
         socket.on('heartBeat', function(data: any[]){
             players = data;
+
         });
 
         socket.on('heartBeatBall', function(data: any){
@@ -181,6 +182,7 @@ class Ball {
         p5.textFont('Courier New');
         p5.fill(0, 102, 153);
 
+
         if(gameOn === false) {
             p5.textSize(48);
             p5.text("0", 25, 50);
@@ -197,6 +199,9 @@ class Ball {
         }
 
         if(gameOn === true && p !== undefined) {
+
+            
+
             p5.textSize(48);
             p5.rect(p5.width/2, 0, 5, 1200);
                 if (master === true) { 
@@ -241,6 +246,28 @@ class Ball {
                     throwBall();
                 }
 
+            // console.log("players.length", players.length);
+
+            if (drawLoops < 50)
+            drawLoops++;
+
+            if (players.length < 2 && drawLoops === 50) {
+                console.log("Other player left");
+                p5.noLoop();
+                // console.log("players.length", players.length);
+                // console.log("counter: ", counter);
+                p5.background(0);
+                p5.textFont('Courier New');
+                p5.textAlign(p5.CENTER); 
+                p5.textFont('Courier New');
+                p5.text("Opponent left :(", p5.width/2, p5.height/2); 
+                p5.textSize(30);
+                p5.text("reloading the page...", p5.width/2, p5.height/2 + 100);
+
+                socket.on('disconnect', () => console.log("disconnection front"));
+                setTimeout(() => {  window.location.href = "/pong"; }, 3000);
+            }
+
             let updateInfoPlayer = {
                 x:p.x,
                 y:p.y,
@@ -259,6 +286,12 @@ class Ball {
                 r:b.r
             };
             socket.emit('updateBall', updateInfoBall);
+
+
+
+
+            
+
         } 
         else if (gameOn === true && p === undefined)
             drawSpectator();
@@ -266,6 +299,9 @@ class Ball {
         pauseGame();
 
     };
+
+/******************************** EXTERNAL FUNCTIONS ********************************/
+
 
     function throwBall() {
         if (p.p >= pointsToWin || opponentPoints >= pointsToWin) {
@@ -300,7 +336,7 @@ class Ball {
             p5.text("reloading the page...", p5.width/2, p5.height/2 + 100);
         }
         socket.on('disconnect', () => console.log("disconnection front"));
-        setTimeout(() => {  window.location.href = "/pong"; }, 5000);
+        setTimeout(() => {  window.location.href = "/pong"; }, 3000);
     }
 
     function drawSpectator() {
