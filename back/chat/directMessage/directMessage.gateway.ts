@@ -78,23 +78,6 @@ export class DirectMessageGateway
 		}
 	}
 
-	@SubscribeMessage('unblockUser') // unblockUser est l'événement que frontend utilise pour interagir avec le backend
-	async handleUnblockUser(@MessageBody() data: BlockageDto,
-							@ConnectedSocket() client: Socket)
-	{
-		try
-		{
-			await this.directMessageService.unblockUser(data.blockerId, data.blockedId);
-			client.emit('userUnblocked', {blockerId: data.blockerId, blockedId: data.blockedId}); // userUnblocked est l'événement que le back envoie au front si succès
-		}
-		catch (error)
-		{
-			console.error('Error while unblocking user:', error);
-			client.emit('error', {message: 'There was an error unblocking the user.',
-								  error: error.message});
-		}
-	}
-
 	// -------------------------------------------DM-------------------------------------------//
 
 	@SubscribeMessage('privateMessage')
@@ -105,15 +88,6 @@ export class DirectMessageGateway
 
 		try
 		{
-			// Vérifie si le receveur a bloqué l'expéditeur du message
-			if (await this.directMessageService.isUserBlocked(data.receiverId, data.senderId))
-			{
-				console.log(`User ${data.receiverId} has blocked user ${data.senderId}`);
-				client.emit('error', {message: 'You have been blocked by this user and \
-											    cannot send them a message.'});
-				return;
-			}
-
 			const newMessage = await this.directMessageService.create(data);
 			console.log('Emitting privateMessage with data:', newMessage);
 
@@ -139,14 +113,6 @@ export class DirectMessageGateway
 	{
 		try
 		{
-			// Vérifie si l'utilisateur destinataire a bloqué l'utilisateur émetteur
-			if (await this.directMessageService.isUserBlocked(data.receiverId, data.senderId))
-			{
-				client.emit('error', {message: 'You have been blocked by this user \
-												and cannot access the conversation.'});
-				return;
-			}
-
 			const messages = await this.directMessageService.getConversation(data.senderId, data.receiverId);
 			client.emit('conversation', messages);
 		}

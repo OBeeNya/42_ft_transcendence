@@ -1,5 +1,6 @@
-import { MouseEvent, useState} from 'react';
+import { MouseEvent, useContext, useState} from 'react';
 import { UserInfos } from "../../../services/interfaces/userInfos.interface";
+import { SocketContext } from '../../../socketContext';
 import Block from "../Block/Block";
 
 const User = ({user, isActive, onClick, onDirectMessageClick, navigate}:
@@ -9,11 +10,6 @@ const User = ({user, isActive, onClick, onDirectMessageClick, navigate}:
 			   navigate: (path: string) => void;}) =>
 {
 	const [showNotification, setShowNotification] = useState(false);
-
-	const handleBlockClick = () =>
-	{
-		setShowNotification(true);
-	};
 
 	return (
 		<div key={user.id} className={`user ${isActive ? 'show-menu' : ''}`}>
@@ -39,7 +35,8 @@ const User = ({user, isActive, onClick, onDirectMessageClick, navigate}:
 						Add friend
 					</li>
 
-					<li className="dropdown-item" onClick={handleBlockClick}>
+					<li className="dropdown-item" onClick={() =>
+						{console.log('Block clicked'); setShowNotification(true);}}>
 						Block
 					</li>
 

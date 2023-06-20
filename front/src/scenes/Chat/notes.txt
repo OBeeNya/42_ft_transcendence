@@ -26,7 +26,7 @@ TODO :
 ------------------------------------------------------------------------------------------------
 Comment connecter le backend avec le frontend ?
 
-Je dois socket.emit() les événements blockUser et unblockUser dans le front.
+Je dois socket.emit() l'événement blockUser dans le front.
 Par exemple, le bouton "Block" pourrait émettre blockUser avec l'id de l'utilisateur à bloquer
 const handleBlock = () =>
 {

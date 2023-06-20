@@ -85,17 +85,17 @@ const UsersList = ({setCurrentUser, setPrivateMessageUserId}: UsersListProps) =>
 	return (
 		<div className="users-list">
 			{users.map((user: UserInfos, index) =>
-			(
-				<User
-					key={user.id}
-					user={user} 
-					isActive={clickedUser === index} 
-					onClick={(event: MouseEvent<HTMLElement>) =>
-					{event.stopPropagation(); setClickedUser(index);}}
-					onDirectMessageClick={() => setPrivateMessageUserId(user.id)}
-					navigate={navigate}
-				/>
-			))}
+		(
+			<User
+				key={user.id}
+				user={user} 
+				isActive={clickedUser === index} 
+				onClick={(event: MouseEvent<HTMLElement>) =>
+				{event.stopPropagation(); setClickedUser(index);}}
+				onDirectMessageClick={() => setPrivateMessageUserId(user.id)}
+				navigate={navigate}
+			/>
+		))}
 		</div>
 	);
 };

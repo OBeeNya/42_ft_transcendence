@@ -64,16 +64,6 @@ let DirectMessageService = class DirectMessageService {
             }
         });
     }
-    async unblockUser(blockerId, blockedId) {
-        return this.prisma.userBlock.delete({
-            where: {
-                userId_blockedId: {
-                    userId: blockerId,
-                    blockedId: blockedId
-                }
-            }
-        });
-    }
     async isUserBlocked(blockerId, blockedId) {
         console.log(`Checking if user ${blockerId} has blocked user ${blockedId}`);
         const block = await this.prisma.userBlock.findUnique({

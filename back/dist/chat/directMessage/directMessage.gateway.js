@@ -60,26 +60,9 @@ let DirectMessageGateway = class DirectMessageGateway {
                 error: error.message });
         }
     }
-    async handleUnblockUser(data, client) {
-        try {
-            await this.directMessageService.unblockUser(data.blockerId, data.blockedId);
-            client.emit('userUnblocked', { blockerId: data.blockerId, blockedId: data.blockedId });
-        }
-        catch (error) {
-            console.error('Error while unblocking user:', error);
-            client.emit('error', { message: 'There was an error unblocking the user.',
-                error: error.message });
-        }
-    }
     async handlePrivateMessage(data, client) {
         console.log(`Message sent from ${data.senderId} to ${data.receiverId}`);
         try {
-            if (await this.directMessageService.isUserBlocked(data.receiverId, data.senderId)) {
-                console.log(`User ${data.receiverId} has blocked user ${data.senderId}`);
-                client.emit('error', { message: 'You have been blocked by this user and \
-											    cannot send them a message.' });
-                return;
-            }
             const newMessage = await this.directMessageService.create(data);
             console.log('Emitting privateMessage with data:', newMessage);
             const receiverSocketId = this.userSocketMap.get(data.receiverId);
@@ -96,11 +79,6 @@ let DirectMessageGateway = class DirectMessageGateway {
     }
     async handleGetConversation(data, client) {
         try {
-            if (await this.directMessageService.isUserBlocked(data.receiverId, data.senderId)) {
-                client.emit('error', { message: 'You have been blocked by this user \
-												and cannot access the conversation.' });
-                return;
-            }
             const messages = await this.directMessageService.getConversation(data.senderId, data.receiverId);
             client.emit('conversation', messages);
         }
@@ -132,15 +110,6 @@ __decorate([
         socket_io_1.Socket]),
     __metadata("design:returntype", Promise)
 ], DirectMessageGateway.prototype, "handleBlockUser", null);
-__decorate([
-    (0, websockets_1.SubscribeMessage)('unblockUser'),
-    __param(0, (0, websockets_1.MessageBody)()),
-    __param(1, (0, websockets_1.ConnectedSocket)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [blockage_dto_1.BlockageDto,
-        socket_io_1.Socket]),
-    __metadata("design:returntype", Promise)
-], DirectMessageGateway.prototype, "handleUnblockUser", null);
 __decorate([
     (0, websockets_1.SubscribeMessage)('privateMessage'),
     __param(0, (0, websockets_1.MessageBody)()),

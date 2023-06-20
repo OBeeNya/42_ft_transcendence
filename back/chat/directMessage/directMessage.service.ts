@@ -8,6 +8,8 @@ export class DirectMessageService
 {
 	constructor(private prisma: PrismaService) {}
 
+	// -------------------------------------------DM-------------------------------------------//
+
 	async create(data: DirectMessageDto): Promise<DirectMessage>
 	{
 		console.log('Creating direct message with data:', data);
@@ -76,21 +78,6 @@ export class DirectMessageService
 			{
 				userId: blockerId,
 				blockedId: blockedId
-			}
-		});
-	}
-
-	async unblockUser(blockerId: number, blockedId: number)
-	{
-		return this.prisma.userBlock.delete(
-		{
-			where:
-			{
-				userId_blockedId:
-				{
-					userId: blockerId,
-					blockedId: blockedId
-				}
 			}
 		});
 	}

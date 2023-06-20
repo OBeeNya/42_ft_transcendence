@@ -4,14 +4,12 @@ import Sidebar from "../Sidebar/Sidebar";
 import UsersList from "../UsersList/UsersList";
 import ChatBox from "../DirectMessage/ChatBox/ChatBox"
 import DirectMessageForm from "../DirectMessage/DirectMessageForm/DirectMessageForm";
-import Block from '../Block/Block';
 import './MainPage.css';
 
 const MainPage = () =>
 {
 	const [currentUser, setCurrentUser] = useState<any>(null);
 	const [privateMessageUserId, setPrivateMessageUserId] = useState<number | null>(null);
-	const [BlockedUserId, setBlockedUserId] = useState<number | null>(null);
 
 	return (
 		<div className="chat-page">
@@ -31,17 +29,11 @@ const MainPage = () =>
 							 receiverId={privateMessageUserId ? privateMessageUserId : -1} />
 				</div>
 
-				<div className="block-section">
-					{privateMessageUserId && currentUser &&
-						<Block blockerId={currentUser.id}
-							   blockedId={BlockedUserId} />
-					}
-				</div>
-
 				<div className="users-list">
-					<UsersList setCurrentUser={setCurrentUser}
-							   setPrivateMessageUserId={setPrivateMessageUserId}
-							   setBlockedUserId={setBlockedUserId} />
+				<UsersList
+					setCurrentUser={setCurrentUser}
+					setPrivateMessageUserId={setPrivateMessageUserId}
+				/>
 				</div>
 			</div>
 		</div>
