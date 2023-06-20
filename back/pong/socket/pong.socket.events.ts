@@ -6,7 +6,7 @@ import { Server, Socket } from "socket.io";
 let connections: number = 0;
 let players = [];
 let b;
-let interval = 20;
+let interval = 10;
 
 function Player(id, x, y, v, w, h, p){
     this.id = id;
@@ -46,7 +46,7 @@ export class SocketEvents {
         connections++;
         this.getCounter();
         client.on("start", (data) => {
-            // console.log("A user just connected: " + client.id + "; connexion number: " + connections);
+            console.log("A user just connected: " + client.id + "; connexion number: " + connections);
             if (players.length > 0 && players[players.length - 1].id === client.id) {
                 return;
             }
@@ -116,7 +116,7 @@ export class SocketEvents {
 
     //deconnexion
     handleDisconnect(client: Socket) {
-        // console.log('client disconnected: ', client.id);
+        console.log('client disconnected: ', client.id);
         connections = 0;
         players = [];
     }
