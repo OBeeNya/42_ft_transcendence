@@ -10,7 +10,9 @@ interface DropdownMenuProps
 	setShowNotification: (showNotification: boolean) => void;
 }
 
-const DropdownMenu: React.FC<DropdownMenuProps> = ({ user, onDirectMessageClick, navigate, setShowNotification }) => {
+const DropdownMenu: React.FC<DropdownMenuProps> = ({user, onDirectMessageClick,
+													navigate, setShowNotification}) =>
+{
 	return (
 		<ul className="dropdown-menu">
 			<DropdownItem onClick={() => navigate(`/profile/${user.id}`)}>Profile</DropdownItem>

@@ -1,6 +1,5 @@
 import { MouseEvent, useContext, useState} from 'react';
 import { UserInfos } from "../../../services/interfaces/userInfos.interface";
-import { SocketContext } from '../../../socketContext';
 import Block from "../Block/Block";
 import DropdownMenu from './DropdownMenu';
 
