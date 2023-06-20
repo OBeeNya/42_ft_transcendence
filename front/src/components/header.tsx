@@ -27,7 +27,7 @@ export default function Header () {
 			});
         }
         catch {
-            console.log("could not change connected to false");
+            console.error("could not change connected to false");
         }
     }
 

@@ -4,6 +4,7 @@ import Header from "../../components/header"
 import { SketchComponent } from "./P5/sketch"
 
 const PongPage = () => {
+
 	const navigate = useNavigate();
 
 	return (

@@ -32,7 +32,7 @@ const SignupPage = () => {
 			// window.location.reload();
 		}
 		catch (error) {
-			console.log(error);
+			console.error(error);
 			const axiosError = error as AxiosError<{ message: string; statusCode: number }>;
 			if (axiosError?.response?.data?.message === "Credentials taken") {
 				const message = document.getElementById("message");

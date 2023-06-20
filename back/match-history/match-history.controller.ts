@@ -15,28 +15,28 @@ export class MatchHistoryController {
 	// localhost:3000/match-history
 	@Get()
 	findAll() {
-		console.log("test findAll matches");
+		// console.log("test findAll matches");
 		return this.historyService.findAll();
 	}
 
 	// localhost:3000/match-history/me
 	@Get("me")
 	findMyMatches(@GetUser() user: User) {
-		console.log("test findMyMatches matches: id = ", user.id);
+		// console.log("test findMyMatches matches: id = ", user.id);
 		return this.historyService.findByUserId(user.id.toString());
 	}
 
 	// localhost:3000/match-history/:id
 	@Get(":id")
 	findByUserId(@Param("id") id: string) {
-		console.log("test findByUser matches: id = ", id);
+		// console.log("test findByUser matches: id = ", id);
 		return this.historyService.findByUserId(id);
 	}
 
 	// localhost:3000/match-history/name/:name
 	@Get("name/:name")
 	findByUserName(@Param("name") name: string) {
-		console.log("test findByUserName matches: name = ", name);
+		// console.log("test findByUserName matches: name = ", name);
 		return this.historyService.findByUserName(name);
 	}
 

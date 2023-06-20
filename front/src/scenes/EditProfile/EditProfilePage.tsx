@@ -53,7 +53,7 @@ const EditProfilePage = () => {
 				});
 			}
 			catch {
-				console.log("could not update tfa preferences")
+				console.error("could not update tfa preferences")
 			}
 
 			const message = document.getElementById("message");
@@ -93,7 +93,6 @@ const EditProfilePage = () => {
 		if (userInfos?.tfa !== undefined) {
 			setUserInfos({...userInfos,
 				tfa: !userInfos?.tfa
-				
 			});
 		}
 	}
