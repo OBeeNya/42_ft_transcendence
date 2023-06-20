@@ -7,14 +7,19 @@ const PongPage = () => {
 
 	const navigate = useNavigate();
 
+    const handleQuit = () => {
+        navigate("/pong");
+        window.location.reload();
+      };
+
 	return (
 		<div>
-			<Header />
+			{/* <Header /> */}
 			<Content>
 				<h1>Pong</h1>
 				<br></br>
                 <SketchComponent/>
-				<button onClick={() => navigate("/home")}>Home</button>
+				<button onClick={() => handleQuit()}>Quit</button>
 				<br></br>
 			</Content>
 		</div>

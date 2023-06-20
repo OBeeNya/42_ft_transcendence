@@ -42,7 +42,8 @@ export class SocketEvents {
 
     //connexion
     handleConnection(client: Socket) {
-        // console.log('client connected: ', client.id);
+        console.log('client.id: ', client.id);
+
         connections++;
         this.getCounter();
         client.on("start", (data) => {
@@ -116,9 +117,11 @@ export class SocketEvents {
 
     //deconnexion
     handleDisconnect(client: Socket) {
-        console.log('client disconnected: ', client.id);
-        connections = 0;
+        connections--;
         players = [];
+        console.log('client disconnected: ', client.id + "; connexion number: " + connections);
+        
+    
     }
 
 }
