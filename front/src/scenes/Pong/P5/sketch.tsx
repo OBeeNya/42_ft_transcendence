@@ -320,7 +320,7 @@ class Ball {
                     b.yv = 0;
                 }
                 else {
-                    b.xv = (b.r === 0)?-ballSpeed:ballSpeed;
+                    b.xv = ballSpeed;
                     b.yv = ballSpeed;
                 }
                 paused *= -1;
