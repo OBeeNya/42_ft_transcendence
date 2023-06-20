@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import Header from "../../../components/header"
 import Sidebar from "../Sidebar/Sidebar";
-import UsersList from "../UsersList/UsersList";
+import UsersList from "../User/UsersList";
 import ChatBox from "../DirectMessage/ChatBox/ChatBox"
 import DirectMessageForm from "../DirectMessage/DirectMessageForm/DirectMessageForm";
 import './MainPage.css';

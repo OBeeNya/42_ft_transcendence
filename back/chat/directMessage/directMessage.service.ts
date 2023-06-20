@@ -38,8 +38,6 @@ export class DirectMessageService
 
 	async getConversation(senderId: number, receiverId: number): Promise<DirectMessage[]>
 	{
-		console.log(`Getting conversation between ${senderId} and ${receiverId}`);
-
 		try
 		{
 			const messages = await this.prisma.directMessage.findMany(
@@ -57,7 +55,6 @@ export class DirectMessageService
 				}
 			});
 
-			console.log(`Got ${messages.length} messages`);
 			return (messages);
 		}
 		catch (error)

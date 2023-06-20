@@ -2,6 +2,7 @@ import { MouseEvent, useContext, useState} from 'react';
 import { UserInfos } from "../../../services/interfaces/userInfos.interface";
 import { SocketContext } from '../../../socketContext';
 import Block from "../Block/Block";
+import DropdownMenu from './DropdownMenu';
 
 const User = ({user, isActive, onClick, onDirectMessageClick, navigate}:
 			  {user: UserInfos; isActive: boolean;
@@ -19,32 +20,17 @@ const User = ({user, isActive, onClick, onDirectMessageClick, navigate}:
 					onClose={() => setShowNotification(false)}
 				/>
 			)}
+
 			<p className="username" onClick={onClick}>{user.name}</p>
-			{isActive &&
-			(
-				<ul className="dropdown-menu">
-					<li className="dropdown-item" onClick={() => navigate(`/profile/${user.id}`)}>
-						Profile
-					</li>
-
-					<li className="dropdown-item" onClick={onDirectMessageClick}>
-  						Direct Message
-					</li>
-
-					<li className="dropdown-item" onClick={() => console.log('Profile clicked')}>
-						Add friend
-					</li>
-
-					<li className="dropdown-item" onClick={() =>
-						{console.log('Block clicked'); setShowNotification(true);}}>
-						Block
-					</li>
-
-					<li className="dropdown-item" onClick={() => console.log('Invite to Pong clicked')}>
-						Invite to Pong
-					</li>
-				</ul>
+			{isActive && (
+				<DropdownMenu 
+					user={user} 
+					onDirectMessageClick={onDirectMessageClick} 
+					navigate={navigate} 
+					setShowNotification={setShowNotification}
+			/>
 			)}
+
 			<div className={user.connected ? 'online' : 'offline'}>
 				{user.isPlaying ?
 					<>

@@ -41,10 +41,7 @@ const ChatBox = ({senderId, receiverId}: {senderId: number, receiverId: number})
 		{
 			// on m.a.j l'etat uniquement si le receveur du nouveau message est l'user actuel
 			if (newMessage.receiverId === receiverId)
-			{
 				setMessages(messages => [...messages, newMessage]);
-  				console.log('Added new message:', newMessage);
-			}
 		});
 
 		return () =>
