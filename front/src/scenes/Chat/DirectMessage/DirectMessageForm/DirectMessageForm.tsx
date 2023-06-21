@@ -6,13 +6,13 @@ import './DirectMessageForm.css';
 type Props =
 {
 	senderId: number;
-	receiverId: number;
+	: number;
 };
 
-const DirectMessageForm: React.FC<Props> = ({senderId, receiverId}) =>
+const DirectMessageForm: React.FC<Props> = ({senderId, }) =>
 {
 	console.log('senderId:', senderId);
-	console.log('receiverId:', receiverId);
+	console.log(':', );
 
 	const [message, setMessage] = useState('');
 	const [error, setError] = useState('');
@@ -22,7 +22,7 @@ const DirectMessageForm: React.FC<Props> = ({senderId, receiverId}) =>
 	{
 		e.preventDefault();
 
-		if (senderId <= 0 || receiverId <= 0)
+		if (senderId <= 0 ||  <= 0)
 		{
 			setError('Invalid user IDs');
 			return;
@@ -30,12 +30,12 @@ const DirectMessageForm: React.FC<Props> = ({senderId, receiverId}) =>
 
 		console.log('Submitting the following message:');
 		console.log(`From: ${senderId}`);
-		console.log(`To: ${receiverId}`);
+		console.log(`To: ${}`);
 		console.log(`Content: "${message}"`);
 
 		if (socket)
 		{
-			socket.emit('privateMessage', {senderId, receiverId, content: message});
+			socket.emit('privateMessage', {senderId, , content: message});
 			console.log('Message has been sent!');
 		}
 

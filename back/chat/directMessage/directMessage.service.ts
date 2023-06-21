@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from "../../prisma_module/prisma.service"
 import { DirectMessageDto } from './directMessage.dto';
-import { DirectMessage } from '@prisma/client';
+import { DirectMessage, UserBlock } from '@prisma/client';
+import { BlockageDto } from './blockage.dto';
 
 @Injectable()
 export class DirectMessageService
@@ -67,14 +68,14 @@ export class DirectMessageService
 	// -------------------------------------------BLOCAGE-------------------------------------------//
 
 	// créer un nouvel enregistrement dans la table UserBlock de Prisma avec blockerId et blockedId
-	async blockUser(blockerId: number, blockedId: number)
+	async blockUser(data: BlockageDto): Promise<UserBlock>
 	{
 		return this.prisma.userBlock.create(
 		{
 			data:
 			{
-				userId: blockerId,
-				blockedId: blockedId
+				blockerId: data.blockerId,
+				blockedId: data.blockedId
 			}
 		});
 	}
