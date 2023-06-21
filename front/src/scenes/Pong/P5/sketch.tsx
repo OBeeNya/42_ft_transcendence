@@ -22,6 +22,8 @@ const sketch: Sketch = p5 => {
     let pointsToWin = 5;
     let paused = 1;
     let drawLoops = 0;
+    let newMap = true;  // passer en props
+    let background: any;
 
 /******************************** PLAYER ********************************/
 
@@ -111,8 +113,11 @@ class Ball {
         socket = io('http://localhost:8080/pong');
         socket.on('connect', () => console.log("connected"));
         
+        if (newMap === true) {
+            background = p5.loadImage('https://happycoding.io/images/stanley-1.jpg');
+        }
         p5.frameRate(85);
-        p5.createCanvas(750,600);
+        p5.createCanvas(750, 600);
         p5.noCursor();
         b = new Ball();
 
@@ -169,7 +174,7 @@ class Ball {
     }
 
     p5.draw = () => {
-        p5.background(0);
+        p5.background(0, 0, 0);
         p5.textFont('Courier New');
         p5.fill(0, 102, 153);
 
@@ -190,7 +195,21 @@ class Ball {
 
         if(gameOn === true && p !== undefined) {
             p5.textSize(48);
-            p5.rect(p5.width/2, 0, 5, 1200);
+
+            if (newMap === true) {
+                // p5.background(60, 0, 0);
+                p5.background(background);
+
+
+
+                
+            } else {
+
+                p5.rect(p5.width/2, 0, 5, 1200);
+
+            }
+
+
             if (master === true) { 
                 p5.text(p.p, 20, 40);
                 p5.text(opponentPoints, 710, 50);
@@ -209,6 +228,7 @@ class Ball {
                 p5.rectMode(p5.CENTER);
                 p5.rect(players[i].x, players[i].y, players[i].w, players[i].h);
             }
+
             if (b.collision(p) && p.x === 0)
                 b.xv = ballSpeed;
             if (b.collision(p) && p.x === p5.width)
@@ -343,6 +363,8 @@ class Ball {
             setTimeout(() => {  window.location.href = "/pong"; }, 3000);
         }
     }
+
+
 };
 
 export function SketchComponent() {
