@@ -23,6 +23,7 @@ const Block: React.FC<Props> = ({blockerId, blockedId}) =>
 				{
 					console.log('User has been blocked!');
 					setShowNotification(true);
+					setTimeout(() => setShowNotification(false), 5000);
 				}
 			});
 

@@ -8,9 +8,7 @@ import { BlockageDto } from './blockage.dto';
 export class DirectMessageService
 {
 	constructor(private prisma: PrismaService) {}
-
-	// -------------------------------------------DM-------------------------------------------//
-
+	
 	async create(data: DirectMessageDto): Promise<DirectMessage>
 	{
 		console.log('Creating direct message with data:', data);
@@ -65,9 +63,6 @@ export class DirectMessageService
 		}
 	}
 
-	// -------------------------------------------BLOCAGE-------------------------------------------//
-
-	// créer un nouvel enregistrement dans la table UserBlock de Prisma avec blockerId et blockedId
 	async blockUser(data: BlockageDto): Promise<UserBlock>
 	{
 		return this.prisma.userBlock.create(

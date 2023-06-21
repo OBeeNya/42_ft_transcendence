@@ -40,8 +40,6 @@ export class DirectMessageGateway
 		console.log(`User ${userId} connected with socket id ${client.id}`);
 	}
 
-	// -------------------------------------------BLOCAGE-------------------------------------------//
-
 	@SubscribeMessage('blockUser')
 	async handleBlockUser(@MessageBody() data: BlockageDto,
 						  @ConnectedSocket() client: Socket)
@@ -78,20 +76,18 @@ export class DirectMessageGateway
 		}
 	}
 
-	// -------------------------------------------DM-------------------------------------------//
-
 	@SubscribeMessage('privateMessage')
 	async handlePrivateMessage(@MessageBody() data: DirectMessageDto,
 							   @ConnectedSocket() client: Socket)
 	{
 		console.log(`Message sent from ${data.senderId} to ${data.receiverId}`);
 
-		if (await this.directMessageService.isUserBlocked(data.receiverId, data.senderId))
-		{
-			console.error('Message blocked:', `User ${data.senderId} is blocked by ${data.receiverId}`);
-			client.emit('error', {message: 'Your message could not be sent. You are blocked by this user.'});
-			return;
-		}
+		// if (await this.directMessageService.isUserBlocked(data.receiverId, data.senderId))
+		// {
+		// 	console.error('Message blocked:', `User ${data.senderId} is blocked by ${data.receiverId}`);
+		// 	client.emit('error', {message: 'Your message could not be sent. You are blocked by this user.'});
+		// 	return;
+		// }
 
 		try
 		{
