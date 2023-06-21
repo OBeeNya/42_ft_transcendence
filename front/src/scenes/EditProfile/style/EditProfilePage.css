@@ -1,8 +1,6 @@
 .editUserAvatar {
-    /* max-width: 200px; */
-    max-width: 45%;
-    height: auto;
-    /* max-height: 400px; */
+    max-width: 130px;
+    height: 130px;
     border-radius: 50%;
 }
 
