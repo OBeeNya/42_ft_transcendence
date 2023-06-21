@@ -54,11 +54,11 @@ let DirectMessageService = class DirectMessageService {
             throw error;
         }
     }
-    async blockUser(blockerId, blockedId) {
+    async blockUser(data) {
         return this.prisma.userBlock.create({
             data: {
-                userId: blockerId,
-                blockedId: blockedId
+                blockerId: data.blockerId,
+                blockedId: data.blockedId
             }
         });
     }

@@ -33,7 +33,7 @@ const Block: React.FC<Props> = ({blockerId, blockedId}) =>
 		}
 	}, [socket, blockerId, blockedId]);
 
-	const handleBlock = () =>
+	const handleBlockClick = () =>
 	{
 		if (blockerId <= 0 || blockedId <= 0)
 		{
@@ -55,9 +55,8 @@ const Block: React.FC<Props> = ({blockerId, blockedId}) =>
 
 	return (
 		<>
-			<button onClick={handleBlock}>Block</button>
 			{showNotification && (
-				<div className="blockage-notification">
+				<div className="blockage-notification"onSubmit={handleBlockClick}>
 					<div className="blockage-notification-content">
 						<div className="blockage-notification-icon">
 							<i className="fas fa-times-circle"></i>

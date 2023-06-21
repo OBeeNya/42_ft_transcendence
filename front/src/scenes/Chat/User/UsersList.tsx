@@ -95,11 +95,12 @@ const UsersList = ({setCurrentUser, setPrivateMessageUserId, setBlockedUsersId}:
 				{event.stopPropagation(); setClickedUser(index);}}
 				onDirectMessageClick={() => setPrivateMessageUserId(user.id)}
 				navigate={navigate}
-				onBlockClick={() => setBlockedUsersId(user.id)}
-				/>
+				handleBlockClick={() => setBlockedUsersId(user.id)}
+			/>
 		))}
 		</div>
 	);
 };
 
 export default UsersList;
+

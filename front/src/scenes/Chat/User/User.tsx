@@ -3,13 +3,12 @@ import { UserInfos } from "../../../services/interfaces/userInfos.interface";
 import Block from "../Blockage/Block";
 import DropdownMenu from './DropdownMenu';
 
-const User = ({user, isActive, onClick, onDirectMessageClick, navigate, onBlockClick}:
+const User = ({user, isActive, onClick, onDirectMessageClick, navigate, handleBlockClick}:
 	{user: UserInfos; isActive: boolean;
 	onClick: (event: MouseEvent<HTMLElement>) => void;
 	onDirectMessageClick: () => void;
 	navigate: (path: string) => void;
-	onBlockClick: () => void;}) =>
-
+	handleBlockClick: (blockerId: number, blockedId: number) => void;}) =>
 {
 	return (
 		<div key={user.id} className={`user ${isActive ? 'show-menu' : ''}`}>
@@ -19,7 +18,7 @@ const User = ({user, isActive, onClick, onDirectMessageClick, navigate, onBlockC
 					user={user}
 					onDirectMessageClick={onDirectMessageClick}
 					navigate={navigate}
-					onBlockClick={onBlockClick}
+					handleBlockClick={handleBlockClick}
 				/>
 			)}
 
@@ -44,4 +43,4 @@ const User = ({user, isActive, onClick, onDirectMessageClick, navigate, onBlockC
 	);
 };
 
-export default User;
+export default User; 
