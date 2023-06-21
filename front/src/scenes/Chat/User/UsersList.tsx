@@ -1,18 +1,19 @@
 import { useEffect, useState, MouseEvent } from "react";
 import React, { Dispatch, SetStateAction } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { UserInfos } from "../../../services/interfaces/userInfos.interface"
 import axios from "axios";
-import './UsersList.css';
+import { UserInfos } from "../../../services/interfaces/userInfos.interface"
 import User from './User';
+import './UsersList.css';
 
 interface UsersListProps
 {
 	setCurrentUser: Dispatch<SetStateAction<any>>;
 	setPrivateMessageUserId: Dispatch<SetStateAction<any>>;
+	setBlockedUsersId: Dispatch<SetStateAction<any>>;
 }
 
-const UsersList = ({setCurrentUser, setPrivateMessageUserId}: UsersListProps) =>
+const UsersList = ({setCurrentUser, setPrivateMessageUserId, setBlockedUsersId}: UsersListProps) =>
 {
 	const navigate = useNavigate();
 	const [users, setUsers] = useState([]);
@@ -32,7 +33,7 @@ const UsersList = ({setCurrentUser, setPrivateMessageUserId}: UsersListProps) =>
 						Authorization: `Bearer ${token}`,
 					},
 				});
-	
+
 				setCurrentUser(response.data);
 
 				console.log('Current user:', response.data);
@@ -94,7 +95,8 @@ const UsersList = ({setCurrentUser, setPrivateMessageUserId}: UsersListProps) =>
 				{event.stopPropagation(); setClickedUser(index);}}
 				onDirectMessageClick={() => setPrivateMessageUserId(user.id)}
 				navigate={navigate}
-			/>
+				onBlockClick={() => setBlockedUsersId(user.id)}
+				/>
 		))}
 		</div>
 	);

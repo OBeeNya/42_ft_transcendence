@@ -39,7 +39,6 @@ const ChatBox = ({senderId, receiverId}: {senderId: number, receiverId: number})
 
 		socket.on('privateMessage', newMessage =>
 		{
-			// on m.a.j l'etat uniquement si le receveur du nouveau message est l'user actuel
 			if (newMessage.receiverId === receiverId)
 				setMessages(messages => [...messages, newMessage]);
 		});
@@ -53,16 +52,16 @@ const ChatBox = ({senderId, receiverId}: {senderId: number, receiverId: number})
 	}, [socket, senderId, receiverId]);
 
 	return (
-    <div className="chat-box">
-        {messages.map((message, i) =>
-            <div key={i} className={`message-container`}>
-                <div className={`message ${message.senderId === senderId ? 'sent' : 'received'}`}>
-                    {message.content}
-                </div>
-            </div>
-        )}
-        <div ref={messagesEndRef} />
-    </div>
+	<div className="chat-box">
+		{messages.map((message, i) =>
+			<div key={i} className={`message-container`}>
+				<div className={`message ${message.senderId === senderId ? 'sent' : 'received'}`}>
+					{message.content}
+				</div>
+			</div>
+		)}
+		<div ref={messagesEndRef} />
+	</div>
 	);
 }
 

@@ -66,6 +66,6 @@ Logique des DM
 ------------------------------------------------------------------------------------------------
 Recuperer blockerId et blockedId dans le front
 
-Comment senderId et receiverId sont-il recuperes ?
+Comment senderId et receiverId sont-il utilises ?
 
 1) 

@@ -1,33 +1,26 @@
 import { MouseEvent, useContext, useState} from 'react';
 import { UserInfos } from "../../../services/interfaces/userInfos.interface";
-import Block from "../Block/Block";
+import Block from "../Blockage/Block";
 import DropdownMenu from './DropdownMenu';
 
-const User = ({user, isActive, onClick, onDirectMessageClick, navigate}:
-			  {user: UserInfos; isActive: boolean;
-			   onClick: (event: MouseEvent<HTMLElement>) => void;
-			   onDirectMessageClick: () => void;
-			   navigate: (path: string) => void;}) =>
-{
-	const [showNotification, setShowNotification] = useState(false);
+const User = ({user, isActive, onClick, onDirectMessageClick, navigate, onBlockClick}:
+	{user: UserInfos; isActive: boolean;
+	onClick: (event: MouseEvent<HTMLElement>) => void;
+	onDirectMessageClick: () => void;
+	navigate: (path: string) => void;
+	onBlockClick: () => void;}) =>
 
+{
 	return (
 		<div key={user.id} className={`user ${isActive ? 'show-menu' : ''}`}>
-			{showNotification && (
-				<Block
-					message="User has been blocked"
-					onClose={() => setShowNotification(false)}
-				/>
-			)}
-
 			<p className="username" onClick={onClick}>{user.name}</p>
 			{isActive && (
-				<DropdownMenu 
-					user={user} 
-					onDirectMessageClick={onDirectMessageClick} 
-					navigate={navigate} 
-					setShowNotification={setShowNotification}
-			/>
+				<DropdownMenu
+					user={user}
+					onDirectMessageClick={onDirectMessageClick}
+					navigate={navigate}
+					onBlockClick={onBlockClick}
+				/>
 			)}
 
 			<div className={user.connected ? 'online' : 'offline'}>
