@@ -37,6 +37,18 @@ model User {
 	@@map("users")
 }
 
+model DirectMessage {
+	id			Int @id @default(autoincrement())
+	createdAt	DateTime @default(now())
+	content		String
+	senderId	Int
+	receiverId	Int
+	sender User @relation("UserDMs", fields: [senderId], references: [id], onDelete: Cascade)
+	receiver User @relation("UserDMsReceived", fields: [receiverId], references: [id], onDelete: Cascade)
+
+	@@map("direct_messages")
+}
+
 model MatchHistory {
 	id				Int @id @default(autoincrement())
 	user			User @relation(fields: [userId], references: [id])
@@ -92,16 +104,4 @@ model UserChat {
 
 	@@id([userId, chatId])
 	@@map("user_chats")
-}
-
-model DirectMessage {
-	id			Int @id @default(autoincrement())
-	createdAt	DateTime @default(now())
-	content		String
-	senderId	Int
-	receiverId	Int
-	sender User @relation("UserDMs", fields: [senderId], references: [id], onDelete: Cascade)
-	receiver User @relation("UserDMsReceived", fields: [receiverId], references: [id], onDelete: Cascade)
-
-	@@map("direct_messages")
 }

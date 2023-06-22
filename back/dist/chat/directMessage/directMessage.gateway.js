@@ -18,15 +18,26 @@ const socket_io_1 = require("socket.io");
 const directMessage_service_1 = require("./directMessage.service");
 const directMessage_dto_1 = require("./directMessage.dto");
 const prisma_service_1 = require("../../prisma_module/prisma.service");
+const blockage_service_1 = require("../blockage/blockage.service");
 const base_gateway_1 = require("../base.gateway");
 let DirectMessageGateway = class DirectMessageGateway extends base_gateway_1.BaseGateway {
-    constructor(directMessageService, prisma) {
+    constructor(directMessageService, blockageService, prisma) {
         super();
         this.directMessageService = directMessageService;
+        this.blockageService = blockageService;
         this.prisma = prisma;
     }
     async handlePrivateMessage(data, client) {
         console.log(`Message sent from ${data.senderId} to ${data.receiverId}`);
+        const blockageData = {
+            blockerId: data.receiverId,
+            blockedId: data.senderId
+        };
+        if (await this.blockageService.isUserBlocked(blockageData)) {
+            console.error('Message blocked:', `User ${data.senderId} is blocked by ${data.receiverId}`);
+            client.emit('error', { message: 'Your message could not be sent. You are blocked by this user.' });
+            return;
+        }
         try {
             const newMessage = await this.directMessageService.create(data);
             console.log('Emitting privateMessage with data:', newMessage);
@@ -74,6 +85,7 @@ __decorate([
 DirectMessageGateway = __decorate([
     (0, websockets_1.WebSocketGateway)({ cors: { origin: "*" } }),
     __metadata("design:paramtypes", [directMessage_service_1.DirectMessageService,
+        blockage_service_1.BlockageService,
         prisma_service_1.PrismaService])
 ], DirectMessageGateway);
 exports.DirectMessageGateway = DirectMessageGateway;

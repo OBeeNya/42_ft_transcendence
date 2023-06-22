@@ -16,56 +16,17 @@ Un utilisateur essaye de rejoindre un channel :
 
 - L'utilisateur a été banni du channel
 
--------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 TODO :
 
 1) Je ne dois pas pouvoir m'envoyer un message
 2) Gérer le cas de l'utilisateur débloqué
 3) Empêcher l'utilisateur bloqué d'envoyer des messages si la conversation est ouverte
 
-------------------------------------------------------------------------------------------------
-Comment connecter le backend avec le frontend ?
+---------------------------------------------------------------------------------------------------
+Blocage
 
-Je dois socket.emit() l'événement blockUser dans le front.
-Par exemple, le bouton "Block" pourrait émettre blockUser avec l'id de l'utilisateur à bloquer
-const handleBlock = () =>
-{
-  socket.emit('blockUser', { blockerId: currentUserId, blockedId: userIdToBlock });
-}
+Ce que dis la soutenance : un utilisateur qui a bloqué un autre utilisateur ne
+doit plus recevoir ses messages, ni voir ses messages dans les channels.
 
-Je peux également écouter les événements userBlocked, userUnblocked et error
-via un gestionnaire d'events pour maj. l'interface user en fonction de l'event
-
-const socket = io('http://localhost:8080');
-
-socket.on('userBlocked', function(data)
-{
-  console.log('L'utilisateur a été bloqué : ', data);
-  // Ici, vous pouvez mettre à jour votre interface utilisateur en conséquence
-});
-
-socket.on('error', function(data)
-{
-  console.log('Une erreur s'est produite : ', data);
-});
-
-------------------------------------------------------------------------------------------------
-Logique des DM 
-
-1) L'utilisateur enclenche onDirectMessageClick() en cliquant sur "Direct Message" dans User.
-
-2) onDirectMessageClick() est passee en tant que prop au composant User dans UsersList.
-
-3) Elle met a jour la fonction setPrivateMessageUserId avec l'id de l'user actuel.
-
-4) setPrivateMessageUserId est une fonction de maj. d'etat definie dans MainPage.tsx
-   Elle est passee en tant que prop a UsersList.
-   Donc onDirectMessageClick, une fois enclenchee, utilise setPrivateMessageUserId pour maj.
-   l'etat de privateMessageUserId avec l'id de l'user actuel.
-
-------------------------------------------------------------------------------------------------
-Recuperer blockerId et blockedId dans le front
-
-Comment senderId et receiverId sont-il utilises ?
-
-1) 
+1) L'utilisateur clique sur "Block" avec une page vierge --> l'utilisateur bloqué ne 
