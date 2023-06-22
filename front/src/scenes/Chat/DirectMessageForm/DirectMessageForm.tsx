@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useContext } from "react";
-import { SocketContext } from "../../../../socketContext";
+import { SocketContext } from "../../../socketContext";
 import './DirectMessageForm.css';
 
 type Props =

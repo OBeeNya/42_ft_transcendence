@@ -11,11 +11,12 @@ const common_1 = require("@nestjs/common");
 const directMessage_gateway_1 = require("./directMessage.gateway");
 const directMessage_service_1 = require("./directMessage.service");
 const prisma_service_1 = require("../../prisma_module/prisma.service");
+const blockage_service_1 = require("../blockage/blockage.service");
 let DirectMessageModule = class DirectMessageModule {
 };
 DirectMessageModule = __decorate([
     (0, common_1.Module)({
-        providers: [directMessage_gateway_1.DirectMessageGateway, directMessage_service_1.DirectMessageService, prisma_service_1.PrismaService]
+        providers: [directMessage_gateway_1.DirectMessageGateway, directMessage_service_1.DirectMessageService, blockage_service_1.BlockageService, prisma_service_1.PrismaService]
     })
 ], DirectMessageModule);
 exports.DirectMessageModule = DirectMessageModule;

@@ -1,19 +1,17 @@
-import { useEffect, useState, MouseEvent } from "react";
-import React, { Dispatch, SetStateAction } from 'react';
+import { useEffect, useState, MouseEvent, Dispatch, SetStateAction } from "react";
 import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 import { UserInfos } from "../../../services/interfaces/userInfos.interface"
-import User from './User';
+import User from '../User/User';
 import './UsersList.css';
 
 interface UsersListProps
 {
 	setCurrentUser: Dispatch<SetStateAction<any>>;
 	setPrivateMessageUserId: Dispatch<SetStateAction<any>>;
-	setBlockedUsersId: Dispatch<SetStateAction<any>>;
 }
 
-const UsersList = ({setCurrentUser, setPrivateMessageUserId, setBlockedUsersId}: UsersListProps) =>
+const UsersList = ({setCurrentUser, setPrivateMessageUserId}: UsersListProps) =>
 {
 	const navigate = useNavigate();
 	const [users, setUsers] = useState([]);
@@ -22,58 +20,44 @@ const UsersList = ({setCurrentUser, setPrivateMessageUserId, setBlockedUsersId}:
 
 	useEffect(() =>
 	{
-		const fetchCurrentUser = async () =>
+		const fetchData = async () =>
 		{
 			try
 			{
-				const response = await axios.get("http://localhost:8080/users/me",
-				{
-					headers:
+				const [currentUserResponse, usersResponse] = await Promise.all(
+				[
+					axios.get("http://localhost:8080/users/me",
 					{
-						Authorization: `Bearer ${token}`,
-					},
-				});
+						headers:
+						{
+							Authorization: `Bearer ${token}`,
+						},
+					}),
 
-				setCurrentUser(response.data);
+					axios.get("http://localhost:8080/users",
+					{
+						headers:
+						{
+							Authorization: `Bearer ${token}`,
+						},
+					})
+				]);
 
-				console.log('Current user:', response.data);
-				console.log('Current user ID:', response.data.id);
+				setCurrentUser(currentUserResponse.data);
+				setUsers(usersResponse.data);
+
+				console.log('Current user:', currentUserResponse.data);
+				console.log('Current user ID:', currentUserResponse.data.id);
 			}
 			catch (error)
 			{
-				console.error('Error fetching current user:', error);
+				console.error('Error fetching data:', error);
 			}
 		};
 	
-		fetchCurrentUser();
+		fetchData();
 	
 	}, [token, setCurrentUser]);
-
-	useEffect(() =>
-	{
-		const fetchUsers = async () =>
-		{
-			try
-			{
-				const response = await axios.get("http://localhost:8080/users",
-				{
-					headers:
-					{
-						Authorization: `Bearer ${token}`,
-					},
-				});
-
-				setUsers(response.data);
-			}
-			catch (error)
-			{
-				console.error('Error fetching users:', error);
-			}
-		};
-
-		fetchUsers();
-
-	}, [token]);
 
 	useEffect(() =>
 	{
@@ -95,7 +79,6 @@ const UsersList = ({setCurrentUser, setPrivateMessageUserId, setBlockedUsersId}:
 				{event.stopPropagation(); setClickedUser(index);}}
 				onDirectMessageClick={() => setPrivateMessageUserId(user.id)}
 				navigate={navigate}
-				handleBlockClick={() => setBlockedUsersId(user.id)}
 			/>
 		))}
 		</div>
@@ -103,4 +86,3 @@ const UsersList = ({setCurrentUser, setPrivateMessageUserId, setBlockedUsersId}:
 };
 
 export default UsersList;
-

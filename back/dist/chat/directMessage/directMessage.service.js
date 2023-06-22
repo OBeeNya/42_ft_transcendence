@@ -54,30 +54,6 @@ let DirectMessageService = class DirectMessageService {
             throw error;
         }
     }
-    async blockUser(data) {
-        return this.prisma.userBlock.create({
-            data: {
-                blockerId: data.blockerId,
-                blockedId: data.blockedId
-            }
-        });
-    }
-    async isUserBlocked(blockerId, blockedId) {
-        console.log(`Checking if user ${blockerId} has blocked user ${blockedId}`);
-        const block = await this.prisma.userBlock.findUnique({
-            where: {
-                userId_blockedId: {
-                    userId: blockerId,
-                    blockedId: blockedId
-                }
-            }
-        });
-        if (block !== null)
-            console.log(`User ${blockerId} has blocked user ${blockedId}`);
-        else
-            console.log(`User ${blockerId} has not blocked user ${blockedId}`);
-        return (block !== null);
-    }
 };
 DirectMessageService = __decorate([
     (0, common_1.Injectable)(),

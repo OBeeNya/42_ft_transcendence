@@ -100,8 +100,8 @@ model DirectMessage {
 	content		String
 	senderId	Int
 	receiverId	Int
-	sender		User @relation("UserDMs", fields: [senderId], references: [id])
-	receiver	User @relation("UserDMsReceived", fields: [receiverId], references: [id])
+	sender User @relation("UserDMs", fields: [senderId], references: [id], onDelete: Cascade)
+	receiver User @relation("UserDMsReceived", fields: [receiverId], references: [id], onDelete: Cascade)
 
 	@@map("direct_messages")
 }

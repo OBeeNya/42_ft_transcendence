@@ -1,14 +1,12 @@
-import { MouseEvent, useContext, useState} from 'react';
+import { MouseEvent } from 'react';
 import { UserInfos } from "../../../services/interfaces/userInfos.interface";
-import Block from "../Blockage/Block";
-import DropdownMenu from './DropdownMenu';
+import DropdownMenu from '../DropdownMenu/DropdownMenu';
 
-const User = ({user, isActive, onClick, onDirectMessageClick, navigate, handleBlockClick}:
+const User = ({user, isActive, onClick, onDirectMessageClick, navigate}:
 			  {user: UserInfos; isActive: boolean;
 			   onClick: (event: MouseEvent<HTMLElement>) => void;
 			   onDirectMessageClick: () => void;
-			   navigate: (path: string) => void;
-			   handleBlockClick: (blockerId: number, blockedId: number) => void;}) =>
+			   navigate: (path: string) => void;}) =>
 {
 	return (
 		<div key={user.id} className={`user ${isActive ? 'show-menu' : ''}`}>
@@ -18,7 +16,6 @@ const User = ({user, isActive, onClick, onDirectMessageClick, navigate, handleBl
 					user={user}
 					onDirectMessageClick={onDirectMessageClick}
 					navigate={navigate}
-					handleBlockClick={handleBlockClick}
 				/>
 			)}
 

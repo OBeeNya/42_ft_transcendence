@@ -18,55 +18,15 @@ const socket_io_1 = require("socket.io");
 const directMessage_service_1 = require("./directMessage.service");
 const directMessage_dto_1 = require("./directMessage.dto");
 const prisma_service_1 = require("../../prisma_module/prisma.service");
-const blockage_dto_1 = require("./blockage.dto");
-let DirectMessageGateway = class DirectMessageGateway {
+const base_gateway_1 = require("../base.gateway");
+let DirectMessageGateway = class DirectMessageGateway extends base_gateway_1.BaseGateway {
     constructor(directMessageService, prisma) {
+        super();
         this.directMessageService = directMessageService;
         this.prisma = prisma;
-        this.userSocketMap = new Map();
-    }
-    afterInit(server) {
-        console.log('Initialized!');
-    }
-    handleConnection(client) {
-        console.log(`Client connected: ${client.id}`);
-    }
-    handleDisconnect(client) {
-        console.log(`Client disconnected: ${client.id}`);
-    }
-    async handleUserConnected(userId, client) {
-        this.userSocketMap.set(userId, client.id);
-        console.log(`User ${userId} connected with socket id ${client.id}`);
-    }
-    async handleBlockUser(data, client) {
-        console.log(`Attempting to block user: ${data.blockedId} by user: ${data.blockerId}`);
-        const userToBlock = await this.prisma.user.findUnique({ where: { id: data.blockedId } });
-        if (!userToBlock) {
-            client.emit('error', { message: 'The user you are trying to block does not exist.' });
-            return;
-        }
-        if (await this.directMessageService.isUserBlocked(data.blockerId, data.blockedId)) {
-            client.emit('error', { message: 'You have already blocked this user.' });
-            return;
-        }
-        try {
-            await this.directMessageService.blockUser(data);
-            console.log(`User ${data.blockedId} has been blocked by ${data.blockerId}`);
-            client.emit('userBlocked', { blockerId: data.blockerId, blockedId: data.blockedId });
-        }
-        catch (error) {
-            console.error('Error while blocking user:', error);
-            client.emit('error', { message: 'There was an error blocking the user.',
-                error: error.message });
-        }
     }
     async handlePrivateMessage(data, client) {
         console.log(`Message sent from ${data.senderId} to ${data.receiverId}`);
-        if (await this.directMessageService.isUserBlocked(data.receiverId, data.senderId)) {
-            console.error('Message blocked:', `User ${data.senderId} is blocked by ${data.receiverId}`);
-            client.emit('error', { message: 'Your message could not be sent. You are blocked by this user.' });
-            return;
-        }
         try {
             const newMessage = await this.directMessageService.create(data);
             console.log('Emitting privateMessage with data:', newMessage);
@@ -94,27 +54,6 @@ let DirectMessageGateway = class DirectMessageGateway {
         }
     }
 };
-__decorate([
-    (0, websockets_1.WebSocketServer)(),
-    __metadata("design:type", socket_io_1.Server)
-], DirectMessageGateway.prototype, "server", void 0);
-__decorate([
-    (0, websockets_1.SubscribeMessage)('userConnected'),
-    __param(0, (0, websockets_1.MessageBody)()),
-    __param(1, (0, websockets_1.ConnectedSocket)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, socket_io_1.Socket]),
-    __metadata("design:returntype", Promise)
-], DirectMessageGateway.prototype, "handleUserConnected", null);
-__decorate([
-    (0, websockets_1.SubscribeMessage)('blockUser'),
-    __param(0, (0, websockets_1.MessageBody)()),
-    __param(1, (0, websockets_1.ConnectedSocket)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [blockage_dto_1.BlockageDto,
-        socket_io_1.Socket]),
-    __metadata("design:returntype", Promise)
-], DirectMessageGateway.prototype, "handleBlockUser", null);
 __decorate([
     (0, websockets_1.SubscribeMessage)('privateMessage'),
     __param(0, (0, websockets_1.MessageBody)()),
