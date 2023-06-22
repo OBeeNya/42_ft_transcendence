@@ -7,7 +7,6 @@ import { UserService } from './user.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { MulterConfig } from './middleware/multer.config';
 import * as speakeasy from 'speakeasy';
-// import { CreateDirectMessageDto } from './dto/create-direct-message.dto';
 
 var QRCode = require('qrcode');
 
