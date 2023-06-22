@@ -18,14 +18,12 @@ const DirectMessageForm: React.FC<Props> = ({senderId, receiverId}) =>
 	const [error, setError] = useState('');
 	const socket = useContext(SocketContext);
 
-	const handleSubmit = (e: React.FormEvent) =>
+	const validateForm = () =>
 	{
-		e.preventDefault();
-
 		if (senderId <= 0 || receiverId <= 0)
 		{
 			setError('Invalid user IDs');
-			return;
+			return false;
 		}
 
 		console.log('Submitting the following message:');
@@ -33,16 +31,28 @@ const DirectMessageForm: React.FC<Props> = ({senderId, receiverId}) =>
 		console.log(`To: ${receiverId}`);
 		console.log(`Content: "${message}"`);
 
+		return true;
+	};
+
+	const emitSocketEvent = () =>
+	{
 		if (socket)
 		{
 			socket.emit('privateMessage', {senderId, receiverId, content: message});
 			console.log('Message has been sent!');
 		}
-
 		else
 			console.log('Socket is not available!');
 
 		setMessage('');
+	};
+
+	const handleSubmit = (e: React.FormEvent) =>
+	{
+		e.preventDefault();
+
+		if (validateForm())
+			emitSocketEvent();
 	};
 
 	return (
