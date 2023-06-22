@@ -1,46 +1,42 @@
 import { Injectable } from "@nestjs/common";
-import { UserBlock } from "@prisma/client";
-import { BlockageDto } from "chat/blockage/blockage.dto";
 import { PrismaService } from "prisma_module/prisma.service";
+import { User } from "@prisma/client";
+import { BlockageDto } from "chat/blockage/blockage.dto";
 
 @Injectable()
 export class BlockageService
 {
 	constructor(private prisma: PrismaService) {}
 
-	async blockUser(data: BlockageDto): Promise<UserBlock>
+	async blockUser(data: BlockageDto): Promise<User>
 	{
-		return this.prisma.userBlock.create(
+		return this.prisma.user.update(
 		{
-			data:
-			{
-				blockerId: data.blockerId,
-				blockedId: data.blockedId
-			}
+			where: {id: data.blockerId},
+			data: {blocked: {connect: {id: data.blockedId}}},
 		});
 	}
 
-	async isUserBlocked(blockerId: number, blockedId: number)
+	async isUserBlocked(data: BlockageDto): Promise<boolean>
 	{
-		console.log(`Checking if user ${blockerId} has blocked user ${blockedId}`);
+		console.log(`Checking if user ${data.blockerId} has blocked user ${data.blockedId}`);
 
-		const block = await this.prisma.userBlock.findUnique(
+		const user = await this.prisma.user.findUnique(
 		{
-			where:
-			{
-				userId_blockedId:
-				{
-					userId: blockerId,
-					blockedId: blockedId
-				}
-			}
+			where: {id: data.blockerId},
+			include: {blocked: true}
 		});
 
-		if (block !== null)
-			console.log(`User ${blockerId} has blocked user ${blockedId}`);
-		else 
-			console.log(`User ${blockerId} has not blocked user ${blockedId}`);
+		if (user === null)
+			throw new Error(`User with ID ${data.blockerId} not found`);
 
-		return (block !== null);
+		const block = user.blocked.some(blockedUser => blockedUser.id === data.blockedId);
+
+		if (block)
+			console.log(`User ${data.blockerId} has blocked user ${data.blockedId}`);
+		else 
+			console.log(`User ${data.blockerId} has not blocked user ${data.blockedId}`);
+
+		return (block);
 	}
 }
