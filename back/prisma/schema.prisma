@@ -20,7 +20,7 @@ model User {
   wins			Int @default(0)
   losses		Int @default(0)
   ladder_level	Int @default(1)
-  history		MatchHistory[]
+  // history		MatchHistory[]
   oauthId		String
   connected		Boolean @default(false)
   isPlaying		Boolean @default(false)
@@ -28,10 +28,11 @@ model User {
   messages		Message[] @relation("UserMessage")
   sentDMs		DirectMessage[] @relation("UserDMs")
   receivedDMs	DirectMessage[] @relation("UserDMsReceived")
-
   tfa				Boolean @default(false)
   tfa_key			String
-  // avatar_url		String
+  opponents String[]
+  ladders Int[]
+  wons Boolean[]
 
   @@map("users")
 }
@@ -58,18 +59,18 @@ model UserFriend {
   @@map("user_friends")
 }
 
-model MatchHistory {
-  id			Int @id @default(autoincrement())
-  user 			User @relation(fields: [userId], references: [id])
-  userId 		Int
-  userName 		String
-  opponentName	String
-  createdAt		DateTime @default(now())
-  ladder		Int
-  won			Boolean @default(false)
+// model MatchHistory {
+//   id			Int @id @default(autoincrement())
+//   user 			User @relation(fields: [userId], references: [id])
+//   userId 		Int
+//   userName 		String
+//   opponentName	String
+//   createdAt		DateTime @default(now())
+//   ladder		Int
+//   won			Boolean @default(false)
 
-  @@map("matchhistory")
-}
+//   @@map("matchhistory")
+// }
 
 model Chat {
   id			Int @id @default(autoincrement())

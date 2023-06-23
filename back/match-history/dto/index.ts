@@ -1,1 +1,1 @@
-export * from './edit-match.dto';
+export * from './create-match.dto';

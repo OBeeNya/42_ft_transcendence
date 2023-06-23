@@ -7,8 +7,9 @@ let connections: number = 0;
 let players = [];
 let b;
 let interval = 10;
+let names = [];
 
-function Player(id, x, y, v, w, h, p){
+function Player(id, x, y, v, w, h, p) {
     this.id = id;
     this.x = x;
     this.y = y;
@@ -18,7 +19,7 @@ function Player(id, x, y, v, w, h, p){
     this.p = p;
 }
 
-function Ball(id, x, y, xv, yv, r){
+function Ball(id, x, y, xv, yv, r) {
     this.id = id;
     this.x = x;
     this.y = y;
@@ -42,24 +43,27 @@ export class SocketEvents {
 
     //connexion
     handleConnection(client: Socket) {
-        console.log('client.id: ', client.id);
-
+        // console.log('client.id: ', client.id);
         connections++;
         this.getCounter();
         client.on("start", (data) => {
-            console.log("A user just connected: " + client.id + "; connexion number: " + connections);
-            if (players.length > 0 && players[players.length - 1].id === client.id) {
+            // console.log("A user just connected: " + client.id + "; connexion number: " + connections);
+            if (players.length > 0 && players[players.length - 1].id === client.id)
                 return;
-            }
             if (players.length < 2) {
                 let p = new Player(client.id, data.x, data.y, data.v, data.w, data.h, data.p);
                 players.push(p);
             }
-        })
+        });
+
+        client.on('registerUser', function(data) {
+            names.push(data);
+            console.log('NAMES:', names);
+        });
 
         client.on("startBall", function(data) {
             b = new Ball(client.id, data.x, data.y, data.xv, data.yv, data.r);
-        })
+        });
 
         client.on('update', function(data) {
             let pl;
@@ -75,7 +79,7 @@ export class SocketEvents {
                 pl.h = data.h;
                 pl.p = data.p;
             }
-        })
+        });
 
         client.on('updateBall', function(data) {
             b.x = data.x;
@@ -83,7 +87,11 @@ export class SocketEvents {
             b.xv = data.xv;
             b.yv = data.yv;
             b.r = data.r;
-        })
+        });
+    }
+
+    getNames() {
+        this.server.emit('getNames', names);
     }
     
     getCounter() {
@@ -119,9 +127,8 @@ export class SocketEvents {
     handleDisconnect(client: Socket) {
         connections--;
         players = [];
-        console.log('client disconnected: ', client.id + "; connexion number: " + connections);
-        
-    
+        names = [];
+        // console.log('client disconnected: ', client.id + "; connexion number: " + connections);
     }
 
 }

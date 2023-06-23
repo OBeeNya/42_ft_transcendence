@@ -20,8 +20,6 @@ const ProfilePage = () => {
 					},
 				});
 				setUserInfos(response.data);
-				// console.log(userInfos?.tfa);
-				// console.log(userInfos?.name);
 			} catch (error) {
 				console.error("Failed to fetch users.");
 			}

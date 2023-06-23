@@ -59,7 +59,7 @@ export class PrismaService extends PrismaClient
 	{
 		return (this.$transaction(
 		[
-			this.matchHistory.deleteMany(),
+			// this.matchHistory.deleteMany(),
 			this.user.deleteMany(),
 		]));
 	}
