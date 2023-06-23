@@ -3,9 +3,9 @@ import { Server, Socket } from "socket.io";
 
 export class BaseGateway
 {
-    protected userSocketMap = new Map<number, string>();
+	protected userSocketMap = new Map<number, string>();
 
-    @WebSocketServer()
+	@WebSocketServer()
 	server: Server;
 
 	afterInit(server: Server)

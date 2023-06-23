@@ -11,7 +11,7 @@ export class BlockageGateway extends BaseGateway
 {
 	constructor(private blockageService: BlockageService, private prisma: PrismaService)
 	{
-		super();
+ 	  super();
 	}
 
 	@SubscribeMessage('blockUser')

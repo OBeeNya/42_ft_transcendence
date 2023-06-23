@@ -13,6 +13,10 @@ model User {
 	updatedAt		DateTime @updatedAt
 	name			String @unique
 	hash			String
+	userFriends		UserFriend[] @relation("UserFriendUser")	// user actuel a init la demande d'ami
+	friendUsers		UserFriend[] @relation("UserFriendFriend")	// user actuel est le destinataire de la demande
+	userBlocks		UserBlock[] @relation("UserBlockUser")		// liste des users que l'user actuel a bloqué
+	blockedUsers	UserBlock[] @relation("UserBlockBlocked")	// liste des users qui ont bloqué l'user actuel
 	wins			Int @default(0)
 	losses			Int @default(0)
 	ladder_level	Int @default(1)
@@ -27,13 +31,6 @@ model User {
 	tfa				Boolean @default(false)
 	tfa_key			String
 
-	blocked   User[] @relation("blocked") // Chaque User a une liste des users qu'il a bloqué
-	blockedOf User[] @relation("blocked") // Et une liste des users qui l'ont bloqué
-	// friends   User[] @relation("friends")
-	// friendsOf User[] @relation("friends")
-	// pendings   User[] @relation("pending")
-	// pendingsOf User[] @relation("pending")
-
 	@@map("users")
 }
 
@@ -47,6 +44,29 @@ model DirectMessage {
 	receiver User @relation("UserDMsReceived", fields: [receiverId], references: [id], onDelete: Cascade)
 
 	@@map("direct_messages")
+}
+
+model UserBlock {
+	id			Int @id @default(autoincrement())
+	blockerId	Int
+	blockedId	Int
+	createdAt	DateTime @default(now())
+	user		User @relation("UserBlockUser", fields: [blockerId], references: [id])
+	blockedUser	User @relation("UserBlockBlocked", fields: [blockedId], references: [id])
+
+	@@map("user_blocks")
+	@@unique([blockerId, blockedId])
+}
+
+model UserFriend {
+	id			Int @id @default(autoincrement())
+	userId		Int
+	friendId	Int
+	createdAt	DateTime @default(now())
+	user		User @relation("UserFriendUser", fields: [userId], references: [id])
+	friend		User @relation("UserFriendFriend", fields: [friendId], references: [id])
+
+	@@map("user_friends")
 }
 
 model MatchHistory {

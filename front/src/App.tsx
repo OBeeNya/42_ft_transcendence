@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { io, Socket } from "socket.io-client";
 import { SocketContext } from "./socketContext";
 import axios from "axios";
@@ -82,6 +82,7 @@ function App()
 			newSocket.off('disconnect');
 			newSocket.close();
 		};
+
 	}, [userId]);
 
   return (

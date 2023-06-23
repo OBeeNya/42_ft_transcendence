@@ -5,11 +5,12 @@ interface DropdownMenuProps
 {
 	user: UserInfos;
 	onDirectMessageClick: () => void;
+	onBlock: () => void;
 	navigate: (path: string) => void;
 }
 
 const DropdownMenu: React.FC<DropdownMenuProps> = ({user, onDirectMessageClick,
-													navigate}) =>
+													onBlock, navigate}) =>
 {
 	return (
 		<ul className="dropdown-menu">
@@ -19,7 +20,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({user, onDirectMessageClick,
 				Direct Message </DropdownItem>
 			<DropdownItem onClick={() => console.log('Profile clicked')}>
 				Add friend </DropdownItem>
-			<DropdownItem onClick={() => console.log('Block clicked')}>
+			<DropdownItem onClick={onBlock}>
 				Block </DropdownItem>
 			<DropdownItem onClick={() => console.log('Invite to Pong clicked')}>
 				Invite to Pong </DropdownItem>
