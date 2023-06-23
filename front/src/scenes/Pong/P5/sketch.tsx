@@ -18,11 +18,11 @@ const sketch: Sketch = p5 => {
     let playerSize = 20;
     let playerSpeed = 6;
     let ballSize = 15;
-    let ballSpeed = 5; // 3 ou 5
+    let ballSpeed = 3; // 3 ou 5
     let pointsToWin = 5;
     let paused = 1;
     let drawLoops = 0;
-    let newMap = true;  // passer en props
+    let newMap = false;  // passer en props
     let background: any;
 
 /******************************** PLAYER ********************************/
@@ -129,7 +129,7 @@ class Ball {
                     master = true;
                 } else if (counter === 2){
                     p = new Player(p5.width);
-                    master = false;
+                    master = false; 
                 }
             } 
             if (p !== undefined) {

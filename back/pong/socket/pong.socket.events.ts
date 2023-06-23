@@ -15,7 +15,7 @@ function Player(id, x, y, v, w, h, p){
     this.v = v;
     this.w = w;
     this.h = h;
-    this.p = p;
+    this.p = p; 
 }
 
 function Ball(id, x, y, xv, yv, r){

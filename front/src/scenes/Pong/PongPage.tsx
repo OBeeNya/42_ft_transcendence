@@ -63,6 +63,7 @@ const PongPage = () => {
 				<h1>Pong page</h1>
 				<br></br>
 				{/* <button onClick={() => navigate(url)}>Game</button> */}
+				<button onClick={() => navigate("/pong2")}>Pong 2</button>
 				<button onClick={matchMaking}>Multi Player</button>
 				<button onClick={() => navigate("/pongGameSolo")}>One player</button>
 				<button onClick={() => navigate("/home")}>Home</button>

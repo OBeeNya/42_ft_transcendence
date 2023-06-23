@@ -7,7 +7,9 @@ import EditProfilePage from './scenes/EditProfile/EditProfilePage';
 import ProfilePage from './scenes/Profile/ProfilePage';
 import Callback42 from './scenes/CallBack42/Callback42';
 import PongPage from './scenes/Pong/PongPage';
+import PongPage2 from './scenes/Pong/PongPage2';
 import PongPageGame from './scenes/Pong/PongPageGame';
+import PongPageGame2 from './scenes/Pong/PongPageGame2';
 import PongPageGameSolo from './scenes/Pong/PongPageGameSolo';
 import { ProtectedRoute , ProtectedRouteProps } from "./components/protectedRoutes";
 import OnlinePage from './scenes/Online/OnlinePage';
@@ -31,7 +33,9 @@ function App() {
         <Route path="/profile" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<ProfilePage/>} />} />
         <Route path="/editprofile" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<EditProfilePage/>} />} />
         <Route path="/pong" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<PongPage/>} />} />
+        <Route path="/pong2" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<PongPage2/>} />} />
         <Route path="/pongGame/:gameId" Component={PongPageGame} element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<PongPageGame/>} />} />
+        <Route path="/pongGame2/public/:username" Component={PongPageGame2} element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<PongPageGame2/>} />} />
         <Route path="/pongGameSolo" Component={PongPageGameSolo} element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<PongPageGameSolo/>} />} />
         <Route path="/chat" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<MainPage/>} />} />
         <Route path="/online" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<OnlinePage/>} />} />
