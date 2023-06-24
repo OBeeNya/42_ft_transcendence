@@ -16,24 +16,13 @@ Un utilisateur essaye de rejoindre un channel :
 
 - L'utilisateur a été banni du channel
 
----------------------------------------------------------------------------------------------
-TODO :
+---------------------------------------------------------------------------------------------------
+Problèmes :
 
-1) Je ne dois pas pouvoir m'envoyer un message
-2) Gérer le cas de l'utilisateur débloqué
-3) Empêcher l'utilisateur bloqué d'envoyer des messages si la conversation est ouverte
-4) Site pas responsive
-
----------------------------------------------------------------------------------------------
-Problèmes blocage :
-
-1) Une fois que j'ai cliqué sur "Block" avec Lucas, je dois rafraichir des deux côtés pour ne
-   plus voir "Direct Message".
-
-2) On peut se bloquer sois même.
-
----------------------------------------------------------------------------------------------
-Problèmes messagerie privée :
-
-1) On peut se dm sois même.
-2) On doit rafraichir pour voir le message côté receiver.
+1) Besoin du rafraichissement du navigateur une fois que le message est reçu pour le voir
+2) Je peux m'envoyer des messages à moi même
+3) Besoin de rafraichir la page pour que "Direct Message" disparaisse
+4) Je peux me bloquer moi même
+5) Site pas responsive
+6) On peut plus accéder aux profils des autres utilisateurs
+7) Avatars ?
