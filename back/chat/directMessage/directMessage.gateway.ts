@@ -4,15 +4,12 @@ import { Socket } from "socket.io";
 import { DirectMessageService } from "./directMessage.service";
 import { DirectMessageDto } from "./directMessage.dto";
 import { PrismaService } from "prisma_module/prisma.service";
-import { BlockageService } from "../blockage/blockage.service";
 import { BaseGateway } from "chat/base.gateway";
-import { BlockageDto } from "chat/blockage/blockage.dto";
 
 @WebSocketGateway({cors: {origin: "*"}})
 export class DirectMessageGateway extends BaseGateway
 {
 	constructor(private directMessageService: DirectMessageService,
-				private blockageService: BlockageService,
 				private prisma: PrismaService)
 	{
 		super();
@@ -23,19 +20,6 @@ export class DirectMessageGateway extends BaseGateway
 							   @ConnectedSocket() client: Socket)
 	{
 		console.log(`Message sent from ${data.senderId} to ${data.receiverId}`);
-
-		const blockageData: BlockageDto =
-		{
-			blockerId: data.receiverId,
-			blockedId: data.senderId
-		};
-
-		if (await this.blockageService.isUserBlocked(blockageData))
-		{
-			console.error('Message blocked:', `User ${data.senderId} is blocked by ${data.receiverId}`);
-			client.emit('error', {message: 'Your message could not be sent. You are blocked by this user.'});
-			return;
-		}
 
 		try
 		{

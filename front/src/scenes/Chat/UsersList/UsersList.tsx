@@ -15,8 +15,62 @@ const UsersList = ({setCurrentUser, setPrivateMessageUserId}: UsersListProps) =>
 {
 	const navigate = useNavigate();
 	const [users, setUsers] = useState([]);
+	const [blockedUsers, setBlockedUsers] = useState<UserInfos[]>([]);
+	const [blockedByUsers, setBlockedByUsers] = useState<UserInfos[]>([]);
 	const [clickedUser, setClickedUser] = useState(-1);
 	const token = localStorage.getItem("token");
+
+	useEffect(() =>
+	{
+		const getBlockedUsers = async () =>
+		{
+			try
+			{
+				const blockedUsersResponse = await axios.get("http://localhost:8080/users/blocked",
+				{
+					headers:
+					{
+						Authorization: `Bearer ${token}`,
+					},
+				});
+
+				setBlockedUsers(blockedUsersResponse.data);
+			}
+			catch (error)
+			{
+				console.error('Error fetching blocked user:', error);
+			}
+		};
+
+		getBlockedUsers();
+
+	}, [token, setBlockedUsers]);
+
+	useEffect(() =>
+	{
+		const getBlockedByUsers = async () =>
+		{
+			try
+			{
+				const blockedByUsersResponse = await axios.get("http://localhost:8080/users/blockedBy",
+				{
+					headers:
+					{
+						Authorization: `Bearer ${token}`,
+					},
+				});
+
+				setBlockedByUsers(blockedByUsersResponse.data);
+			}
+			catch (error)
+			{
+				console.error('Error fetching blocked by user:', error);
+			}
+		};
+
+		getBlockedByUsers();
+
+	}, [token, setBlockedByUsers]);
 
 	useEffect(() =>
 	{
@@ -45,9 +99,6 @@ const UsersList = ({setCurrentUser, setPrivateMessageUserId}: UsersListProps) =>
 
 				setCurrentUser(currentUserResponse.data);
 				setUsers(usersResponse.data);
-
-				console.log('Current user:', currentUserResponse.data);
-				console.log('Current user ID:', currentUserResponse.data.id);
 			}
 			catch (error)
 			{
@@ -67,6 +118,28 @@ const UsersList = ({setCurrentUser, setPrivateMessageUserId}: UsersListProps) =>
 		return () => window.removeEventListener('click', clickHandler);
 	}, []);
 
+	const handleBlockSuccess = async (userId: number) =>
+	{
+		try
+		{
+			const response = await axios.get(`http://localhost:8080/users/${userId}`,
+			{
+				headers:
+				{
+					Authorization: `Bearer ${token}`,
+				},
+			});
+
+			const blockedUser = response.data;
+		
+		setBlockedUsers(prevBlockedUsers => [...prevBlockedUsers, blockedUser]);
+	}
+	catch (error)
+	{
+		console.error('Error fetching blocked user:', error);
+	}
+};
+
 	return (
 		<div className="users-list">
 			{users.map((user: UserInfos, index) =>
@@ -79,6 +152,9 @@ const UsersList = ({setCurrentUser, setPrivateMessageUserId}: UsersListProps) =>
 				{event.stopPropagation(); setClickedUser(index);}}
 				onDirectMessageClick={() => setPrivateMessageUserId(user.id)}
 				navigate={navigate}
+				blockedUsers={blockedUsers}
+				blockedByUsers={blockedByUsers}
+				onBlockSuccess={handleBlockSuccess}
 			/>
 		))}
 		</div>

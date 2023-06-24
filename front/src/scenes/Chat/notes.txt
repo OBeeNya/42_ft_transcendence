@@ -22,39 +22,18 @@ TODO :
 1) Je ne dois pas pouvoir m'envoyer un message
 2) Gérer le cas de l'utilisateur débloqué
 3) Empêcher l'utilisateur bloqué d'envoyer des messages si la conversation est ouverte
+4) Site pas responsive
 
 ---------------------------------------------------------------------------------------------
-Fonctionnement du blocage dans mon code :
+Problèmes blocage :
 
-BACKEND
+1) Une fois que j'ai cliqué sur "Block" avec Lucas, je dois rafraichir des deux côtés pour ne
+   plus voir "Direct Message".
 
-1) schema.prisma : lorsqu'un utilisateur bloque un autre utilisateur, une instance
-de la table UserBlock est créée, celle ci contenant le blockerId et le blockedId.
-Dans User, userBlocks est une liste de toutes les instances de UserBlock où l'utilisateur
-actuel à initié le blocage. Donc userBlocks contient tous les utilisateus bloqués
-par l'utilisateur actuel.
-L'inverse pour blockedUsers.
-
-2) blockage.gateway .service : handleBlockUser() attends un message "blockUser" de la part
-du client contenant l'id de l'utilisateur qui bloque (blockerId) et l'id de l'utilisateur
-bloqué (blockedId). S'il existe et qu'il n'est pas déjà bloqué, elle utilise blockUser() de
-blockage.service pour créer une nouvelle entrée dans la table UserBlock contenant les id
-appropriés.
-
-FRONTEND
-
-1) Récupérer l'id de l'utilisateur qui bloque, et celui qui se fait bloquer.
-2) 
+2) On peut se bloquer sois même.
 
 ---------------------------------------------------------------------------------------------
-Blocage
+Problèmes messagerie privée :
 
-Ce que dis la soutenance : un utilisateur qui a bloqué un autre utilisateur ne
-doit plus recevoir ses messages, ni voir ses messages dans les channels.
-
-1) L'utilisateur clique sur "Block" avec une page vierge --> l'utilisateur bloqué
-clique sur "Direct Message mais ça ne fait rien".
-
-2) L'utilisateur clique sur "Block" avec une conversation privée ouverte -->
-il rentre des strings mais elles ne s'envoient pas.
-
+1) On peut se dm sois même.
+2) On doit rafraichir pour voir le message côté receiver.

@@ -45,7 +45,6 @@ function App()
 				});
 	
 				setUserId(response.data.id);
-				console.log('Current user ID:', response.data.id);
 			}
 			catch (error)
 			{

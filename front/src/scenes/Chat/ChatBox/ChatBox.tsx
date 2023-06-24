@@ -10,7 +10,6 @@ interface Message
 
 const ChatBox = ({senderId, receiverId}: {senderId: number, receiverId: number}) =>
 {
-	console.log('Rendering ChatBox with senderId:', senderId, 'and receiverId:', receiverId);
 	const [messages, setMessages] = useState<Message[]>([]);
 	const socket = useContext(SocketContext);
 	const messagesEndRef = useRef<null | HTMLDivElement>(null);

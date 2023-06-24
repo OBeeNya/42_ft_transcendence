@@ -7,7 +7,7 @@ import { DirectMessage } from '@prisma/client';
 export class DirectMessageService
 {
 	constructor(private prisma: PrismaService) {}
-	
+
 	async create(data: DirectMessageDto): Promise<DirectMessage>
 	{
 		console.log('Creating direct message with data:', data);

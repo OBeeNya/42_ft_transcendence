@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma_module/prisma.service';
-import { User, DirectMessage } from '@prisma/client';
+import { User, DirectMessage, UserBlock } from '@prisma/client';
 import { EditUserDto, Create42UserDto} from './dto';
 import * as speakeasy from 'speakeasy';
 
@@ -13,13 +13,23 @@ export class UserService
 		return this.prisma.user.findMany();
 	}
 
-	async findOneById(id: string) {
-		const user = await this.prisma.user.findUniqueOrThrow({
-			where: {
-				id: Number(id),
-			}
-		});
-		return (user);
+	async findOneById(id: string)
+	{
+		if (!isNaN(Number(id)))
+		{
+			const idNumber = Number(id)
+
+			const user = await this.prisma.user.findUniqueOrThrow(
+			{
+				where:
+				{
+				  id: idNumber
+				}
+			})
+		}
+
+		else
+			throw new Error(`Invalid ID value: ${id}`)
 	}
 
 	async findOneByName(name: string) {
@@ -38,7 +48,6 @@ export class UserService
 					id: userId,
 				},
 				data: {
-					// ...dto,
 					name: dto.name,
 				},
 			});
@@ -121,5 +130,45 @@ export class UserService
 			}
 		});
 		return (user.tfa_key);
+	}
+
+	//********************************BLOCAGE********************************
+
+	async getBlockedUsers(userId: number): Promise<User[]>
+	{
+		const userBlocks = await this.prisma.userBlock.findMany(
+		{
+			where: {blockerId: userId}
+		});
+
+		const blockedUsers = await Promise.all(userBlocks.map((block: {blockedId: any;}) =>
+			this.prisma.user.findUnique({where: {id: block.blockedId}})));
+	
+		return (blockedUsers);
+	}
+
+	async getBlockedByUsers(userId: number): Promise<User[]>
+	{
+		const userBlocks = await this.prisma.userBlock.findMany(
+		{
+			where: {blockedId: userId}
+		});
+
+		const blockedByUsers = await Promise.all(userBlocks.map((block: {blockerId: any;}) =>
+		this.prisma.user.findUnique({where: {id: block.blockerId}})));
+
+		return (blockedByUsers);
+	}
+
+	async blockUser(blockerId: number, blockedId: number): Promise<UserBlock>
+	{
+		return (this.prisma.userBlock.create(
+		{
+			data:
+			{
+				blockerId: blockerId,
+				blockedId: blockedId
+			}
+		}));
 	}
 }

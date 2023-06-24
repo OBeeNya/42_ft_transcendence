@@ -21,12 +21,16 @@ let UserService = class UserService {
         return this.prisma.user.findMany();
     }
     async findOneById(id) {
-        const user = await this.prisma.user.findUniqueOrThrow({
-            where: {
-                id: Number(id),
-            }
-        });
-        return (user);
+        if (!isNaN(Number(id))) {
+            const idNumber = Number(id);
+            const user = await this.prisma.user.findUniqueOrThrow({
+                where: {
+                    id: idNumber
+                }
+            });
+        }
+        else
+            throw new Error(`Invalid ID value: ${id}`);
     }
     async findOneByName(name) {
         return (await this.prisma.user.findFirst({
@@ -118,6 +122,28 @@ let UserService = class UserService {
             }
         });
         return (user.tfa_key);
+    }
+    async getBlockedUsers(userId) {
+        const userBlocks = await this.prisma.userBlock.findMany({
+            where: { blockerId: userId }
+        });
+        const blockedUsers = await Promise.all(userBlocks.map((block) => this.prisma.user.findUnique({ where: { id: block.blockedId } })));
+        return (blockedUsers);
+    }
+    async getBlockedByUsers(userId) {
+        const userBlocks = await this.prisma.userBlock.findMany({
+            where: { blockedId: userId }
+        });
+        const blockedByUsers = await Promise.all(userBlocks.map((block) => this.prisma.user.findUnique({ where: { id: block.blockerId } })));
+        return (blockedByUsers);
+    }
+    async blockUser(blockerId, blockedId) {
+        return (this.prisma.userBlock.create({
+            data: {
+                blockerId: blockerId,
+                blockedId: blockedId
+            }
+        }));
     }
 };
 UserService = __decorate([

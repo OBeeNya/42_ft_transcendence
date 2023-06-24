@@ -26,12 +26,7 @@ const DirectMessageForm: React.FC<Props> = ({senderId, receiverId}) =>
 			return false;
 		}
 
-		console.log('Submitting the following message:');
-		console.log(`From: ${senderId}`);
-		console.log(`To: ${receiverId}`);
-		console.log(`Content: "${message}"`);
-
-		return true;
+		return (true);
 	};
 
 	const emitSocketEvent = () =>

@@ -1,17 +1,18 @@
 import axios from 'axios';
 import { MouseEvent, useContext, useEffect, useState } from 'react';
 import { UserInfos } from "../../../services/interfaces/userInfos.interface";
-import { SocketContext } from '../../../socketContext';
 import DropdownMenu from '../DropdownMenu/DropdownMenu';
 
-const User = ({user,isActive, onClick, onDirectMessageClick, navigate}:
+const User = ({user,isActive, onClick, onDirectMessageClick, navigate, blockedUsers, blockedByUsers, onBlockSuccess}:
 			  {user: UserInfos;
 			   isActive: boolean;
 			   onClick: (event: MouseEvent<HTMLElement>) => void;
 			   onDirectMessageClick: () => void;
-			   navigate: (path: string) => void;}) =>
+			   navigate: (path: string) => void;
+			   blockedUsers: UserInfos[];
+			   blockedByUsers: UserInfos[];
+			   onBlockSuccess: (userId: number) => void;}) =>
 {
-	const socket = useContext(SocketContext);
 	const [currentUser, setCurrentUser] = useState<UserInfos | null>(null);
 	const token = localStorage.getItem("token");
 
@@ -36,15 +37,29 @@ const User = ({user,isActive, onClick, onDirectMessageClick, navigate}:
 				console.error('Error fetching current user:', error);
 			}
 		};
-	
+
 		getCurrentUser();
-	
+
 	}, [token, setCurrentUser]);
 
-	const handleBlock = () =>
+	const handleBlock = async () =>
 	{
-		if (socket && currentUser)
-			socket.emit('blockUser', {blockerId: currentUser.id, blockedId: user.id});
+		try
+		{
+			await axios.post("http://localhost:8080/users/block", {userId: user.id},
+			{
+				headers:
+				{
+					Authorization: `Bearer ${token}`,
+				},
+			});
+
+			onBlockSuccess(user.id);
+		}
+		catch (error)
+		{
+			console.error('Error blocking user:', error);
+		}
 	};
 
 	return (
@@ -56,6 +71,8 @@ const User = ({user,isActive, onClick, onDirectMessageClick, navigate}:
 					onDirectMessageClick={onDirectMessageClick}
 					onBlock={handleBlock}
 					navigate={navigate}
+					blockedUsers={blockedUsers}
+					blockedByUsers={blockedByUsers}
 				/>
 			)}
 

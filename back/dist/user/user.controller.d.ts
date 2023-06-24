@@ -8,7 +8,10 @@ export declare class UserController {
     findOne(name: string): Promise<User>;
     getMe(user: User): User;
     findOneByName(name: string): Promise<User>;
-    findOneById(id: string): Promise<User>;
+    getBlockedUsers(user: User): Promise<User[]>;
+    getBlockedByUsers(user: User): Promise<User[]>;
+    blockUser(user: User, userId: number): Promise<import(".prisma/client").UserBlock>;
+    findOneById(id: string): Promise<void>;
     editUser(userId: number, dto: EditUserDto): Promise<any>;
     deleteUserById(id: string): Promise<{
         deletedUsers: number;

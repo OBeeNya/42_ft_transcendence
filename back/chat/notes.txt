@@ -1,4 +1,0 @@
-fichier ts définissant les sockets (handleco...)
-fichier.module associé
-importer dans app.module.ts général !
-index.html
