@@ -1,5 +1,4 @@
-import { ConnectedSocket, MessageBody, SubscribeMessage,
-		 WebSocketGateway } from "@nestjs/websockets";
+import { ConnectedSocket, MessageBody, SubscribeMessage, WebSocketGateway } from "@nestjs/websockets";
 import { Socket } from "socket.io";
 import { DirectMessageService } from "./directMessage.service";
 import { DirectMessageDto } from "./directMessage.dto";
@@ -13,6 +12,12 @@ export class DirectMessageGateway extends BaseGateway
 				private prisma: PrismaService)
 	{
 		super();
+
+		// setInterval(() =>
+		// {
+		// 	console.log('Current userSocketMap:');
+		// 	console.log(Array.from(this.userSocketMap.entries()));
+		// }, 50000);
 	}
 
 	@SubscribeMessage('privateMessage')

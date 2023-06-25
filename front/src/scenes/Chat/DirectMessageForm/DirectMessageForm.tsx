@@ -32,10 +32,7 @@ const DirectMessageForm: React.FC<Props> = ({senderId, receiverId}) =>
 	const emitSocketEvent = () =>
 	{
 		if (socket)
-		{
 			socket.emit('privateMessage', {senderId, receiverId, content: message});
-			console.log('Message has been sent!');
-		}
 		else
 			console.log('Socket is not available!');
 

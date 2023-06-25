@@ -16,13 +16,22 @@ Un utilisateur essaye de rejoindre un channel :
 
 - L'utilisateur a été banni du channel
 
----------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
 Problèmes :
 
-1) Besoin du rafraichissement du navigateur une fois que le message est reçu pour le voir
+1) Besoin du rafraichissement du navigateur une fois que le message est reçu
+   pour le voir
 2) Je peux m'envoyer des messages à moi même
 3) Besoin de rafraichir la page pour que "Direct Message" disparaisse
 4) Je peux me bloquer moi même
 5) Site pas responsive
 6) On peut plus accéder aux profils des autres utilisateurs
 7) Avatars ?
+
+-------------------------------------------------------------------------------
+Rafraichissement MPs
+
+Problème 1 : userSocketMap FAIT
+Problème 2 : mauvaise écoute/agissements des événements associés aux messages
+privés côté client.
+
