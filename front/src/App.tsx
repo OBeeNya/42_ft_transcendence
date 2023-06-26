@@ -13,9 +13,6 @@ import OnlinePage from './scenes/Online/OnlinePage';
 import Leaderboard from './scenes/Leaderboard/Leaderboard';
 import TfaPage from './scenes/Tfa/TfaPage';
 import MainPage from './scenes/Chat/MainPage/MainPage';
-import { SocketContext } from './socketContext';
-import { useState } from 'react';
-import { Socket } from 'socket.io-client';
 
 const defaultProtectedRouteProps: Omit<ProtectedRouteProps, 'outlet'> = {
   authenticationPath: '/',

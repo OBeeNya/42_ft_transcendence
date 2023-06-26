@@ -65,8 +65,8 @@
 }
 
 .sidebar {
-	flex-basis: 12%;
-	/* width: 12%; */
+	flex-basis: 15%;
+	width: 15%;
 	background-color: rgba(74, 102, 104, 0.3);
 	color: white;
 	border: 1px solid white;

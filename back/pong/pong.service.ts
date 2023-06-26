@@ -12,9 +12,6 @@ export class PongService {
         const app2 = express();
         // const server = app.listen(3002);
 
-
-
-
 		return ("hello socket");
 	}
 }

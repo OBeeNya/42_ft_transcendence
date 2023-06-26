@@ -1,24 +1,25 @@
 import { Injectable, BadRequestException, ForbiddenException } from '@nestjs/common';
-import { PrismaService } from '../prisma_module/prisma.service';
+import { PrismaService } from '../../prisma_module/prisma.service';
+import { CreateChannelDto } from './chat.dto';
 
 @Injectable()
 export class ChatService
 {
 	constructor(private prisma: PrismaService) {} // injection de PrismaService dans ChatService --> permet d'interagir avec la db
 
-	async searchChannel(channelName: string)
-	{
-		return (this.prisma.chat.findMany(
-		{
-			where:
-			{
-				name:
-				{
-					contains: channelName,
-					mode: 'insensitive', // Pour une recherche insensible à la casse
+	async createChannel(dto: CreateChannelDto) {
+			return (this.prisma.channel.create({
+				data: {
+					name: dto.channelName,
 				},
-			},
-		}));
+			}));
+	}
+
+	async getChannel()
+	{
+		const channels = await this.prisma.channel.findMany({select: { name: true, }});
+		const channelNames = channels.map(channel => channel.name);
+		return channelNames;
 	}
 
 	async setChatPassword(userId: number, chatId: number, password: string)

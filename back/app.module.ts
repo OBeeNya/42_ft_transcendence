@@ -4,7 +4,7 @@ import { UserModule } from './user/user.module';
 import { PrismaModule } from './prisma_module/prisma.module';
 import { ConfigModule } from '@nestjs/config';
 import { MatchHistoryModule } from './match-history/match-history.module';
-import { ChatModule } from './chat/chat.module';
+import { ChatModule } from './chat/channels/chat.module';
 import { PongModule } from './pong/pong.module';
 import { SocketModule } from 'pong/socket/pong.socket.module';
 

@@ -1,10 +1,16 @@
 import { Controller, Post, Body, Get, Query } from '@nestjs/common';
 import { ChatService } from './chat.service';
+import { CreateChannelDto } from './chat.dto';
 
 @Controller('chat')
 export class ChatController
 {
 	constructor(private readonly chatService: ChatService) {}
+
+	@Post('createChannel')
+	async createChannel(@Body() dto: CreateChannelDto) {
+		return this.chatService.createChannel(dto);
+	}
 
 	@Post('join')
 	async joinChannel
@@ -28,9 +34,9 @@ export class ChatController
 		return this.chatService.setChatPassword(userId, chatId, password);
 	}
 
-	@Get('search')
-	async searchChannel(@Query('channelName') channelName: string)
+	@Get('getchan')
+	async getChannel()
 	{
-		return this.chatService.searchChannel(channelName);
+		return this.chatService.getChannel();
 	}
 }

@@ -56,3 +56,8 @@ POSTGRE: 5432
 
 
 
+
+modifier le chatbox de lucas pour qu'a la place d'utiliser senderid et receiveid il utilise l'id de la room
+remplacer la requete que j'ai fais par une websocket en front et en back
+
+
