@@ -19,15 +19,15 @@ const sketch: Sketch = p5 => {
     let playerSize = 20;
     let playerSpeed = 6;
     let ballSize = 15;
-    // let ballSpeed = 5; // 3 ou 5
     let ballSpeed = 3; // 3 ou 5
-    let pointsToWin = 5;
+    let pointsToWin = 3; // 3 ou 5
     let paused = 1;
     let drawLoops = 0;
     let newMap = true;  // passer en props
     let background: any;
     let names: any[] = [];
     let opponentName: String;
+    let won: Boolean;
 
 /******************************** PLAYER ********************************/
 
@@ -115,7 +115,6 @@ class Ball {
 
         socket = io('http://localhost:8080/pong');
         socket.on('connect', () => console.log("connected"));
-
     	const token = localStorage.getItem("token");
         try {
             const response = await ax.get('http://localhost:8080/users/me', {
@@ -125,7 +124,6 @@ class Ball {
         } catch {
             console.error('could not get current user in pong game');
         }
-
         if (newMap === true)
             background = p5.loadImage('https://happycoding.io/images/stanley-1.jpg');
         p5.frameRate(85);
@@ -178,10 +176,6 @@ class Ball {
                 b.r = data.r;
             }
         });
-        // socket.on('getNames', function(data: any) {
-        //     names = data;
-        //     console.log('names after getNames:', names);
-        // });
     }
 
     p5.draw = () => {
@@ -302,14 +296,24 @@ class Ball {
             p5.textSize(30);
             p5.text("reloading the page...", p5.width/2, p5.height/2 + 100);
         }
-        socket.on('disconnect', () => console.log("disconnection front"));
         // setTimeout(() => {  window.location.href = "/pong"; }, 3000);
-        // if (master === true && names !== undefined)
-        //     opponentName = names[1];
-        // else if (names !== undefined)
-        //     opponentName = names[0];
-        // console.log('OPPONENT NAME:', opponentName);
-        setTimeout(() => {  window.location.href = "/record"; }, 3000);
+        const request = { action: 'getNames' };
+        socket.send(JSON.stringify(request));
+        socket.onmessage = (event: any) => {
+            const response = JSON.parse(event.data);
+            if (response.action === 'functionResult')
+                names = response.result;
+        };
+        if (master === true && names !== undefined)
+            opponentName = names[1];
+        else if (names !== undefined)
+            opponentName = names[0];
+        if (p.p === 5)
+            won = true;
+        else
+            won = false;
+        socket.on('disconnect', () => console.log("disconnection front"));
+        setTimeout(() => {  window.location.href = '/record?opponentName=' + opponentName + '&won=' + won; }, 3000);
     }
 
     function drawSpectator() {
