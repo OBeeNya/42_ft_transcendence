@@ -1,4 +1,4 @@
-import { WebSocketGateway, WebSocketServer } from "@nestjs/websockets";
+import { SubscribeMessage, WebSocketGateway, WebSocketServer } from "@nestjs/websockets";
 import { Server, Socket } from "socket.io";
 
 /******************** VARIABLES ******************/
@@ -58,7 +58,6 @@ export class SocketEvents {
 
         client.on('registerUser', function(data) {
             names.push(data);
-            console.log('NAMES:', names);
         });
 
         client.on("startBall", function(data) {
@@ -88,12 +87,18 @@ export class SocketEvents {
             b.yv = data.yv;
             b.r = data.r;
         });
+
     }
 
-    getNames() {
-        this.server.emit('getNames', names);
+    @SubscribeMessage('getNames')
+    handleGetNames(client: any) {
+        const response = {
+            action: 'functionResult',
+            names,
+        }
+        client.send(response);
     }
-    
+
     getCounter() {
         this.server.emit('getCounter', connections);
     }
@@ -124,7 +129,8 @@ export class SocketEvents {
     }
 
     //deconnexion
-    handleDisconnect(client: Socket) {
+    // handleDisconnect(client: Socket) {
+    handleDisconnect() {
         connections--;
         players = [];
         names = [];

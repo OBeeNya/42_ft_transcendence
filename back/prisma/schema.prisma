@@ -17,8 +17,8 @@ model User {
   friendUsers	UserFriend[] @relation("UserFriendFriend")	// user actuel est le destinataire de la demande
   userBlocks	UserBlock[] @relation("UserBlockUser")		// liste des users que l'user actuel a bloqués
   blockedUsers	UserBlock[] @relation("UserBlockBlocked")	// liste des users qui ont bloqué l'user actuel
-  wins			Int @default(0)
-  losses		Int @default(0)
+  // wins			Int @default(0)
+  // losses		Int @default(0)
   ladder_level	Int @default(1)
   // history		MatchHistory[]
   oauthId		String
@@ -33,7 +33,7 @@ model User {
   opponents String[]
   ladders Int[]
   wons Boolean[]
-
+  exp Int @default(0)
   @@map("users")
 }
 

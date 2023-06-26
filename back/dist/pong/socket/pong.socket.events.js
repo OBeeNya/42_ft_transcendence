@@ -48,7 +48,6 @@ let SocketEvents = class SocketEvents {
         });
         client.on('registerUser', function (data) {
             names.push(data);
-            console.log('NAMES:', names);
         });
         client.on("startBall", function (data) {
             b = new Ball(client.id, data.x, data.y, data.xv, data.yv, data.r);
@@ -76,8 +75,12 @@ let SocketEvents = class SocketEvents {
             b.r = data.r;
         });
     }
-    getNames() {
-        this.server.emit('getNames', names);
+    handleGetNames(client) {
+        const response = {
+            action: 'functionResult',
+            names,
+        };
+        client.send(response);
     }
     getCounter() {
         this.server.emit('getCounter', connections);
@@ -102,7 +105,7 @@ let SocketEvents = class SocketEvents {
         this.startHeartbeat();
         this.startBallHeartbeat();
     }
-    handleDisconnect(client) {
+    handleDisconnect() {
         connections--;
         players = [];
         names = [];
@@ -112,6 +115,12 @@ __decorate([
     (0, websockets_1.WebSocketServer)(),
     __metadata("design:type", socket_io_1.Server)
 ], SocketEvents.prototype, "server", void 0);
+__decorate([
+    (0, websockets_1.SubscribeMessage)('getNames'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], SocketEvents.prototype, "handleGetNames", null);
 SocketEvents = __decorate([
     (0, websockets_1.WebSocketGateway)({
         namespace: 'pong',
