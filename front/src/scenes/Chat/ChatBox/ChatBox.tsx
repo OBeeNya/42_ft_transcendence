@@ -1,5 +1,5 @@
-import { useContext, useState, useEffect, useRef } from "react";
-import { MessageContext, SocketContext } from "../../../contexts";
+import { useContext, useEffect, useRef } from "react";
+import { MessageContext} from "../../../contexts";
 import "./ChatBox.css";
 
 export interface Message
@@ -11,7 +11,6 @@ export interface Message
 
 const ChatBox = ({senderId, receiverId}: {senderId: number, receiverId: number}) =>
 {
-	const socket = useContext(SocketContext);
 	const allMessages = useContext(MessageContext);
 	const messagesEndRef = useRef<null | HTMLDivElement>(null);
 	
