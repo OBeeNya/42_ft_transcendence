@@ -13,7 +13,7 @@ const ChatBox = ({senderId, receiverId}: {senderId: number, receiverId: number})
 {
 	const allMessages = useContext(MessageContext);
 	const messagesEndRef = useRef<null | HTMLDivElement>(null);
-	
+
 	const messages = allMessages.filter(msg =>
 		(msg.senderId === senderId && msg.receiverId === receiverId) ||
 		(msg.senderId === receiverId && msg.receiverId === senderId)

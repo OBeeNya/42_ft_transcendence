@@ -37,16 +37,28 @@ function App()
 		if (!socket)
 			return;
 
-		const listener = (newMessage: Message) =>
+		// const listener = (newMessage: Message) =>
+		// {
+		// 	setMessages(oldMessages => [...oldMessages, newMessage]);
+		// };
+
+		const privateMessageListener = (newMessage: Message) =>
 		{
 			setMessages(oldMessages => [...oldMessages, newMessage]);
 		};
 
-		socket.on('privateMessage', listener);
+		const conversationListener = (oldMessages: Message[]) =>
+		{
+			setMessages(oldMessages);
+		};
+
+		socket.on('privateMessage', privateMessageListener);
+		socket.on('conversation', conversationListener);
 
 		return () =>
 		{
-			socket.off('privateMessage', listener);
+			socket.off('privateMessage', privateMessageListener);
+			socket.off('conversation', conversationListener);
 		};
 
 	}, [socket]);
@@ -107,26 +119,26 @@ function App()
 	}, [userId]);
 
   return (
-	<SocketContext.Provider value={socket}>
-		<MessageContext.Provider value={messages}>
-			<Routes>
-				<Route path="/" element={<AuthPage/>} />
-				<Route path="/signup" element={<SignupPage/>} />
-				<Route path="/signin" element={<SigninPage/>} />
-				<Route path="/callback42" element={<Callback42/>} />
-				<Route path="/tfa" element={<TfaPage/>} />
-				<Route path="/home" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<HomePage/>} />} />
-				<Route path="/profile" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<ProfilePage/>} />} />
-				<Route path="/editprofile" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<EditProfilePage/>} />} />
-				<Route path="/pong" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<PongPage/>} />} />
-				<Route path="/pongGame" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<PongPageGame/>} />} />
-				<Route path="/chat" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<MainPage/>} />} />
-				<Route path="/online" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<OnlinePage/>} />} />
-				<Route path="/leaderboard" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<Leaderboard/>} />} />
-			</Routes>
-		</MessageContext.Provider>
-	</SocketContext.Provider>
-  );
+		<SocketContext.Provider value={socket}>
+			<MessageContext.Provider value={messages}>
+				<Routes>
+					<Route path="/" element={<AuthPage/>} />
+					<Route path="/signup" element={<SignupPage/>} />
+					<Route path="/signin" element={<SigninPage/>} />
+					<Route path="/callback42" element={<Callback42/>} />
+					<Route path="/tfa" element={<TfaPage/>} />
+					<Route path="/home" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<HomePage/>} />} />
+					<Route path="/profile" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<ProfilePage/>} />} />
+					<Route path="/editprofile" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<EditProfilePage/>} />} />
+					<Route path="/pong" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<PongPage/>} />} />
+					<Route path="/pongGame" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<PongPageGame/>} />} />
+					<Route path="/chat" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<MainPage/>} />} />
+					<Route path="/online" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<OnlinePage/>} />} />
+					<Route path="/leaderboard" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<Leaderboard/>} />} />
+				</Routes>
+			</MessageContext.Provider>
+		</SocketContext.Provider>
+	);
 }
 
 export default App;
