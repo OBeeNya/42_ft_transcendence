@@ -13,11 +13,11 @@ export class DirectMessageGateway extends BaseGateway
 	{
 		super();
 
-		// setInterval(() =>
-		// {
-		// 	console.log('Current userSocketMap:');
-		// 	console.log(Array.from(this.userSocketMap.entries()));
-		// }, 50000);
+		setInterval(() =>
+		{
+			console.log('Current userSocketMap:');
+			console.log(Array.from(this.userSocketMap.entries()));
+		}, 30000);
 	}
 
 	@SubscribeMessage('privateMessage')

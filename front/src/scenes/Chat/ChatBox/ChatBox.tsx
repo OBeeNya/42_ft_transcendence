@@ -1,18 +1,24 @@
 import { useContext, useState, useEffect, useRef } from "react";
-import { SocketContext } from "../../../socketContext";
+import { MessageContext, SocketContext } from "../../../contexts";
 import "./ChatBox.css";
 
-interface Message
+export interface Message
 {
 	senderId: number;
+	receiverId: number;
 	content: string;
 }
 
 const ChatBox = ({senderId, receiverId}: {senderId: number, receiverId: number}) =>
 {
-	const [messages, setMessages] = useState<Message[]>([]);
 	const socket = useContext(SocketContext);
+	const allMessages = useContext(MessageContext);
 	const messagesEndRef = useRef<null | HTMLDivElement>(null);
+	
+	const messages = allMessages.filter(msg =>
+		(msg.senderId === senderId && msg.receiverId === receiverId) ||
+		(msg.senderId === receiverId && msg.receiverId === senderId)
+	);
 
 	const scrollToBottom = () =>
 	{
@@ -23,32 +29,6 @@ const ChatBox = ({senderId, receiverId}: {senderId: number, receiverId: number})
 	{
 		scrollToBottom()
 	}, [messages]);
-
-	useEffect(() =>
-	{
-		if (socket == null)
-			return () => {};
-
-		socket.emit('getConversation', {senderId, receiverId});
-
-		socket.on('conversation', (conversation: Message[]) =>
-		{
-			setMessages(conversation);
-		});
-
-		socket.on('privateMessage', newMessage =>
-		{
-			if (newMessage.receiverId === receiverId)
-				setMessages(messages => [...messages, newMessage]);
-		});
-
-		return () =>
-		{
-			socket.off('conversation');
-			socket.off('privateMessage');
-		};
-
-	}, [socket, senderId, receiverId]);
 
 	return (
 	<div className="chat-box">

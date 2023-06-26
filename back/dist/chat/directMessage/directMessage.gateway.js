@@ -27,7 +27,7 @@ let DirectMessageGateway = class DirectMessageGateway extends base_gateway_1.Bas
         setInterval(() => {
             console.log('Current userSocketMap:');
             console.log(Array.from(this.userSocketMap.entries()));
-        }, 50000);
+        }, 30000);
     }
     async handlePrivateMessage(data, client) {
         console.log(`Message sent from ${data.senderId} to ${data.receiverId}`);
