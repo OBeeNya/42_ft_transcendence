@@ -31,6 +31,12 @@ const DirectMessageForm: React.FC<Props> = ({senderId, receiverId}) =>
 
 	const emitSocketEvent = () =>
 	{
+		if (senderId === receiverId)
+		{
+			setError("Error: You can't dm yourself !");
+			return;
+		}
+
 		if (socket)
 			socket.emit('privateMessage', {senderId, receiverId, content: message});
 		else

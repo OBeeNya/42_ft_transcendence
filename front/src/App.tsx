@@ -37,11 +37,6 @@ function App()
 		if (!socket)
 			return;
 
-		// const listener = (newMessage: Message) =>
-		// {
-		// 	setMessages(oldMessages => [...oldMessages, newMessage]);
-		// };
-
 		const privateMessageListener = (newMessage: Message) =>
 		{
 			setMessages(oldMessages => [...oldMessages, newMessage]);
