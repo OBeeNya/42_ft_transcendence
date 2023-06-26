@@ -37,6 +37,8 @@ const DirectMessageForm: React.FC<Props> = ({senderId, receiverId}) =>
 			return;
 		}
 
+		setError('');
+
 		if (socket)
 			socket.emit('privateMessage', {senderId, receiverId, content: message});
 		else
@@ -62,7 +64,7 @@ const DirectMessageForm: React.FC<Props> = ({senderId, receiverId}) =>
 				maxLength={4096}
 				className="message-input"
 				value={message}
-				onChange={e => setMessage(e.target.value)}
+				onChange={e => {setError(''); setMessage(e.target.value)}}
 		  	/>
 		</form>
 	  );
