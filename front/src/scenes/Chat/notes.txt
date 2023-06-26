@@ -19,8 +19,8 @@ Un utilisateur essaye de rejoindre un channel :
 -------------------------------------------------------------------------------
 Problèmes :
 
-1) Besoin de rafraichir la page pour que "Direct Message" disparaisse
+1) Blocage pas en temps réel
 2) Je peux me bloquer moi même
 3) Site pas responsive
-4) On peut plus accéder aux profils des autres utilisateurs
+4) Profils utilisateurs
 5) Avatars ?

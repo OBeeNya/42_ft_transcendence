@@ -1,11 +1,11 @@
 import { useContext, useState } from 'react';
 import Header from "../../../components/header"
+import { SocketContext } from '../../../contexts';
 import Sidebar from "../Sidebar/Sidebar";
 import UsersList from "../UsersList/UsersList";
 import ChatBox from "../ChatBox/ChatBox"
 import DirectMessageForm from "../DirectMessageForm/DirectMessageForm";
 import './MainPage.css';
-import { SocketContext } from '../../../contexts';
 
 const MainPage = () =>
 {
@@ -46,9 +46,7 @@ const MainPage = () =>
 						setPrivateMessageUserId={handlePrivateMessageUserChange}
 					/>
 				</div>
-
 			</div>
-			
 		</div>
 	);
 };
