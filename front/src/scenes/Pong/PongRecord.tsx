@@ -4,11 +4,11 @@ import { ax } from "../../services/axios/axios";
 const PongRecord = () => {
 
 	const navigate = useNavigate();
+	// const [currentTime, seCurrentTime] = use
 
     const Record = async () => {
 		const location = useLocation();
 		const params = new URLSearchParams(location.search);
-		const opponentName = params.get('opponentName');
 		const wons = params.get('won');
 		let won: Boolean;
 		if (wons === 'true')
@@ -21,11 +21,10 @@ const PongRecord = () => {
 				headers: { Authorization: `Bearer ${token}` }
             });
             const ladder = response.data.ladder_level;
-			console.log(opponentName, won, ladder);
             await ax.post('match-history', {
-					opponentName: opponentName,
 					ladder: ladder,
 					won: won,
+					gameDate: 'test',
 				}, {
 					headers: {
 						Authorization: `Bearer ${token}`

@@ -48,10 +48,10 @@ export class MatchHistoryService {
 	async create(dto: CreateMatchDto, user: User) {
 		const existingData = await this.prisma.user.findUniqueOrThrow({
 			where: { id: user.id },
-			select: { opponents: true, ladders: true, wons: true },
+			select: { gameDates: true, ladders: true, wons: true },
 		});
 		const updatedData = {
-			opponents: [...existingData.opponents, dto.opponentName],
+			gameDates: [...existingData.gameDates, dto.gameDate],
 			ladders: [...existingData.ladders, dto.ladder],
 			wons: [...existingData.wons, dto.won],
 		};

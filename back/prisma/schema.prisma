@@ -28,12 +28,12 @@ model User {
   messages		Message[] @relation("UserMessage")
   sentDMs		DirectMessage[] @relation("UserDMs")
   receivedDMs	DirectMessage[] @relation("UserDMsReceived")
-  tfa				Boolean @default(false)
-  tfa_key			String
-  opponents String[]
-  ladders Int[]
-  wons Boolean[]
-  exp Int @default(0)
+  tfa			Boolean @default(false)
+  tfa_key		String
+  ladders		Int[]
+  wons			Boolean[]
+  gameDates		String[]
+  exp			Int @default(0)
   @@map("users")
 }
 

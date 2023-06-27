@@ -7,7 +7,6 @@ let connections: number = 0;
 let players = [];
 let b;
 let interval = 10;
-let names = [];
 
 function Player(id, x, y, v, w, h, p) {
     this.id = id;
@@ -56,10 +55,6 @@ export class SocketEvents {
             }
         });
 
-        client.on('registerUser', function(data) {
-            names.push(data);
-        });
-
         client.on("startBall", function(data) {
             b = new Ball(client.id, data.x, data.y, data.xv, data.yv, data.r);
         });
@@ -88,15 +83,6 @@ export class SocketEvents {
             b.r = data.r;
         });
 
-    }
-
-    @SubscribeMessage('getNames')
-    handleGetNames(client: any) {
-        const response = {
-            action: 'functionResult',
-            names,
-        }
-        client.send(response);
     }
 
     getCounter() {
@@ -133,7 +119,6 @@ export class SocketEvents {
     handleDisconnect() {
         connections--;
         players = [];
-        names = [];
         // console.log('client disconnected: ', client.id + "; connexion number: " + connections);
     }
 

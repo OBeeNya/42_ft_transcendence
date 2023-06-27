@@ -25,8 +25,6 @@ const sketch: Sketch = p5 => {
     let drawLoops = 0;
     let newMap = true;  // passer en props
     let background: any;
-    let names: any[] = [];
-    let opponentName: String;
     let won: Boolean;
 
 /******************************** PLAYER ********************************/
@@ -141,7 +139,7 @@ class Ball {
                     p = new Player(p5.width);
                     master = false;
                 }
-            } 
+            }
             if (p !== undefined) {
                 let infosPlayer = {
                     x:p.x,
@@ -297,23 +295,12 @@ class Ball {
             p5.text("reloading the page...", p5.width/2, p5.height/2 + 100);
         }
         // setTimeout(() => {  window.location.href = "/pong"; }, 3000);
-        const request = { action: 'getNames' };
-        socket.send(JSON.stringify(request));
-        socket.onmessage = (event: any) => {
-            const response = JSON.parse(event.data);
-            if (response.action === 'functionResult')
-                names = response.result;
-        };
-        if (master === true && names !== undefined)
-            opponentName = names[1];
-        else if (names !== undefined)
-            opponentName = names[0];
         if (p.p === 5)
             won = true;
         else
             won = false;
         socket.on('disconnect', () => console.log("disconnection front"));
-        setTimeout(() => {  window.location.href = '/record?opponentName=' + opponentName + '&won=' + won; }, 3000);
+        setTimeout(() => {  window.location.href = '/record?won=' + won; }, 3000);
     }
 
     function drawSpectator() {
