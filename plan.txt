@@ -24,3 +24,8 @@ Problèmes :
 3) Site pas responsive
 4) Profils utilisateurs
 5) Avatars ?
+
+-------------------------------------------------------------------------------
+Channels
+
+1) creation de channel en temps reel
