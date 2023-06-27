@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { UserInfos } from "../../services/interfaces/userInfos.interface"
 import axios from "axios";
+import { UserInfos } from "../../services/interfaces/userInfos.interface"
 import './Leaderboard.css';
 
 const Leaderboard = () => 
