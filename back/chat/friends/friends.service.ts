@@ -12,6 +12,8 @@ export class FriendsService
 	{
 		try
 		{
+			console.log(`Attempting to add friend with ID ${data.friendId} for user with ID ${data.userId}...`);
+
 			const friend = await this.prisma.userFriend.create(
 			{
 				data:
@@ -20,6 +22,8 @@ export class FriendsService
 					friendId: data.friendId
 				}
 			});
+
+			console.log(`Friend with ID ${data.friendId} added successfully for user with ID ${data.userId}!`);
 
 			return (friend);
 		}
@@ -34,6 +38,8 @@ export class FriendsService
 	{
 		try 
 		{
+			console.log(`Attempting to get friends for user with ID ${data.userId}...`);
+
 			const friends = await this.prisma.userFriend.findMany(
 			{
 				where:
@@ -41,6 +47,8 @@ export class FriendsService
 					userId: data.userId
 				}
 			});
+
+			console.log(`Friends retrieved successfully for user with ID ${data.userId}!`);
 
 			return (friends);
 		}

@@ -21,7 +21,10 @@ export class FriendsGateway extends BaseGateway
 	{
 		try
 		{
+			console.log(`Received addFriend request. User ID: ${data.userId}, Friend ID: ${data.friendId}`);
 			const newFriend = await this.friendsService.addFriend(data);
+			console.log('Successfully added friend! Emitting friendAdded...');
+
 			client.emit('friendAdded', newFriend);
 		} 
 		catch (error)
@@ -38,7 +41,10 @@ export class FriendsGateway extends BaseGateway
 	{
 		try
 		{
+			console.log(`Received getFriends request for user with ID ${data.userId}`);
 			const friends = await this.friendsService.getFriends(data);
+			console.log('Successfully retrieved friends! Emitting friends...');
+
 			client.emit('friends', friends);
 		} 
 		catch (error)
