@@ -30,20 +30,3 @@ io.on('connection', (socket: Socket) => {
   });
 
 });
-
- /* socket.on('message', async (roomId: string, message: string) => {
-    await prisma.message.create({
-        data: {
-            //utiliser le dto pour message
-        }
-    })
-    console.log(`Message reçu dans la room ${roomId}: ${message}`);
-    // Diffuser le message à tous les clients de la room
-    io.to(roomId).emit('message', message);
-  });
-});
-
-httpServer.listen(8080, () => {
-  console.log('Serveur Socket.IO en écoute sur le port 8080.');
-});
-*/
