@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { UserInfos } from "../../services/interfaces/userInfos.interface"
-import './Social.css';
+import './Friends.css';
 
-const Social = () => 
+const Friends = () => 
 {
 	const [users, setUsers] = useState([]);
 	const token = localStorage.getItem("token");
@@ -35,8 +35,8 @@ const Social = () =>
 	}, [token]);
 
   return (
-	<div className="content-body social">
-	  <h1>Social</h1>
+	<div className="content-body friends">
+	  <h1>Friends</h1>
 	  <table>
 		<thead>
 		  <tr>
@@ -70,4 +70,4 @@ const Social = () =>
   );
 }
 
-export default Social;
+export default Friends;

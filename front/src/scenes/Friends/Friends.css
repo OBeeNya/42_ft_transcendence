@@ -1,9 +1,9 @@
-.social {
+.friends {
 	width: 95%;
 	margin: 0 auto;
 }
 
-.social table {
+.friends table {
 	width: 100%;
 	border-collapse: separate;
 	border-spacing: 0;
@@ -13,14 +13,14 @@
 	border: 1px solid #fff;
 }
 
-.social th {
+.friends th {
 	border: none;
 	padding: 20px;
 	text-align: center;
 	word-wrap: break-word;
 }
 
-.social td {
+.friends td {
 	border: 1px solid #fff;
 	padding: 20px;
 	text-align: center;
