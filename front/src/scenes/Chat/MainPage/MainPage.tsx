@@ -1,15 +1,14 @@
+import { useContext, useState, useRef, createContext } from 'react';
 import Header from "../../../components/header"
+import { SocketContext } from '../../../contexts';
 import Sidebar from "../Sidebar/Sidebar";
 import UsersList from "../UsersList/UsersList";
-import ChatBox from "../DirectMessage/ChatBox/ChatBox"
-import DirectMessageForm from "../DirectMessage/DirectMessageForm/DirectMessageForm";
+import ChatBox from "../ChatBox/ChatBox"
+import DirectMessageForm from "../DirectMessageForm/DirectMessageForm";
 import './MainPage.css';
 import { Socket } from "socket.io-client";
-import { SocketContext } from "../../../socketContext";
-import { useState, useRef, createContext } from "react";
 import { ax } from "../../../services/axios/axios";
-import { CreateChannelDto } from  "../../../../../back/chat/channels/chat.dto";
-
+import { CreateChannelDto } from  "../../../../../back/chat/channels/channels.dto";
 
 interface ButtonChannelContextValue {
 	displayPopup: () => void;
@@ -26,14 +25,13 @@ export const buttonChannelContext = createContext<ButtonChannelContextValue>({
 const ChatPage = () =>
 {
     const [currentUser, setCurrentUser] = useState<any>(null);
-    const [privateMessageUserId, setPrivateMessageUserId] = useState(null);
-	const [socket, setSocket] = useState<Socket | null>(null);
+    const [privateMessageUserId, setPrivateMessageUserId] = useState<number | null>(null);
 	const [statepopup, ChangeStatePopup] = useState(false);
 	const createInputRef = useRef<HTMLInputElement>(null);
 	const [channel, setChannel] = useState('');
 	const [channelsName, setChannelsName] = useState<string[]>([]);
 	const [chatInterface, setChatInterface] = useState(false);
-
+    const socket = useContext(SocketContext);
 
 	const addDataChannels = (name: string) => {
 		const updatedChannelsName = [...channelsName, name];
@@ -87,6 +85,14 @@ const ChatPage = () =>
 		channelsName,
 	  };
 
+	const handlePrivateMessageUserChange = (newUserId: number | null) =>
+	{
+		setPrivateMessageUserId(newUserId);
+
+		if (newUserId && socket) 
+			socket.emit('getConversation', {senderId: currentUser.id, receiverId: newUserId});
+	}
+
 	return (
 	<SocketContext.Provider value={socket}>
 		<div className="chat-page">
@@ -97,17 +103,20 @@ const ChatPage = () =>
 						<Sidebar/>
 					</div>
 				</buttonChannelContext.Provider>
-				<div className="chat-section">
-					{privateMessageUserId && currentUser &&
-						<DirectMessageForm senderId={currentUser.id} receiverId={privateMessageUserId} />
-					}
-					<ChatBox senderId={currentUser ? currentUser.id : -1} receiverId={privateMessageUserId ? privateMessageUserId : -1} />
-				</div>
-				<div className="channel-section">
+                <div className="chat-section">
+				{privateMessageUserId && currentUser &&
+					<DirectMessageForm senderId={currentUser.id}
+									   receiverId={privateMessageUserId} />
+				}
+				<ChatBox senderId={currentUser ? currentUser.id : -1}
+						 receiverId={privateMessageUserId ? privateMessageUserId : -1} />
 				</div>
 
 				<div className="users-list">
-					<UsersList setCurrentUser={setCurrentUser} setPrivateMessageUserId={setPrivateMessageUserId} />
+					<UsersList
+						setCurrentUser={setCurrentUser}
+						setPrivateMessageUserId={handlePrivateMessageUserChange}
+					/>
 				</div>
 				{statepopup && (
 					<div className ="popup" >

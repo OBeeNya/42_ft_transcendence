@@ -1,10 +1,9 @@
-import { useEffect, useState, MouseEvent } from "react";
-import React, { Dispatch, SetStateAction } from 'react';
+import { useEffect, useState, MouseEvent, Dispatch, SetStateAction } from "react";
 import { useNavigate } from 'react-router-dom';
-import { UserInfos } from "../../../services/interfaces/userInfos.interface"
 import axios from "axios";
+import { UserInfos } from "../../../services/interfaces/userInfos.interface"
+import User from '../User/User';
 import './UsersList.css';
-import User from './User';
 
 interface UsersListProps
 {
@@ -15,47 +14,45 @@ interface UsersListProps
 const UsersList = ({setCurrentUser, setPrivateMessageUserId}: UsersListProps) =>
 {
 	const navigate = useNavigate();
-	
 	const [users, setUsers] = useState([]);
+	const [blockedUsers, setBlockedUsers] = useState<UserInfos[]>([]);
+	const [blockedByUsers, setBlockedByUsers] = useState<UserInfos[]>([]);
 	const [clickedUser, setClickedUser] = useState(-1);
 	const token = localStorage.getItem("token");
 
 	useEffect(() =>
 	{
-		const fetchCurrentUser = async () =>
+		const getBlockedUsers = async () =>
 		{
 			try
 			{
-				const response = await axios.get("http://localhost:8080/users/me",
+				const blockedUsersResponse = await axios.get("http://localhost:8080/users/blocked",
 				{
 					headers:
 					{
 						Authorization: `Bearer ${token}`,
 					},
 				});
-	
-				setCurrentUser(response.data);
 
-				console.log('Current user:', response.data);
-				console.log('Current user ID:', response.data.id);
+				setBlockedUsers(blockedUsersResponse.data);
 			}
 			catch (error)
 			{
-				console.error('Error fetching current user:', error);
+				console.error('Error fetching blocked user:', error);
 			}
 		};
-	
-		fetchCurrentUser();
-	
-	}, [token, setCurrentUser]);
+
+		getBlockedUsers();
+
+	}, [token, setBlockedUsers]);
 
 	useEffect(() =>
 	{
-		const fetchUsers = async () =>
+		const getBlockedByUsers = async () =>
 		{
 			try
 			{
-				const response = await axios.get("http://localhost:8080/users",
+				const blockedByUsersResponse = await axios.get("http://localhost:8080/users/blockedBy",
 				{
 					headers:
 					{
@@ -63,17 +60,55 @@ const UsersList = ({setCurrentUser, setPrivateMessageUserId}: UsersListProps) =>
 					},
 				});
 
-				setUsers(response.data);
+				setBlockedByUsers(blockedByUsersResponse.data);
 			}
 			catch (error)
 			{
-				console.error('Error fetching users:', error);
+				console.error('Error fetching blocked by user:', error);
 			}
 		};
 
-		fetchUsers();
+		getBlockedByUsers();
 
-	}, [token]);
+	}, [token, setBlockedByUsers]);
+
+	useEffect(() =>
+	{
+		const fetchData = async () =>
+		{
+			try
+			{
+				const [currentUserResponse, usersResponse] = await Promise.all(
+				[
+					axios.get("http://localhost:8080/users/me",
+					{
+						headers:
+						{
+							Authorization: `Bearer ${token}`,
+						},
+					}),
+
+					axios.get("http://localhost:8080/users",
+					{
+						headers:
+						{
+							Authorization: `Bearer ${token}`,
+						},
+					})
+				]);
+
+				setCurrentUser(currentUserResponse.data);
+				setUsers(usersResponse.data);
+			}
+			catch (error)
+			{
+				console.error('Error fetching data:', error);
+			}
+		};
+	
+		fetchData();
+	
+	}, [token, setCurrentUser]);
 
 	useEffect(() =>
 	{
@@ -83,20 +118,45 @@ const UsersList = ({setCurrentUser, setPrivateMessageUserId}: UsersListProps) =>
 		return () => window.removeEventListener('click', clickHandler);
 	}, []);
 
+	const handleBlockSuccess = async (userId: number) =>
+	{
+		try
+		{
+			const response = await axios.get(`http://localhost:8080/users/${userId}`,
+			{
+				headers:
+				{
+					Authorization: `Bearer ${token}`,
+				},
+			});
+
+			const blockedUser = response.data;
+		
+		setBlockedUsers(prevBlockedUsers => [...prevBlockedUsers, blockedUser]);
+	}
+	catch (error)
+	{
+		console.error('Error fetching blocked user:', error);
+	}
+};
+
 	return (
 		<div className="users-list">
 			{users.map((user: UserInfos, index) =>
-			(
-				<User 
-					key={user.id}
-					user={user} 
-					isActive={clickedUser === index} 
-					onClick={(event: MouseEvent<HTMLElement>) =>
-						{event.stopPropagation(); setClickedUser(index);}}
-					onDirectMessageClick={() => setPrivateMessageUserId(user.id)} 
-					navigate={navigate}
-				/>
-			))}
+		(
+			<User
+				key={user.id}
+				user={user} 
+				isActive={clickedUser === index} 
+				onClick={(event: MouseEvent<HTMLElement>) =>
+				{event.stopPropagation(); setClickedUser(index);}}
+				onDirectMessageClick={() => setPrivateMessageUserId(user.id)}
+				navigate={navigate}
+				blockedUsers={blockedUsers}
+				blockedByUsers={blockedByUsers}
+				onBlockSuccess={handleBlockSuccess}
+			/>
+		))}
 		</div>
 	);
 };

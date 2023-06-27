@@ -1,6 +1,6 @@
 import { Module } from "@nestjs/common";
 import { SocketEvents } from "./pong.socket.events"
-import { DirectMessageModule } from "./directMessage.module";
+import { DirectMessageModule } from "../../chat/directMessage/directMessage.module";
 
 @Module({
     providers: [SocketEvents],

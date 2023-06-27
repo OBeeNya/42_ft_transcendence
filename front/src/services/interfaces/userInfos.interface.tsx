@@ -11,7 +11,7 @@ export interface UserInfos
 	tfa: boolean;
 	tfa_key: string;
 	status: string;
-	avatar_url: string;
+	// avatar_url: string;
 }
 
 export {};

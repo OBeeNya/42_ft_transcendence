@@ -39,6 +39,31 @@ export class UserController {
 		return this.userService.findOneByName(name);
 	}
 
+	//*********************************BLOCAGE*********************************
+
+	// localhost:3000/users/blocked
+	@Get('blocked')
+	async getBlockedUsers(@GetUser() user: User)
+	{
+		return (this.userService.getBlockedUsers(user.id));
+	}
+	
+	// localhost:3000/users/blockedBy
+	@Get('blockedBy')
+	async getBlockedByUsers(@GetUser() user: User)
+	{
+		return (this.userService.getBlockedByUsers(user.id));
+	}
+	
+	// localhost:3000/users/block
+	@Post('block')
+	async blockUser(@GetUser() user: User, @Body('userId') userId: number)
+	{
+		return (this.userService.blockUser(user.id, userId));
+	}
+
+	//*************************************************************************
+
 	// localhost:3000/users/:id
 	@Get(":id")
 	findOneById(@Param("id") id: string) {

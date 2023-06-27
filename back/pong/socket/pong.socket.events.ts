@@ -1,8 +1,8 @@
 import { ConnectedSocket, MessageBody, SubscribeMessage, WebSocketGateway, WebSocketServer } from "@nestjs/websockets";
 import { Server, Socket } from "socket.io";
 import { Interval } from '@nestjs/schedule';
-import { DirectMessageService } from "./directMessage.service";
-import { DirectMessageDto } from "./dto/directMessage.dto";
+import { DirectMessageService } from "../../chat/directMessage/directMessage.service";
+import { DirectMessageDto } from "../../chat/directMessage/directMessage.dto";
 
 
 /******************** VARIABLES ******************/
