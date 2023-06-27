@@ -33,3 +33,13 @@ Contenu tableau :
 - statut (online/offline/in game)
 - avatar (?)
 - mode spectateur
+
+-------------------------------------------------------------------------------
+Étapes
+
+1) Cliquer sur "Add friend" enregistre l'id de l'utilisateur qui
+   sera ajouté en ami.
+
+2) L'username de cet utilisateur, ainsi que son statut (online, offline, in game)
+   seront affichés dans un grand tableau accessible à la route
+   (http://localhost:3000/friends)

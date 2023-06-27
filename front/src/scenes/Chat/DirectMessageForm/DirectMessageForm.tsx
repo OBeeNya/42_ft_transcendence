@@ -23,7 +23,7 @@ const DirectMessageForm: React.FC<Props> = ({senderId, receiverId}) =>
 		if (senderId <= 0 || receiverId <= 0)
 		{
 			setError('Invalid user IDs');
-			return false;
+			return (false);
 		}
 
 		return (true);

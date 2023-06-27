@@ -46,7 +46,7 @@ export class FriendsGateway extends BaseGateway
 			console.log('Successfully retrieved friends! Emitting friends...');
 
 			client.emit('friends', friends);
-		} 
+		}
 		catch (error)
 		{
 			console.error('Error while getting friends:', error);
