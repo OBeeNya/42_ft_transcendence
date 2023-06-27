@@ -14,7 +14,7 @@ import Callback42 from './scenes/CallBack42/Callback42';
 import PongPage from './scenes/Pong/PongPage';
 import PongPageGame from './scenes/Pong/PongPageGame';
 import OnlinePage from './scenes/Online/OnlinePage';
-import Leaderboard from './scenes/Leaderboard/Leaderboard';
+import Social from './scenes/Social/Social';
 import MainPage from './scenes/Chat/MainPage/MainPage';
 import TfaPage from './scenes/Tfa/TfaPage';
 import { Message } from './scenes/Chat/ChatBox/ChatBox';
@@ -129,7 +129,7 @@ function App()
 					<Route path="/pongGame" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<PongPageGame/>} />} />
 					<Route path="/chat" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<MainPage/>} />} />
 					<Route path="/online" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<OnlinePage/>} />} />
-					<Route path="/leaderboard" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<Leaderboard/>} />} />
+					<Route path="/social" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<Social/>} />} />
 				</Routes>
 			</MessageContext.Provider>
 		</SocketContext.Provider>

@@ -43,6 +43,7 @@ export default function Header () {
             <Link className="header-links" to="/profile">Profile</Link>
             <Link className="header-links" to="/pong">Pong</Link>
             <Link className="header-links" to="/chat">Chat</Link>
+            <Link className="header-links" to="/social">Social</Link>
             <Link className="header-links" onClick={logout} to="/">Logout</Link> 
         </div>
     )

@@ -26,6 +26,10 @@ Problèmes :
 5) Avatars ?
 
 -------------------------------------------------------------------------------
-Channels
+Interface amis
 
-1) creation de channel en temps reel
+Contenu tableau :
+- username
+- statut (online/offline/in game)
+- avatar (?)
+- mode spectateur

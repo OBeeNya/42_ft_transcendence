@@ -1,14 +1,13 @@
 import { useContext, useState, useRef, createContext } from 'react';
+import { ax } from "../../../services/axios/axios";
 import Header from "../../../components/header"
 import { SocketContext } from '../../../contexts';
-import Sidebar from "../Sidebar/Sidebar";
 import UsersList from "../UsersList/UsersList";
-import ChatBox from "../ChatBox/ChatBox"
 import DirectMessageForm from "../DirectMessageForm/DirectMessageForm";
-import './MainPage.css';
-import { Socket } from "socket.io-client";
-import { ax } from "../../../services/axios/axios";
+import Sidebar from "../Sidebar/Sidebar";
+import ChatBox from "../ChatBox/ChatBox"
 import { CreateChannelDto } from  "../../../../../back/chat/channels/channels.dto";
+import './MainPage.css';
 
 interface ButtonChannelContextValue {
 	displayPopup: () => void;

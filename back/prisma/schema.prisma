@@ -17,8 +17,8 @@ model User {
 	friendUsers		UserFriend[] @relation("UserFriendFriend")	// user actuel est le destinataire de la demande
 	userBlocks		UserBlock[] @relation("UserBlockUser")		// liste des users que l'user actuel a bloqué
 	blockedUsers	UserBlock[] @relation("UserBlockBlocked")	// liste des users qui ont bloqué l'user actuel
-	channels        Channel[]   @relation("UserChannels")
-	owner           Channel[] @relation("owner")
+	channels		Channel[]   @relation("UserChannels")
+	owner			Channel[] @relation("owner")
 	wins			Int @default(0)
 	losses			Int @default(0)
 	ladder_level	Int @default(1)
@@ -36,14 +36,25 @@ model User {
 	@@map("users")
 }
 
+model UserFriend {
+	id			Int @id @default(autoincrement())
+	userId		Int
+	friendId	Int
+	createdAt	DateTime @default(now())
+	user		User @relation("UserFriendUser", fields: [userId], references: [id])
+	friend		User @relation("UserFriendFriend", fields: [friendId], references: [id])
+
+	@@map("user_friends")
+}
+
 model DirectMessage {
 	id			Int @id @default(autoincrement())
 	createdAt	DateTime @default(now())
 	content		String
 	senderId	Int
 	receiverId	Int
-	sender User @relation("UserDMs", fields: [senderId], references: [id], onDelete: Cascade)
-	receiver User @relation("UserDMsReceived", fields: [receiverId], references: [id], onDelete: Cascade)
+	sender		User @relation("UserDMs", fields: [senderId], references: [id], onDelete: Cascade)
+	receiver	User @relation("UserDMsReceived", fields: [receiverId], references: [id], onDelete: Cascade)
 
 	@@map("direct_messages")
 }
@@ -61,21 +72,16 @@ model UserBlock {
 }
 
 model Channel {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  
-  name      String   @unique
-  password  String?
-
-  ispassword Boolean @default(false)
-  private Boolean @default(false)
-  
-
-  users     User[]   @relation("UserChannels")
-  type      ChatType @default(PUBLIC)
-
-  owner User[] @relation("owner")
+  id			Int @id @default(autoincrement())
+  createdAt 	DateTime @default(now())
+  updatedAt		DateTime @updatedAt
+  name			String @unique
+  password		String?
+  ispassword	Boolean @default(false)
+  private		Boolean @default(false)
+  users			User[] @relation("UserChannels")
+  type			ChatType @default(PUBLIC)
+  owner			User[] @relation("owner")
 
   @@map("channels")
 }
@@ -90,17 +96,6 @@ model Message {
 	chatId		Int
 
 	@@map("messages")
-}
-
-model UserFriend {
-	id			Int @id @default(autoincrement())
-	userId		Int
-	friendId	Int
-	createdAt	DateTime @default(now())
-	user		User @relation("UserFriendUser", fields: [userId], references: [id])
-	friend		User @relation("UserFriendFriend", fields: [friendId], references: [id])
-
-	@@map("user_friends")
 }
 
 model MatchHistory {
