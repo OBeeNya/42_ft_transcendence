@@ -6,13 +6,17 @@ interface DropdownMenuProps
 	user: UserInfos;
 	onDirectMessageClick: () => void;
 	onBlock: () => void;
+	onAddFriendClick: () => void;
 	navigate: (path: string) => void;
 	blockedUsers: UserInfos[];
 	blockedByUsers: UserInfos[];
 }
 
-const DropdownMenu: React.FC<DropdownMenuProps> = ({user, onDirectMessageClick,onBlock,
-													navigate, blockedUsers, blockedByUsers}) =>
+const DropdownMenu: React.FC<DropdownMenuProps> = ({user, onDirectMessageClick,
+													onBlock, onAddFriendClick,
+													navigate,
+													blockedUsers,
+													blockedByUsers}) =>
 {
 	const isBlocked = blockedUsers.some((blockedUser: {id: number;}) => blockedUser.id === user.id) ||
 	blockedByUsers.some((blockedUser: {id: number;}) => blockedUser.id === user.id);
@@ -22,14 +26,13 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({user, onDirectMessageClick,o
 			<DropdownItem onClick={() => navigate(`/profile/${user.id}`)}>
 				Profile </DropdownItem>
 
-				{!isBlocked && (
-				<DropdownItem onClick={onDirectMessageClick}>
-					Direct Message
-				</DropdownItem> )}
+			{!isBlocked && (
+			<DropdownItem onClick={onDirectMessageClick}>
+				Direct Message </DropdownItem> )}
 
-			<DropdownItem onClick={() => console.log('Profile clicked')}>
+			<DropdownItem onClick={onAddFriendClick}>
 				Add friend </DropdownItem>
-
+				
 			<DropdownItem onClick={onBlock}>
 				Block </DropdownItem>
 

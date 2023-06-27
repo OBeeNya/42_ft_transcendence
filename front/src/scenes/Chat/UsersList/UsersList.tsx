@@ -132,13 +132,18 @@ const UsersList = ({setCurrentUser, setPrivateMessageUserId}: UsersListProps) =>
 
 			const blockedUser = response.data;
 		
-		setBlockedUsers(prevBlockedUsers => [...prevBlockedUsers, blockedUser]);
-	}
-	catch (error)
+			setBlockedUsers(prevBlockedUsers => [...prevBlockedUsers, blockedUser]);
+		}
+		catch (error)
+		{
+			console.error('Error fetching blocked user:', error);
+		}
+	};
+
+	const handleAddFriend = async (userId: number) =>
 	{
-		console.error('Error fetching blocked user:', error);
-	}
-};
+		
+	};
 
 	return (
 		<div className="users-list">
@@ -155,6 +160,7 @@ const UsersList = ({setCurrentUser, setPrivateMessageUserId}: UsersListProps) =>
 				blockedUsers={blockedUsers}
 				blockedByUsers={blockedByUsers}
 				onBlockSuccess={handleBlockSuccess}
+				onAddFriendClick={() => handleAddFriend(user.id)}
 			/>
 		))}
 		</div>

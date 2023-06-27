@@ -62,6 +62,12 @@ const User = ({user,isActive, onClick, onDirectMessageClick, navigate, blockedUs
 		}
 	};
 
+	const handleAddFriend = async () =>
+	{
+		// Ici, vous pouvez appeler votre fonction pour ajouter un ami en utilisant l'ID de l'utilisateur
+		console.log('Add friend clicked for user ID: ', user.id);
+	}
+
 	return (
 		<div key={user.id} className={`user ${isActive ? 'show-menu' : ''}`}>
 			<p className="username" onClick={onClick}>{user.name}</p>
@@ -73,6 +79,7 @@ const User = ({user,isActive, onClick, onDirectMessageClick, navigate, blockedUs
 					navigate={navigate}
 					blockedUsers={blockedUsers}
 					blockedByUsers={blockedByUsers}
+					onAddFriendClick={handleAddFriend}
 				/>
 			)}
 
