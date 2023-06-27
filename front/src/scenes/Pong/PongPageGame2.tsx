@@ -8,24 +8,209 @@ import io from "socket.io-client"
 // import { Helmet } from "react-helmet";
 
 const Canvas = (props: any) => {
+
+/******************** VARIABLES ********************/
+
+  let socket: any;
+  let width = 0,
+  height = 0,
+  player_width = 0,
+  player_height = 0,
+  end_point = 0;
+  const pi = Math.PI;
+  const UP = 38,
+  DOWN = 40;
+
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  let context: any = null;
+  let ctxRef: any = null;
+
+  let keystate: any;
+  let ball: any;
+  let message = "";
+  let score1 = 0, score2 = 0;
+  let username: string[] = [];
+  let space_down = false;
+
+/******************** PLAYER CLASS ********************/
+
+let players: any[] = [];
+class player {
+        x: number;
+        y: number;
+        width: number;
+        height: number;
+        username: string;
+    
+        constructor(xpos = 0, ypos = 0) {
+          this.x = xpos;
+          this.y = ypos;
+          this.width = 0;
+          this.height = 0;
+          this.username = "";
+        }
+    
+        init() {}
+    
+        update() {
+          this.width = player_width;
+          this.height = player_height;
+        }
+    
+        draw() {
+          const ctx = ctxRef.current;
+          if (ctx) {
+            ctx.fillRect(this.x, this.y, this.width, this.height);
+          }
+        }
+      }
+
+/******************** BALL CLASS ********************/
+
+    ball = {
+      x: null,
+      y: null,
+      vel: null,
+      side: 0,
+      speed: 8,
+      update: function () {},
+  
+      draw: function () {
+        const ctx = ctxRef.current;
+        if (ctx) {
+          ctx.fillRect(this.x, this.y, this.side, this.side);
+        }
+      }
+    };
+
+/******************** FUNCTIONS ********************/
+
+    function init() {
+      ball.side = player_width;
+      ball.x = (width - ball.side) / 2;
+      ball.y = (height - ball.side) / 2;
+      console.log("player_width", player_width);
+      ball.vel = {
+        x: ball.speed,
+        y: 0
+      };
+    }
+  
+    function update() {
+      ball.update();
+      // console.log("Update: players.length", players.length);
+
+      for (let p in players) {
+        players[p].update();
+      }
+    }
+
+    const draw = (ctx: any) => {
+
+// console.log("test draw")
+
+      ctx.fillRect(0, 0, width, height);
+      ctx.save();
+      ctx.fillStyle = "#fff";
+
+      // console.log("test draw");
+
+
+      for(let p = 0; p < players.length; p++){
+        players[p].draw();
+      }
+
+      ball.draw();
+
+      let mid_width = 4;
+      let x = (width - mid_width) * 0.5;
+      let y = 0;
+      let step = height / 20;
+
+      // draw half line
+      while (y < height) {
+        ctx.fillRect(x, y + step * 0.25, mid_width, step * 0.5);
+        y += step;
+      }
+
+      // Messages
+      ctx.font = "30px Arial";
+      ctx.fillText(message, 0, height - 50);
+      // Scores
+      ctx.font = "50px Arial"
+      ctx.fillText(score1, width/4, height / 5)
+      ctx.fillText(score2, 3 * width / 4, height / 5)
+      // Usernames : Todo : center usernames
+      ctx.font = "30px Arial"
+      ctx.fillText(username[0], width/4, height / 8)
+      ctx.fillText(username[1], 3 * width / 4, height / 8)
+
+      ctx.restore();
+    }
+
+    function main(canvas: any, ctx: any) {
+      document.body.appendChild(canvas);
+
+      let loop = function() {
+          canvas.width = width;
+          canvas.height = height;
+          update();
+          draw(ctx);
+          // window.requestAnimationFrame(loop, canvas);
+          window.requestAnimationFrame(loop);
+      }
+      // window.requestAnimationFrame(loop, canvas);
+      window.requestAnimationFrame(loop);
+  }
+
   useEffect(() => {
     console.log("test game 2");
 
+    socket = io("http://localhost:8080/gamePong2");
+    socket.on("connect", () => console.log("connected"));
+
     const canvas = canvasRef.current;
     if (canvas) {
-      context = canvas.getContext('2d')
+      ctxRef = canvas.getContext('2d');
     }
-    //Our first draw
-    context.fillStyle = '#000000'
-    context.fillRect(0, 0, context.canvas.width, context.canvas.height)
-  }, [])
+
+    main(canvas, ctxRef);
+    socket.on('config', (config: any) => {
+      width         = config.screen_width;
+      height        = config.screen_height;
+      player_width  = config.player_width;
+      player_height = config.player_height;
+      end_point     = config.end_point;
+      init();
+    })
+
+    socket.on('usernames', (usernames: string) => {
+      username.push(usernames[0]);
+      username.push(usernames[1]);
+    })
+
+    // update game info
+    socket.on('update', (ids: number, player_status: any[], ball_status: any) => {
+      console.log('update');
+      players = [];
+      for (let id = 0; id < ids; id++) {
+          if(players[id] == null || players[id] == undefined) { 
+              players[id] = new player(player_status[id].x, player_status[id].y);
+          } 
+          else {
+              players[id].x = player_status[id].x;
+              players[id].y = player_status[id].y;
+          }
+      }
+      ball.x = ball_status.x
+      ball.y = ball_status.y
+  });
+    
+
+  }, [main])
 
   return (
     <div>
-
-        <canvas ref={canvasRef} {...props}/>;
+        <canvas ref={canvasRef} {...props}/>
     </div>
   );
 
