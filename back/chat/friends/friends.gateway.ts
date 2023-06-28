@@ -26,6 +26,7 @@ export class FriendsGateway extends BaseGateway
 			console.log('Successfully added friend! Emitting friendAdded...');
 
 			client.emit('friendAdded', newFriend);
+			console.log('newFriend:', newFriend);
 		}
 		catch (error)
 		{
