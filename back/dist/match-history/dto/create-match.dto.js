@@ -14,10 +14,6 @@ const class_validator_1 = require("class-validator");
 class CreateMatchDto {
 }
 __decorate([
-    (0, class_validator_1.IsString)(),
-    __metadata("design:type", String)
-], CreateMatchDto.prototype, "opponentName", void 0);
-__decorate([
     (0, class_validator_1.IsNumber)(),
     __metadata("design:type", Number)
 ], CreateMatchDto.prototype, "ladder", void 0);
@@ -25,5 +21,9 @@ __decorate([
     (0, class_validator_1.IsBoolean)(),
     __metadata("design:type", Boolean)
 ], CreateMatchDto.prototype, "won", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CreateMatchDto.prototype, "gameDate", void 0);
 exports.CreateMatchDto = CreateMatchDto;
 //# sourceMappingURL=create-match.dto.js.map

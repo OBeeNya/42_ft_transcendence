@@ -1,10 +1,20 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { ax } from "../../services/axios/axios";
+import { useEffect, useState } from "react";
 
 const PongRecord = () => {
 
 	const navigate = useNavigate();
-	// const [currentTime, seCurrentTime] = use
+	const [currentTime, setCurrentTime] = useState(new Date());
+
+	useEffect(() => {
+		const timer = setInterval(() => {
+			setCurrentTime(new Date());
+		}, 1000);
+		return () => {
+			clearInterval(timer);
+		};
+	}, []);
 
     const Record = async () => {
 		const location = useLocation();
@@ -24,14 +34,38 @@ const PongRecord = () => {
             await ax.post('match-history', {
 					ladder: ladder,
 					won: won,
-					gameDate: 'test',
+					gameDate: currentTime.toLocaleDateString(),
 				}, {
 					headers: {
 						Authorization: `Bearer ${token}`
 					},
 			});
-			const exp = response.data.exp + 100 / ladder;
-			// patch user exp and ladder_level
+			let exp;
+			if (won === true) {
+				await ax.patch('users', {
+					wons: response.data.wons + 1,
+				},
+				{ headers: { Authorization: `Bearer ${token}` }});
+				exp = response.data.exp + 100 / ladder;
+			}
+			else {
+				await ax.patch('users', {
+					losses: response.data.losses + 1,
+				},
+				{ headers: { Authorization: `Bearer ${token}` }});
+				exp = response.data.exp;
+			}
+			if (exp >= 100)
+				await ax.patch('users', {
+					ladder: response.data.ladder + 1,
+					exp: 0,
+				},
+				{ headers: { Authorization: `Bearer ${token}` }});
+			else
+				await ax.patch('users', {
+					exp: exp,
+				},
+				{ headers: { Authorization: `Bearer ${token}` }});
         } catch {
             console.error('could not add match history');
         }

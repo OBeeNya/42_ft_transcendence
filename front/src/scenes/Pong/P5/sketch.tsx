@@ -295,7 +295,7 @@ class Ball {
             p5.text("reloading the page...", p5.width/2, p5.height/2 + 100);
         }
         // setTimeout(() => {  window.location.href = "/pong"; }, 3000);
-        if (p.p === 5)
+        if (p.p === pointsToWin)
             won = true;
         else
             won = false;
