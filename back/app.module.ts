@@ -7,6 +7,8 @@ import { MatchHistoryModule } from './match-history/match-history.module';
 import { ChatModule } from './chat/channels/channels.module';
 import { PongModule } from './pong/pong.module';
 import { SocketModule } from 'pong/socket/pong.socket.module';
+import { FriendsModule } from 'chat/friends/friends.module';
+import { DirectMessageModule } from 'chat/directMessage/directMessage.module';
 
 @Module({
   imports: [
@@ -20,6 +22,9 @@ import { SocketModule } from 'pong/socket/pong.socket.module';
     ChatModule,
     PongModule,
     SocketModule,
+    DirectMessageModule,
+    FriendsModule
   ],
 })
+
 export class AppModule {}
