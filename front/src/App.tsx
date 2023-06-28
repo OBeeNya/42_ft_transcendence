@@ -74,7 +74,7 @@ function App()
 
 				setUserId(response.data.id);
 
-				if(socket)
+				if (socket)
 					socket.emit('userConnected', response.data.id);
 			}
 

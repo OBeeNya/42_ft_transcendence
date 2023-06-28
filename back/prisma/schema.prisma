@@ -17,7 +17,7 @@ model User {
 	friendUsers		UserFriend[] @relation("UserFriendFriend")	// user actuel est le destinataire de la demande
 	userBlocks		UserBlock[] @relation("UserBlockUser")		// liste des users que l'user actuel a bloqué
 	blockedUsers	UserBlock[] @relation("UserBlockBlocked")	// liste des users qui ont bloqué l'user actuel
-	channels		Channel[]   @relation("UserChannels")
+	channels		Channel[] @relation("UserChannels")
 	owner			Channel[] @relation("owner")
 	wins			Int @default(0)
 	losses			Int @default(0)

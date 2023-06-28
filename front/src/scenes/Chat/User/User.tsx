@@ -2,8 +2,10 @@ import axios from 'axios';
 import { MouseEvent, useContext, useEffect, useState } from 'react';
 import { UserInfos } from "../../../services/interfaces/userInfos.interface";
 import DropdownMenu from '../DropdownMenu/DropdownMenu';
+import { SocketContext } from '../../../contexts';
 
-const User = ({user,isActive, onClick, onDirectMessageClick, navigate, blockedUsers, blockedByUsers, onBlockSuccess}:
+const User = ({user,isActive, onClick, onDirectMessageClick, navigate,
+			   blockedUsers, blockedByUsers, onBlockSuccess}:
 			  {user: UserInfos;
 			   isActive: boolean;
 			   onClick: (event: MouseEvent<HTMLElement>) => void;
@@ -14,6 +16,7 @@ const User = ({user,isActive, onClick, onDirectMessageClick, navigate, blockedUs
 			   onBlockSuccess: (userId: number) => void;}) =>
 {
 	const [currentUser, setCurrentUser] = useState<UserInfos | null>(null);
+	const socket = useContext(SocketContext);
 	const token = localStorage.getItem("token");
 
 	useEffect(() =>
@@ -64,8 +67,19 @@ const User = ({user,isActive, onClick, onDirectMessageClick, navigate, blockedUs
 
 	const handleAddFriend = async () =>
 	{
-		// Ici, vous pouvez appeler votre fonction pour ajouter un ami en utilisant l'ID de l'utilisateur
-		console.log('Add friend clicked for user ID: ', user.id);
+		try
+		{
+			console.log('Attempting to add friend...');
+
+			if (currentUser && socket)
+				socket.emit('addFriend', {userId: currentUser.id, friendId: user.id});
+			else 
+				console.log('Current user is null or socket is not available');
+		}
+		catch (error)
+		{
+			console.error('Error adding friend:', error);
+		}
 	}
 
 	return (
@@ -75,11 +89,12 @@ const User = ({user,isActive, onClick, onDirectMessageClick, navigate, blockedUs
 				<DropdownMenu
 					user={user}
 					onDirectMessageClick={onDirectMessageClick}
+					onAddFriendClick={handleAddFriend}
 					onBlock={handleBlock}
 					navigate={navigate}
 					blockedUsers={blockedUsers}
 					blockedByUsers={blockedByUsers}
-					onAddFriendClick={handleAddFriend}
+					
 				/>
 			)}
 

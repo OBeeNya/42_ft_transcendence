@@ -140,11 +140,6 @@ const UsersList = ({setCurrentUser, setPrivateMessageUserId}: UsersListProps) =>
 		}
 	};
 
-	const handleAddFriend = async (userId: number) =>
-	{
-		
-	};
-
 	return (
 		<div className="users-list">
 			{users.map((user: UserInfos, index) =>
@@ -160,7 +155,6 @@ const UsersList = ({setCurrentUser, setPrivateMessageUserId}: UsersListProps) =>
 				blockedUsers={blockedUsers}
 				blockedByUsers={blockedByUsers}
 				onBlockSuccess={handleBlockSuccess}
-				onAddFriendClick={() => handleAddFriend(user.id)}
 			/>
 		))}
 		</div>

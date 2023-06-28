@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { UserFriend } from "@prisma/client";
+import { User, UserFriend } from "@prisma/client";
 import { PrismaService } from "prisma_module/prisma.service";
 import { FriendsDto } from "./friends.dto";
 
@@ -8,24 +8,29 @@ export class FriendsService
 {
 	constructor(private prisma: PrismaService) {}
 
-	async addFriend(data: FriendsDto): Promise<UserFriend>
+	async addFriend(data: FriendsDto): Promise<User>
 	{
 		try
 		{
 			console.log(`Attempting to add friend with ID ${data.friendId} for user with ID ${data.userId}...`);
-
+	
 			const friend = await this.prisma.userFriend.create(
 			{
 				data:
 				{
 					userId: data.userId,
 					friendId: data.friendId
+				},
+				include:
+				{
+					friend: true
 				}
 			});
-
+	
 			console.log(`Friend with ID ${data.friendId} added successfully for user with ID ${data.userId}!`);
+	
+			return (friend.friend);
 
-			return (friend);
 		}
 		catch (error)
 		{
@@ -34,21 +39,27 @@ export class FriendsService
 		}
 	}
 
-	async getFriends(data: FriendsDto) : Promise<UserFriend[]>
+	async getFriends(data: FriendsDto) : Promise<User[]>
 	{
-		try 
+		try
 		{
 			console.log(`Attempting to get friends for user with ID ${data.userId}...`);
 
-			const friends = await this.prisma.userFriend.findMany(
+			const userFriends = await this.prisma.userFriend.findMany(
 			{
 				where:
 				{
 					userId: data.userId
+				},
+				include:
+				{
+					friend: true
 				}
 			});
 
 			console.log(`Friends retrieved successfully for user with ID ${data.userId}!`);
+
+			const friends = userFriends.map(userFriend => userFriend.friend);
 
 			return (friends);
 		}
