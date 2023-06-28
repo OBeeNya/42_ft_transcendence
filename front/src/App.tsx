@@ -8,6 +8,7 @@ import ProfilePage from './scenes/Profile/ProfilePage';
 import Callback42 from './scenes/CallBack42/Callback42';
 import PongPage from './scenes/Pong/PongPage';
 import PongPageGame from './scenes/Pong/PongPageGame';
+import PongPageGame2 from './scenes/Pong/PongPageGame2';
 import PongPageGameSolo from './scenes/Pong/PongPageGameSolo';
 import { ProtectedRoute , ProtectedRouteProps } from "./components/protectedRoutes";
 import OnlinePage from './scenes/Online/OnlinePage';
@@ -21,7 +22,7 @@ const defaultProtectedRouteProps: Omit<ProtectedRouteProps, 'outlet'> = {
 
 function App() {
   return (
-  <Routes>
+    <Routes>
         <Route path="/" element={<AuthPage/>} />
         <Route path="/signup" element={<SignupPage/>} />
         <Route path="/signin" element={<SigninPage/>} />
@@ -32,6 +33,7 @@ function App() {
         <Route path="/editprofile" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<EditProfilePage/>} />} />
         <Route path="/pong" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<PongPage/>} />} />
         <Route path="/pongGame/:gameId" Component={PongPageGame} element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<PongPageGame/>} />} />
+        <Route path="/pongGame2/:gameId" Component={PongPageGame2} element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<PongPageGame2/>} />} />
         <Route path="/pongGameSolo" Component={PongPageGameSolo} element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<PongPageGameSolo/>} />} />
         <Route path="/chat" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<MainPage/>} />} />
         <Route path="/online" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<OnlinePage/>} />} />
