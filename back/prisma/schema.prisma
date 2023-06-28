@@ -18,7 +18,7 @@ model User {
 	userBlocks		UserBlock[] @relation("UserBlockUser")		// liste des users que l'user actuel a bloqué
 	blockedUsers	UserBlock[] @relation("UserBlockBlocked")	// liste des users qui ont bloqué l'user actuel
 	channels        Channel[]   @relation("UserChannels")
-	owner           Channel[] @relation("owner")
+	ownedChannels           Channel[] @relation("owner")
 	wins			Int @default(0)
 	losses			Int @default(0)
 	ladder_level	Int @default(1)
@@ -75,7 +75,8 @@ model Channel {
   users     User[]   @relation("UserChannels")
   type      ChatType @default(PUBLIC)
 
-  owner User[] @relation("owner")
+  ownerId Int
+  owner User @relation("owner", fields: [ownerId], references:[id])
 
   @@map("channels")
 }

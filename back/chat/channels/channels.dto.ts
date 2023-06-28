@@ -1,7 +1,8 @@
-import { IsBoolean, IsNotEmpty, IsString } from "class-validator";
+import { IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreateChannelDto {
-    @IsString()
+    
     @IsNotEmpty()
-    channelName : string;
+    @IsString()
+    readonly name: string;
 }
