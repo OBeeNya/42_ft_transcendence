@@ -13,6 +13,13 @@ export class FriendsGateway extends BaseGateway
 				private prisma: PrismaService)
 	{
 		super();
+		console.log(`FriendsGateway instance: ${this}`);
+
+		setInterval(() =>
+		{
+			console.log('Current userSocketMap(Friends):');
+			console.log(Array.from(this.userSocketMap.entries()));
+		}, 30000);
 	}
 
 	@SubscribeMessage('addFriend')
@@ -21,7 +28,8 @@ export class FriendsGateway extends BaseGateway
 	{
 		try
 		{
-			console.log(`Received addFriend request. User ID: ${data.userId}, Friend ID: ${data.friendId}`);
+			console.log(`Received addFriend request. User ID: ${data.userId},
+						 Friend ID: ${data.friendId}`);
 			const newFriend = await this.friendsService.addFriend(data);
 			console.log('Successfully added friend! Emitting friendAdded...');
 

@@ -13,10 +13,12 @@ export class DirectMessageGateway extends BaseGateway
 				private prisma: PrismaService)
 	{
 		super();
+		console.log(`DirectMessage instance: ${this}`);
+		// console.log(`DirectMessage instance: ${JSON.stringify(this, null, 2)}`);
 
 		setInterval(() =>
 		{
-			console.log('Current userSocketMap:');
+			console.log('Current userSocketMap(DirectMessage):');
 			console.log(Array.from(this.userSocketMap.entries()));
 		}, 30000);
 	}

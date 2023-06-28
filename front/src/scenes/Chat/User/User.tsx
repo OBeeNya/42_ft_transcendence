@@ -15,8 +15,8 @@ const User = ({user,isActive, onClick, onDirectMessageClick, navigate,
 			   blockedByUsers: UserInfos[];
 			   onBlockSuccess: (userId: number) => void;}) =>
 {
-	const [currentUser, setCurrentUser] = useState<UserInfos | null>(null);
 	const socket = useContext(SocketContext);
+	const [currentUser, setCurrentUser] = useState<UserInfos | null>(null);
 	const token = localStorage.getItem("token");
 
 	useEffect(() =>
@@ -72,7 +72,11 @@ const User = ({user,isActive, onClick, onDirectMessageClick, navigate,
 			console.log('Attempting to add friend...');
 
 			if (currentUser && socket)
+			{
+				console.log(`Emitting addFriend with User ID: ${currentUser.id}, Friend ID: ${user.id}`);
 				socket.emit('addFriend', {userId: currentUser.id, friendId: user.id});
+			}
+
 			else 
 				console.log('Current user is null or socket is not available');
 		}
@@ -94,7 +98,6 @@ const User = ({user,isActive, onClick, onDirectMessageClick, navigate,
 					navigate={navigate}
 					blockedUsers={blockedUsers}
 					blockedByUsers={blockedByUsers}
-					
 				/>
 			)}
 

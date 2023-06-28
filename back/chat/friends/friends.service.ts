@@ -28,7 +28,6 @@ export class FriendsService
 			});
 	
 			console.log(`Friend with ID ${data.friendId} added successfully for user with ID ${data.userId}!`);
-	
 			return (friend.friend);
 
 		}
@@ -58,9 +57,7 @@ export class FriendsService
 			});
 
 			console.log(`Friends retrieved successfully for user with ID ${data.userId}!`);
-
 			const friends = userFriends.map(userFriend => userFriend.friend);
-
 			return (friends);
 		}
 		catch (error)

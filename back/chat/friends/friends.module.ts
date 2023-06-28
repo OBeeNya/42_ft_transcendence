@@ -5,7 +5,7 @@ import { FriendsService } from "./friends.service";
 
 @Module(
 {
-	providers: [FriendsGateway, FriendsService ,PrismaService],
+	providers: [FriendsGateway, FriendsService , PrismaService],
 	exports: [FriendsService],
 })
 
