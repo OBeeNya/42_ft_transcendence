@@ -8,30 +8,36 @@ interface DropdownMenuProps
 	onAddFriendClick: () => void;
 	onBlockClick: () => void;
 	navigate: (path: string) => void;
+	isBlocked: boolean;
 }
 
 const DropdownMenu: React.FC<DropdownMenuProps> = ({user, onDirectMessageClick,
 													onAddFriendClick, onBlockClick,
-													navigate,}) =>
+													navigate, isBlocked}) =>
 {
 	return (
 		<ul className="dropdown-menu">
 			<DropdownItem onClick={() => navigate(`/profile/${user.id}`)}>
 				Profile </DropdownItem>
 
-			<DropdownItem onClick={onDirectMessageClick}>
-				Direct Message </DropdownItem>
+			{!isBlocked && (
+				<>
+					<DropdownItem onClick={onDirectMessageClick}>
+						Direct Message </DropdownItem>
 
-			<DropdownItem onClick={onAddFriendClick}>
-				Add friend </DropdownItem>
+					<DropdownItem onClick={onAddFriendClick}>
+						Add friend </DropdownItem>
 
-			<DropdownItem onClick={onBlockClick}>
-				Block </DropdownItem>
+					<DropdownItem onClick={onBlockClick}>
+						Block </DropdownItem>
 
-			<DropdownItem onClick={() => console.log('Invite to Pong clicked')}>
-				Invite to Pong </DropdownItem>
+					<DropdownItem onClick={() => console.log('Invite to Pong clicked')}>
+						Invite to Pong </DropdownItem>
+				</>
+			)}
 		</ul>
 	);
 };
+
 
 export default DropdownMenu;

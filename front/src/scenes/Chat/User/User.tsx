@@ -14,6 +14,7 @@ const User = ({user,isActive, onClick, onDirectMessageClick, navigate}:
 	const socket = useContext(SocketContext);
 	const [currentUser, setCurrentUser] = useState<UserInfos | null>(null);
 	const [isBlocked, setIsBlocked] = useState(false);
+	const [blockedUsers, setBlockedUsers] = useState<number[]>([]);
 	const token = localStorage.getItem("token");
 
 	useEffect(() =>
@@ -94,11 +95,12 @@ const User = ({user,isActive, onClick, onDirectMessageClick, navigate}:
 				if (currentUser && (blockedId === currentUser.id || userId === currentUser.id)) 
 				{
 					console.log(`User ${blockedId} has been blocked by ${userId}`);
+					setBlockedUsers(oldBlockedUsers => [...oldBlockedUsers, blockedId]);
 					setIsBlocked(true);
 				}
 			});
 		}
-
+		
 		return () => 
 		{
 			if (socket) 
@@ -107,18 +109,20 @@ const User = ({user,isActive, onClick, onDirectMessageClick, navigate}:
 
 	}, [token, setCurrentUser, user.id, socket]);
 
+
 	return (
 		<div key={user.id} className={`user ${isActive ? 'show-menu' : ''}`}>
 			<p className="username" onClick={onClick}>{user.name}</p>
-			{isActive && !isBlocked && (
+			{isActive && !isBlocked && !blockedUsers.includes(user.id) && currentUser && !blockedUsers.includes(currentUser.id) && (
 				<DropdownMenu
 					user={user}
 					onDirectMessageClick={onDirectMessageClick}
 					onAddFriendClick={handleAddFriend}
 					onBlockClick={handleBlock}
 					navigate={navigate}
+					isBlocked={isBlocked || blockedUsers.includes(user.id)}
 				/>
-				)}
+			)}
 
 			<div className={user.connected ? 'online' : 'offline'}>
 				{user.isPlaying ?

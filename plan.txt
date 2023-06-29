@@ -25,8 +25,13 @@ Problèmes :
 4) Invite to Pong
 5) Site pas responsive
 6) Profils utilisateurs
-7) Avatars ?
+7) Avatars : ne s'affiche plus dans la users list
+   (est-ce que ça marche pour le profile ?)
 
 -------------------------------------------------------------------------------
 Blocage
 
+1) L'ajout d'ami fonctionne
+2) Voir le profile fonctionne
+3) Inviter au Pong fonctionne
+4) Je dois rafraichir pour pouvoir cliquer à nouveau sur l'utilisateur bloqué

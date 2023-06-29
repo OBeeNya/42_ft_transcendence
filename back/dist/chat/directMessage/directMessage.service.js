@@ -19,6 +19,16 @@ let DirectMessageService = class DirectMessageService {
     async create(data) {
         console.log('Creating direct message with data:', data);
         try {
+            const blockExists = await this.prisma.userBlock.findFirst({
+                where: {
+                    OR: [
+                        { userId: data.senderId, blockedId: data.receiverId },
+                        { userId: data.receiverId, blockedId: data.senderId }
+                    ]
+                }
+            });
+            if (blockExists)
+                throw new Error("Message cannot be sent. One user has blocked the other.");
             const createdMessage = await this.prisma.directMessage.create({
                 data: {
                     senderId: data.senderId,

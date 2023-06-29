@@ -27,8 +27,7 @@ export class BaseGateway
 			if (socketId === client.id)
 			{
 				this.userSocketMap.delete(userId);
-				console.log(`User ${userId} disconnected, socket id ${client.id} \
-							removed from map.`);
+				console.log(`User ${userId} disconnected, socket id ${client.id} removed from map.`);
 				break;
 			}
 		}
