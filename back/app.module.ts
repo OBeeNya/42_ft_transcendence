@@ -9,21 +9,23 @@ import { PongModule } from './pong/pong.module';
 import { SocketModule } from 'pong/socket/pong.socket.module';
 import { FriendsModule } from 'chat/friends/friends.module';
 import { DirectMessageModule } from 'chat/directMessage/directMessage.module';
+import { BlockageModule } from 'chat/blockage/blockage.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({
-      isGlobal: true,
-    }),
-    AuthModule,
-    UserModule,
-    PrismaModule,
-    MatchHistoryModule,
-    ChatModule,
-    PongModule,
-    SocketModule,
-    DirectMessageModule,
-    FriendsModule
+	ConfigModule.forRoot({
+	  isGlobal: true,
+	}),
+	AuthModule,
+	UserModule,
+	PrismaModule,
+	MatchHistoryModule,
+	ChatModule,
+	PongModule,
+	SocketModule,
+	BlockageModule,
+	DirectMessageModule,
+	FriendsModule,
   ],
 })
 

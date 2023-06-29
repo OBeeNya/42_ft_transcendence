@@ -123,28 +123,6 @@ let UserService = class UserService {
         });
         return (user.tfa_key);
     }
-    async getBlockedUsers(userId) {
-        const userBlocks = await this.prisma.userBlock.findMany({
-            where: { blockerId: userId }
-        });
-        const blockedUsers = await Promise.all(userBlocks.map((block) => this.prisma.user.findUnique({ where: { id: block.blockedId } })));
-        return (blockedUsers);
-    }
-    async getBlockedByUsers(userId) {
-        const userBlocks = await this.prisma.userBlock.findMany({
-            where: { blockedId: userId }
-        });
-        const blockedByUsers = await Promise.all(userBlocks.map((block) => this.prisma.user.findUnique({ where: { id: block.blockerId } })));
-        return (blockedByUsers);
-    }
-    async blockUser(blockerId, blockedId) {
-        return (this.prisma.userBlock.create({
-            data: {
-                blockerId: blockerId,
-                blockedId: blockedId
-            }
-        }));
-    }
 };
 UserService = __decorate([
     (0, common_1.Injectable)(),

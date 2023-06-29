@@ -13,10 +13,10 @@ model User {
 	updatedAt		DateTime @updatedAt
 	name			String @unique
 	hash			String
-	userFriends		UserFriend[] @relation("UserFriendUser")	// user actuel a init la demande d'ami
-	friendUsers		UserFriend[] @relation("UserFriendFriend")	// user actuel est le destinataire de la demande
-	userBlocks		UserBlock[] @relation("UserBlockUser")		// liste des users que l'user actuel a bloqué
-	blockedUsers	UserBlock[] @relation("UserBlockBlocked")	// liste des users qui ont bloqué l'user actuel
+	userFriends		UserFriend[] @relation("UserFriendUser")
+	friendUsers		UserFriend[] @relation("UserFriendFriend")
+	userBlocks		UserBlock[] @relation("UserBlockUser")
+	blockedUsers	UserBlock[] @relation("UserBlockBlocked")
 	channels		Channel[] @relation("UserChannels")
 	owner			Channel[] @relation("owner")
 	wins			Int @default(0)
@@ -34,6 +34,18 @@ model User {
 	tfa_key			String
 
 	@@map("users")
+}
+
+model UserBlock {
+	id			Int @id @default(autoincrement())
+	createdAt	DateTime @default(now())
+	userId		Int
+	blockedId	Int
+	user		User @relation("UserBlockUser", fields: [userId], references: [id], onDelete: Cascade)
+	blockedUser	User @relation("UserBlockBlocked", fields: [blockedId], references: [id], onDelete: Cascade)
+
+	@@map("user_blocks")
+	@@unique([userId, blockedId])
 }
 
 model UserFriend {
@@ -57,18 +69,6 @@ model DirectMessage {
 	receiver	User @relation("UserDMsReceived", fields: [receiverId], references: [id], onDelete: Cascade)
 
 	@@map("direct_messages")
-}
-
-model UserBlock {
-	id			Int @id @default(autoincrement())
-	blockerId	Int
-	blockedId	Int
-	createdAt	DateTime @default(now())
-	user		User @relation("UserBlockUser", fields: [blockerId], references: [id], onDelete: Cascade)
-	blockedUser	User @relation("UserBlockBlocked", fields: [blockedId], references: [id], onDelete: Cascade)
-
-	@@map("user_blocks")
-	@@unique([blockerId, blockedId])
 }
 
 model Channel {

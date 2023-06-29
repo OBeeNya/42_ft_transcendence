@@ -21,15 +21,12 @@ Problèmes :
 
 1) Blocage pas en temps réel
 2) Je peux me bloquer moi même
-3) Site pas responsive
-4) Profils utilisateurs
-5) Avatars ?
+3) Interface amis : statut "in game", mode spectateur
+4) Invite to Pong
+5) Site pas responsive
+6) Profils utilisateurs
+7) Avatars ?
 
 -------------------------------------------------------------------------------
-Interface amis
+Blocage
 
-Contenu tableau :
-- avatar (?) : useless
-- username : FAIT
-- mode spectateur : FAIT
-- statut (online/offline/in game) : manque in game

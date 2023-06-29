@@ -21,6 +21,16 @@ CREATE TABLE "users" (
 );
 
 -- CreateTable
+CREATE TABLE "user_blocks" (
+    "id" SERIAL NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "userId" INTEGER NOT NULL,
+    "blockedId" INTEGER NOT NULL,
+
+    CONSTRAINT "user_blocks_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "user_friends" (
     "id" SERIAL NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -39,16 +49,6 @@ CREATE TABLE "direct_messages" (
     "receiverId" INTEGER NOT NULL,
 
     CONSTRAINT "direct_messages_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "user_blocks" (
-    "id" SERIAL NOT NULL,
-    "blockerId" INTEGER NOT NULL,
-    "blockedId" INTEGER NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-
-    CONSTRAINT "user_blocks_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -128,7 +128,7 @@ CREATE TABLE "_owner" (
 CREATE UNIQUE INDEX "users_name_key" ON "users"("name");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "user_blocks_blockerId_blockedId_key" ON "user_blocks"("blockerId", "blockedId");
+CREATE UNIQUE INDEX "user_blocks_userId_blockedId_key" ON "user_blocks"("userId", "blockedId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "channels_name_key" ON "channels"("name");
@@ -149,6 +149,12 @@ CREATE UNIQUE INDEX "_owner_AB_unique" ON "_owner"("A", "B");
 CREATE INDEX "_owner_B_index" ON "_owner"("B");
 
 -- AddForeignKey
+ALTER TABLE "user_blocks" ADD CONSTRAINT "user_blocks_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "user_blocks" ADD CONSTRAINT "user_blocks_blockedId_fkey" FOREIGN KEY ("blockedId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "user_friends" ADD CONSTRAINT "user_friends_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -159,12 +165,6 @@ ALTER TABLE "direct_messages" ADD CONSTRAINT "direct_messages_senderId_fkey" FOR
 
 -- AddForeignKey
 ALTER TABLE "direct_messages" ADD CONSTRAINT "direct_messages_receiverId_fkey" FOREIGN KEY ("receiverId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "user_blocks" ADD CONSTRAINT "user_blocks_blockerId_fkey" FOREIGN KEY ("blockerId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "user_blocks" ADD CONSTRAINT "user_blocks_blockedId_fkey" FOREIGN KEY ("blockedId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "messages" ADD CONSTRAINT "messages_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

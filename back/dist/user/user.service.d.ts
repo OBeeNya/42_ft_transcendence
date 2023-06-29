@@ -1,5 +1,5 @@
 import { PrismaService } from '../prisma_module/prisma.service';
-import { User, UserBlock } from '@prisma/client';
+import { User } from '@prisma/client';
 import { EditUserDto, Create42UserDto } from './dto';
 export declare class UserService {
     private prisma;
@@ -19,7 +19,4 @@ export declare class UserService {
     create42User(dto: Create42UserDto): Promise<User>;
     find42User(id: string): Promise<User>;
     qrcode(name: string): Promise<string>;
-    getBlockedUsers(userId: number): Promise<User[]>;
-    getBlockedByUsers(userId: number): Promise<User[]>;
-    blockUser(blockerId: number, blockedId: number): Promise<UserBlock>;
 }

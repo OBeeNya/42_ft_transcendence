@@ -4,19 +4,16 @@ import { UserInfos } from "../../../services/interfaces/userInfos.interface";
 import DropdownMenu from '../DropdownMenu/DropdownMenu';
 import { SocketContext } from '../../../contexts';
 
-const User = ({user,isActive, onClick, onDirectMessageClick, navigate,
-			   blockedUsers, blockedByUsers, onBlockSuccess}:
+const User = ({user,isActive, onClick, onDirectMessageClick, navigate}:
 			  {user: UserInfos;
 			   isActive: boolean;
 			   onClick: (event: MouseEvent<HTMLElement>) => void;
 			   onDirectMessageClick: () => void;
-			   navigate: (path: string) => void;
-			   blockedUsers: UserInfos[];
-			   blockedByUsers: UserInfos[];
-			   onBlockSuccess: (userId: number) => void;}) =>
+			   navigate: (path: string) => void;}) =>
 {
 	const socket = useContext(SocketContext);
 	const [currentUser, setCurrentUser] = useState<UserInfos | null>(null);
+	const [isBlocked, setIsBlocked] = useState(false);
 	const token = localStorage.getItem("token");
 
 	useEffect(() =>
@@ -49,15 +46,17 @@ const User = ({user,isActive, onClick, onDirectMessageClick, navigate,
 	{
 		try
 		{
-			await axios.post("http://localhost:8080/users/block", {userId: user.id},
+			console.log('Attempting to block user...');
+	
+			if (currentUser && socket)
 			{
-				headers:
-				{
-					Authorization: `Bearer ${token}`,
-				},
-			});
-
-			onBlockSuccess(user.id);
+				console.log(`Emitting blockUser event with User ID: ${currentUser.id}, Blocked User ID: ${user.id}`);
+				socket.emit('blockUser', {userId: currentUser.id, blockedId: user.id});
+				setIsBlocked(true);
+			}
+	
+			else
+				console.log('Current user is null or socket is not available');
 		}
 		catch (error)
 		{
@@ -73,7 +72,7 @@ const User = ({user,isActive, onClick, onDirectMessageClick, navigate,
 
 			if (currentUser && socket)
 			{
-				console.log(`Emitting addFriend with User ID: ${currentUser.id}, Friend ID: ${user.id}`);
+				console.log(`Emitting addFriend event with User ID: ${currentUser.id}, Friend ID: ${user.id}`);
 				socket.emit('addFriend', {userId: currentUser.id, friendId: user.id});
 			}
 
@@ -86,20 +85,40 @@ const User = ({user,isActive, onClick, onDirectMessageClick, navigate,
 		}
 	}
 
+	useEffect(() =>
+	{
+		if (socket) 
+		{
+			socket.on('userBlocked', ({userId, blockedId}) => 
+			{
+				if (currentUser && (blockedId === currentUser.id || userId === currentUser.id)) 
+				{
+					console.log(`User ${blockedId} has been blocked by ${userId}`);
+					setIsBlocked(true);
+				}
+			});
+		}
+
+		return () => 
+		{
+			if (socket) 
+				socket.off('userBlocked');
+		};
+
+	}, [token, setCurrentUser, user.id, socket]);
+
 	return (
 		<div key={user.id} className={`user ${isActive ? 'show-menu' : ''}`}>
 			<p className="username" onClick={onClick}>{user.name}</p>
-			{isActive && (
+			{isActive && !isBlocked && (
 				<DropdownMenu
 					user={user}
 					onDirectMessageClick={onDirectMessageClick}
 					onAddFriendClick={handleAddFriend}
-					onBlock={handleBlock}
+					onBlockClick={handleBlock}
 					navigate={navigate}
-					blockedUsers={blockedUsers}
-					blockedByUsers={blockedByUsers}
 				/>
-			)}
+				)}
 
 			<div className={user.connected ? 'online' : 'offline'}>
 				{user.isPlaying ?

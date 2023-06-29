@@ -38,15 +38,6 @@ let UserController = class UserController {
     findOneByName(name) {
         return this.userService.findOneByName(name);
     }
-    async getBlockedUsers(user) {
-        return (this.userService.getBlockedUsers(user.id));
-    }
-    async getBlockedByUsers(user) {
-        return (this.userService.getBlockedByUsers(user.id));
-    }
-    async blockUser(user, userId) {
-        return (this.userService.blockUser(user.id, userId));
-    }
     findOneById(id) {
         return this.userService.findOneById(id);
     }
@@ -102,28 +93,6 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], UserController.prototype, "findOneByName", null);
-__decorate([
-    (0, common_1.Get)('blocked'),
-    __param(0, (0, decorator_1.GetUser)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", Promise)
-], UserController.prototype, "getBlockedUsers", null);
-__decorate([
-    (0, common_1.Get)('blockedBy'),
-    __param(0, (0, decorator_1.GetUser)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", Promise)
-], UserController.prototype, "getBlockedByUsers", null);
-__decorate([
-    (0, common_1.Post)('block'),
-    __param(0, (0, decorator_1.GetUser)()),
-    __param(1, (0, common_1.Body)('userId')),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, Number]),
-    __metadata("design:returntype", Promise)
-], UserController.prototype, "blockUser", null);
 __decorate([
     (0, common_1.Get)(":id"),
     __param(0, (0, common_1.Param)("id")),

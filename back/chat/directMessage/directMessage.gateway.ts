@@ -1,5 +1,5 @@
 import { ConnectedSocket, MessageBody, SubscribeMessage,
-	WebSocketGateway } from "@nestjs/websockets";
+		 WebSocketGateway } from "@nestjs/websockets";
 import { Socket } from "socket.io";
 import { DirectMessageService } from "./directMessage.service";
 import { DirectMessageDto } from "./directMessage.dto";
@@ -19,7 +19,7 @@ export class DirectMessageGateway extends BaseGateway
 		{
 			console.log('Current userSocketMap(DirectMessage):');
 			console.log(Array.from(this.userSocketMap.entries()));
-		}, 30000);
+		}, 50000);
 	}
 
 	@SubscribeMessage('privateMessage')

@@ -12,7 +12,8 @@ export class FriendsService
 	{
 		try
 		{
-			console.log(`Attempting to add friend with ID ${data.friendId} for user with ID ${data.userId}...`);
+			console.log(`Attempting to add friend with ID ${data.friendId} \
+						 for user with ID ${data.userId}...`);
 
 			if (data.userId === data.friendId) 
 				throw new Error("User cannot add themselves as a friend");
@@ -30,7 +31,9 @@ export class FriendsService
 				}
 			});
 	
-			console.log(`Friend with ID ${data.friendId} added successfully for user with ID ${data.userId}!`);
+			console.log(`Friend with ID ${data.friendId} added successfully \
+						 for user with ID ${data.userId}!`);
+
 			return (friend.friend);
 
 		}

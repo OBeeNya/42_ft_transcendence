@@ -130,44 +130,4 @@ export class UserService {
 		});
 		return (user.tfa_key);
 	}
-
-	//********************************BLOCAGE********************************
-
-	async getBlockedUsers(userId: number): Promise<User[]>
-	{
-		const userBlocks = await this.prisma.userBlock.findMany(
-		{
-			where: {blockerId: userId}
-		});
-
-		const blockedUsers = await Promise.all(userBlocks.map((block: {blockedId: any;}) =>
-			this.prisma.user.findUnique({where: {id: block.blockedId}})));
-	
-		return (blockedUsers);
-	}
-
-	async getBlockedByUsers(userId: number): Promise<User[]>
-	{
-		const userBlocks = await this.prisma.userBlock.findMany(
-		{
-			where: {blockedId: userId}
-		});
-
-		const blockedByUsers = await Promise.all(userBlocks.map((block: {blockerId: any;}) =>
-		this.prisma.user.findUnique({where: {id: block.blockerId}})));
-
-		return (blockedByUsers);
-	}
-
-	async blockUser(blockerId: number, blockedId: number): Promise<UserBlock>
-	{
-		return (this.prisma.userBlock.create(
-		{
-			data:
-			{
-				blockerId: blockerId,
-				blockedId: blockedId
-			}
-		}));
-	}
 }

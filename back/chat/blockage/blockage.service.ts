@@ -1,46 +1,67 @@
-// import { Injectable } from "@nestjs/common";
-// import { PrismaService } from "prisma_module/prisma.service";
-// import { UserBlock } from "@prisma/client";
-// import { BlockageDto } from "chat/blockage/blockage.dto";
+import { Injectable } from "@nestjs/common";
+import { PrismaService } from "prisma_module/prisma.service";
+import { User } from "@prisma/client";
+import { BlockageDto } from "chat/blockage/blockage.dto";
 
-// @Injectable()
-// export class BlockageService
-// {
-// 	constructor(private prisma: PrismaService) {}
+@Injectable()
+export class BlockageService
+{
+	constructor(private prisma: PrismaService) {}
 
-// 	async blockUser(data: BlockageDto): Promise<UserBlock>
-// 	{
-// 		return this.prisma.userBlock.create(
-// 		{
-// 			data:
-// 			{
-// 				blockerId: data.blockerId,
-// 				blockedId: data.blockedId
-// 			}
-// 		});
-// 	}
+	async blockUser(data: BlockageDto): Promise<User>
+	{
+		try
+		{
+			if (data.userId === data.blockedId) 
+				throw new Error("User cannot block themselves");
 
-// 	async isUserBlocked(data: BlockageDto)
-// 	{
-// 		console.log(`Checking if user ${data.blockerId} has blocked user ${data.blockedId}`);
+			const blockExists = await this.prisma.userBlock.findFirst(
+			{
+				where:
+				{
+					OR:
+					[
+						{userId: data.userId, blockedId: data.blockedId},
+						{userId: data.blockedId, blockedId: data.userId}
+					]
+				}
+			});
 
-// 		const block = await this.prisma.userBlock.findUnique(
-// 		{
-// 			where:
-// 			{
-// 				blockerId_blockedId:
-// 				{
-// 					blockerId: data.blockerId,
-// 					blockedId: data.blockedId
-// 				}
-// 			}
-// 		});
+			if (blockExists)
+				throw new Error("Block cannot be created. One user has already blocked the other.");
 
-// 		if (block !== null)
-// 			console.log(`User ${data.blockerId} has blocked user ${data.blockedId}`);
-// 		else 
-// 			console.log(`User ${data.blockerId} has not blocked user ${data.blockedId}`);
+			// Check if both users exist
+			const user = await this.prisma.user.findUnique({ where: {id: data.userId}});
+			const blockedUser = await this.prisma.user.findUnique({ where: {id: data.blockedId}});
 
-// 		return (block !== null);
-// 	}
-// }
+			if (!user || !blockedUser) 
+				throw new Error("One or both users do not exist");
+
+			// Check if block already exists
+			const existingBlock = await this.prisma.userBlock.findUnique(
+			{
+				where: {userId_blockedId: {userId: data.userId, blockedId: data.blockedId}},
+			});
+
+			if (existingBlock)
+				throw new Error("User has already been blocked");
+
+			const newBlock = await this.prisma.userBlock.create(
+			{
+				data:
+				{
+					userId: data.userId,
+					blockedId: data.blockedId
+				}
+			});
+
+			console.log(`${data.userId} blocked successfully ${data.blockedId}`)
+			return (newBlock);
+		}
+		catch (error)
+		{
+			console.error('Error while blocking user:', error);
+			throw error;
+		}
+	}
+}

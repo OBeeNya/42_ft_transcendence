@@ -1,12 +1,12 @@
-// import { IsNotEmpty, IsNumber} from 'class-validator';
+import { IsNotEmpty, IsNumber} from 'class-validator';
 
-// export class BlockageDto
-// {
-// 	@IsNotEmpty()
-// 	@IsNumber()
-// 	blockerId: number;
+export class BlockageDto
+{
+	@IsNotEmpty()
+	@IsNumber()
+	userId: number;
 
-// 	@IsNotEmpty()
-// 	@IsNumber()
-// 	blockedId: number;
-// }
+	@IsNotEmpty()
+	@IsNumber()
+	blockedId: number;
+}
