@@ -14,7 +14,6 @@ export class DirectMessageGateway extends BaseGateway
 	{
 		super();
 		console.log(`DirectMessage instance: ${this}`);
-		// console.log(`DirectMessage instance: ${JSON.stringify(this, null, 2)}`);
 
 		setInterval(() =>
 		{
