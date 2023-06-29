@@ -13,7 +13,10 @@ export class FriendsService
 		try
 		{
 			console.log(`Attempting to add friend with ID ${data.friendId} for user with ID ${data.userId}...`);
-	
+
+			if (data.userId === data.friendId) 
+				throw new Error("User cannot add themselves as a friend");
+			
 			const friend = await this.prisma.userFriend.create(
 			{
 				data:

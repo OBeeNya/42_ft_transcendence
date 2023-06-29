@@ -41,8 +41,8 @@ model UserFriend {
 	createdAt	DateTime @default(now())
 	userId		Int
 	friendId	Int
-	user		User @relation("UserFriendUser", fields: [userId], references: [id])
-	friend		User @relation("UserFriendFriend", fields: [friendId], references: [id])
+	user		User @relation("UserFriendUser", fields: [userId], references: [id], onDelete: Cascade)
+	friend		User @relation("UserFriendFriend", fields: [friendId], references: [id], onDelete: Cascade)
 
 	@@map("user_friends")
 }
