@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router-dom";
 import Content from "../../components/content"
-import Header from "../../components/header"
 import { SketchComponent } from "./P5/sketch"
 
 const PongPage = () => {
@@ -14,7 +13,6 @@ const PongPage = () => {
 
 	return (
 		<div>
-			{/* <Header /> */}
 			<Content>
 				<h1>Pong</h1>
 				<br></br>

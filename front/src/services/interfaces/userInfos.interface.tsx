@@ -12,6 +12,10 @@ export interface UserInfos
 	tfa_key: string;
 	status: string;
 	avatar_url: string;
+	exp: number;
+	ladders: number[];
+	wons: boolean[];
+	gameDates: string[];
 }
 
 export {};

@@ -1,6 +1,7 @@
 // import * as React from "react";
 import { ReactP5Wrapper, Sketch } from "@p5-wrapper/react";
 import io from "socket.io-client"
+import { ax } from "../../../services/axios/axios";
 
 const sketch: Sketch = p5 => {
 
@@ -18,12 +19,13 @@ const sketch: Sketch = p5 => {
     let playerSize = 20;
     let playerSpeed = 6;
     let ballSize = 15;
-    let ballSpeed = 5; // 3 ou 5
-    let pointsToWin = 5;
+    let ballSpeed = 3; // 3 ou 5
+    let pointsToWin = 3; // 3 ou 5
     let paused = 1;
     let drawLoops = 0;
     let newMap = true;  // passer en props
     let background: any;
+    let won: Boolean;
 
 /******************************** PLAYER ********************************/
 
@@ -51,12 +53,11 @@ class Player {
 
     move = (): void => {
         if (p5.keyIsPressed) {
-            if (p5.keyCode === p5.UP_ARROW && this.y !== 0) { 
+            if (p5.keyCode === p5.UP_ARROW && this.y !== 0)
                 this.y -= this.v;
-            } else if (p5.keyCode === p5.DOWN_ARROW && this.y !== p5.height) { 
+            else if (p5.keyCode === p5.DOWN_ARROW && this.y !== p5.height)
                 this.y += this.v;
-            }
-          }
+        }
     }
 }
 
@@ -70,10 +71,10 @@ class Ball {
     yv: number; 
 
     constructor() {
-        this.x = p5.width/2;
-        this.y = p5.height/2;
+        this.x = p5.width / 2;
+        this.y = p5.height / 2;
         this.r = p5.floor(p5.random(2));
-        this.xv = (this.r === 0)?-ballSpeed:ballSpeed;
+        this.xv = (this.r === 0)? -ballSpeed : ballSpeed;
         this.yv = ballSpeed;
     }
 
@@ -92,15 +93,14 @@ class Ball {
 
     collision(p: Player) {
         let d = p5.dist(this.x, this.y, p.x, p.y);
-        if(d < ballSize + playerSize) {
-                if(this.y - p.y < 0)
-                    this.yv = ballSpeed;
-                else if(this.y - p.y === 0) {
-                    this.yv = 0;
-                }
-                else
-                    this.yv = -ballSpeed;
-                return true;
+        if (d < ballSize + playerSize) {
+            if(this.y - p.y < 0)
+                this.yv = ballSpeed;
+            else if(this.y - p.y === 0)
+                this.yv = 0;
+            else
+                this.yv = -ballSpeed;
+            return true;
         }
         else
             return false;
@@ -109,13 +109,21 @@ class Ball {
 
 /******************************** SKETCH ********************************/
 
-    p5.setup = () => {
+    p5.setup = async () => {
+
         socket = io('http://localhost:8080/pong');
         socket.on('connect', () => console.log("connected"));
-        
-        if (newMap === true) {
-            background = p5.loadImage('https://happycoding.io/images/stanley-1.jpg');
+    	const token = localStorage.getItem("token");
+        try {
+            const response = await ax.get('http://localhost:8080/users/me', {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            socket.emit('registerUser', response.data.name);
+        } catch {
+            console.error('could not get current user in pong game');
         }
+        if (newMap === true)
+            background = p5.loadImage('https://happycoding.io/images/stanley-1.jpg');
         p5.frameRate(85);
         p5.createCanvas(750, 600);
         p5.noCursor();
@@ -131,7 +139,7 @@ class Ball {
                     p = new Player(p5.width);
                     master = false;
                 }
-            } 
+            }
             if (p !== undefined) {
                 let infosPlayer = {
                     x:p.x,
@@ -142,7 +150,6 @@ class Ball {
                     p:p.p
                 };
                 socket.emit('start', infosPlayer);
-
                 let infosBall = {
                     x:b.x,
                     y:b.y,
@@ -152,17 +159,13 @@ class Ball {
                 };
                 socket.emit('startBall', infosBall);
             }
-            if (counter >= 2) {
+            if (counter >= 2)
                 gameOn = true;
-            }
         });
-
-        socket.on('heartBeat', function(data: any[]){
+        socket.on('heartBeat', function(data: any[]) {
             players = data;
-
         });
-
-        socket.on('heartBeatBall', function(data: any){
+        socket.on('heartBeatBall', function(data: any) {
             if (data !== null) {
                 b.x = data.x;
                 b.y = data.y;
@@ -177,39 +180,24 @@ class Ball {
         p5.background(0, 0, 0);
         p5.textFont('Courier New');
         p5.fill(0, 102, 153);
-
         if(gameOn === false) {
             p5.textSize(48);
             p5.text("0", 25, 50);
             p5.text("0", 710, 50);
-
             p5.textAlign(p5.CENTER); 
             p5.textSize(40); 
             p5.text("Waiting for an opponent", p5.width/2, p5.height/2); 
         }
-
         if (gameEnded === true) {
             p5.noLoop();
             showWinner();
         }
-
         if(gameOn === true && p !== undefined) {
             p5.textSize(48);
-
-            if (newMap === true) {
-                // p5.background(60, 0, 0);
+            if (newMap === true)
                 p5.background(background);
-
-
-
-                
-            } else {
-
+            else
                 p5.rect(p5.width/2, 0, 5, 1200);
-
-            }
-
-
             if (master === true) { 
                 p5.text(p.p, 20, 40);
                 p5.text(opponentPoints, 710, 50);
@@ -221,14 +209,12 @@ class Ball {
             p.move();
             b.show();
             b.move();
-
             if (players.length === 2 && p !== undefined) {
                 let i = master === true  ? 1 : 0;
                 p5.fill(255, 0, 0);
                 p5.rectMode(p5.CENTER);
                 p5.rect(players[i].x, players[i].y, players[i].w, players[i].h);
             }
-
             if (b.collision(p) && p.x === 0)
                 b.xv = ballSpeed;
             if (b.collision(p) && p.x === p5.width)
@@ -248,13 +234,10 @@ class Ball {
                     opponentPoints++;
                 throwBall();
             }
-
             if (drawLoops < 50)
                 drawLoops++;
-
             checkPlayers();
             pauseGame();
-
             let updateInfoPlayer = {
                 x:p.x,
                 y:p.y,
@@ -264,7 +247,6 @@ class Ball {
                 p:p.p
             };
             socket.emit('update', updateInfoPlayer);
-
             let updateInfoBall = {
                 x:b.x,
                 y:b.y,
@@ -278,9 +260,7 @@ class Ball {
             drawSpectator();
     };
 
-
 /******************************** EXTERNAL FUNCTIONS ********************************/
-
 
     function throwBall() {
         if (p.p >= pointsToWin || opponentPoints >= pointsToWin) {
@@ -314,8 +294,13 @@ class Ball {
             p5.textSize(30);
             p5.text("reloading the page...", p5.width/2, p5.height/2 + 100);
         }
+        // setTimeout(() => {  window.location.href = "/pong"; }, 3000);
+        if (p.p === pointsToWin)
+            won = true;
+        else
+            won = false;
         socket.on('disconnect', () => console.log("disconnection front"));
-        setTimeout(() => {  window.location.href = "/pong"; }, 3000);
+        setTimeout(() => {  window.location.href = '/record?won=' + won; }, 3000);
     }
 
     function drawSpectator() {
@@ -327,9 +312,8 @@ class Ball {
                 p5.rectMode(p5.CENTER);
                 p5.rect(players[i].x, players[i].y, players[i].w, players[i].h);
             }
-        } else if (players.length === 0){
+        } else if (players.length === 0)
             showWinner();
-        }
     }
 
     function pauseGame() {
@@ -358,12 +342,10 @@ class Ball {
             p5.text("Opponent left :(", p5.width/2, p5.height/2); 
             p5.textSize(30);
             p5.text("reloading the page...", p5.width/2, p5.height/2 + 100);
-
             socket.on('disconnect', () => console.log("disconnection front"));
             setTimeout(() => {  window.location.href = "/pong"; }, 3000);
         }
     }
-
 
 };
 

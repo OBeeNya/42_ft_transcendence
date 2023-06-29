@@ -20,8 +20,6 @@ const ProfilePage = () => {
 					},
 				});
 				setUserInfos(response.data);
-				// console.log(userInfos?.tfa);
-				// console.log(userInfos?.name);
 			} catch (error) {
 				console.error("Failed to fetch users.");
 			}
@@ -53,7 +51,8 @@ const ProfilePage = () => {
 						<p className="userInformationKey"> Statistiques: </p>
 						<p className="userInformationValue"> Wins: {userInfos?.wins} </p>
 						<p className="userInformationValue"> Losses: {userInfos?.losses} </p>
-						<p className="userInformationValue"> Ladder lever: {userInfos?.ladder_level} </p>
+						<p className="userInformationValue"> Level: {userInfos?.ladder_level} </p>
+						<span> Progression to next level: {`${userInfos?.exp}%`}</span>
 
 						{userInfos?.tfa && (
 							  <button onClick={toggleTFAKey}>View your 2FA key</button>
@@ -70,6 +69,29 @@ const ProfilePage = () => {
 					<button >Edit your profile informations</button>
 				</a>
 				</div>
+
+				<div>
+					<h1>Match history</h1>
+					<table>
+						<thead>
+							<tr>
+								<th>Level</th>
+								<th>Won</th>
+								<th>Date</th>
+							</tr>
+						</thead>
+						<tbody>
+							{userInfos?.ladders.map((value, index) => (
+								<tr key={index}>
+									<td>{value}</td>
+									<td>{userInfos?.wons[index].toString()}</td>
+									<td>{userInfos?.gameDates[index]}</td>
+								</tr>
+							))}
+						</tbody>
+					</table>
+				</div>
+
 			</Content>
 		</div>
 	);
