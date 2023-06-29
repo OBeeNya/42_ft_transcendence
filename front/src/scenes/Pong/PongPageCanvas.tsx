@@ -56,7 +56,7 @@ const Canvas = (props: any) => {
 
     class Ball extends Entity {
     
-        private speed:number = 5;
+        private speed:number = 3;
         
         constructor(w:number, h:number, x:number, y:number){
             super(w,h,x,y);
@@ -81,16 +81,31 @@ const Canvas = (props: any) => {
                 this.yVel = -1;
             }
             
-            //check left canvas bounds
-            if(this.x <= 0){  
-                this.x = canvas.width / 2 - this.width / 2;
-                opponentScore += 1;
-            }
-            
-            //check right canvas bounds
-            if(this.x + this.width >= canvas.width){
-                this.x = canvas.width / 2 - this.width / 2;
-                playerScore += 1;
+            if (master) {
+
+                //check left canvas bounds
+                if(this.x <= 0){  
+                    this.x = canvas.width / 2 - this.width / 2;
+                    opponentScore += 1;
+                }
+                
+                //check right canvas bounds
+                if(this.x + this.width >= canvas.width){
+                    this.x = canvas.width / 2 - this.width / 2;
+                    playerScore += 1;
+                }
+            } else {
+                 //check left canvas bounds
+                 if(this.x <= 0){  
+                    this.x = canvas.width / 2 - this.width / 2;
+                    playerScore += 1;
+                }
+                    
+                //check right canvas bounds
+                if(this.x + this.width >= canvas.width){
+                    this.x = canvas.width / 2 - this.width / 2;
+                    opponentScore += 1;
+                }
             }
             
             
