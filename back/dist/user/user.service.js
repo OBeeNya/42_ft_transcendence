@@ -67,6 +67,46 @@ let UserService = class UserService {
                 },
             });
         }
+        if (dto.wins !== undefined) {
+            user = await this.prisma.user.update({
+                where: {
+                    id: userId,
+                },
+                data: {
+                    wins: dto.wins,
+                },
+            });
+        }
+        if (dto.losses !== undefined) {
+            user = await this.prisma.user.update({
+                where: {
+                    id: userId,
+                },
+                data: {
+                    losses: dto.losses,
+                },
+            });
+        }
+        if (dto.exp !== undefined) {
+            user = await this.prisma.user.update({
+                where: {
+                    id: userId,
+                },
+                data: {
+                    exp: dto.exp,
+                },
+            });
+        }
+        if (dto.ladder !== undefined) {
+            user = await this.prisma.user.update({
+                where: {
+                    id: userId,
+                },
+                data: {
+                    ladder_level: dto.exp,
+                },
+            });
+        }
         delete user.hash;
         return (user);
     }

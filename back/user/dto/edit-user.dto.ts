@@ -30,4 +30,11 @@ export class EditUserDto {
 	@IsOptional()
 	tfa?: boolean;
 
+	@IsNumber()
+	@IsOptional()
+	exp?: number;
+
+	@IsNumber()
+	@IsOptional()
+	ladder?: number;
 }

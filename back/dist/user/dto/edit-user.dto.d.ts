@@ -6,4 +6,6 @@ export declare class EditUserDto {
     ladder_level?: number;
     connected?: boolean;
     tfa?: boolean;
+    exp?: number;
+    ladder?: number;
 }

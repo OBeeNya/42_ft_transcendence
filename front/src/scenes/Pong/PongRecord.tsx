@@ -42,13 +42,15 @@ const PongRecord = () => {
 			});
 			let exp;
 			if (won === true) {
+				console.log(response.data.wins + 1);
 				await ax.patch('users', {
-					wons: response.data.wons + 1,
+					wins: response.data.wins + 1,
 				},
 				{ headers: { Authorization: `Bearer ${token}` }});
 				exp = response.data.exp + 100 / ladder;
 			}
 			else {
+				console.log(response.data.losses + 1);
 				await ax.patch('users', {
 					losses: response.data.losses + 1,
 				},
