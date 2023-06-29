@@ -29,17 +29,7 @@ Problèmes :
 Interface amis
 
 Contenu tableau :
-- avatar (?)
-- username
-- mode spectateur
-- statut (online/offline/in game)
-
-Étapes
-
-1) Cliquer sur "Add friend" enregistre l'id de l'utilisateur qui
-   sera ajouté en ami.
-
-2) L'username de cet utilisateur est stocke dans le tableau (http://localhost:3000/friends)
-
-Comment se passe l'ajout d'ami dans mon code actuellement ?
-
+- avatar (?) : useless
+- username : FAIT
+- mode spectateur : FAIT
+- statut (online/offline/in game) : manque in game

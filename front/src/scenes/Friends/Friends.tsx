@@ -2,6 +2,8 @@ import { useContext, useEffect, useState } from "react";
 import { SocketContext } from "../../contexts";
 import axios from "axios";
 import { UserInfos } from "../../services/interfaces/userInfos.interface"
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faEye } from '@fortawesome/free-solid-svg-icons'
 import './Friends.css';
 
 const Friends = () => 
@@ -82,38 +84,43 @@ const Friends = () =>
 
 	return (
 		<div className="content-body friends">
-	 	 <h1>Friends</h1>
-	 	 <table>
-			<thead>
-			  <tr>
-				<th>Username</th>
-				<th>Status</th>
-				{/* <th>Spectator</th> */}
-		 	 </tr>
-			</thead>
-			<tbody>
-			{users.map((user: UserInfos) =>
-			(
-				<tr key={user.id}>
-				  <td>{user.name}</td>
-				  <td className={user.connected ? 'online' : 'offline'}>
-					{user.connected ?
-					  <>
-						<div className="online-indicator" />
-						<span>Online</span>
-				 	 </> :
-				 	 <>
-						<div className="offline-indicator" />
-						<span>Offline</span>
-					  </>
-					}
-			 	 </td>
-				</tr>
-		  	))}
-			</tbody>
-	 	 </table>
+			  <h1>Friends</h1>
+			  <table>
+				<thead>
+				  <tr>
+					<th>Username</th>
+					<th>Status</th>
+					<th>Spectator</th>
+				  </tr>
+				</thead>
+				<tbody>
+				{users.map((user: UserInfos) =>
+				(
+					<tr key={user.id}>
+					  <td>{user.name}</td>
+					  <td className={user.connected ? 'online' : 'offline'}>
+						{user.connected ?
+						  <>
+							<div className="online-indicator" />
+							<span>Online</span>
+						  </> :
+						  <>
+							<div className="offline-indicator" />
+							<span>Offline</span>
+						  </>
+						}
+					  </td>
+					  <td>
+						<button onClick={() => { /* fonction mode spec*/ }}>
+							<FontAwesomeIcon icon={faEye} />
+						</button>
+					 </td>
+					</tr>
+				  ))}
+				</tbody>
+			  </table>
 		</div>
-	);
+	)
 }
 
 export default Friends;

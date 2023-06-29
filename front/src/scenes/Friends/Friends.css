@@ -53,3 +53,10 @@
 	display: inline-block;
 	margin-right: 5px;
 } */
+
+.friends td {
+	border: 1px solid #fff;
+	padding: 20px;
+	text-align: center;
+	word-wrap: break-word;
+}

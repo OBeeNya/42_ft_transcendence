@@ -14,12 +14,6 @@ export class FriendsGateway extends BaseGateway
 	{
 		super();
 		console.log(`FriendsGateway instance: ${this}`);
-
-		setInterval(() =>
-		{
-			console.log('Current userSocketMap(Friends):');
-			console.log(Array.from(this.userSocketMap.entries()));
-		}, 30000);
 	}
 
 	@SubscribeMessage('addFriend')
