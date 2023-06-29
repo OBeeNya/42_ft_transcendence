@@ -42,7 +42,6 @@ const PongRecord = () => {
 			});
 			let exp;
 			if (won === true) {
-				console.log(response.data.wins + 1);
 				await ax.patch('users', {
 					wins: response.data.wins + 1,
 				},
@@ -50,7 +49,6 @@ const PongRecord = () => {
 				exp = response.data.exp + 100 / ladder;
 			}
 			else {
-				console.log(response.data.losses + 1);
 				await ax.patch('users', {
 					losses: response.data.losses + 1,
 				},
@@ -59,7 +57,7 @@ const PongRecord = () => {
 			}
 			if (exp >= 100)
 				await ax.patch('users', {
-					ladder: response.data.ladder + 1,
+					ladder: response.data.ladder_level + 1,
 					exp: 0,
 				},
 				{ headers: { Authorization: `Bearer ${token}` }});

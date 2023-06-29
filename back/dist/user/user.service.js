@@ -103,7 +103,7 @@ let UserService = class UserService {
                     id: userId,
                 },
                 data: {
-                    ladder_level: dto.exp,
+                    ladder_level: dto.ladder,
                 },
             });
         }

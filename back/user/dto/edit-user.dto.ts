@@ -37,4 +37,5 @@ export class EditUserDto {
 	@IsNumber()
 	@IsOptional()
 	ladder?: number;
+	
 }
