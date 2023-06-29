@@ -84,7 +84,7 @@ const ProfilePage = () => {
 							{userInfos?.ladders.map((value, index) => (
 								<tr key={index}>
 									<td>{value}</td>
-									<td>{userInfos?.wons[index]}</td>
+									<td>{userInfos?.wons[index].toString()}</td>
 									<td>{userInfos?.gameDates[index]}</td>
 								</tr>
 							))}
