@@ -8,23 +8,23 @@ let players = [];
 let b;
 let interval = 10;
 
-function Player(id, x, y, v, w, h, p){
+function Player(id, x, y, v, width, height, p){
     this.id = id;
     this.x = x;
     this.y = y;
-    this.v = v;
-    this.w = w;
-    this.h = h;
-    this.p = p;
+    // this.v = v;
+    this.width = width;
+    this.height = height;
+    // this.p = p;
 }
 
-function Ball(id, x, y, xv, yv, r){
+function Ball(id, x, y, xVel, yVel){
     this.id = id;
     this.x = x;
     this.y = y;
-    this.xv = xv;
-    this.yv = yv;
-    this.r = r;
+    this.xVel = xVel;
+    this.yVel = yVel;
+    // this.r = r;
 }
 
 /*********************** SERVER SOCKET ***********************/
@@ -52,13 +52,17 @@ export class SocketEvents {
                 return;
             }
             if (players.length < 2) {
+                console.log("adding new player");
                 let p = new Player(client.id, data.x, data.y, data.v, data.w, data.h, data.p);
                 players.push(p);
+                // console.log("players.length: ", players.length);
+
             }
         })
 
         client.on("startBall", function(data) {
-            b = new Ball(client.id, data.x, data.y, data.xv, data.yv, data.r);
+            // console.log("ball:", data);
+            b = new Ball(client.id, data.x, data.y, data.xVel, data.yVel);
         })
 
         client.on('update', function(data) {
@@ -70,19 +74,19 @@ export class SocketEvents {
             if (pl !== undefined) {
                 pl.x = data.x;
                 pl.y = data.y;
-                pl.v = data.v;
-                pl.w = data.w;
-                pl.h = data.h;
-                pl.p = data.p;
+                pl.width = data.w;
+                pl.height = data.h;
+                // pl.v = data.v;
+                // pl.p = data.p;
             }
         })
 
         client.on('updateBall', function(data) {
             b.x = data.x;
             b.y = data.y;
-            b.xv = data.xv;
-            b.yv = data.yv;
-            b.r = data.r;
+            b.xVel = data.xVel;
+            b.yVel = data.yVel;
+            // b.r = data.r;
         })
     }
     

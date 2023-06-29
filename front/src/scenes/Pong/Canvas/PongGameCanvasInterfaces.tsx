@@ -132,14 +132,14 @@ export interface Game_data_extended extends Game_data {
   avatar2URL: string;
 }
 
-export interface StateSoloPong {
-  ballX: number;
-  ballY: number;
-  paddleLeftY: number;
-  gameStarted: boolean;
-  player1Score: number;
-  player1Name: string;
-  isSettingsShown?: boolean;
-  settingsState: "up" | "down" | "none";
-  avatarP1URL: string,
-}
+// export interface StateSoloPong {
+//   ballX: number;
+//   ballY: number;
+//   paddleLeftY: number;
+//   gameStarted: boolean;
+//   player1Score: number;
+//   player1Name: string;
+//   isSettingsShown?: boolean;
+//   settingsState: "up" | "down" | "none";
+//   avatarP1URL: string,
+// }
