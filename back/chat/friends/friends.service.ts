@@ -12,9 +12,6 @@ export class FriendsService
 	{
 		try
 		{
-			console.log(`Attempting to add friend with ID ${data.friendId}` + 
-						`for user with ID ${data.userId}...`);
-
 			if (data.userId === data.friendId) 
 				throw new Error("User cannot add themselves as a friend");
 
@@ -29,9 +26,9 @@ export class FriendsService
 					]
 				}
 			});
-		
+
 			if (blockExists)
-				throw new Error(`Friend cannot be added.` + 
+				throw new Error(`Friend cannot be added. ` + 
 								`One user has blocked the other.`);
 
 			const friend = await this.prisma.userFriend.create(
@@ -46,9 +43,9 @@ export class FriendsService
 					friend: true
 				}
 			});
-	
-			console.log(`Friend with ID ${data.friendId} added successfully` + 
-						`for user with ID ${data.userId}!`);
+
+			console.log(`User with ID ${data.userId} ` +
+						`added ${data.friendId} as friend!`);
 
 			return (friend.friend);
 		}
@@ -63,9 +60,6 @@ export class FriendsService
 	{
 		try
 		{
-			console.log(`Attempting to get friends` + 
-						`for user with ID ${data.userId}...`);
-
 			const userFriends = await this.prisma.userFriend.findMany(
 			{
 				where:
@@ -77,9 +71,6 @@ export class FriendsService
 					friend: true
 				}
 			});
-
-			console.log(`Friends retrieved successfully for user` + 
-						`with ID ${data.userId}!`);
 
 			const friends = userFriends.map(userFriend => userFriend.friend);
 			return (friends);

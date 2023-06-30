@@ -30,14 +30,12 @@ export class BlockageService
 			if (blockExists)
 				throw new Error("Block cannot be created. One user has already blocked the other.");
 
-			// Check if both users exist
 			const user = await this.prisma.user.findUnique({ where: {id: data.userId}});
 			const blockedUser = await this.prisma.user.findUnique({ where: {id: data.blockedId}});
 
 			if (!user || !blockedUser) 
 				throw new Error("One or both users do not exist");
 
-			// Check if block already exists
 			const existingBlock = await this.prisma.userBlock.findUnique(
 			{
 				where: {userId_blockedId: {userId: data.userId, blockedId: data.blockedId}},
@@ -55,7 +53,6 @@ export class BlockageService
 				}
 			});
 
-			console.log(`${data.userId} blocked successfully ${data.blockedId}`)
 			return (newBlock);
 		}
 		catch (error)

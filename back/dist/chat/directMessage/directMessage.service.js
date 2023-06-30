@@ -17,7 +17,6 @@ let DirectMessageService = class DirectMessageService {
         this.prisma = prisma;
     }
     async create(data) {
-        console.log('Creating direct message with data:', data);
         try {
             const blockExists = await this.prisma.userBlock.findFirst({
                 where: {

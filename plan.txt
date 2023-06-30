@@ -19,9 +19,7 @@ Un utilisateur essaye de rejoindre un channel :
 -------------------------------------------------------------------------------
 Problèmes :
 
-1) Interface amis : statut "in game", mode spectateur
-2) Invite to Pong (l'implementer et l'adapter au blocage)
-3) Site pas responsive
-4) Profils utilisateurs
-5) Avatars : ne s'affiche plus dans la users list
-   (est-ce que ça marche pour le profile ?)
+1) Pas de statut "In game", et le mode spectateur ne marche pas dans l'interface amis
+2) Invite to Pong pas implémenté (+ l'adapter au blocage!)
+3) Voir le profil des utilisateurs ne marche pas
+4) Site pas responsive

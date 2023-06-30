@@ -10,8 +10,6 @@ export class DirectMessageService
 
 	async create(data: DirectMessageDto): Promise<DirectMessage>
 	{
-		console.log('Creating direct message with data:', data);
-
 		try
 		{
 			const blockExists = await this.prisma.userBlock.findFirst(

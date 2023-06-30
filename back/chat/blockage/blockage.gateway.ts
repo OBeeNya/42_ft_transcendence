@@ -20,8 +20,6 @@ export class BlockageGateway extends BaseGateway
 	async handleBlockUser(@MessageBody() data: BlockageDto,
 						  @ConnectedSocket() client: Socket)
 	{
-		console.log(`${data.userId} attempting to block ${data.blockedId}`);
-
 		try
 		{
 			await this.blockageService.blockUser(data);

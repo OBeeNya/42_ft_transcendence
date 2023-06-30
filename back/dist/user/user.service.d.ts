@@ -1,12 +1,39 @@
 import { PrismaService } from '../prisma_module/prisma.service';
-import { User } from '@prisma/client';
 import { EditUserDto, Create42UserDto } from './dto';
 export declare class UserService {
     private prisma;
     constructor(prisma: PrismaService);
-    findAll(): import(".prisma/client").Prisma.PrismaPromise<User[]>;
+    findAll(): import(".prisma/client").Prisma.PrismaPromise<(import("@prisma/client/runtime").GetResult<{
+        id: number;
+        createdAt: Date;
+        updatedAt: Date;
+        name: string;
+        hash: string;
+        wins: number;
+        losses: number;
+        ladder_level: number;
+        oauthId: string;
+        connected: boolean;
+        isPlaying: boolean;
+        tfa: boolean;
+        tfa_key: string;
+    }, unknown, never> & {})[]>;
     findOneById(id: string): Promise<void>;
-    findOneByName(name: string): Promise<User>;
+    findOneByName(name: string): Promise<import("@prisma/client/runtime").GetResult<{
+        id: number;
+        createdAt: Date;
+        updatedAt: Date;
+        name: string;
+        hash: string;
+        wins: number;
+        losses: number;
+        ladder_level: number;
+        oauthId: string;
+        connected: boolean;
+        isPlaying: boolean;
+        tfa: boolean;
+        tfa_key: string;
+    }, unknown, never> & {}>;
     editUser(userId: number, dto: EditUserDto): Promise<any>;
     deleteUserById(id: string): Promise<{
         deletedUsers: number;
@@ -16,7 +43,35 @@ export declare class UserService {
         deletedUsers: number;
         nbUsers: number;
     }>;
-    create42User(dto: Create42UserDto): Promise<User>;
-    find42User(id: string): Promise<User>;
+    create42User(dto: Create42UserDto): Promise<import("@prisma/client/runtime").GetResult<{
+        id: number;
+        createdAt: Date;
+        updatedAt: Date;
+        name: string;
+        hash: string;
+        wins: number;
+        losses: number;
+        ladder_level: number;
+        oauthId: string;
+        connected: boolean;
+        isPlaying: boolean;
+        tfa: boolean;
+        tfa_key: string;
+    }, unknown, never> & {}>;
+    find42User(id: string): Promise<import("@prisma/client/runtime").GetResult<{
+        id: number;
+        createdAt: Date;
+        updatedAt: Date;
+        name: string;
+        hash: string;
+        wins: number;
+        losses: number;
+        ladder_level: number;
+        oauthId: string;
+        connected: boolean;
+        isPlaying: boolean;
+        tfa: boolean;
+        tfa_key: string;
+    }, unknown, never> & {}>;
     qrcode(name: string): Promise<string>;
 }
