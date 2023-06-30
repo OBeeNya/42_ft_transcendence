@@ -93,7 +93,7 @@ let UserService = class UserService {
                     id: userId,
                 },
                 data: {
-                    exp: dto.exp,
+                    exp: Math.ceil(dto.exp),
                 },
             });
         }

@@ -5,8 +5,10 @@ export declare class SocketEvents {
     getCounter(): void;
     heartBeat(): void;
     heartBeatBall(): void;
+    heartBeatScore(): void;
     startHeartbeat(): void;
     startBallHeartbeat(): void;
+    startScoreHeartbeat(): void;
     afterInit(): void;
     handleDisconnect(): void;
 }

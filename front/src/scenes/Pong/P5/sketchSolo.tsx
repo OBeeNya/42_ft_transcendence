@@ -50,9 +50,7 @@ class Player {
     }
 }
 
-
 /******************************** AI ************************************/
-
 
 class AI {
     x: number;
@@ -85,9 +83,7 @@ class AI {
     }
 }
 
-
 /******************************** BALL ********************************/
-
 
 class Ball {
     x: number; 
@@ -134,7 +130,6 @@ class Ball {
     }
 }
 
-
 /******************************** SKETCH ********************************/
 
     p5.setup = () => {
@@ -175,9 +170,7 @@ class Ball {
         pauseGame();
     };
 
-
 /******************************** EXTERNAL FUNCTIONS ********************************/
-
 
     function throwBall() {
         if (p.p >= pointsToWin || opponentPoints >= pointsToWin) {
@@ -212,8 +205,6 @@ class Ball {
 
     function pauseGame() {
         if (p5.keyIsPressed) {
-            let tempX = b.xv;
-            let tempy = b.yv;
             if (p5.keyCode === p5.LEFT_ARROW) {
                 if (paused === 1) {
                     b.xv = 0;

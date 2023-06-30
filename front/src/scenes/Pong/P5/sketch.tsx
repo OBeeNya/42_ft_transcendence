@@ -1,7 +1,5 @@
-// import * as React from "react";
 import { ReactP5Wrapper, Sketch } from "@p5-wrapper/react";
 import io from "socket.io-client"
-import { ax } from "../../../services/axios/axios";
 
 const sketch: Sketch = p5 => {
 
@@ -19,11 +17,12 @@ const sketch: Sketch = p5 => {
     let playerSize = 20;
     let playerSpeed = 6;
     let ballSize = 15;
-    let ballSpeed = 3; // 3 ou 5
-    let pointsToWin = 3; // 3 ou 5
+    let ballSpeed = 5; // 3 ou 5
+    let pointsToWinProps = 5;  // variable à envoyer
+    let pointsToWin = pointsToWinProps - 1;
     let paused = 1;
     let drawLoops = 0;
-    let newMap = true;  // passer en props
+    let newMap = false;  // passer en props
     let background: any;
     let won: Boolean;
 
@@ -39,7 +38,7 @@ class Player {
 
     constructor(x:number) {
         this.x = x;
-        this.y = p5.height/2;
+        this.y = p5.height / 2;
         this.v = playerSpeed;
         this.w = playerSize;
         this.h = 80;
@@ -100,28 +99,19 @@ class Ball {
                 this.yv = 0;
             else
                 this.yv = -ballSpeed;
-            return true;
+            return (true);
         }
         else
-            return false;
+            return (false);
     }
 }
 
 /******************************** SKETCH ********************************/
 
-    p5.setup = async () => {
+    p5.setup = () => {
 
         socket = io('http://localhost:8080/pong');
         socket.on('connect', () => console.log("connected"));
-    	const token = localStorage.getItem("token");
-        try {
-            const response = await ax.get('http://localhost:8080/users/me', {
-                headers: { Authorization: `Bearer ${token}` }
-            });
-            socket.emit('registerUser', response.data.name);
-        } catch {
-            console.error('could not get current user in pong game');
-        }
         if (newMap === true)
             background = p5.loadImage('https://happycoding.io/images/stanley-1.jpg');
         p5.frameRate(85);
@@ -142,20 +132,20 @@ class Ball {
             }
             if (p !== undefined) {
                 let infosPlayer = {
-                    x:p.x,
-                    y:p.y,
-                    v:p.v,
-                    w:p.w,
-                    h:p.h,
-                    p:p.p
+                    x: p.x,
+                    y: p.y,
+                    v: p.v,
+                    w: p.w,
+                    h: p.h,
+                    // p:p.p
                 };
                 socket.emit('start', infosPlayer);
                 let infosBall = {
-                    x:b.x,
-                    y:b.y,
-                    xv:b.xv,
-                    yv:b.yv,
-                    r:b.r
+                    x: b.x,
+                    y: b.y,
+                    xv: b.xv,
+                    yv: b.yv,
+                    r: b.r
                 };
                 socket.emit('startBall', infosBall);
             }
@@ -172,6 +162,19 @@ class Ball {
                 b.xv = data.xv;
                 b.yv = data.yv;
                 b.r = data.r;
+            }
+        });
+
+        socket.on('heartBeatScore', function(data: any){
+            if (data !== null) {
+                if (master === true) {
+                    p.p = data[0];
+                    opponentPoints = data[1];
+                }
+                else {
+                    p.p = data[1];
+                    opponentPoints = data[0];
+                }
             }
         });
     }
@@ -197,7 +200,7 @@ class Ball {
             if (newMap === true)
                 p5.background(background);
             else
-                p5.rect(p5.width/2, 0, 5, 1200);
+                p5.rect(p5.width / 2, 0, 5, 1200);
             if (master === true) { 
                 p5.text(p.p, 20, 40);
                 p5.text(opponentPoints, 710, 50);
@@ -221,17 +224,17 @@ class Ball {
                 b.xv = -ballSpeed;
             if (b.x === 0) {
                 p5.noLoop();
-                if (master === false)
-                    p.p++;
-                else
-                    opponentPoints++;
+                if (master === false) {
+                    socket.emit('updateScoreSlave', p.p);
+                }
+                    // p.p++;
                 throwBall();
             } else if (b.x === p5.width) {
                 p5.noLoop();
-                if (master === true)
-                    p.p++;
-                else
-                    opponentPoints++;
+                if (master === true) {
+                    socket.emit('updateScoreMaster', p.p);
+                }
+                    // p.p++;
                 throwBall();
             }
             if (drawLoops < 50)
@@ -239,20 +242,20 @@ class Ball {
             checkPlayers();
             pauseGame();
             let updateInfoPlayer = {
-                x:p.x,
-                y:p.y,
-                v:p.v,
-                w:p.w,
-                h:p.h,
-                p:p.p
+                x: p.x,
+                y: p.y,
+                v: p.v,
+                w: p.w,
+                h: p.h,
+                p: p.p
             };
             socket.emit('update', updateInfoPlayer);
             let updateInfoBall = {
-                x:b.x,
-                y:b.y,
-                xv:b.xv,
-                yv:b.yv,
-                r:b.r
+                x: b.x,
+                y: b.y,
+                xv: b.xv,
+                yv: b.yv,
+                r: b.r
             };
             socket.emit('updateBall', updateInfoBall);
         } 
@@ -263,13 +266,13 @@ class Ball {
 /******************************** EXTERNAL FUNCTIONS ********************************/
 
     function throwBall() {
-        if (p.p >= pointsToWin || opponentPoints >= pointsToWin) {
+        if (p.p >= pointsToWin || opponentPoints >= pointsToWin ) {
             gameOn = false;
             gameEnded = true;
         }
         p5.loop();
-        b.x = p5.width/2;
-        b.y = p5.height/2;
+        b.x = p5.width / 2;
+        b.y = p5.height / 2;
     }
 
     function showWinner() {
@@ -295,7 +298,7 @@ class Ball {
             p5.text("reloading the page...", p5.width/2, p5.height/2 + 100);
         }
         // setTimeout(() => {  window.location.href = "/pong"; }, 3000);
-        if (p.p === pointsToWin)
+        if (p.p === pointsToWinProps)
             won = true;
         else
             won = false;

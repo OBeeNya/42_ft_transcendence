@@ -7,6 +7,9 @@ let connections: number = 0;
 let players = [];
 let b;
 let interval = 10;
+// let masterScore = 0;
+// let slaveScore = 0;
+let scores: number[] = [0, 0];
 
 function Player(id, x, y, v, w, h, p) {
     this.id = id;
@@ -15,7 +18,7 @@ function Player(id, x, y, v, w, h, p) {
     this.v = v;
     this.w = w;
     this.h = h;
-    this.p = p;
+    // this.p = p;
 }
 
 function Ball(id, x, y, xv, yv, r) {
@@ -71,7 +74,7 @@ export class SocketEvents {
                 pl.v = data.v;
                 pl.w = data.w;
                 pl.h = data.h;
-                pl.p = data.p;
+                // pl.p = data.p;
             }
         });
 
@@ -81,8 +84,21 @@ export class SocketEvents {
             b.xv = data.xv;
             b.yv = data.yv;
             b.r = data.r;
-        });
+        })
 
+        client.on('updateScoreMaster', function(data) {
+            // console.log("score master: ", data);
+            data++;
+            scores[0] = data;
+            // console.log("score master 2: ", data);
+        })
+
+        client.on('updateScoreSlave', function(data) {
+            // console.log("score slave: ", data);
+            data++;
+            scores[1] = data;
+            // console.log("score slave2: ", data);
+        })
     }
 
     getCounter() {
@@ -97,6 +113,10 @@ export class SocketEvents {
         this.server.emit('heartBeatBall', b); 
     }
 
+    heartBeatScore() {
+        this.server.emit('heartBeatScore', scores); 
+    }
+
     startHeartbeat() {
         setInterval(() => {
           this.heartBeat();
@@ -109,9 +129,16 @@ export class SocketEvents {
         }, interval);
     }
 
+    startScoreHeartbeat() {
+        setInterval(() => {
+            this.heartBeatScore();
+        }, interval);
+    }
+
     afterInit() {
         this.startHeartbeat();
         this.startBallHeartbeat();
+        this.startScoreHeartbeat();
     }
 
     //deconnexion
@@ -119,6 +146,7 @@ export class SocketEvents {
     handleDisconnect() {
         connections--;
         players = [];
+        scores = [0, 0];
         // console.log('client disconnected: ', client.id + "; connexion number: " + connections);
     }
 

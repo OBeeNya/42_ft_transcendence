@@ -16,6 +16,7 @@ let connections = 0;
 let players = [];
 let b;
 let interval = 10;
+let scores = [0, 0];
 function Player(id, x, y, v, w, h, p) {
     this.id = id;
     this.x = x;
@@ -23,7 +24,6 @@ function Player(id, x, y, v, w, h, p) {
     this.v = v;
     this.w = w;
     this.h = h;
-    this.p = p;
 }
 function Ball(id, x, y, xv, yv, r) {
     this.id = id;
@@ -60,7 +60,6 @@ let SocketEvents = class SocketEvents {
                 pl.v = data.v;
                 pl.w = data.w;
                 pl.h = data.h;
-                pl.p = data.p;
             }
         });
         client.on('updateBall', function (data) {
@@ -69,6 +68,14 @@ let SocketEvents = class SocketEvents {
             b.xv = data.xv;
             b.yv = data.yv;
             b.r = data.r;
+        });
+        client.on('updateScoreMaster', function (data) {
+            data++;
+            scores[0] = data;
+        });
+        client.on('updateScoreSlave', function (data) {
+            data++;
+            scores[1] = data;
         });
     }
     getCounter() {
@@ -80,6 +87,9 @@ let SocketEvents = class SocketEvents {
     heartBeatBall() {
         this.server.emit('heartBeatBall', b);
     }
+    heartBeatScore() {
+        this.server.emit('heartBeatScore', scores);
+    }
     startHeartbeat() {
         setInterval(() => {
             this.heartBeat();
@@ -90,13 +100,20 @@ let SocketEvents = class SocketEvents {
             this.heartBeatBall();
         }, interval);
     }
+    startScoreHeartbeat() {
+        setInterval(() => {
+            this.heartBeatScore();
+        }, interval);
+    }
     afterInit() {
         this.startHeartbeat();
         this.startBallHeartbeat();
+        this.startScoreHeartbeat();
     }
     handleDisconnect() {
         connections--;
         players = [];
+        scores = [0, 0];
     }
 };
 __decorate([
