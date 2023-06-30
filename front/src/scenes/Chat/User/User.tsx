@@ -100,7 +100,7 @@ const User = ({user,isActive, onClick, onDirectMessageClick, navigate}:
 				}
 			});
 		}
-		
+
 		return () => 
 		{
 			if (socket) 
@@ -108,7 +108,6 @@ const User = ({user,isActive, onClick, onDirectMessageClick, navigate}:
 		};
 
 	}, [token, setCurrentUser, user.id, socket]);
-
 
 	return (
 		<div key={user.id} className={`user ${isActive ? 'show-menu' : ''}`}>

@@ -19,7 +19,7 @@ export class DirectMessageGateway extends BaseGateway
 		{
 			console.log('Current userSocketMap(DirectMessage):');
 			console.log(Array.from(this.userSocketMap.entries()));
-		}, 50000);
+		}, 120000);
 	}
 
 	@SubscribeMessage('privateMessage')

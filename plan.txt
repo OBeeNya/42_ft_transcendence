@@ -19,19 +19,10 @@ Un utilisateur essaye de rejoindre un channel :
 -------------------------------------------------------------------------------
 Problèmes :
 
-1) Blocage pas en temps réel
-2) Je peux me bloquer moi même
-3) Interface amis : statut "in game", mode spectateur
-4) Invite to Pong
-5) Site pas responsive
-6) Profils utilisateurs
-7) Avatars : ne s'affiche plus dans la users list
+1) Interface amis : statut "in game", mode spectateur
+2) Invite to Pong (l'implementer et l'adapter au blocage)
+3) Site pas responsive
+4) Profils utilisateurs
+5) Avatars : ne s'affiche plus dans la users list
    (est-ce que ça marche pour le profile ?)
 
--------------------------------------------------------------------------------
-Blocage
-
-1) L'ajout d'ami fonctionne
-2) Voir le profile fonctionne
-3) Inviter au Pong fonctionne
-4) Je dois rafraichir pour pouvoir cliquer à nouveau sur l'utilisateur bloqué
