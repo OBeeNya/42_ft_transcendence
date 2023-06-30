@@ -8,41 +8,36 @@
 	border-collapse: separate;
 	border-spacing: 0;
 	table-layout: fixed;
-	border-radius: 15px;
+	border-radius: 1.5em;
 	overflow: hidden;
-	border: 1px solid #fff;
+	border: 0.1em solid #fff;
 }
 
 .friends th {
 	border: none;
-	padding: 20px;
+	padding: 1.5em;
 	text-align: center;
 	word-wrap: break-word;
 }
 
 .friends td {
-	border: 1px solid #fff;
-	padding: 20px;
+	border: 0.1em solid #fff;
+	padding: 1.5em;
 	text-align: center;
 	word-wrap: break-word;
 }
 
-.online-indicator {
+.online-indicator, .offline-indicator {
 	background-color: green;
-	width: 10px;
-	height: 10px;
+	width: 0.7em;
+	height: 0.7em;
 	border-radius: 50%;
 	display: inline-block;
-	margin-right: 5px;
+	margin-right: 0.5em;
 }
 
 .offline-indicator {
 	background-color: red;
-	width: 10px;
-	height: 10px;
-	border-radius: 50%;
-	display: inline-block;
-	margin-right: 5px;
 }
 
 /* .ingame-indicator {
@@ -55,8 +50,8 @@
 } */
 
 .friends td {
-	border: 1px solid #fff;
-	padding: 20px;
+	border: 0.1em solid #fff;
+	padding: 1.5em;
 	text-align: center;
 	word-wrap: break-word;
 }

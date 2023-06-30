@@ -103,12 +103,12 @@ const ChatPage = () =>
 					</div>
 				</buttonChannelContext.Provider>
                 <div className="chat-section">
-				{privateMessageUserId && currentUser &&
-					<DirectMessageForm senderId={currentUser.id}
-									   receiverId={privateMessageUserId} />
-				}
-				<ChatBox senderId={currentUser ? currentUser.id : -1}
-						 receiverId={privateMessageUserId ? privateMessageUserId : -1} />
+					{privateMessageUserId && currentUser &&
+						<DirectMessageForm senderId={currentUser.id}
+										   receiverId={privateMessageUserId} />
+					}
+					<ChatBox senderId={currentUser ? currentUser.id : -1}
+							 receiverId={privateMessageUserId ? privateMessageUserId : -1} />
 				</div>
 
 				<div className="users-list">
