@@ -25,4 +25,3 @@ Problèmes :
 4) Profils utilisateurs
 5) Avatars : ne s'affiche plus dans la users list
    (est-ce que ça marche pour le profile ?)
-
