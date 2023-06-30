@@ -19,10 +19,11 @@ const sketch: Sketch = p5 => {
     let playerSpeed = 6;
     let ballSize = 15;
     let ballSpeed = 5; // 3 ou 5
-    let pointsToWin = 5;
+    let pointsToWinProps = 5;  // variable à envoyer
+    let pointsToWin = pointsToWinProps - 1;
     let paused = 1;
     let drawLoops = 0;
-    let newMap = true;  // passer en props
+    let newMap = false;  // passer en props
     let background: any;
 
 /******************************** PLAYER ********************************/
@@ -139,7 +140,7 @@ class Ball {
                     v:p.v,
                     w:p.w,
                     h:p.h,
-                    p:p.p
+                    // p:p.p
                 };
                 socket.emit('start', infosPlayer);
 
@@ -171,6 +172,19 @@ class Ball {
                 b.r = data.r;
             }
         });
+
+        socket.on('heartBeatScore', function(data: any){
+            if (data !== null) {
+                if (master === true) {
+                    p.p = data[0];
+                    opponentPoints = data[1];
+                }
+                else {
+                    p.p = data[1];
+                    opponentPoints = data[0];
+                }
+            }
+        });
     }
 
     p5.draw = () => {
@@ -196,19 +210,10 @@ class Ball {
         if(gameOn === true && p !== undefined) {
             p5.textSize(48);
 
-            if (newMap === true) {
-                // p5.background(60, 0, 0);
+            if (newMap === true)
                 p5.background(background);
-
-
-
-                
-            } else {
-
+            else
                 p5.rect(p5.width/2, 0, 5, 1200);
-
-            }
-
 
             if (master === true) { 
                 p5.text(p.p, 20, 40);
@@ -235,17 +240,18 @@ class Ball {
                 b.xv = -ballSpeed;
             if (b.x === 0) {
                 p5.noLoop();
-                if (master === false)
-                    p.p++;
-                else
-                    opponentPoints++;
+                if (master === false) {
+                    socket.emit('updateScoreSlave', p.p);
+                }
+                    // p.p++;
                 throwBall();
             } else if (b.x === p5.width) {
                 p5.noLoop();
-                if (master === true)
-                    p.p++;
-                else
-                    opponentPoints++;
+                if (master === true) {
+                    socket.emit('updateScoreMaster', p.p);
+                }
+                    // p.p++;
+
                 throwBall();
             }
 
@@ -283,7 +289,7 @@ class Ball {
 
 
     function throwBall() {
-        if (p.p >= pointsToWin || opponentPoints >= pointsToWin) {
+        if (p.p >= pointsToWin || opponentPoints >= pointsToWin ) {
             gameOn = false;
             gameEnded = true;
         }
