@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { io, Socket } from "socket.io-client";
-import { MessageContext, SocketContext } from "./contexts";
+import { ChanMessageContext, MessageContext, SocketContext } from "./contexts";
 import axios from "axios";
 import { Route, Routes } from 'react-router-dom';
 import { ProtectedRoute , ProtectedRouteProps } from "./components/protectedRoutes";
@@ -18,6 +18,7 @@ import Leaderboard from './scenes/Leaderboard/Leaderboard';
 import MainPage from './scenes/Chat/MainPage/MainPage';
 import TfaPage from './scenes/Tfa/TfaPage';
 import { Message } from './scenes/Chat/ChatBox/ChatBox';
+import { ChanMessage } from './scenes/Chat/ChannelBox/ChannelBox';
 
 const defaultProtectedRouteProps: Omit<ProtectedRouteProps, 'outlet'> =
 {
@@ -29,8 +30,23 @@ function App()
 	const [socket, setSocket] = useState<Socket | null>(null);
 	const [userId, setUserId] = useState<number | null>(null);
 	const [messages, setMessages] = useState<Message[]>([]);
+	const [chanmessages, chansetMessages] = useState<ChanMessage[]>([]);
 
 	const token = localStorage.getItem("token");
+
+	useEffect(() => {
+		if (socket) {
+			socket.on('newMessage', (newMessage) => {
+				chansetMessages(oldMessages => [...oldMessages, newMessage]);
+			});
+		}
+
+		return () => {
+			if (socket) {
+				socket.off('newMessage');
+			}
+		}
+	}, [socket]);
 
 	useEffect(() =>
 	{
@@ -60,6 +76,9 @@ function App()
 
 	useEffect(() =>
 	{
+		if (!socket)
+			return;
+
 		const fetchCurrentUser = async () =>
 		{
 			try
@@ -73,9 +92,7 @@ function App()
 				});
 
 				setUserId(response.data.id);
-
-				if(socket)
-					socket.emit('userConnected', response.data.id);
+				socket.emit('userConnected', response.data.id);
 			}
 
 			catch (error)
@@ -116,6 +133,7 @@ function App()
   return (
 		<SocketContext.Provider value={socket}>
 			<MessageContext.Provider value={messages}>
+				<ChanMessageContext.Provider value={chanmessages}>
 				<Routes>
 					<Route path="/" element={<AuthPage/>} />
 					<Route path="/signup" element={<SignupPage/>} />
@@ -131,6 +149,7 @@ function App()
 					<Route path="/online" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<OnlinePage/>} />} />
 					<Route path="/leaderboard" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<Leaderboard/>} />} />
 				</Routes>
+				</ChanMessageContext.Provider>
 			</MessageContext.Provider>
 		</SocketContext.Provider>
 	);

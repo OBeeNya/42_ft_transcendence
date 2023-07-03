@@ -26,7 +26,6 @@ model User {
 	oauthId			String
 	connected		Boolean @default(false)
 	isPlaying		Boolean @default(false)
-	chats			UserChat[]
 	messages		Message[] @relation("UserMessage")
 	sentDMs			DirectMessage[] @relation("UserDMs")
 	receivedDMs		DirectMessage[] @relation("UserDMsReceived")
@@ -75,6 +74,7 @@ model Channel {
   users     User[]   @relation("UserChannels")
   type      ChatType @default(PUBLIC)
 
+  message Message[]
   ownerId Int
   owner User @relation("owner", fields: [ownerId], references:[id])
 
@@ -84,11 +84,14 @@ model Channel {
 model Message {
 	id			Int @id @default(autoincrement())
 	createdAt	DateTime @default(now())
+
 	content		String
+
 	sender		User @relation("UserMessage", fields: [userId], references: [id])
 	userId		Int
-	chat		Chat @relation(fields: [chatId], references: [id])
-	chatId		Int
+	
+	channel		Channel @relation(fields: [channelId], references: [id])
+	channelId		Int
 
 	@@map("messages")
 }
@@ -117,34 +120,9 @@ model MatchHistory {
 	@@map("matchhistory")
 }
 
-model Chat {
-	id			Int @id @default(autoincrement())
-	createdAt	DateTime @default(now())
-	updatedAt	DateTime @updatedAt
-	name		String @unique
-	messages	Message[]
-	type		ChatType @default(PUBLIC)
-	users		UserChat[]
-	password	String?
-
-	@@map("chats")
-}
 
 enum ChatType {
 	PUBLIC
 	PRIVATE
 	PASSWORD
-}
-
-model UserChat {
-	userId		Int
-	chatId		Int
-	user		User @relation(fields: [userId], references: [id])
-	chat		Chat @relation(fields: [chatId], references: [id])
-	isOwner		Boolean
-	isBlocked	Boolean
-	permissions	String
-
-	@@id([userId, chatId])
-	@@map("user_chats")
 }

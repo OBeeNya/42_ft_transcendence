@@ -6,3 +6,12 @@ export class CreateChannelDto {
     @IsString()
     readonly name: string;
 }
+
+export class JoinRoomDto {
+    roomId: string;
+}
+  
+export class MessageDto {
+    roomId: string;
+    message: string;
+}

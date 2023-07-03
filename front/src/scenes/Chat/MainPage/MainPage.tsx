@@ -1,4 +1,4 @@
-import { useContext, useState, useRef, createContext } from 'react';
+import { useContext, useState, useRef, createContext, useEffect } from 'react';
 import Header from "../../../components/header"
 import { SocketContext } from '../../../contexts';
 import Sidebar from "../Sidebar/Sidebar";
@@ -6,41 +6,45 @@ import UsersList from "../UsersList/UsersList";
 import ChatBox from "../ChatBox/ChatBox"
 import DirectMessageForm from "../DirectMessageForm/DirectMessageForm";
 import './MainPage.css';
-import { Socket } from "socket.io-client";
-import { ax } from "../../../services/axios/axios";
-import { CreateChannelDto } from  "../../../../../back/chat/channels/channels.dto";
+import ChannelBox from '../ChannelBox/ChannelBox';
+import ChannelForm from '../ChannelForm/ChannelForm'
 
 interface ButtonChannelContextValue {
 	displayPopup: () => void;
-	displayChatbox: () => void;
-	channelsName: string[];
+	channels: Channel[];
+	activeChannel: Channel | null;
+	joinChannel: (channel: Channel) => void;
   }
+
+interface Channel {
+	id: string
+	name: string;
+}
 
 export const buttonChannelContext = createContext<ButtonChannelContextValue>({
 	displayPopup: () => {},
-	displayChatbox: () => {},
-	channelsName: [],
+	channels: [],
+	activeChannel:null,
+	joinChannel: () => {},
 });
 
 const ChatPage = () =>
 {
     const [currentUser, setCurrentUser] = useState<any>(null);
+	const [activeChannel, setActiveChannel] = useState<Channel | null>(null);
     const [privateMessageUserId, setPrivateMessageUserId] = useState<number | null>(null);
 	const [statepopup, ChangeStatePopup] = useState(false);
 	const createInputRef = useRef<HTMLInputElement>(null);
 	const [channel, setChannel] = useState('');
-	const [channelsName, setChannelsName] = useState<string[]>([]);
-	const [chatInterface, setChatInterface] = useState(false);
-    const socket = useContext(SocketContext);
+	const [channels, setChannels] = useState<{id: string, name: string}[]>([]);
+	const socket = useContext(SocketContext);
+//	const [chatInterface, setChatInterface] = useState(false);
 
-	const addDataChannels = (name: string) => {
-		const updatedChannelsName = [...channelsName, name];
-		setChannelsName(updatedChannelsName);
-	}
-
-	const displayChatbox = () => {
-		setChatInterface(!chatInterface);
-	}
+	const joinChannel = (channel: Channel) => {
+		setActiveChannel(channel);
+		if(socket)
+			socket.emit('joinRoom', {roomId: channel.id});
+	};
 
 	const displayPopup = () => {
 		ChangeStatePopup(!statepopup);
@@ -54,13 +58,6 @@ const ChatPage = () =>
 	};
 
 
-	const createChannel = async (channelName: string) => {
-		const dto: CreateChannelDto = {
-			channelName: channelName,
-			};
-		await ax.post("chat/createChannel", dto);
-	}
-
 	const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>): void => {
 		const key = event.key;
 		const letters = /^[A-Za-z]+$/;
@@ -72,8 +69,13 @@ const ChatPage = () =>
 		} else if (createInputRef.current && createInputRef.current.value.length > 0  && key === 'Enter') {
 			event.preventDefault();
 			displayPopup();
-			createChannel(createInputRef.current.value);
-			addDataChannels(createInputRef.current.value);
+			const newChannelName = createInputRef.current.value;
+			if (socket) {
+				socket.emit('userConnected', currentUser.id);
+				socket.emit('createChannel', {
+					name: newChannelName,
+				});
+			}
 			setChannel('');
 		}
 	  };
@@ -81,9 +83,10 @@ const ChatPage = () =>
 
 	  const contextValue: ButtonChannelContextValue = {
 		displayPopup,
-		displayChatbox,
-		channelsName,
-	  };
+		channels,
+		activeChannel,
+		joinChannel,
+		};
 
 	const handlePrivateMessageUserChange = (newUserId: number | null) =>
 	{
@@ -92,6 +95,28 @@ const ChatPage = () =>
 		if (newUserId && socket) 
 			socket.emit('getConversation', {senderId: currentUser.id, receiverId: newUserId});
 	}
+
+	useEffect(() => {
+		if (socket && currentUser) {
+			socket.emit('getChannels');
+
+			socket.on('channels', (channels: Channel[]) => {
+				setChannels(channels);
+			});
+			
+			socket.on('channelCreated', (newChannel: Channel) => {
+				setChannels((prevChannels) => [
+					...prevChannels,
+					{id: newChannel.id, name: newChannel.name}
+				]);
+			});
+
+			return () => {
+				socket.off('channelCreated');
+				socket.off('channels');
+			};
+		}
+	}, [socket, currentUser]);
 
 	return (
 	<SocketContext.Provider value={socket}>
@@ -117,6 +142,14 @@ const ChatPage = () =>
 						setCurrentUser={setCurrentUser}
 						setPrivateMessageUserId={handlePrivateMessageUserChange}
 					/>
+				</div>
+				<div className='channel-section'>
+					{activeChannel && (
+						<div>
+						<ChannelForm senderId ={currentUser.id} channelId={ parseInt(activeChannel.id)} />
+						<ChannelBox senderId ={currentUser.id} channelId={ parseInt(activeChannel.id)} />
+						</div>
+						)}
 				</div>
 				{statepopup && (
 					<div className ="popup" >
