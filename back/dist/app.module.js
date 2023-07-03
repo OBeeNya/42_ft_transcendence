@@ -19,6 +19,7 @@ const pong_socket_module_1 = require("./pong/socket/pong.socket.module");
 const friends_module_1 = require("./chat/friends/friends.module");
 const directMessage_module_1 = require("./chat/directMessage/directMessage.module");
 const blockage_module_1 = require("./chat/blockage/blockage.module");
+const pong_socket_events_1 = require("./pong/socket/pong.socket.events");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -38,6 +39,12 @@ AppModule = __decorate([
             directMessage_module_1.DirectMessageModule,
             friends_module_1.FriendsModule,
         ],
+        providers: [
+            {
+                provide: pong_socket_events_1.SocketEvents,
+                useFactory: () => new pong_socket_events_1.SocketEvents(),
+            }
+        ]
     })
 ], AppModule);
 exports.AppModule = AppModule;

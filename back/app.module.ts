@@ -10,6 +10,7 @@ import { SocketModule } from 'pong/socket/pong.socket.module';
 import { FriendsModule } from 'chat/friends/friends.module';
 import { DirectMessageModule } from 'chat/directMessage/directMessage.module';
 import { BlockageModule } from 'chat/blockage/blockage.module';
+import { SocketEvents } from 'pong/socket/pong.socket.events';
 
 @Module({
   imports: [
@@ -27,6 +28,12 @@ import { BlockageModule } from 'chat/blockage/blockage.module';
 	DirectMessageModule,
 	FriendsModule,
   ],
+  providers: [
+	{
+		provide: SocketEvents,
+		useFactory: () => new SocketEvents(),
+	}
+  ]
 })
 
 export class AppModule {}

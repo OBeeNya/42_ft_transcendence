@@ -3,7 +3,7 @@ import { Server, Socket } from "socket.io";
 
 /******************** VARIABLES ******************/
 
-let connections: number = 0;
+// let connections: number = 0;
 let players = [];
 let b;
 let interval = 10;
@@ -43,11 +43,28 @@ export class SocketEvents {
     @WebSocketServer()
     server: Server;
 
+    private connections = 0;
+    private readonly instancesPerConnection = 2;
+    private initialized = false;
+
+    constructor() {}
+
+    private initializeGateway() {
+        this.initialized = true;
+    }
+
     //connexion
     handleConnection(client: Socket) {
         // console.log('client.id: ', client.id);
-        connections++;
+        this.connections++;
         this.getCounter();
+        
+        if (this.initialized === true && this.connections % this.instancesPerConnection === 1) {
+            const newServer = new SocketEvents();
+            newServer.initializeGateway();
+            newServer.afterInit(this.server);
+        }
+
         client.on("start", (data) => {
             // console.log("A user just connected: " + client.id + "; connexion number: " + connections);
             if (players.length > 0 && players[players.length - 1].id === client.id)
@@ -67,10 +84,10 @@ export class SocketEvents {
             for (let i = 0; i < players.length; i++) {
                 if (client.id === players[i].id)
                     pl = players[i];
-            }
-            if (pl !== undefined) {
-                pl.x = data.x;
-                pl.y = data.y;
+                }
+                if (pl !== undefined) {
+                    pl.x = data.x;
+                    pl.y = data.y;
                 pl.v = data.v;
                 pl.w = data.w;
                 pl.h = data.h;
@@ -92,17 +109,18 @@ export class SocketEvents {
             scores[0] = data;
             // console.log("score master 2: ", data);
         })
-
+        
         client.on('updateScoreSlave', function(data) {
             // console.log("score slave: ", data);
             data++;
             scores[1] = data;
             // console.log("score slave2: ", data);
         })
+
     }
 
     getCounter() {
-        this.server.emit('getCounter', connections);
+        this.server.emit('getCounter', this.connections);
     }
 
     heartBeat() {
@@ -135,7 +153,7 @@ export class SocketEvents {
         }, interval);
     }
 
-    afterInit() {
+    afterInit(server: Server) {
         this.startHeartbeat();
         this.startBallHeartbeat();
         this.startScoreHeartbeat();
@@ -144,7 +162,7 @@ export class SocketEvents {
     //deconnexion
     // handleDisconnect(client: Socket) {
     handleDisconnect() {
-        connections--;
+        this.connections--;
         players = [];
         scores = [0, 0];
         // console.log('client disconnected: ', client.id + "; connexion number: " + connections);

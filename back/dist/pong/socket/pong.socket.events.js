@@ -8,11 +8,11 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var SocketEvents_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SocketEvents = void 0;
 const websockets_1 = require("@nestjs/websockets");
 const socket_io_1 = require("socket.io");
-let connections = 0;
 let players = [];
 let b;
 let interval = 10;
@@ -33,10 +33,26 @@ function Ball(id, x, y, xv, yv, r) {
     this.yv = yv;
     this.r = r;
 }
-let SocketEvents = class SocketEvents {
+let SocketEvents = SocketEvents_1 = class SocketEvents {
+    constructor() {
+        this.connections = 0;
+        this.instancesPerConnection = 2;
+        this.initialized = false;
+    }
+    initializeGateway() {
+        this.initialized = true;
+    }
     handleConnection(client) {
-        connections++;
+        this.connections++;
         this.getCounter();
+        console.log('THIS.INITIALIZED: ' + this.initialized);
+        if (this.initialized === true && this.connections % this.instancesPerConnection === 1) {
+            console.log('here in handleConnection');
+            const newServer = new SocketEvents_1();
+            newServer.initializeGateway();
+            newServer.afterInit(this.server);
+        }
+        console.log('AFTER CHECK');
         client.on("start", (data) => {
             if (players.length > 0 && players[players.length - 1].id === client.id)
                 return;
@@ -79,7 +95,7 @@ let SocketEvents = class SocketEvents {
         });
     }
     getCounter() {
-        this.server.emit('getCounter', connections);
+        this.server.emit('getCounter', this.connections);
     }
     heartBeat() {
         this.server.emit('heartBeat', players);
@@ -105,13 +121,14 @@ let SocketEvents = class SocketEvents {
             this.heartBeatScore();
         }, interval);
     }
-    afterInit() {
+    afterInit(server) {
+        console.log('AFTER INIT CALLED');
         this.startHeartbeat();
         this.startBallHeartbeat();
         this.startScoreHeartbeat();
     }
     handleDisconnect() {
-        connections--;
+        this.connections--;
         players = [];
         scores = [0, 0];
     }
@@ -120,13 +137,14 @@ __decorate([
     (0, websockets_1.WebSocketServer)(),
     __metadata("design:type", socket_io_1.Server)
 ], SocketEvents.prototype, "server", void 0);
-SocketEvents = __decorate([
+SocketEvents = SocketEvents_1 = __decorate([
     (0, websockets_1.WebSocketGateway)({
         namespace: 'pong',
         cors: {
             origin: '*',
         },
-    })
+    }),
+    __metadata("design:paramtypes", [])
 ], SocketEvents);
 exports.SocketEvents = SocketEvents;
 //# sourceMappingURL=pong.socket.events.js.map
