@@ -297,13 +297,15 @@ class Ball {
             p5.textSize(30);
             p5.text("reloading the page...", p5.width/2, p5.height/2 + 100);
         }
-        // setTimeout(() => {  window.location.href = "/pong"; }, 3000);
-        if (p.p === pointsToWinProps)
+        if (p !== undefined && p.p === pointsToWinProps)
             won = true;
         else
             won = false;
         socket.on('disconnect', () => console.log("disconnection front"));
-        setTimeout(() => {  window.location.href = '/record?won=' + won; }, 3000);
+        if (p !== undefined)
+            setTimeout(() => {  window.location.href = '/record?won=' + won; }, 3000);
+        else    
+           setTimeout(() => {  window.location.href = '/pong'; }, 3000);
     }
 
     function drawSpectator() {

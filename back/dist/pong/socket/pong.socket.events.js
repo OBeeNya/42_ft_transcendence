@@ -45,14 +45,11 @@ let SocketEvents = SocketEvents_1 = class SocketEvents {
     handleConnection(client) {
         this.connections++;
         this.getCounter();
-        console.log('THIS.INITIALIZED: ' + this.initialized);
         if (this.initialized === true && this.connections % this.instancesPerConnection === 1) {
-            console.log('here in handleConnection');
             const newServer = new SocketEvents_1();
             newServer.initializeGateway();
             newServer.afterInit(this.server);
         }
-        console.log('AFTER CHECK');
         client.on("start", (data) => {
             if (players.length > 0 && players[players.length - 1].id === client.id)
                 return;
@@ -122,7 +119,6 @@ let SocketEvents = SocketEvents_1 = class SocketEvents {
         }, interval);
     }
     afterInit(server) {
-        console.log('AFTER INIT CALLED');
         this.startHeartbeat();
         this.startBallHeartbeat();
         this.startScoreHeartbeat();
