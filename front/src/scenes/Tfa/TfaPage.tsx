@@ -59,7 +59,7 @@ const TfaPage = () => {
 			}
 		}
 		catch {
-			console.log("could not verify qrcode");
+			console.error("could not verify qrcode");
 		}
 	}
 

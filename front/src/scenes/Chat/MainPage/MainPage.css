@@ -2,7 +2,7 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    height: calc(100vh);
+    height: 100vh;
 }
 
 .chat-page {
@@ -14,14 +14,8 @@
 .chat-section {
     flex: 1;
     overflow: auto;
+	position: relative;
 }
-
-/* .btn-test {
-	padding: 10px 20px;
-	display: block;
-	margin: 100px auto 0;
-	size: 18px;
-} */
 
 .popup, .overlay {
 	width: 100vw;
@@ -39,37 +33,36 @@
 
 .popup-content {
 	position: absolute;
-	top: 40%;
-	left:50%;
+	top: 50%;
+	left: 50%;
 	transform: translate(-50%, -50%);
 	line-height: 1.4;
 	background: #008080;
-	padding: 14px 28px;
-	border-radius: 3px;
-	max-width: 600px;
-	min-width: 300px;
+	padding: 0.875em 1.75em;
+	border-radius: 0.1875em;
+	max-width: 37.5em;
+	min-width: 18.75em;
 }
 
 .close-popup {
-	position:absolute;
-	top: 10px;
-	right: 10px;
-	padding: 5px 7px;
-	
+	position: absolute;
+	top: 0.625em;
+	right: 0.625em;
+	padding: 0.3125em 0.4375em;
 }
 
 .chat-page .header-body {
 	margin: 0;
 	border-radius: 0;
-	border: 1px solid white;
+	border: 0.0625em solid white;
 }
 
 .sidebar {
-	flex-basis: 12%;
-	/* width: 12%; */
+	flex-basis: 15%;
+	width: 15%;
 	background-color: rgba(74, 102, 104, 0.3);
 	color: white;
-	border: 1px solid white;
+	border: 0.0625em solid white;
 }
 
 .first-line {
@@ -80,17 +73,17 @@
 }
 
 .first-line button:not(:last-child) {
-	margin-right: 10px;
+	margin-right: 0.625em;
 }
 
 .icons {
-	margin-right: 10px;
+	margin-right: 0.625em;
 }
 
 .channels-text {
-	margin-left: 10px;
+	margin-left: 0.625em;
 }
 
 .sidebar i.fas {
-	font-size: 12px;
+	font-size: 0.75em;
 }

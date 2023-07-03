@@ -21,12 +21,16 @@ let UserService = class UserService {
         return this.prisma.user.findMany();
     }
     async findOneById(id) {
-        const user = await this.prisma.user.findUniqueOrThrow({
-            where: {
-                id: Number(id),
-            }
-        });
-        return (user);
+        if (!isNaN(Number(id))) {
+            const idNumber = Number(id);
+            const user = await this.prisma.user.findUniqueOrThrow({
+                where: {
+                    id: idNumber
+                }
+            });
+        }
+        else
+            throw new Error(`Invalid ID value: ${id}`);
     }
     async findOneByName(name) {
         return (await this.prisma.user.findFirst({

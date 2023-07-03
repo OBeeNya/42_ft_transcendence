@@ -36,9 +36,7 @@ const PongRecord = () => {
 					won: won,
 					gameDate: currentTime.toLocaleDateString(),
 				}, {
-					headers: {
-						Authorization: `Bearer ${token}`
-					},
+					headers: { Authorization: `Bearer ${token}` },
 			});
 			let exp;
 			if (won === true) {

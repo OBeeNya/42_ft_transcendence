@@ -18,11 +18,11 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [token, setToken] = useState<string | null>(null);
   // const navigate = useNavigate();
 
-  console.log("setting connected to FALSE (Auth context)");
+  // console.log("setting connected to FALSE (Auth context)");
   const [isConnected, setIsConnected] = useState(false);
 
   // console.log("token", token);
-  console.log("isConnected", isConnected);
+  // console.log("isConnected", isConnected);
   
   return (
     <AuthContext.Provider value={{ token, setToken, isConnected, setIsConnected }}>

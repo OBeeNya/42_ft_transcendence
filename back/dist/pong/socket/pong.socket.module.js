@@ -9,7 +9,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.SocketModule = void 0;
 const common_1 = require("@nestjs/common");
 const pong_socket_events_1 = require("./pong.socket.events");
-const directMessage_module_1 = require("./directMessage.module");
+const directMessage_module_1 = require("../../chat/directMessage/directMessage.module");
 let SocketModule = class SocketModule {
 };
 SocketModule = __decorate([

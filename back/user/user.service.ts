@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma_module/prisma.service';
-import { EditUserDto, Create42UserDto } from './dto';
+import { EditUserDto, Create42UserDto} from './dto';
 import * as speakeasy from 'speakeasy';
 
 @Injectable()
@@ -12,13 +12,23 @@ export class UserService {
 		return this.prisma.user.findMany();
 	}
 
-	async findOneById(id: string) {
-		const user = await this.prisma.user.findUniqueOrThrow({
-			where: {
-				id: Number(id),
-			}
-		});
-		return (user);
+	async findOneById(id: string)
+	{
+		if (!isNaN(Number(id)))
+		{
+			const idNumber = Number(id)
+
+			const user = await this.prisma.user.findUniqueOrThrow(
+			{
+				where:
+				{
+				  id: idNumber
+				}
+			})
+		}
+
+		else
+			throw new Error(`Invalid ID value: ${id}`)
 	}
 
 	async findOneByName(name: string) {

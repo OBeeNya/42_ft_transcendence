@@ -1,0 +1,19 @@
+.private-message-form-wrapper {
+	position: absolute;
+	bottom: 0;
+	left: 50%;
+	transform: translateX(-51%);
+	width: 60vw;
+	min-width: 18.75em;
+	background: rgb(249, 249, 249);
+	box-sizing: border-box;
+	border-radius: 1.2em;
+	padding: 0.8em 2.2em 0.8em 1.6em;
+}
+
+.message-input {
+	width: 100%;
+	background: inherit;
+	border: none;
+	font-size: 1.2em;
+}

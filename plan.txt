@@ -1,0 +1,26 @@
+Un utilisateur essaye de rejoindre un channel :
+
+- l'utilisateur n'est pas membre du channel et ce dernier est public --> il le rejoint
+
+- le channel est privé --> l'utilisateur a besoin d'une invitation 
+  ET/OU le propriétaire du channel doit approuver la demande pour rejoindre
+
+- le channel est protégé par mot de passe : l'utilisateur doit fournir le bon mdp pour rejoindre
+
+- l'utilisateur est deja membre du channel
+
+- Le channel est plein
+
+- L'utilisateur a ete bloque par le propriétaire du channel ou
+  par l'administrateur
+
+- L'utilisateur a été banni du channel
+
+-------------------------------------------------------------------------------
+Problèmes :
+
+1) Pas de statut "In game", et le mode spectateur ne marche pas dans l'interface amis.
+2) Invite to Pong pas implémenté (+ l'adapter au blocage!).
+3) Voir le profil des utilisateurs ne marche pas.
+4) Formulaire de messages pas responsive.
+5) Avatars (apparaissent pas dans users list et pas les bons dans route Profile).
