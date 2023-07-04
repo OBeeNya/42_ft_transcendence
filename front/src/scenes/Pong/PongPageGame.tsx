@@ -7,6 +7,8 @@ const PongPage = () => {
 
 	const navigate = useNavigate();
 	const token = localStorage.getItem("token");
+	const userAgent = navigator.userAgent;
+	// localStorage.setItem("userStatus", "playing");
 
     const handleQuit = async () => {
 		try {
@@ -18,8 +20,10 @@ const PongPage = () => {
 		} catch {
 			console.error('could not remove player when quitting');
 		}
+		// localStorage.setItem("userStatus", "connected");
         navigate("/pong");
-        window.location.reload();
+		if (userAgent.indexOf('Chrome') > -1)
+        	window.location.reload();
     };
 
 	return (
@@ -27,7 +31,7 @@ const PongPage = () => {
 			<Content>
 				<h1>Pong</h1>
 				<br></br>
-                <SketchComponent/>
+                <SketchComponent />
 				<button onClick={() => handleQuit()}>Quit</button>
 				<br></br>
 			</Content>

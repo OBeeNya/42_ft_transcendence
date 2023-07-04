@@ -1,9 +1,9 @@
 import { ReactP5Wrapper, Sketch } from "@p5-wrapper/react";
-import io from "socket.io-client"
+import io from "socket.io-client";
+
+export let newMap = false;  // passer en props
 
 const sketch: Sketch = p5 => {
-
-/******************** VARIABLES ******************/
 
     let p: Player;
     let master = false;
@@ -22,12 +22,9 @@ const sketch: Sketch = p5 => {
     let pointsToWin = pointsToWinProps - 1;
     let paused = 1;
     let drawLoops = 0;
-    let newMap = false;  // passer en props
     let background: any;
     let won: Boolean;
-
-/******************************** PLAYER ********************************/
-
+    
 class Player {
     x: number;
     y: number;
@@ -59,8 +56,6 @@ class Player {
         }
     }
 }
-
-/******************************** BALL ********************************/
 
 class Ball {
     x: number; 
@@ -105,8 +100,6 @@ class Ball {
             return (false);
     }
 }
-
-/******************************** SKETCH ********************************/
 
     p5.setup = () => {
 
@@ -263,8 +256,6 @@ class Ball {
             drawSpectator();
     };
 
-/******************************** EXTERNAL FUNCTIONS ********************************/
-
     function throwBall() {
         if (p.p >= pointsToWin || opponentPoints >= pointsToWin ) {
             gameOn = false;
@@ -338,7 +329,6 @@ class Ball {
 
     function checkPlayers() {
         if (players.length < 2 && drawLoops === 50) {
-            console.log("Other player left");
             p5.noLoop();
             p5.background(0);
             p5.textFont('Courier New');
@@ -348,12 +338,12 @@ class Ball {
             p5.textSize(30);
             p5.text("reloading the page...", p5.width/2, p5.height/2 + 100);
             socket.on('disconnect', () => console.log("disconnection front"));
-            setTimeout(() => {  window.location.href = "/pong"; }, 3000);
+            setTimeout(() => {  window.location.href = "/pongredirec"; }, 3000);
         }
     }
 
 };
 
 export function SketchComponent() {
-  return <ReactP5Wrapper sketch={sketch} />;
+    return <ReactP5Wrapper sketch={sketch} />;
 }

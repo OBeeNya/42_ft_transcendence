@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { PlayerDto } from './dto';
 
 @Injectable()
 export class PongService {
@@ -9,19 +8,19 @@ export class PongService {
     static players: number = 0;
 
     setSocket() {
-        // console.log("test Pong route for server socket");
         const express = require('express');
         const app2 = express();
-        // const server = app.listen(3002);
 		return ("hello socket");
 	}
     
     addPlayer() {
         PongService.players++;
+        console.log('players: ', PongService.players);
     }
     
     removePlayer() {
         PongService.players--;
+        console.log('players: ', PongService.players);
     }
 
     getPlayers() {

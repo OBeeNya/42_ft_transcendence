@@ -21,11 +21,11 @@ let PongService = PongService_1 = class PongService {
     }
     addPlayer() {
         PongService_1.players++;
-        console.log('players:' + PongService_1.players);
+        console.log('players: ', PongService_1.players);
     }
     removePlayer() {
         PongService_1.players--;
-        console.log('players:' + PongService_1.players);
+        console.log('players: ', PongService_1.players);
     }
     getPlayers() {
         return (PongService_1.players);

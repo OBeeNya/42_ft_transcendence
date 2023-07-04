@@ -1,11 +1,21 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { ax } from "../../services/axios/axios";
 import { useNavigate } from "react-router-dom";
+import "./style/Matchmaking.css";
 
 const MatchmakingPage = () => {
 
 	const token = localStorage.getItem("token");
 	const navigate = useNavigate();
+
+    const joinGame = async () => {
+        await ax.patch(
+            'pong/addPlayer',
+            { add: 'adding' },
+            { headers: { Authorization: `Bearer ${token}` } }
+        );
+        navigate('/pongGame');
+    }
 
     const checkVariableValue = async () => {
         try {
@@ -13,9 +23,8 @@ const MatchmakingPage = () => {
 				'pong/getPlayers',
 				{ headers: { Authorization: `Bearer ${token}` } }
 			);
-            console.log(response.data);
             if (response.data === 0)
-                navigate('/pongGame');
+                joinGame();
         } catch {
             console.error('could not get players in match making');
         }
@@ -26,13 +35,13 @@ const MatchmakingPage = () => {
         return () => {
             clearInterval(interval);
         };
-    }, []);
+    });
 
 	return (
-		<div>
-			Waiting to be match maked baby...
-		</div>
-		
+        <div className="loading-container">
+        <h1 className="loading-text">Searching game...</h1>
+        <div className="loading-circle"></div>
+      </div>
 	);
 
 };

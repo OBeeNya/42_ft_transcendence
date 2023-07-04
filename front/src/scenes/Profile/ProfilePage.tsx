@@ -70,14 +70,15 @@ const ProfilePage = () => {
 				</a>
 				</div>
 
+				<h1>Match history</h1>
+				<p className="matchHistory">
 				<div>
-					<h1>Match history</h1>
 					<table>
 						<thead>
 							<tr>
-								<th>Level</th>
-								<th>Won</th>
-								<th>Date</th>
+								<th>Which lvl were you?</th>
+								<th>You won that game</th>
+								<th>Which day was it?</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -91,6 +92,7 @@ const ProfilePage = () => {
 						</tbody>
 					</table>
 				</div>
+				</p>
 
 			</Content>
 		</div>

@@ -1,7 +1,3 @@
-import { useEffect, useState } from 'react';
-import { io, Socket } from "socket.io-client";
-import { MessageContext, SocketContext } from "./contexts";
-import axios from "axios";
 import { Route, Routes } from 'react-router-dom';
 import { ProtectedRoute , ProtectedRouteProps } from "./components/protectedRoutes";
 import SignupPage from './scenes/SignUp/SignupPage';
@@ -20,6 +16,7 @@ import MainPage from './scenes/Chat/MainPage/MainPage';
 import PongRecord from './scenes/Pong/PongRecord';
 import TfaPage from './scenes/Tfa/TfaPage';
 import MatchmakingPage from './scenes/Matchmaking/Matchmaking';
+import PongRedirecPage from './scenes/Pong/PongRedirec';
 
 const defaultProtectedRouteProps: Omit<ProtectedRouteProps, 'outlet'> =
 {
@@ -41,6 +38,7 @@ function App()
         <Route path="/editprofile" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<EditProfilePage/>} />} />
         <Route path="/matchmaking" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<MatchmakingPage/>} />} />
         <Route path="/pong" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<PongPage/>} />} />
+        <Route path="/pongredirec" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<PongRedirecPage/>} />} />
         <Route path="/record" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<PongRecord/>} />} />
         <Route path="/pongGame" Component={PongPageGame} element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<PongPageGame/>} />} />
         <Route path="/pongGameSolo" Component={PongPageGameSolo} element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<PongPageGameSolo/>} />} />

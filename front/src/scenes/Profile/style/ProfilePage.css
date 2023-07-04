@@ -29,6 +29,23 @@
     font-weight: bold;
 }
 
+.matchHistory {
+  width: 100%;
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 5px;
+  text-align: center;
+  border: 1px solid white;
+}
+
 /************* TFA *************/
 
 .tfaKeyContainer {
