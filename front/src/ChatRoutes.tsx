@@ -83,12 +83,12 @@ function ChatRoutes()
 
 		newSocket.on('connect', () =>
 		{
-			console.log('WebSocket connected');
+			// console.log('WebSocket connected');
 		});
 
 		newSocket.on('disconnect', (reason: string) =>
 		{
-			console.log('WebSocket disconnected, reason:', reason);
+			// console.log('WebSocket disconnected, reason:', reason);
 		});
 
 		setSocket(newSocket);

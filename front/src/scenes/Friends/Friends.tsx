@@ -45,19 +45,19 @@ const Friends = () =>
 		{
 			const fetchFriends = async () =>
 			{
-				console.log(`Requesting friends list for user ID: ${currentUser.id}`);
+				// console.log(`Requesting friends list for user ID: ${currentUser.id}`);
 				socket.emit('getFriends', {userId: currentUser.id});
 			};
 
 			const friendAddedListener = (newFriend: UserInfos) =>
 			{
-				console.log('Friend added:', newFriend);
+				// console.log('Friend added:', newFriend);
 				setUsers((users) => [...users, newFriend]);
 			};
 
 			const friendsListener = (friends: UserInfos[]) =>
 			{
-				console.log('Friends received:', friends);
+				// console.log('Friends received:', friends);
 				setUsers(friends);
 			};
 	
