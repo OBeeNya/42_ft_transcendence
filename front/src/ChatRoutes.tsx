@@ -1,12 +1,12 @@
+import { Route, Routes } from "react-router-dom";
+import { ProtectedRoute, ProtectedRouteProps } from "./components/protectedRoutes";
 import { SocketContext, MessageContext } from "./contexts";
 import { Socket, io } from "socket.io-client";
 import { useEffect, useState } from "react";
-import { Message } from "./scenes/Chat/ChatBox/ChatBox";
 import axios from "axios";
 import MainPage from "./scenes/Chat/MainPage/MainPage";
+import { Message } from "./scenes/Chat/ChatBox/ChatBox";
 import Friends from "./scenes/Friends/Friends";
-import { Route, Routes } from "react-router-dom";
-import { ProtectedRoute, ProtectedRouteProps } from "./components/protectedRoutes";
 
 const defaultProtectedRouteProps: Omit<ProtectedRouteProps, 'outlet'> =
 {
