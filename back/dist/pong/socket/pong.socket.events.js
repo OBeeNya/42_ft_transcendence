@@ -8,11 +8,11 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var SocketEvents_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SocketEvents = void 0;
 const websockets_1 = require("@nestjs/websockets");
 const socket_io_1 = require("socket.io");
+let connections = 0;
 let players = [];
 let b;
 let interval = 10;
@@ -33,23 +33,11 @@ function Ball(id, x, y, xv, yv, r) {
     this.yv = yv;
     this.r = r;
 }
-let SocketEvents = SocketEvents_1 = class SocketEvents {
-    constructor() {
-        this.connections = 0;
-        this.instancesPerConnection = 2;
-        this.initialized = false;
-    }
-    initializeGateway() {
-        this.initialized = true;
-    }
+let SocketEvents = class SocketEvents {
+    constructor() { }
     handleConnection(client) {
-        this.connections++;
+        connections++;
         this.getCounter();
-        if (this.initialized === true && this.connections % this.instancesPerConnection === 1) {
-            const newServer = new SocketEvents_1();
-            newServer.initializeGateway();
-            newServer.afterInit(this.server);
-        }
         client.on("start", (data) => {
             if (players.length > 0 && players[players.length - 1].id === client.id)
                 return;
@@ -92,7 +80,7 @@ let SocketEvents = SocketEvents_1 = class SocketEvents {
         });
     }
     getCounter() {
-        this.server.emit('getCounter', this.connections);
+        this.server.emit('getCounter', connections);
     }
     heartBeat() {
         this.server.emit('heartBeat', players);
@@ -118,13 +106,13 @@ let SocketEvents = SocketEvents_1 = class SocketEvents {
             this.heartBeatScore();
         }, interval);
     }
-    afterInit(server) {
+    afterInit() {
         this.startHeartbeat();
         this.startBallHeartbeat();
         this.startScoreHeartbeat();
     }
     handleDisconnect() {
-        this.connections--;
+        connections--;
         players = [];
         scores = [0, 0];
     }
@@ -133,7 +121,7 @@ __decorate([
     (0, websockets_1.WebSocketServer)(),
     __metadata("design:type", socket_io_1.Server)
 ], SocketEvents.prototype, "server", void 0);
-SocketEvents = SocketEvents_1 = __decorate([
+SocketEvents = __decorate([
     (0, websockets_1.WebSocketGateway)({
         namespace: 'pong',
         cors: {

@@ -1,11 +1,8 @@
+import { OnGatewayInit } from "@nestjs/websockets";
 import { Server, Socket } from "socket.io";
-export declare class SocketEvents {
+export declare class SocketEvents implements OnGatewayInit {
     server: Server;
-    private connections;
-    private readonly instancesPerConnection;
-    private initialized;
     constructor();
-    private initializeGateway;
     handleConnection(client: Socket): void;
     getCounter(): void;
     heartBeat(): void;
@@ -14,6 +11,6 @@ export declare class SocketEvents {
     startHeartbeat(): void;
     startBallHeartbeat(): void;
     startScoreHeartbeat(): void;
-    afterInit(server: Server): void;
+    afterInit(): void;
     handleDisconnect(): void;
 }

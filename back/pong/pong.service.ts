@@ -6,7 +6,7 @@ export class PongService {
 
 	constructor() {}
 
-    static waitingList: PlayerDto[] = [];
+    static players: number = 0;
 
     setSocket() {
         // console.log("test Pong route for server socket");
@@ -15,27 +15,17 @@ export class PongService {
         // const server = app.listen(3002);
 		return ("hello socket");
 	}
-
-	async addPlayerToWaitingList(player: PlayerDto) {
-        PongService.waitingList.push(player);
-        return (PongService.waitingList);
+    
+    addPlayer() {
+        PongService.players++;
+    }
+    
+    removePlayer() {
+        PongService.players--;
     }
 
-	async removePlayerFromWaitingList(player: PlayerDto) {
-        for (const p of PongService.waitingList) {
-            if (p.name === player.name) {
-                const index = PongService.waitingList.indexOf(player);
-                PongService.waitingList.splice(index, 1);
-                break ;
-            }
-        }
+    getPlayers() {
+        return (PongService.players);
     }
 
-    async emptyWaitingList() {
-        PongService.waitingList = [];
-    }
-
-    getWaitingList() {
-        return (PongService.waitingList);
-    }
 }

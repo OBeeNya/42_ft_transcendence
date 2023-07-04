@@ -19,7 +19,7 @@ import Friends from './scenes/Friends/Friends';
 import MainPage from './scenes/Chat/MainPage/MainPage';
 import PongRecord from './scenes/Pong/PongRecord';
 import TfaPage from './scenes/Tfa/TfaPage';
-import { Message } from './scenes/Chat/ChatBox/ChatBox';
+import MatchmakingPage from './scenes/Matchmaking/Matchmaking';
 
 const defaultProtectedRouteProps: Omit<ProtectedRouteProps, 'outlet'> =
 {
@@ -28,96 +28,8 @@ const defaultProtectedRouteProps: Omit<ProtectedRouteProps, 'outlet'> =
 
 function App()
 {
-	// const [socket, setSocket] = useState<Socket | null>(null);
-	// const [userId, setUserId] = useState<number | null>(null);
-	// const [messages, setMessages] = useState<Message[]>([]);
-
-	// const token = localStorage.getItem("token");
-
-	// useEffect(() =>
-	// {
-	// 	if (!socket)
-	// 		return;
-
-	// 	const privateMessageListener = (newMessage: Message) =>
-	// 	{
-	// 		setMessages(oldMessages => [...oldMessages, newMessage]);
-	// 	};
-
-	// 	const conversationListener = (oldMessages: Message[]) =>
-	// 	{
-	// 		setMessages(oldMessages);
-	// 	};
-
-	// 	socket.on('privateMessage', privateMessageListener);
-	// 	socket.on('conversation', conversationListener);
-
-	// 	return () =>
-	// 	{
-	// 		socket.off('privateMessage', privateMessageListener);
-	// 		socket.off('conversation', conversationListener);
-	// 	};
-
-	// }, [socket]);
-
-	// useEffect(() =>
-	// {
-	// 	const fetchCurrentUser = async () =>
-	// 	{
-	// 		try
-	// 		{
-	// 			const response = await axios.get("http://localhost:8080/users/me",
-	// 			{
-	// 				headers:
-	// 				{
-	// 					Authorization: `Bearer ${token}`,
-	// 				},
-	// 			});
-
-	// 			setUserId(response.data.id);
-
-	// 			if (socket)
-	// 				socket.emit('userConnected', response.data.id);
-	// 		}
-
-	// 		catch (error)
-	// 		{
-	// 			console.error('Error fetching current user:', error);
-	// 		}
-	// 	};
-
-	// 	fetchCurrentUser();
-
-	// }, [token, socket]);
-
-	// useEffect(() =>
-	// {
-	// 	const newSocket = io('http://localhost:8080');
-
-	// 	newSocket.on('connect', () =>
-	// 	{
-	// 		// console.log('WebSocket connected');
-	// 	});
-
-	// 	newSocket.on('disconnect', (reason: string) =>
-	// 	{
-	// 		// console.log('WebSocket disconnected, reason:', reason);
-	// 	});
-
-	// 	setSocket(newSocket);
-
-	// 	return () =>
-	// 	{
-	// 		newSocket.off('connect');
-	// 		newSocket.off('disconnect');
-	// 		newSocket.close();
-	// 	};
-
-	// }, [userId]);
 
   return (
-/* <SocketContext.Provider value={socket}>
-	<MessageContext.Provider value={messages}> */
 	<Routes>
         <Route path="/" element={<AuthPage/>} />
         <Route path="/signup" element={<SignupPage/>} />
@@ -127,16 +39,15 @@ function App()
         <Route path="/home" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<HomePage/>} />} />
         <Route path="/profile" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<ProfilePage/>} />} />
         <Route path="/editprofile" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<EditProfilePage/>} />} />
+        <Route path="/matchmaking" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<MatchmakingPage/>} />} />
         <Route path="/pong" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<PongPage/>} />} />
         <Route path="/record" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<PongRecord/>} />} />
-        <Route path="/pongGame/:gameId" Component={PongPageGame} element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<PongPageGame/>} />} />
+        <Route path="/pongGame" Component={PongPageGame} element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<PongPageGame/>} />} />
         <Route path="/pongGameSolo" Component={PongPageGameSolo} element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<PongPageGameSolo/>} />} />
         <Route path="/chat" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<MainPage/>} />} />
         <Route path="/online" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<OnlinePage/>} />} />
 		<Route path="/friends" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<Friends/>} />} />
 	</Routes>
-	/* </MessageContext.Provider>
-	</SocketContext.Provider> */
   );
 }
 

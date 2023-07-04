@@ -27,32 +27,78 @@ const PongPage = () => {
 		getUsers();
 	}, [token]);
 
+	// const matchMaking = async () => {
+	// 	try {
+	// 		let url = '';
+	// 		const response = await ax.patch("pong/addPlayerToWaitingList", {
+	// 			name: userInfos?.name,
+	// 			id: userInfos?.id,
+	// 		}, {
+	// 			headers: {
+	// 				Authorization: `Bearer ${token}`,
+	// 			},
+	// 		});
+	// 		if (response.data.length === 1)
+	// 			url = `/pongGame/${userInfos?.id}`;
+	// 		else {
+	// 			url = `/pongGame/${response.data[0].id}`;
+	// 			await ax.patch('pong/removePlayerFromWaitingList',
+	// 				response.data[0], {
+	// 				headers: {
+	// 					Authorization: `Bearer ${token}`,
+	// 				},
+	// 			});
+	// 		}
+	// 		navigate(url);
+	// 	}
+	// 	catch {
+	// 		console.error('could not handle matchmaking');
+	// 	}
+	// }
+
 	const matchMaking = async () => {
 		try {
-			let url = '';
-			const response = await ax.patch("pong/addPlayerToWaitingList", {
-				name: userInfos?.name,
-				id: userInfos?.id,
-			}, {
-				headers: {
-					Authorization: `Bearer ${token}`,
-				},
-			});
-			if (response.data.length === 1)
-				url = `/pongGame/${userInfos?.id}`;
-			else {
-				url = `/pongGame/${response.data[0].id}`;
-				await ax.patch('pong/removePlayerFromWaitingList',
-					response.data[0], {
-					headers: {
-						Authorization: `Bearer ${token}`,
-					},
-				});
+			const players = await ax.get(
+				'pong/getPlayers',
+				{ headers: { Authorization: `Bearer ${token}` } }
+			);
+			if (players.data < 2) {
+				await ax.patch(
+					'pong/addPlayer',
+					{ add: 'adding' },
+					{ headers: { Authorization: `Bearer ${token}` } }
+				);
+				navigate('/pongGame');
 			}
-			navigate(url);
+			else {
+				navigate('/matchmaking');
+			}
+		} catch {
+			console.error('could not matchmake');
 		}
-		catch {
-			console.error('could not handle matchmaking');
+	}
+
+	const spectating = async () => {
+		try {
+			const players = await ax.get(
+				'pong/getPlayers',
+				{ headers: { Authorization: `Bearer ${token}` } }
+			);
+			if (players.data !== 2) {
+				const messageSpectating = document.getElementById("messageSpectating");
+				if (messageSpectating)
+					messageSpectating.textContent = "No game is currently being played";
+			}
+			else {
+				await ax.patch(
+					'pong/addPlayer',
+					{ add: 'adding' },
+					{ headers: { Authorization: `Bearer ${token}` } }
+				);
+				navigate('/pongGame');
+			}
+		} catch {
+			console.error('could not matchmake');
 		}
 	}
 
@@ -63,6 +109,8 @@ const PongPage = () => {
 				<h1>Pong page</h1>
 				<br></br>
 				<button onClick={matchMaking}>Multi Player</button>
+				<button onClick={spectating}>Spectator mode</button>
+				<div id="messageSpectating"></div>
 				<button onClick={() => navigate("/pongGameSolo")}>One player</button>
 				<button onClick={() => navigate("/home")}>Home</button>
 				<br></br>

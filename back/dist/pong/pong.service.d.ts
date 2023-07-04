@@ -1,10 +1,8 @@
-import { PlayerDto } from './dto';
 export declare class PongService {
     constructor();
-    static waitingList: PlayerDto[];
+    static players: number;
     setSocket(): string;
-    addPlayerToWaitingList(player: PlayerDto): Promise<PlayerDto[]>;
-    removePlayerFromWaitingList(player: PlayerDto): Promise<void>;
-    emptyWaitingList(): Promise<void>;
-    getWaitingList(): PlayerDto[];
+    addPlayer(): void;
+    removePlayer(): void;
+    getPlayers(): number;
 }
