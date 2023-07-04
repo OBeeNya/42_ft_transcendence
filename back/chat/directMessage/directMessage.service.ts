@@ -37,7 +37,7 @@ export class DirectMessageService
 				},
 			});
 
-			// console.log('Direct message created:', createdMessage);
+			console.log('Direct message created:', createdMessage);
 			return (createdMessage);
 		}
 		catch (error)

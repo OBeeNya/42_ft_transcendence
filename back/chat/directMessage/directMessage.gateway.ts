@@ -13,12 +13,12 @@ export class DirectMessageGateway extends BaseGateway
 				private prisma: PrismaService)
 	{
 		super();
-		// console.log(`DirectMessage instance: ${this}`);
+		console.log(`DirectMessage instance: ${this}`);
 
 		setInterval(() =>
 		{
-			// console.log('Current userSocketMap(DirectMessage):');
-			// console.log(Array.from(this.userSocketMap.entries()));
+			console.log('Current userSocketMap(DirectMessage):');
+			console.log(Array.from(this.userSocketMap.entries()));
 		}, 120000);
 	}
 
@@ -26,12 +26,12 @@ export class DirectMessageGateway extends BaseGateway
 	async handlePrivateMessage(@MessageBody() data: DirectMessageDto,
 							   @ConnectedSocket() client: Socket)
 	{
-		// console.log(`Message sent from ${data.senderId} to ${data.receiverId}`);
+		console.log(`Message sent from ${data.senderId} to ${data.receiverId}`);
 
 		try
 		{
 			const newMessage = await this.directMessageService.create(data);
-			// console.log('Emitting privateMessage with data:', newMessage);
+			console.log('Emitting privateMessage with data:', newMessage);
 
 			const receiverSocketId = this.userSocketMap.get(data.receiverId);
 

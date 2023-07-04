@@ -8,6 +8,24 @@ export declare class JwtStrategy extends JwtStrategy_base {
     validate(payload: {
         sub: number;
         name: string;
-    }): Promise<import(".prisma/client").User>;
+    }): Promise<import("@prisma/client/runtime").GetResult<{
+        id: number;
+        createdAt: Date;
+        updatedAt: Date;
+        name: string;
+        hash: string;
+        wins: number;
+        losses: number;
+        ladder_level: number;
+        oauthId: string;
+        connected: boolean;
+        isPlaying: boolean;
+        tfa: boolean;
+        tfa_key: string;
+        ladders: number[];
+        wons: boolean[];
+        gameDates: string[];
+        exp: number;
+    }, unknown, never> & {}>;
 }
 export {};

@@ -11,8 +11,8 @@ type Props =
 
 const DirectMessageForm: React.FC<Props> = ({senderId, receiverId}) =>
 {
-	// console.log('senderId:', senderId);
-	// console.log('receiverId:', receiverId);
+	console.log('senderId:', senderId);
+	console.log('receiverId:', receiverId);
 
 	const [message, setMessage] = useState('');
 	const [error, setError] = useState('');
@@ -42,7 +42,7 @@ const DirectMessageForm: React.FC<Props> = ({senderId, receiverId}) =>
 		if (socket)
 			socket.emit('privateMessage', {senderId, receiverId, content: message});
 		else
-			console.error('Socket is not available!');
+			console.log('Socket is not available!');
 
 		setMessage('');
 	};

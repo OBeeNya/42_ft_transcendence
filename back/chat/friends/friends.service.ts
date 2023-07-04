@@ -31,6 +31,18 @@ export class FriendsService
 				throw new Error(`Friend cannot be added. ` + 
 								`One user has blocked the other.`);
 
+			const friendshipExists = await this.prisma.userFriend.findFirst(
+			{
+				where:
+				{
+					userId: data.userId,
+					friendId: data.friendId
+				}
+			});
+							
+			if (friendshipExists)
+				throw new Error('This user is already a friend.');
+
 			const friend = await this.prisma.userFriend.create(
 			{
 				data:
@@ -38,14 +50,15 @@ export class FriendsService
 					userId: data.userId,
 					friendId: data.friendId
 				},
+
 				include:
 				{
 					friend: true
 				}
 			});
 
-			// console.log(`User with ID ${data.userId} ` +
-			// 			`added ${data.friendId} as friend!`);
+			console.log(`User with ID ${data.userId} ` +
+						`added ${data.friendId} as friend!`);
 
 			return (friend.friend);
 		}
@@ -66,6 +79,7 @@ export class FriendsService
 				{
 					userId: data.userId
 				},
+
 				include:
 				{
 					friend: true

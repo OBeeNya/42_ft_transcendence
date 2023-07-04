@@ -35,6 +35,7 @@ let DirectMessageService = class DirectMessageService {
                     content: data.content,
                 },
             });
+            console.log('Direct message created:', createdMessage);
             return (createdMessage);
         }
         catch (error) {

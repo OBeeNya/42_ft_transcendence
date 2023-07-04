@@ -47,11 +47,11 @@ const User = ({user,isActive, onClick, onDirectMessageClick, navigate}:
 	{
 		try
 		{
-			// console.log('Attempting to block user...');
+			console.log('Attempting to block user...');
 	
 			if (currentUser && socket)
 			{
-				// console.log(`Emitting blockUser event with User ID: ${currentUser.id}, Blocked User ID: ${user.id}`);
+				console.log(`Emitting blockUser event with User ID: ${currentUser.id}, Blocked User ID: ${user.id}`);
 				socket.emit('blockUser', {userId: currentUser.id, blockedId: user.id});
 				setIsBlocked(true);
 			}
@@ -69,11 +69,11 @@ const User = ({user,isActive, onClick, onDirectMessageClick, navigate}:
 	{
 		try
 		{
-			// console.log('Attempting to add friend...');
+			console.log('Attempting to add friend...');
 
 			if (currentUser && socket)
 			{
-				// console.log(`Emitting addFriend event with User ID: ${currentUser.id}, Friend ID: ${user.id}`);
+				console.log(`Emitting addFriend event with User ID: ${currentUser.id}, Friend ID: ${user.id}`);
 				socket.emit('addFriend', {userId: currentUser.id, friendId: user.id});
 			}
 
@@ -94,7 +94,7 @@ const User = ({user,isActive, onClick, onDirectMessageClick, navigate}:
 			{
 				if (currentUser && (blockedId === currentUser.id || userId === currentUser.id)) 
 				{
-					// console.log(`User ${blockedId} has been blocked by ${userId}`);
+					console.log(`User ${blockedId} has been blocked by ${userId}`);
 					setBlockedUsers(oldBlockedUsers => [...oldBlockedUsers, blockedId]);
 					setIsBlocked(true);
 				}
