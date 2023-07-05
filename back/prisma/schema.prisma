@@ -12,8 +12,8 @@ model User {
 	createdAt				DateTime @default(now())
 	updatedAt				DateTime @updatedAt
 	name					String @unique
-  	hash					String
-  	wins					Int @default(0)
+	hash					String
+	wins					Int @default(0)
 	losses					Int @default(0)
 	ladder_level			Int @default(1)
 	// history				MatchHistory[]
@@ -47,6 +47,7 @@ model PongInvitation {
 	userId		Int
 	invitedId	Int
 	accepted	Boolean @default(false)
+	refused		Boolean @default(false)
 	user		User @relation("PongInvitationsSent", fields: [userId], references: [id], onDelete: Cascade)
 	invited		User @relation("PongInvitationsReceived", fields: [invitedId], references: [id], onDelete: Cascade)
 

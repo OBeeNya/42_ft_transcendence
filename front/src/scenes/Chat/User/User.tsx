@@ -90,8 +90,28 @@ const User = ({user,isActive, onClick, onDirectMessageClick, navigate}:
 	{
 		try
 		{
-			if (currentUser && socket) 
-				socket.emit('inviteToPong', {fromId: currentUser.id, toId: user.id});
+			if (currentUser && socket)
+			{
+				console.log(`Emitting sendPongInvitation event with User ID: ${currentUser.id}, Invited ID: ${user.id}`);
+	
+				socket.on('pongInvitationSent', () =>
+				{
+					alert('Invitation sent!');
+				});
+	
+				socket.on('pongInvitationAccepted', () =>
+				{
+					navigate('/matchmaking');
+				});
+	
+				socket.on('pongInvitationRefused', () =>
+				{
+					alert('Invitation refused!');
+				});
+	
+				socket.emit('sendPongInvitation', {userId: currentUser.id, invitedId: user.id});
+			}
+
 			else
 				console.error('Current user is null or socket is not available');
 		}

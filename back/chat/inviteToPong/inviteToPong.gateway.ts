@@ -46,6 +46,21 @@ export class InviteToPongGateway extends BaseGateway
 		}
 	}
 
+	@SubscribeMessage('refusePongInvitation')
+	async handleRefuseInvitation(@MessageBody() data: {id: number},
+								 @ConnectedSocket() client: Socket)
+	{
+		try
+		{
+			const updatedInvitation = await this.inviteToPongService.refuseInvitation(data.id);
+			client.emit('pongInvitationRefused', updatedInvitation);
+		}
+		catch (error)
+		{
+			client.emit('error', {message: 'There was an error refusing the invitation.', error: error.message});
+		}
+	}
+
 	@SubscribeMessage('getPongInvitations')
 	async handleGetInvitations(@MessageBody() data: {invitedId: number},
 							   @ConnectedSocket() client: Socket)

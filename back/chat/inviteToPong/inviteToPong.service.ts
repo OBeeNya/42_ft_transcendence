@@ -39,10 +39,32 @@ export class InviteToPongService
 
 	async acceptInvitation(id: number): Promise<PongInvitation>
 	{
+		const invitation = await this.prisma.pongInvitation.findUnique({where: {id}});
+
+		if (invitation.accepted)
+			throw new Error('This invitation has already been accepted.');
+
 		return (this.prisma.pongInvitation.update(
 		{
 			where: {id: id},
 			data: {accepted: true},
+		}));
+	}
+
+	async refuseInvitation(id: number): Promise<PongInvitation>
+	{
+		const invitation = await this.prisma.pongInvitation.findUnique({where: {id}});
+
+		if (invitation.accepted)
+			throw new Error('This invitation has already been accepted.');
+
+		if (invitation.refused)
+			throw new Error('This invitation has already been refused.');
+
+		return (this.prisma.pongInvitation.update(
+		{
+			where: {id: id},
+			data: {refused: true},
 		}));
 	}
 
