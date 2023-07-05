@@ -10,6 +10,7 @@ import { SocketModule } from 'pong/socket/pong.socket.module';
 import { FriendsModule } from 'chat/friends/friends.module';
 import { DirectMessageModule } from 'chat/directMessage/directMessage.module';
 import { BlockageModule } from 'chat/blockage/blockage.module';
+import { InviteToPongModule } from 'chat/inviteToPong/inviteToPong.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { BlockageModule } from 'chat/blockage/blockage.module';
 	BlockageModule,
 	DirectMessageModule,
 	FriendsModule,
+	InviteToPongModule,
   ],
 })
 

@@ -16,13 +16,16 @@ Un utilisateur essaye de rejoindre un channel :
 
 - L'utilisateur a été banni du channel
 
--------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------
 Problèmes :
 
 1) Pas de statut "In game", et le mode spectateur ne marche pas dans l'interface amis.
 2) Invite to Pong pas implémenté (+ l'adapter au blocage!).
 3) Voir le profil des utilisateurs ne marche pas.
 
--------------------------------------------------------------------------------
-Redirection utilisateurs
+-----------------------------------------------------------------------------------------
+Invite to Pong
+
+L'utilisateur A clique sur "Invite to Pong", l'utilisateur B recoit une notification
+S'il accepte, on redirige vers la route /matchmaking.
 

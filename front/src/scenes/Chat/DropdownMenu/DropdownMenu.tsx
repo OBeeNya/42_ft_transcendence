@@ -7,13 +7,15 @@ interface DropdownMenuProps
 	onDirectMessageClick: () => void;
 	onAddFriendClick: () => void;
 	onBlockClick: () => void;
+	onInviteToPongClick: () => void;
 	navigate: (path: string) => void;
 	isBlocked: boolean;
 }
 
 const DropdownMenu: React.FC<DropdownMenuProps> = ({user, onDirectMessageClick,
 													onAddFriendClick, onBlockClick,
-													navigate, isBlocked}) =>
+													onInviteToPongClick, navigate,
+													isBlocked}) =>
 {
 	return (
 		<ul className="dropdown-menu">
@@ -31,7 +33,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({user, onDirectMessageClick,
 					<DropdownItem onClick={onBlockClick}>
 						Block </DropdownItem>
 
-					<DropdownItem onClick={() => console.log('Invite to Pong clicked')}>
+					<DropdownItem onClick={onInviteToPongClick}>
 						Invite to Pong </DropdownItem>
 				</>
 			)}

@@ -43,6 +43,27 @@ const User = ({user,isActive, onClick, onDirectMessageClick, navigate}:
 
 	}, [token, setCurrentUser]);
 
+	const handleAddFriend = async () =>
+	{
+		try
+		{
+			// console.log('Attempting to add friend...');
+
+			if (currentUser && socket)
+			{
+				// console.log(`Emitting addFriend event with User ID: ${currentUser.id}, Friend ID: ${user.id}`);
+				socket.emit('addFriend', {userId: currentUser.id, friendId: user.id});
+			}
+
+			else 
+				console.error('Current user is null or socket is not available');
+		}
+		catch (error)
+		{
+			console.error('Error adding friend:', error);
+		}
+	}
+
 	const handleBlock = async () =>
 	{
 		try
@@ -65,24 +86,18 @@ const User = ({user,isActive, onClick, onDirectMessageClick, navigate}:
 		}
 	};
 
-	const handleAddFriend = async () =>
+	const handleInviteToPong = async () =>
 	{
 		try
 		{
-			// console.log('Attempting to add friend...');
-
-			if (currentUser && socket)
-			{
-				// console.log(`Emitting addFriend event with User ID: ${currentUser.id}, Friend ID: ${user.id}`);
-				socket.emit('addFriend', {userId: currentUser.id, friendId: user.id});
-			}
-
-			else 
+			if (currentUser && socket) 
+				socket.emit('inviteToPong', {fromId: currentUser.id, toId: user.id});
+			else
 				console.error('Current user is null or socket is not available');
 		}
 		catch (error)
 		{
-			console.error('Error adding friend:', error);
+			console.error('Error inviting user to Pong:', error);
 		}
 	}
 
@@ -118,6 +133,7 @@ const User = ({user,isActive, onClick, onDirectMessageClick, navigate}:
 					onDirectMessageClick={onDirectMessageClick}
 					onAddFriendClick={handleAddFriend}
 					onBlockClick={handleBlock}
+					onInviteToPongClick={handleInviteToPong}
 					navigate={navigate}
 					isBlocked={isBlocked || blockedUsers.includes(user.id)}
 				/>
