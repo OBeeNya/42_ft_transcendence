@@ -15,12 +15,12 @@ export class PongService {
     
     addPlayer() {
         PongService.players++;
-        console.log('players: ', PongService.players);
+        // console.log('players: ', PongService.players);
     }
     
     removePlayer() {
         PongService.players--;
-        console.log('players: ', PongService.players);
+        // console.log('players: ', PongService.players);
     }
 
     getPlayers() {

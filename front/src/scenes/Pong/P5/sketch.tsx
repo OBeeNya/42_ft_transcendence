@@ -1,4 +1,5 @@
 import { ReactP5Wrapper, Sketch } from "@p5-wrapper/react";
+import { wait } from "@testing-library/user-event/dist/utils";
 import io from "socket.io-client";
 
 export let newMap = false;  // passer en props
@@ -113,6 +114,7 @@ class Ball {
         b = new Ball();
 
         socket.on('getCounter', function(data: number) {
+            // socket.on('getCounter', async function(data: number) {
             counter = data;
             if(p === undefined) {
                 if (counter === 1) {
@@ -182,7 +184,7 @@ class Ball {
             p5.text("0", 710, 50);
             p5.textAlign(p5.CENTER); 
             p5.textSize(40); 
-            p5.text("Waiting for an opponent", p5.width/2, p5.height/2); 
+            p5.text("Waiting for your opponent...", p5.width/2, p5.height/2); 
         }
         if (gameEnded === true) {
             p5.noLoop();
@@ -194,7 +196,7 @@ class Ball {
                 p5.background(background);
             else
                 p5.rect(p5.width / 2, 0, 5, 1200);
-            if (master === true) { 
+            if (master === true) {
                 p5.text(p.p, 20, 40);
                 p5.text(opponentPoints, 710, 50);
             } else {

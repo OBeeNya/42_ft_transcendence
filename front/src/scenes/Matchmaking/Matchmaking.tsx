@@ -23,7 +23,7 @@ const MatchmakingPage = () => {
 				'pong/getPlayers',
 				{ headers: { Authorization: `Bearer ${token}` } }
 			);
-            if (response.data === 0)
+            if (response.data === 0 || response.data === 1)
                 joinGame();
         } catch {
             console.error('could not get players in match making');
@@ -39,7 +39,7 @@ const MatchmakingPage = () => {
 
 	return (
         <div className="loading-container">
-        <h1 className="loading-text">Searching game...</h1>
+        <h1 className="loading-text">Waiting for empty room...</h1>
         <div className="loading-circle"></div>
       </div>
 	);
