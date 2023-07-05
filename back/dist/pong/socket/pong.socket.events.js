@@ -34,6 +34,7 @@ function Ball(id, x, y, xv, yv, r) {
     this.r = r;
 }
 let SocketEvents = class SocketEvents {
+    constructor() { }
     handleConnection(client) {
         connections++;
         this.getCounter();
@@ -126,7 +127,8 @@ SocketEvents = __decorate([
         cors: {
             origin: '*',
         },
-    })
+    }),
+    __metadata("design:paramtypes", [])
 ], SocketEvents);
 exports.SocketEvents = SocketEvents;
 //# sourceMappingURL=pong.socket.events.js.map

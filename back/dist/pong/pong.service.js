@@ -19,27 +19,17 @@ let PongService = PongService_1 = class PongService {
         const app2 = express();
         return ("hello socket");
     }
-    async addPlayerToWaitingList(player) {
-        PongService_1.waitingList.push(player);
-        return (PongService_1.waitingList);
+    addPlayer() {
+        PongService_1.players++;
     }
-    async removePlayerFromWaitingList(player) {
-        for (const p of PongService_1.waitingList) {
-            if (p.name === player.name) {
-                const index = PongService_1.waitingList.indexOf(player);
-                PongService_1.waitingList.splice(index, 1);
-                break;
-            }
-        }
+    removePlayer() {
+        PongService_1.players--;
     }
-    async emptyWaitingList() {
-        PongService_1.waitingList = [];
-    }
-    getWaitingList() {
-        return (PongService_1.waitingList);
+    getPlayers() {
+        return (PongService_1.players);
     }
 };
-PongService.waitingList = [];
+PongService.players = 0;
 PongService = PongService_1 = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [])

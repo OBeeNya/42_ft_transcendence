@@ -6,6 +6,7 @@ const PongRecord = () => {
 
 	const navigate = useNavigate();
 	const [currentTime, setCurrentTime] = useState(new Date());
+	const token = localStorage.getItem('token');
 
 	useEffect(() => {
 		const timer = setInterval(() => {
@@ -26,7 +27,6 @@ const PongRecord = () => {
 		else
 			won = false;
 		try {
-			const token = localStorage.getItem('token');
 			const response = await ax.get('http://localhost:8080/users/me', {
 				headers: { Authorization: `Bearer ${token}` }
             });
@@ -67,6 +67,15 @@ const PongRecord = () => {
         } catch {
             console.error('could not add match history');
         }
+		try {
+			await ax.patch(
+				'pong/removePlayer',
+				{ rem: 'removing' },
+				{ headers: { Authorization: `Bearer ${token}` } }
+			);
+		} catch {
+			console.error('could not remove player when quitting');
+		}
         navigate("/pong");
     };
     Record();

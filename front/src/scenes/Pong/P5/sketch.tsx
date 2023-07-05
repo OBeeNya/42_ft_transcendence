@@ -1,9 +1,9 @@
 import { ReactP5Wrapper, Sketch } from "@p5-wrapper/react";
-import io from "socket.io-client"
+import io from "socket.io-client";
+
+export let newMap = false;  // passer en props
 
 const sketch: Sketch = p5 => {
-
-/******************** VARIABLES ******************/
 
     let p: Player;
     let master = false;
@@ -22,12 +22,9 @@ const sketch: Sketch = p5 => {
     let pointsToWin = pointsToWinProps - 1;
     let paused = 1;
     let drawLoops = 0;
-    let newMap = false;  // passer en props
     let background: any;
     let won: Boolean;
-
-/******************************** PLAYER ********************************/
-
+    
 class Player {
     x: number;
     y: number;
@@ -59,8 +56,6 @@ class Player {
         }
     }
 }
-
-/******************************** BALL ********************************/
 
 class Ball {
     x: number; 
@@ -106,8 +101,6 @@ class Ball {
     }
 }
 
-/******************************** SKETCH ********************************/
-
     p5.setup = () => {
 
         socket = io('http://localhost:8080/pong');
@@ -120,6 +113,7 @@ class Ball {
         b = new Ball();
 
         socket.on('getCounter', function(data: number) {
+            // socket.on('getCounter', async function(data: number) {
             counter = data;
             if(p === undefined) {
                 if (counter === 1) {
@@ -189,7 +183,7 @@ class Ball {
             p5.text("0", 710, 50);
             p5.textAlign(p5.CENTER); 
             p5.textSize(40); 
-            p5.text("Waiting for an opponent", p5.width/2, p5.height/2); 
+            p5.text("Waiting for your opponent...", p5.width/2, p5.height/2); 
         }
         if (gameEnded === true) {
             p5.noLoop();
@@ -201,7 +195,7 @@ class Ball {
                 p5.background(background);
             else
                 p5.rect(p5.width / 2, 0, 5, 1200);
-            if (master === true) { 
+            if (master === true) {
                 p5.text(p.p, 20, 40);
                 p5.text(opponentPoints, 710, 50);
             } else {
@@ -263,8 +257,6 @@ class Ball {
             drawSpectator();
     };
 
-/******************************** EXTERNAL FUNCTIONS ********************************/
-
     function throwBall() {
         if (p.p >= pointsToWin || opponentPoints >= pointsToWin ) {
             gameOn = false;
@@ -297,13 +289,15 @@ class Ball {
             p5.textSize(30);
             p5.text("reloading the page...", p5.width/2, p5.height/2 + 100);
         }
-        // setTimeout(() => {  window.location.href = "/pong"; }, 3000);
-        if (p.p === pointsToWinProps)
+        if (p !== undefined && p.p === pointsToWinProps)
             won = true;
         else
             won = false;
         socket.on('disconnect', () => console.log("disconnection front"));
-        setTimeout(() => {  window.location.href = '/record?won=' + won; }, 3000);
+        if (p !== undefined)
+            setTimeout(() => {  window.location.href = '/record?won=' + won; }, 3000);
+        else    
+           setTimeout(() => {  window.location.href = '/pong'; }, 3000);
     }
 
     function drawSpectator() {
@@ -336,7 +330,6 @@ class Ball {
 
     function checkPlayers() {
         if (players.length < 2 && drawLoops === 50) {
-            console.log("Other player left");
             p5.noLoop();
             p5.background(0);
             p5.textFont('Courier New');
@@ -346,12 +339,12 @@ class Ball {
             p5.textSize(30);
             p5.text("reloading the page...", p5.width/2, p5.height/2 + 100);
             socket.on('disconnect', () => console.log("disconnection front"));
-            setTimeout(() => {  window.location.href = "/pong"; }, 3000);
+            setTimeout(() => {  window.location.href = "/pongredirec"; }, 3000);
         }
     }
 
 };
 
 export function SketchComponent() {
-  return <ReactP5Wrapper sketch={sketch} />;
+    return <ReactP5Wrapper sketch={sketch} />;
 }

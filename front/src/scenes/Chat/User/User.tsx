@@ -107,7 +107,8 @@ const User = ({user,isActive, onClick, onDirectMessageClick, navigate}:
 				socket.off('userBlocked');
 		};
 
-	}, [token, setCurrentUser, user.id, socket]);
+	});
+	// }, [token, setCurrentUser, user.id, socket]);
 
 	return (
 		<div key={user.id} className={`user ${isActive ? 'show-menu' : ''}`}>

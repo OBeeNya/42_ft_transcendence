@@ -14,6 +14,9 @@ import OnlinePage from './scenes/Online/OnlinePage';
 import PongRecord from './scenes/Pong/PongRecord';
 import TfaPage from './scenes/Tfa/TfaPage';
 import ChatRoutes from './ChatRoutes';
+import MatchmakingPage from './scenes/Matchmaking/Matchmaking';
+import PongRedirecPage from './scenes/Pong/PongRedirec';
+import RoomEmptyPage from './scenes/Matchmaking/RoomEmpty';
 
 const defaultProtectedRouteProps: Omit<ProtectedRouteProps, 'outlet'> =
 {
@@ -22,23 +25,27 @@ const defaultProtectedRouteProps: Omit<ProtectedRouteProps, 'outlet'> =
 
 function App()
 {
-	return (
-		<Routes>
-			<Route path="/" element={<AuthPage/>} />
-			<Route path="/signup" element={<SignupPage/>} />
-			<Route path="/signin" element={<SigninPage/>} />
-			<Route path="/callback42" element={<Callback42/>} />
-			<Route path="/tfa" element={<TfaPage/>} />
-			<Route path="/home" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<HomePage/>} />} />
-			<Route path="/profile" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<ProfilePage/>} />} />
-			<Route path="/editprofile" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<EditProfilePage/>} />} />
-			<Route path="/pong" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<PongPage/>} />} />
-			<Route path="/record" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<PongRecord/>} />} />
-			<Route path="/pongGame/:gameId" Component={PongPageGame} element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<PongPageGame/>} />} />
-			<Route path="/pongGameSolo" Component={PongPageGameSolo} element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<PongPageGameSolo/>} />} />
-			<Route path="/online" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<OnlinePage/>} />} />
-			<Route path="/*" element={<ChatRoutes/>} />
-		</Routes>
+
+  return (
+	<Routes>
+        <Route path="/" element={<AuthPage/>} />
+        <Route path="/signup" element={<SignupPage/>} />
+        <Route path="/signin" element={<SigninPage/>} />
+        <Route path="/callback42" element={<Callback42/>} />
+        <Route path="/tfa" element={<TfaPage/>} />
+        <Route path="/home" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<HomePage/>} />} />
+        <Route path="/profile" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<ProfilePage/>} />} />
+        <Route path="/editprofile" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<EditProfilePage/>} />} />
+        <Route path="/matchmaking" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<MatchmakingPage/>} />} />
+        <Route path="/pong" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<PongPage/>} />} />
+        <Route path="/pongredirec" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<PongRedirecPage/>} />} />
+        <Route path="/record" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<PongRecord/>} />} />
+        <Route path="/empty" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<RoomEmptyPage/>} />} />
+        <Route path="/pongGame" Component={PongPageGame} element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<PongPageGame/>} />} />
+        <Route path="/pongGameSolo" Component={PongPageGameSolo} element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<PongPageGameSolo/>} />} />
+        <Route path="/online" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<OnlinePage/>} />} />
+		<Route path="/*" element={<ChatRoutes/>} />
+	</Routes>
   );
 }
 

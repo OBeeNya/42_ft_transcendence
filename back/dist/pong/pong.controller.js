@@ -16,7 +16,6 @@ exports.PongController = void 0;
 const common_1 = require("@nestjs/common");
 const pong_service_1 = require("./pong.service");
 const guard_1 = require("../auth/guard");
-const dto_1 = require("./dto");
 let PongController = class PongController {
     constructor(pongService) {
         this.pongService = pongService;
@@ -24,17 +23,14 @@ let PongController = class PongController {
     setSocket() {
         return this.pongService.setSocket();
     }
-    async addPlayerToWaitingList(player) {
-        return (await this.pongService.addPlayerToWaitingList(player));
+    addPlayer(add) {
+        return (this.pongService.addPlayer());
     }
-    async removePlayerFromWaitingList(player) {
-        return (await this.pongService.removePlayerFromWaitingList(player));
+    removePlayer(rem) {
+        return (this.pongService.removePlayer());
     }
-    async emptyWaitingList() {
-        return (await this.pongService.emptyWaitingList());
-    }
-    getWaitingList() {
-        return (this.pongService.getWaitingList());
+    getPlayers() {
+        return (this.pongService.getPlayers());
     }
 };
 __decorate([
@@ -44,31 +40,25 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], PongController.prototype, "setSocket", null);
 __decorate([
-    (0, common_1.Patch)('addPlayerToWaitingList'),
+    (0, common_1.Patch)('addPlayer'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [dto_1.PlayerDto]),
-    __metadata("design:returntype", Promise)
-], PongController.prototype, "addPlayerToWaitingList", null);
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], PongController.prototype, "addPlayer", null);
 __decorate([
-    (0, common_1.Patch)('removePlayerFromWaitingList'),
+    (0, common_1.Patch)('removePlayer'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [dto_1.PlayerDto]),
-    __metadata("design:returntype", Promise)
-], PongController.prototype, "removePlayerFromWaitingList", null);
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], PongController.prototype, "removePlayer", null);
 __decorate([
-    (0, common_1.Patch)('emptyWaitingList'),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", Promise)
-], PongController.prototype, "emptyWaitingList", null);
-__decorate([
-    (0, common_1.Get)(),
+    (0, common_1.Get)('getPlayers'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
-], PongController.prototype, "getWaitingList", null);
+], PongController.prototype, "getPlayers", null);
 PongController = __decorate([
     (0, common_1.UseGuards)(guard_1.JwtGuard),
     (0, common_1.Controller)('pong'),
