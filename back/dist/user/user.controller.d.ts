@@ -80,7 +80,25 @@ export declare class UserController {
         gameDates: string[];
         exp: number;
     }, unknown, never> & {}>;
-    findOneById(id: string): Promise<void>;
+    findOneById(id: string): Promise<import("@prisma/client/runtime").GetResult<{
+        id: number;
+        createdAt: Date;
+        updatedAt: Date;
+        name: string;
+        hash: string;
+        wins: number;
+        losses: number;
+        ladder_level: number;
+        oauthId: string;
+        connected: boolean;
+        isPlaying: boolean;
+        tfa: boolean;
+        tfa_key: string;
+        ladders: number[];
+        wons: boolean[];
+        gameDates: string[];
+        exp: number;
+    }, unknown, never> & {}>;
     editUser(userId: number, dto: EditUserDto): Promise<any>;
     deleteUserById(id: string): Promise<{
         deletedUsers: number;

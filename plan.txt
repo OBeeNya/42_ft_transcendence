@@ -23,3 +23,6 @@ Problèmes :
 2) Invite to Pong pas implémenté (+ l'adapter au blocage!).
 3) Voir le profil des utilisateurs ne marche pas.
 
+-------------------------------------------------------------------------------
+Redirection utilisateurs
+

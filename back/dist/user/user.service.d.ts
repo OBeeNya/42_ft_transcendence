@@ -22,7 +22,25 @@ export declare class UserService {
         gameDates: string[];
         exp: number;
     }, unknown, never> & {})[]>;
-    findOneById(id: string): Promise<void>;
+    findOneById(id: string): Promise<import("@prisma/client/runtime").GetResult<{
+        id: number;
+        createdAt: Date;
+        updatedAt: Date;
+        name: string;
+        hash: string;
+        wins: number;
+        losses: number;
+        ladder_level: number;
+        oauthId: string;
+        connected: boolean;
+        isPlaying: boolean;
+        tfa: boolean;
+        tfa_key: string;
+        ladders: number[];
+        wons: boolean[];
+        gameDates: string[];
+        exp: number;
+    }, unknown, never> & {}>;
     findOneByName(name: string): Promise<import("@prisma/client/runtime").GetResult<{
         id: number;
         createdAt: Date;

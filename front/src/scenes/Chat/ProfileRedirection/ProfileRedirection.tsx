@@ -1,12 +1,14 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
-import Header from "../../../components/header";
-import Content from "../../../components/content";
-import { UserInfos } from "../../../services/interfaces/userInfos.interface";
-import "./style/ProfileRedirection.css";
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { UserInfos } from '../../../services/interfaces/userInfos.interface';
+import Content from '../../../components/content';
+import Header from '../../../components/header';
+import "./ProfileRedirection.css"
 
 const ProfileRedirection = () =>
 {
+	const { userId } = useParams();
 	const [userInfos, setUserInfos] = useState<UserInfos | null>(null);
 	const token = localStorage.getItem("token");
 
@@ -16,7 +18,7 @@ const ProfileRedirection = () =>
 		{
 			try
 			{
-				const response = await axios.get("http://localhost:8080/users/me",
+				const response = await axios.get(`http://localhost:8080/users/${userId}`,
 				{
 					headers:
 					{
@@ -24,17 +26,19 @@ const ProfileRedirection = () =>
 					},
 				});
 
+				// console.log(response.data);
+
 				setUserInfos(response.data);
 			}
 			catch (error)
 			{
-				console.error("Failed to fetch users.");
+				console.error("Failed to fetch user.");
 			}
 		};
 
 		getUsers();
 
-	}, [token]);
+	}, [token, userId]);
 
 	return (
 		<div>
@@ -50,6 +54,7 @@ const ProfileRedirection = () =>
 								target.src = '/avatar/auto.png';
 							}}
 					/>
+
 					<div className="userInformations">
 						<p className="userInformationKey">  Name: </p>
 						<p className="userInformationValue"> {userInfos?.name} </p>
@@ -72,13 +77,13 @@ const ProfileRedirection = () =>
 							</tr>
 						</thead>
 						<tbody>
-							{userInfos?.ladders.map((value, index) => (
-								<tr key={index}>
-									<td>{value}</td>
-									<td>{userInfos?.wons[index].toString()}</td>
-									<td>{userInfos?.gameDates[index]}</td>
-								</tr>
-							))}
+						{userInfos?.ladders?.map((value, index) => (
+							<tr key={index}>
+        						<td>{value}</td>
+        						<td>{userInfos?.wons[index].toString()}</td>
+        						<td>{userInfos?.gameDates[index]}</td>
+    						</tr>
+						))}
 						</tbody>
 					</table>
 				</div>

@@ -18,11 +18,11 @@ export class UserService {
 		{
 			const idNumber = Number(id)
 
-			const user = await this.prisma.user.findUniqueOrThrow(
+			return await this.prisma.user.findUniqueOrThrow(
 			{
 				where:
 				{
-				  id: idNumber
+					id: idNumber
 				}
 			})
 		}

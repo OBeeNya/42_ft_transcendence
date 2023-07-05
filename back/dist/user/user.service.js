@@ -23,7 +23,7 @@ let UserService = class UserService {
     async findOneById(id) {
         if (!isNaN(Number(id))) {
             const idNumber = Number(id);
-            const user = await this.prisma.user.findUniqueOrThrow({
+            return await this.prisma.user.findUniqueOrThrow({
                 where: {
                     id: idNumber
                 }
