@@ -25,13 +25,15 @@ CREATE TABLE "users" (
 );
 
 -- CreateTable
-CREATE TABLE "user_blocks" (
+CREATE TABLE "pong_invitations" (
     "id" SERIAL NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "userId" INTEGER NOT NULL,
-    "blockedId" INTEGER NOT NULL,
+    "invitedId" INTEGER NOT NULL,
+    "accepted" BOOLEAN NOT NULL DEFAULT false,
+    "refused" BOOLEAN NOT NULL DEFAULT false,
 
-    CONSTRAINT "user_blocks_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "pong_invitations_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -45,6 +47,16 @@ CREATE TABLE "user_friends" (
 );
 
 -- CreateTable
+CREATE TABLE "user_blocks" (
+    "id" SERIAL NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "userId" INTEGER NOT NULL,
+    "blockedId" INTEGER NOT NULL,
+
+    CONSTRAINT "user_blocks_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "direct_messages" (
     "id" SERIAL NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -53,6 +65,17 @@ CREATE TABLE "direct_messages" (
     "receiverId" INTEGER NOT NULL,
 
     CONSTRAINT "direct_messages_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "messages" (
+    "id" SERIAL NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "content" TEXT NOT NULL,
+    "userId" INTEGER NOT NULL,
+    "chatId" INTEGER NOT NULL,
+
+    CONSTRAINT "messages_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -70,17 +93,6 @@ CREATE TABLE "channels" (
 );
 
 -- CreateTable
-CREATE TABLE "messages" (
-    "id" SERIAL NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "content" TEXT NOT NULL,
-    "userId" INTEGER NOT NULL,
-    "chatId" INTEGER NOT NULL,
-
-    CONSTRAINT "messages_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
 CREATE TABLE "chats" (
     "id" SERIAL NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -90,17 +102,6 @@ CREATE TABLE "chats" (
     "password" TEXT,
 
     CONSTRAINT "chats_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "user_chats" (
-    "userId" INTEGER NOT NULL,
-    "chatId" INTEGER NOT NULL,
-    "isOwner" BOOLEAN NOT NULL,
-    "isBlocked" BOOLEAN NOT NULL,
-    "permissions" TEXT NOT NULL,
-
-    CONSTRAINT "user_chats_pkey" PRIMARY KEY ("userId","chatId")
 );
 
 -- CreateTable
@@ -140,16 +141,22 @@ CREATE UNIQUE INDEX "_owner_AB_unique" ON "_owner"("A", "B");
 CREATE INDEX "_owner_B_index" ON "_owner"("B");
 
 -- AddForeignKey
-ALTER TABLE "user_blocks" ADD CONSTRAINT "user_blocks_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "pong_invitations" ADD CONSTRAINT "pong_invitations_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "user_blocks" ADD CONSTRAINT "user_blocks_blockedId_fkey" FOREIGN KEY ("blockedId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "pong_invitations" ADD CONSTRAINT "pong_invitations_invitedId_fkey" FOREIGN KEY ("invitedId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "user_friends" ADD CONSTRAINT "user_friends_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "user_friends" ADD CONSTRAINT "user_friends_friendId_fkey" FOREIGN KEY ("friendId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "user_blocks" ADD CONSTRAINT "user_blocks_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "user_blocks" ADD CONSTRAINT "user_blocks_blockedId_fkey" FOREIGN KEY ("blockedId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "direct_messages" ADD CONSTRAINT "direct_messages_senderId_fkey" FOREIGN KEY ("senderId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -162,12 +169,6 @@ ALTER TABLE "messages" ADD CONSTRAINT "messages_userId_fkey" FOREIGN KEY ("userI
 
 -- AddForeignKey
 ALTER TABLE "messages" ADD CONSTRAINT "messages_chatId_fkey" FOREIGN KEY ("chatId") REFERENCES "chats"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "user_chats" ADD CONSTRAINT "user_chats_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "user_chats" ADD CONSTRAINT "user_chats_chatId_fkey" FOREIGN KEY ("chatId") REFERENCES "chats"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_UserChannels" ADD CONSTRAINT "_UserChannels_A_fkey" FOREIGN KEY ("A") REFERENCES "channels"("id") ON DELETE CASCADE ON UPDATE CASCADE;

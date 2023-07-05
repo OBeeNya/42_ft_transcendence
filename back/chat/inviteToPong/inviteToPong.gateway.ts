@@ -23,21 +23,25 @@ export class InviteToPongGateway extends BaseGateway
 		try
 		{
 			const newInvitation = await this.inviteToPongService.createInvitation(data);
-			client.emit('pongInvitationSent', newInvitation);
+			const invitedSocketId = this.userSocketMap.get(data.invitedId);
+
+			if (invitedSocketId)
+				this.server.to(invitedSocketId).emit('pongInvitationReceived', newInvitation);
 		}
 		catch (error)
 		{
+			console.error('Error while inviting to Pong:', error);
 			client.emit('error', {message: 'There was an error sending your invitation.', error: error.message});
 		}
 	}
 
 	@SubscribeMessage('acceptPongInvitation')
-	async handleAcceptInvitation(@MessageBody() data: {id: number},
+	async handleAcceptInvitation(@MessageBody() data: InviteToPongDto,
 								 @ConnectedSocket() client: Socket)
 	{
 		try
 		{
-			const updatedInvitation = await this.inviteToPongService.acceptInvitation(data.id);
+			const updatedInvitation = await this.inviteToPongService.acceptInvitation(data.invitedId);
 			client.emit('pongInvitationAccepted', updatedInvitation);
 		}
 		catch (error)
@@ -47,12 +51,12 @@ export class InviteToPongGateway extends BaseGateway
 	}
 
 	@SubscribeMessage('refusePongInvitation')
-	async handleRefuseInvitation(@MessageBody() data: {id: number},
+	async handleRefuseInvitation(@MessageBody() data: InviteToPongDto,
 								 @ConnectedSocket() client: Socket)
 	{
 		try
 		{
-			const updatedInvitation = await this.inviteToPongService.refuseInvitation(data.id);
+			const updatedInvitation = await this.inviteToPongService.refuseInvitation(data.invitedId);
 			client.emit('pongInvitationRefused', updatedInvitation);
 		}
 		catch (error)
@@ -62,7 +66,7 @@ export class InviteToPongGateway extends BaseGateway
 	}
 
 	@SubscribeMessage('getPongInvitations')
-	async handleGetInvitations(@MessageBody() data: {invitedId: number},
+	async handleGetInvitations(@MessageBody() data: InviteToPongDto,
 							   @ConnectedSocket() client: Socket)
 	{
 		try

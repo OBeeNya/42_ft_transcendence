@@ -21,7 +21,6 @@ Problèmes :
 
 1) Pas de statut "In game", et le mode spectateur ne marche pas dans l'interface amis.
 2) Invite to Pong pas implémenté (+ l'adapter au blocage!).
-3) Voir le profil des utilisateurs ne marche pas.
 
 -----------------------------------------------------------------------------------------
 Invite to Pong

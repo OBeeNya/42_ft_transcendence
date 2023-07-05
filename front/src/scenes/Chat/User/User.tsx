@@ -92,23 +92,7 @@ const User = ({user,isActive, onClick, onDirectMessageClick, navigate}:
 		{
 			if (currentUser && socket)
 			{
-				console.log(`Emitting sendPongInvitation event with User ID: ${currentUser.id}, Invited ID: ${user.id}`);
-	
-				socket.on('pongInvitationSent', () =>
-				{
-					alert('Invitation sent!');
-				});
-	
-				socket.on('pongInvitationAccepted', () =>
-				{
-					navigate('/matchmaking');
-				});
-	
-				socket.on('pongInvitationRefused', () =>
-				{
-					alert('Invitation refused!');
-				});
-	
+				console.log(`Emitting sendPongInvitation event with User ID: ${currentUser.id}, Invited ID: ${user.id}`);	
 				socket.emit('sendPongInvitation', {userId: currentUser.id, invitedId: user.id});
 			}
 
@@ -120,6 +104,48 @@ const User = ({user,isActive, onClick, onDirectMessageClick, navigate}:
 			console.error('Error inviting user to Pong:', error);
 		}
 	}
+
+	// const handleAcceptPong = async () =>
+	// {
+	// 	if (currentUser && socket)
+	// 	{
+	// 		socket.emit('acceptPongInvitation', {userId: currentUser.id, invitedId: user.id});
+	// 		navigate("/matchmaking");
+	// 	}
+
+	// 	else
+	// 		console.error('Current user is null or socket is not available');
+	// }
+
+	// const handleRefusePong = async () =>
+	// {
+	// 	if (currentUser && socket)
+	// 		socket.emit('refusePongInvitation', {userId: currentUser.id, invitedId: user.id});
+	// 	else 
+	// 		console.error('Current user is null or socket is not available');
+	// }
+
+	// useEffect(() =>
+	// {
+	// 	if (socket)
+	// 	{
+	// 		socket.on('pongInvitationReceived', (invitation) =>
+	// 		{
+	// 			toast(
+	// 				<div>
+	// 					<p>You have been invited to Pong!</p>
+	// 					<button onClick={() => handleAcceptPong()}>Accept</button>
+	// 					<button onClick={() => handleRefusePong()}>Refuse</button>
+	// 				</div>
+	// 			);
+	// 		});
+	// 	}
+	// 	return () =>
+	// 	{
+	// 		if (socket) 
+	// 			socket.off('pongInvitationReceived');
+	// 	};
+	// }, [socket, currentUser, navigate]);
 
 	useEffect(() =>
 	{
