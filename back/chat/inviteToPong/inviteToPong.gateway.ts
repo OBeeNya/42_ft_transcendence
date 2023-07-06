@@ -22,6 +22,8 @@ export class InviteToPongGateway extends BaseGateway
 	{
 		try
 		{
+			console.log(`Invitation sent from user ${data.userId} to user ${data.invitedId}`);
+
 			const newInvitation = await this.inviteToPongService.createInvitation(data);
 			const invitedSocketId = this.userSocketMap.get(data.invitedId);
 
@@ -41,12 +43,15 @@ export class InviteToPongGateway extends BaseGateway
 	{
 		try
 		{
+			console.log(`User ${data.invitedId} accepted the invitation`);
+
 			const updatedInvitation = await this.inviteToPongService.acceptInvitation(data.invitedId);
 			client.emit('pongInvitationAccepted', updatedInvitation);
 		}
 		catch (error)
 		{
-			client.emit('error', {message: 'There was an error accepting the invitation.', error: error.message});
+			client.emit('error', {message: 'There was an error accepting the invitation.',
+								  error: error.message});
 		}
 	}
 
@@ -56,6 +61,8 @@ export class InviteToPongGateway extends BaseGateway
 	{
 		try
 		{
+			console.log(`User ${data.invitedId} refused the invitation`);
+
 			const updatedInvitation = await this.inviteToPongService.refuseInvitation(data.invitedId);
 			client.emit('pongInvitationRefused', updatedInvitation);
 		}
@@ -71,6 +78,8 @@ export class InviteToPongGateway extends BaseGateway
 	{
 		try
 		{
+			console.log(`Getting invitations for user ${data.invitedId}`);
+
 			const invitations = await this.inviteToPongService.getInvitations(data.invitedId);
 			client.emit('pongInvitations', invitations);
 		}

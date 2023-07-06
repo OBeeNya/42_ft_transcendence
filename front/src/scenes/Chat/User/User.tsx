@@ -4,6 +4,12 @@ import { UserInfos } from "../../../services/interfaces/userInfos.interface";
 import DropdownMenu from '../DropdownMenu/DropdownMenu';
 import { SocketContext } from '../../../contexts';
 
+interface Invitation
+{
+	userId: number;
+	invitedId: number;
+}
+
 const User = ({user,isActive, onClick, onDirectMessageClick, navigate}:
 			  {user: UserInfos;
 			   isActive: boolean;
@@ -15,6 +21,7 @@ const User = ({user,isActive, onClick, onDirectMessageClick, navigate}:
 	const [currentUser, setCurrentUser] = useState<UserInfos | null>(null);
 	const [isBlocked, setIsBlocked] = useState(false);
 	const [blockedUsers, setBlockedUsers] = useState<number[]>([]);
+	const [invitations, setInvitations] = useState<Invitation[]>([]);
 	const token = localStorage.getItem("token");
 
 	useEffect(() =>
@@ -86,67 +93,6 @@ const User = ({user,isActive, onClick, onDirectMessageClick, navigate}:
 		}
 	};
 
-	const handleInviteToPong = async () =>
-	{
-		try
-		{
-			if (currentUser && socket)
-			{
-				console.log(`Emitting sendPongInvitation event with User ID: ${currentUser.id}, Invited ID: ${user.id}`);	
-				socket.emit('sendPongInvitation', {userId: currentUser.id, invitedId: user.id});
-			}
-
-			else
-				console.error('Current user is null or socket is not available');
-		}
-		catch (error)
-		{
-			console.error('Error inviting user to Pong:', error);
-		}
-	}
-
-	// const handleAcceptPong = async () =>
-	// {
-	// 	if (currentUser && socket)
-	// 	{
-	// 		socket.emit('acceptPongInvitation', {userId: currentUser.id, invitedId: user.id});
-	// 		navigate("/matchmaking");
-	// 	}
-
-	// 	else
-	// 		console.error('Current user is null or socket is not available');
-	// }
-
-	// const handleRefusePong = async () =>
-	// {
-	// 	if (currentUser && socket)
-	// 		socket.emit('refusePongInvitation', {userId: currentUser.id, invitedId: user.id});
-	// 	else 
-	// 		console.error('Current user is null or socket is not available');
-	// }
-
-	// useEffect(() =>
-	// {
-	// 	if (socket)
-	// 	{
-	// 		socket.on('pongInvitationReceived', (invitation) =>
-	// 		{
-	// 			toast(
-	// 				<div>
-	// 					<p>You have been invited to Pong!</p>
-	// 					<button onClick={() => handleAcceptPong()}>Accept</button>
-	// 					<button onClick={() => handleRefusePong()}>Refuse</button>
-	// 				</div>
-	// 			);
-	// 		});
-	// 	}
-	// 	return () =>
-	// 	{
-	// 		if (socket) 
-	// 			socket.off('pongInvitationReceived');
-	// 	};
-	// }, [socket, currentUser, navigate]);
-
 	useEffect(() =>
 	{
 		if (socket) 
@@ -169,6 +115,138 @@ const User = ({user,isActive, onClick, onDirectMessageClick, navigate}:
 		};
 
 	}, [token, setCurrentUser, user.id, socket]);
+
+	const handleInviteToPong = async () =>
+	{
+		try
+		{
+			if (currentUser && socket)
+				socket.emit('sendPongInvitation', {userId: currentUser.id, invitedId: user.id});
+			else
+				console.error('Current user is null or socket is not available');
+		}
+		catch (error)
+		{
+			console.error('Error inviting user to Pong:', error);
+		}
+	}
+
+	useEffect(() =>
+	{
+		if (socket)
+		{
+			socket.on('pongInvitationReceived', (invitation) =>
+			{
+				setInvitations(prevInvitations => [...prevInvitations, invitation]);
+				createNotification(invitation);
+			});
+		}
+
+		return () =>
+		{
+			if (socket)
+				socket.off('pongInvitationReceived');
+		};
+
+	}, [socket]);
+
+	const acceptInvitation = async () =>
+	{
+		console.log("acceptInvitation est call");
+
+		try
+		{
+			if (currentUser && socket)
+				socket.emit('acceptPongInvitation', {userId: currentUser.id, invitedId: user.id});
+			else
+				console.error('[acceptInvitation] Current user is null or socket is not available');
+		}
+		catch (error)
+		{
+			console.error('Error accepting invitation to Pong:', error);
+		}
+	};
+
+	const refuseInvitation = async () =>
+	{
+		console.log("refuseInvitation est call !");
+
+		try
+		{
+			if (currentUser && socket)
+				socket.emit('refusePongInvitation', {userId: currentUser.id, invitedId: user.id});
+			else
+				console.error('[refuseInvitation] Current user is null or socket is not available');
+		}
+		catch (error)
+		{
+			console.error('Error refusing invitation to Pong:', error);
+		}
+	};
+
+	useEffect(() =>
+	{
+		if (socket && currentUser)
+		{
+			socket.on('pongInvitationAccepted', (data) =>
+			{
+				console.log('Invitation accepted:', data);
+				navigate('/matchmaking');
+			});
+
+			socket.on('pongInvitationRefused', (data) =>
+			{
+				console.log('Invitation refused:', data);
+				// Remove notification here
+			});
+		}
+
+		return () =>
+		{
+			if (socket)
+			{
+				socket.off('pongInvitationAccepted');
+				socket.off('pongInvitationRefused');
+			}
+		};
+
+	}, [socket, currentUser, navigate]);
+
+	const createNotification = (invitation: Invitation) =>
+	{
+		let notificationDiv = document.createElement("div");
+		notificationDiv.style.position = "fixed";
+		notificationDiv.style.bottom = "20px";
+		notificationDiv.style.right = "20px";
+		notificationDiv.style.width = "300px";
+		notificationDiv.style.height = "100px";
+		notificationDiv.style.backgroundColor = "#f8d7da";
+		notificationDiv.style.color = "#721c24";
+		notificationDiv.style.padding = "10px";
+		notificationDiv.style.border = "solid 1px #f5c6cb";
+		notificationDiv.style.borderRadius = "5px";
+		notificationDiv.style.zIndex = "1000";
+		notificationDiv.innerHTML = "You have been invited to Pong";
+	
+		let acceptButton = document.createElement("button");
+		acceptButton.style.marginRight = "10px";
+		acceptButton.innerHTML = "Accept";
+		acceptButton.addEventListener('click', () => acceptInvitation());
+	
+		let refuseButton = document.createElement("button");
+		refuseButton.innerHTML = "Refuse";
+		refuseButton.addEventListener('click', () => refuseInvitation());
+	
+		notificationDiv.appendChild(acceptButton);
+		notificationDiv.appendChild(refuseButton);
+	
+		document.body.appendChild(notificationDiv);
+	
+		setTimeout(() =>
+		{
+			notificationDiv.remove();
+		}, 60000);
+	};
 
 	return (
 		<div key={user.id} className={`user ${isActive ? 'show-menu' : ''}`}>

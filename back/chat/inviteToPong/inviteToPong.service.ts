@@ -22,8 +22,11 @@ export class InviteToPongService
 			}
 		});
 
-		if (existingInvitation)
-			throw new Error('Invitation already exists.');
+		if (existingInvitation && !existingInvitation.accepted && !existingInvitation.refused)
+			throw new Error('An invitation is already pending.');
+
+		if (existingInvitation && (existingInvitation.accepted || existingInvitation.refused))
+			await this.prisma.pongInvitation.delete({where: {id: existingInvitation.id}});
 
 		const invitation = await this.prisma.pongInvitation.create(
 		{

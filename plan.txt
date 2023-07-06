@@ -23,8 +23,9 @@ Problèmes :
 2) Invite to Pong pas implémenté (+ l'adapter au blocage!).
 
 -----------------------------------------------------------------------------------------
-Invite to Pong
+Problemes Invite to Pong
 
-L'utilisateur A clique sur "Invite to Pong", l'utilisateur B recoit une notification
-S'il accepte, on redirige vers la route /matchmaking.
-
+1) Une fois l'invitation envoyee, l'utilisateur qui a envoye l'invitation
+   ne peux plus en renvoyer une
+2) Si l'utilisateur accepte, je veux qu'il soit redirige vers la route /matchmaking.
+   S'il refuse, je veux que la notification arrete d'apparaitre.
