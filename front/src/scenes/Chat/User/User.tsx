@@ -4,12 +4,6 @@ import { UserInfos } from "../../../services/interfaces/userInfos.interface";
 import DropdownMenu from '../DropdownMenu/DropdownMenu';
 import { SocketContext } from '../../../contexts';
 
-interface Invitation
-{
-	userId: number;
-	invitedId: number;
-}
-
 const User = ({user,isActive, onClick, onDirectMessageClick, navigate}:
 			  {user: UserInfos;
 			   isActive: boolean;
@@ -21,7 +15,6 @@ const User = ({user,isActive, onClick, onDirectMessageClick, navigate}:
 	const [currentUser, setCurrentUser] = useState<UserInfos | null>(null);
 	const [isBlocked, setIsBlocked] = useState(false);
 	const [blockedUsers, setBlockedUsers] = useState<number[]>([]);
-	const [invitations, setInvitations] = useState<Invitation[]>([]);
 	const token = localStorage.getItem("token");
 
 	useEffect(() =>
@@ -52,45 +45,22 @@ const User = ({user,isActive, onClick, onDirectMessageClick, navigate}:
 
 	const handleAddFriend = async () =>
 	{
-		try
-		{
-			// console.log('Attempting to add friend...');
-
-			if (currentUser && socket)
-			{
-				// console.log(`Emitting addFriend event with User ID: ${currentUser.id}, Friend ID: ${user.id}`);
-				socket.emit('addFriend', {userId: currentUser.id, friendId: user.id});
-			}
-
-			else 
-				console.error('Current user is null or socket is not available');
-		}
-		catch (error)
-		{
-			console.error('Error adding friend:', error);
-		}
+		if (currentUser && socket)
+			socket.emit('addFriend', {userId: currentUser.id, friendId: user.id});
+		else 
+			console.error('Current user is null or socket is not available');
 	}
 
 	const handleBlock = async () =>
 	{
-		try
+		if (currentUser && socket)
 		{
-			// console.log('Attempting to block user...');
-	
-			if (currentUser && socket)
-			{
-				// console.log(`Emitting blockUser event with User ID: ${currentUser.id}, Blocked User ID: ${user.id}`);
-				socket.emit('blockUser', {userId: currentUser.id, blockedId: user.id});
-				setIsBlocked(true);
-			}
-	
-			else
-				console.error('Current user is null or socket is not available');
+			socket.emit('blockUser', {userId: currentUser.id, blockedId: user.id});
+			setIsBlocked(true);
 		}
-		catch (error)
-		{
-			console.error('Error blocking user:', error);
-		}
+
+		else
+			console.error('Current user is null or socket is not available');
 	};
 
 	useEffect(() =>
@@ -101,7 +71,6 @@ const User = ({user,isActive, onClick, onDirectMessageClick, navigate}:
 			{
 				if (currentUser && (blockedId === currentUser.id || userId === currentUser.id)) 
 				{
-					// console.log(`User ${blockedId} has been blocked by ${userId}`);
 					setBlockedUsers(oldBlockedUsers => [...oldBlockedUsers, blockedId]);
 					setIsBlocked(true);
 				}
@@ -118,135 +87,30 @@ const User = ({user,isActive, onClick, onDirectMessageClick, navigate}:
 
 	const handleInviteToPong = async () =>
 	{
-		try
-		{
-			if (currentUser && socket)
-				socket.emit('sendPongInvitation', {userId: currentUser.id, invitedId: user.id});
-			else
-				console.error('Current user is null or socket is not available');
-		}
-		catch (error)
-		{
-			console.error('Error inviting user to Pong:', error);
-		}
+		if (currentUser && socket)
+			socket.emit('sendPongInvitation', {userId: currentUser.id, invitedId: user.id});
+		else
+			console.error('Current user is null or socket is not available');
 	}
 
 	useEffect(() =>
 	{
-		if (socket)
+		if (currentUser && socket)
 		{
-			socket.on('pongInvitationReceived', (invitation) =>
+			socket.on('pongInvitationReceived', ({invitedId}) =>
 			{
-				setInvitations(prevInvitations => [...prevInvitations, invitation]);
-				createNotification(invitation);
+				if (currentUser.id === invitedId)
+					navigate('/matchmaking');
 			});
 		}
 
 		return () =>
 		{
-			if (socket)
+			if (socket) 
 				socket.off('pongInvitationReceived');
 		};
 
-	}, [socket]);
-
-	const acceptInvitation = async () =>
-	{
-		console.log("acceptInvitation est call");
-
-		try
-		{
-			if (currentUser && socket)
-				socket.emit('acceptPongInvitation', {userId: currentUser.id, invitedId: user.id});
-			else
-				console.error('[acceptInvitation] Current user is null or socket is not available');
-		}
-		catch (error)
-		{
-			console.error('Error accepting invitation to Pong:', error);
-		}
-	};
-
-	const refuseInvitation = async () =>
-	{
-		console.log("refuseInvitation est call !");
-
-		try
-		{
-			if (currentUser && socket)
-				socket.emit('refusePongInvitation', {userId: currentUser.id, invitedId: user.id});
-			else
-				console.error('[refuseInvitation] Current user is null or socket is not available');
-		}
-		catch (error)
-		{
-			console.error('Error refusing invitation to Pong:', error);
-		}
-	};
-
-	useEffect(() =>
-	{
-		if (socket && currentUser)
-		{
-			socket.on('pongInvitationAccepted', (data) =>
-			{
-				console.log('Invitation accepted:', data);
-				navigate('/matchmaking');
-			});
-
-			socket.on('pongInvitationRefused', (data) =>
-			{
-				console.log('Invitation refused:', data);
-				// Remove notification here
-			});
-		}
-
-		return () =>
-		{
-			if (socket)
-			{
-				socket.off('pongInvitationAccepted');
-				socket.off('pongInvitationRefused');
-			}
-		};
-
-	}, [socket, currentUser, navigate]);
-
-	const createNotification = (invitation: Invitation) =>
-	{
-		let notificationDiv = document.createElement("div");
-		notificationDiv.style.position = "fixed";
-		notificationDiv.style.bottom = "20px";
-		notificationDiv.style.right = "20px";
-		notificationDiv.style.width = "300px";
-		notificationDiv.style.height = "100px";
-		notificationDiv.style.backgroundColor = "#f8d7da";
-		notificationDiv.style.color = "#721c24";
-		notificationDiv.style.padding = "10px";
-		notificationDiv.style.border = "solid 1px #f5c6cb";
-		notificationDiv.style.borderRadius = "5px";
-		notificationDiv.style.zIndex = "1000";
-		notificationDiv.innerHTML = "You have been invited to Pong";
-	
-		let acceptButton = document.createElement("button");
-		acceptButton.style.marginRight = "10px";
-		acceptButton.innerHTML = "Accept";
-		acceptButton.addEventListener('click', () => acceptInvitation());
-	
-		let refuseButton = document.createElement("button");
-		refuseButton.innerHTML = "Refuse";
-		refuseButton.addEventListener('click', () => refuseInvitation());
-	
-		notificationDiv.appendChild(acceptButton);
-		notificationDiv.appendChild(refuseButton);
-	
-		document.body.appendChild(notificationDiv);
-	
-		setTimeout(() =>
-		{
-			notificationDiv.remove();
-		}, 60000);
-	};
+	}, [currentUser, socket, navigate]);
 
 	return (
 		<div key={user.id} className={`user ${isActive ? 'show-menu' : ''}`}>

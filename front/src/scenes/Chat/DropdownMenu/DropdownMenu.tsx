@@ -19,11 +19,12 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({user, onDirectMessageClick,
 {
 	return (
 		<ul className="dropdown-menu">
-			<DropdownItem onClick={() => navigate(`/profile/${user.id}`)}>
-				Profile </DropdownItem>
 
 			{!isBlocked && (
 				<>
+					<DropdownItem onClick={() => navigate(`/profile/${user.id}`)}>
+						Profile </DropdownItem>
+
 					<DropdownItem onClick={onDirectMessageClick}>
 						Direct Message </DropdownItem>
 
@@ -40,6 +41,5 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({user, onDirectMessageClick,
 		</ul>
 	);
 };
-
 
 export default DropdownMenu;

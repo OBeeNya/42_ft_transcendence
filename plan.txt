@@ -20,12 +20,3 @@ Un utilisateur essaye de rejoindre un channel :
 Problèmes :
 
 1) Pas de statut "In game", et le mode spectateur ne marche pas dans l'interface amis.
-2) Invite to Pong pas implémenté (+ l'adapter au blocage!).
-
------------------------------------------------------------------------------------------
-Problemes Invite to Pong
-
-1) Une fois l'invitation envoyee, l'utilisateur qui a envoye l'invitation
-   ne peux plus en renvoyer une
-2) Si l'utilisateur accepte, je veux qu'il soit redirige vers la route /matchmaking.
-   S'il refuse, je veux que la notification arrete d'apparaitre.

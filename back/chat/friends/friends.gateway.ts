@@ -13,7 +13,6 @@ export class FriendsGateway extends BaseGateway
 				private prisma: PrismaService)
 	{
 		super();
-		// console.log(`FriendsGateway instance: ${this}`);
 	}
 
 	@SubscribeMessage('addFriend')
@@ -40,7 +39,6 @@ export class FriendsGateway extends BaseGateway
 		try
 		{
 			const friends = await this.friendsService.getFriends(data);
-			// console.log('Successfully retrieved friends!');
 			client.emit('friends', friends);
 		}
 		catch (error)

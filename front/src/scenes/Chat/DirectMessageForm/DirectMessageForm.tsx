@@ -11,9 +11,6 @@ type Props =
 
 const DirectMessageForm: React.FC<Props> = ({senderId, receiverId}) =>
 {
-	// console.log('senderId:', senderId);
-	// console.log('receiverId:', receiverId);
-
 	const [message, setMessage] = useState('');
 	const [error, setError] = useState('');
 	const socket = useContext(SocketContext);

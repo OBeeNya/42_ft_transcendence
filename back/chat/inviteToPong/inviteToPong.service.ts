@@ -13,20 +13,20 @@ export class InviteToPongService
 		if (data.userId === data.invitedId) 
 			throw new Error("User cannot invite themselves to a game");
 
-		const existingInvitation = await this.prisma.pongInvitation.findFirst(
+		const block = await this.prisma.userBlock.findFirst(
 		{
 			where:
 			{
-				userId: data.userId,
-				invitedId: data.invitedId
+				OR:
+				[
+					{ userId: data.userId, blockedId: data.invitedId },
+					{ userId: data.invitedId, blockedId: data.userId }
+				]
 			}
 		});
 
-		if (existingInvitation && !existingInvitation.accepted && !existingInvitation.refused)
-			throw new Error('An invitation is already pending.');
-
-		if (existingInvitation && (existingInvitation.accepted || existingInvitation.refused))
-			await this.prisma.pongInvitation.delete({where: {id: existingInvitation.id}});
+		if (block)
+			throw new Error("Blocked users cannot invite each other to a game");
 
 		const invitation = await this.prisma.pongInvitation.create(
 		{
@@ -38,37 +38,6 @@ export class InviteToPongService
 		});
 
 		return (invitation);
-	}
-
-	async acceptInvitation(id: number): Promise<PongInvitation>
-	{
-		const invitation = await this.prisma.pongInvitation.findUnique({where: {id}});
-
-		if (invitation.accepted)
-			throw new Error('This invitation has already been accepted.');
-
-		return (this.prisma.pongInvitation.update(
-		{
-			where: {id: id},
-			data: {accepted: true},
-		}));
-	}
-
-	async refuseInvitation(id: number): Promise<PongInvitation>
-	{
-		const invitation = await this.prisma.pongInvitation.findUnique({where: {id}});
-
-		if (invitation.accepted)
-			throw new Error('This invitation has already been accepted.');
-
-		if (invitation.refused)
-			throw new Error('This invitation has already been refused.');
-
-		return (this.prisma.pongInvitation.update(
-		{
-			where: {id: id},
-			data: {refused: true},
-		}));
 	}
 
 	async getInvitations(invitedId: number): Promise<PongInvitation[]>
@@ -87,3 +56,34 @@ export class InviteToPongService
 		}));
 	}
 }
+
+	// async acceptInvitation(id: number): Promise<PongInvitation>
+	// {
+	// 	const invitation = await this.prisma.pongInvitation.findUnique({where: {id}});
+
+	// 	if (invitation.accepted)
+	// 		throw new Error('This invitation has already been accepted.');
+
+	// 	return (this.prisma.pongInvitation.update(
+	// 	{
+	// 		where: {id: id},
+	// 		data: {accepted: true},
+	// 	}));
+	// }
+
+	// async refuseInvitation(id: number): Promise<PongInvitation>
+	// {
+	// 	const invitation = await this.prisma.pongInvitation.findUnique({where: {id}});
+
+	// 	if (invitation.accepted)
+	// 		throw new Error('This invitation has already been accepted.');
+
+	// 	if (invitation.refused)
+	// 		throw new Error('This invitation has already been refused.');
+
+	// 	return (this.prisma.pongInvitation.update(
+	// 	{
+	// 		where: {id: id},
+	// 		data: {refused: true},
+	// 	}));
+	// }
