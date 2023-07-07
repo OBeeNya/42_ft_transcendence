@@ -19,6 +19,7 @@ const ProfilePage = () => {
 						Authorization: `Bearer ${token}`,
 					},
 				});
+				// console.log(response.data);
 				setUserInfos(response.data);
 			} catch (error) {
 				console.error("Failed to fetch users.");

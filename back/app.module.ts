@@ -11,6 +11,7 @@ import { FriendsModule } from 'chat/friends/friends.module';
 import { DirectMessageModule } from 'chat/directMessage/directMessage.module';
 import { BlockageModule } from 'chat/blockage/blockage.module';
 // import { SocketEvents } from 'pong/socket/pong.socket.events';
+import { InviteToPongModule } from 'chat/inviteToPong/inviteToPong.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { BlockageModule } from 'chat/blockage/blockage.module';
 	BlockageModule,
 	DirectMessageModule,
 	FriendsModule,
+	InviteToPongModule,
   ],
 //   providers: [
 // 	{

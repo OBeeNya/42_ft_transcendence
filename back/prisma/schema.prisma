@@ -8,36 +8,61 @@ datasource db {
 }
 
 model User {
-	id			Int @id @default(autoincrement())
-	createdAt		DateTime @default(now())
-	updatedAt		DateTime @updatedAt
-	name			String @unique
-  	hash			String
-  	wins			Int @default(0)
-  	losses		Int @default(0)
-  	ladder_level	Int @default(1)
-  	// history		MatchHistory[]
-  	oauthId		String
-  	connected		Boolean @default(false)
-  	isPlaying		Boolean @default(false)
-  	chats			UserChat[]
-  	tfa			Boolean @default(false)
-  	tfa_key		String
-  	ladders		Int[]
-  	wons			Boolean[]
-  	gameDates		String[]
-  	exp			Int @default(0)
-	userFriends		UserFriend[] @relation("UserFriendUser")
-	friendUsers		UserFriend[] @relation("UserFriendFriend")
-	userBlocks		UserBlock[] @relation("UserBlockUser")
-	blockedUsers	UserBlock[] @relation("UserBlockBlocked")
-	channels		Channel[] @relation("UserChannels")
-	owner			Channel[] @relation("owner")
-	messages		Message[] @relation("UserMessage")
-	sentDMs			DirectMessage[] @relation("UserDMs")
-	receivedDMs		DirectMessage[] @relation("UserDMsReceived")
-  @@map("users")
+	id						Int @id @default(autoincrement())
+	createdAt				DateTime @default(now())
+	updatedAt				DateTime @updatedAt
+	name					String @unique
+	hash					String
+	wins					Int @default(0)
+	losses					Int @default(0)
+	ladder_level			Int @default(1)
+	// history				MatchHistory[]
+	oauthId					String
+	connected				Boolean @default(false)
+	isPlaying				Boolean @default(false)
+	tfa						Boolean @default(false)
+	tfa_key					String
+	ladders					Int[]
+	wons					Boolean[]
+	gameDates				String[]
+	exp						Int @default(0)
+	userFriends				UserFriend[] @relation("UserFriendUser")
+	friendUsers				UserFriend[] @relation("UserFriendFriend")
+	userBlocks				UserBlock[] @relation("UserBlockUser")
+	blockedUsers			UserBlock[] @relation("UserBlockBlocked")
+	pongInvitationsSent		PongInvitation[] @relation("PongInvitationsSent")
+	pongInvitationsReceived	PongInvitation[] @relation("PongInvitationsReceived")
+	channels				Channel[] @relation("UserChannels")
+	owner					Channel[] @relation("owner")
+	messages				Message[] @relation("UserMessage")
+	sentDMs					DirectMessage[] @relation("UserDMs")
+	receivedDMs				DirectMessage[] @relation("UserDMsReceived")
 
+	@@map("users")
+}
+
+model PongInvitation {
+	id			Int @id @default(autoincrement())
+	createdAt	DateTime @default(now())
+	userId		Int
+	invitedId	Int
+	accepted	Boolean @default(false)
+	refused		Boolean @default(false)
+	user		User @relation("PongInvitationsSent", fields: [userId], references: [id], onDelete: Cascade)
+	invited		User @relation("PongInvitationsReceived", fields: [invitedId], references: [id], onDelete: Cascade)
+
+	@@map("pong_invitations")
+}
+
+model UserFriend {
+	id			Int @id @default(autoincrement())
+	createdAt	DateTime @default(now())
+	userId		Int
+	friendId	Int
+	user		User @relation("UserFriendUser", fields: [userId], references: [id], onDelete: Cascade)
+	friend		User @relation("UserFriendFriend", fields: [friendId], references: [id], onDelete: Cascade)
+
+	@@map("user_friends")
 }
 
 model UserBlock {
@@ -52,17 +77,6 @@ model UserBlock {
 	@@unique([userId, blockedId])
 }
 
-model UserFriend {
-	id			Int @id @default(autoincrement())
-	createdAt	DateTime @default(now())
-	userId		Int
-	friendId	Int
-	user		User @relation("UserFriendUser", fields: [userId], references: [id], onDelete: Cascade)
-	friend		User @relation("UserFriendFriend", fields: [friendId], references: [id], onDelete: Cascade)
-
-	@@map("user_friends")
-}
-
 model DirectMessage {
 	id			Int @id @default(autoincrement())
 	createdAt	DateTime @default(now())
@@ -73,6 +87,18 @@ model DirectMessage {
 	receiver	User @relation("UserDMsReceived", fields: [receiverId], references: [id], onDelete: Cascade)
 
 	@@map("direct_messages")
+}
+
+model Message {
+	id			Int @id @default(autoincrement())
+	createdAt	DateTime @default(now())
+	content		String
+	sender		User @relation("UserMessage", fields: [userId], references: [id])
+	userId		Int
+	chat		Chat @relation(fields: [chatId], references: [id])
+	chatId		Int
+
+	@@map("messages")
 }
 
 model Channel {
@@ -90,18 +116,6 @@ model Channel {
   @@map("channels")
 }
 
-model Message {
-	id			Int @id @default(autoincrement())
-	createdAt	DateTime @default(now())
-	content		String
-	sender		User @relation("UserMessage", fields: [userId], references: [id])
-	userId		Int
-	chat		Chat @relation(fields: [chatId], references: [id])
-	chatId		Int
-
-	@@map("messages")
-}
-
 model Chat {
 	id			Int @id @default(autoincrement())
 	createdAt	DateTime @default(now())
@@ -109,7 +123,6 @@ model Chat {
 	name		String @unique
 	messages	Message[]
 	type		ChatType @default(PUBLIC)
-	users		UserChat[]
 	password	String?
 
 	@@map("chats")
@@ -119,17 +132,4 @@ enum ChatType {
 	PUBLIC
 	PRIVATE
 	PASSWORD
-}
-
-model UserChat {
-	userId		Int
-	chatId		Int
-	user		User @relation(fields: [userId], references: [id])
-	chat		Chat @relation(fields: [chatId], references: [id])
-	isOwner		Boolean
-	isBlocked	Boolean
-	permissions	String
-
-	@@id([userId, chatId])
-	@@map("user_chats")
 }

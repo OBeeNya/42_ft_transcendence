@@ -43,48 +43,25 @@ const User = ({user,isActive, onClick, onDirectMessageClick, navigate}:
 
 	}, [token, setCurrentUser]);
 
-	const handleBlock = async () =>
-	{
-		try
-		{
-			console.log('Attempting to block user...');
-	
-			if (currentUser && socket)
-			{
-				console.log(`Emitting blockUser event with User ID: ${currentUser.id}, Blocked User ID: ${user.id}`);
-				socket.emit('blockUser', {userId: currentUser.id, blockedId: user.id});
-				setIsBlocked(true);
-			}
-	
-			else
-				console.error('Current user is null or socket is not available');
-		}
-		catch (error)
-		{
-			console.error('Error blocking user:', error);
-		}
-	};
-
 	const handleAddFriend = async () =>
 	{
-		try
-		{
-			console.log('Attempting to add friend...');
-
-			if (currentUser && socket)
-			{
-				console.log(`Emitting addFriend event with User ID: ${currentUser.id}, Friend ID: ${user.id}`);
-				socket.emit('addFriend', {userId: currentUser.id, friendId: user.id});
-			}
-
-			else 
-				console.error('Current user is null or socket is not available');
-		}
-		catch (error)
-		{
-			console.error('Error adding friend:', error);
-		}
+		if (currentUser && socket)
+			socket.emit('addFriend', {userId: currentUser.id, friendId: user.id});
+		else 
+			console.error('Current user is null or socket is not available');
 	}
+
+	const handleBlock = async () =>
+	{
+		if (currentUser && socket)
+		{
+			socket.emit('blockUser', {userId: currentUser.id, blockedId: user.id});
+			setIsBlocked(true);
+		}
+
+		else
+			console.error('Current user is null or socket is not available');
+	};
 
 	useEffect(() =>
 	{
@@ -94,7 +71,6 @@ const User = ({user,isActive, onClick, onDirectMessageClick, navigate}:
 			{
 				if (currentUser && (blockedId === currentUser.id || userId === currentUser.id)) 
 				{
-					console.log(`User ${blockedId} has been blocked by ${userId}`);
 					setBlockedUsers(oldBlockedUsers => [...oldBlockedUsers, blockedId]);
 					setIsBlocked(true);
 				}
@@ -110,6 +86,33 @@ const User = ({user,isActive, onClick, onDirectMessageClick, navigate}:
 	});
 	// }, [token, setCurrentUser, user.id, socket]);
 
+	const handleInviteToPong = async () =>
+	{
+		if (currentUser && socket)
+			socket.emit('sendPongInvitation', {userId: currentUser.id, invitedId: user.id});
+		else
+			console.error('Current user is null or socket is not available');
+	}
+
+	useEffect(() =>
+	{
+		if (currentUser && socket)
+		{
+			socket.on('pongInvitationReceived', ({invitedId}) =>
+			{
+				if (currentUser.id === invitedId)
+					navigate('/matchmaking');
+			});
+		}
+
+		return () =>
+		{
+			if (socket) 
+				socket.off('pongInvitationReceived');
+		};
+
+	}, [currentUser, socket, navigate]);
+
 	return (
 		<div key={user.id} className={`user ${isActive ? 'show-menu' : ''}`}>
 			<p className="username" onClick={onClick}>{user.name}</p>
@@ -119,6 +122,7 @@ const User = ({user,isActive, onClick, onDirectMessageClick, navigate}:
 					onDirectMessageClick={onDirectMessageClick}
 					onAddFriendClick={handleAddFriend}
 					onBlockClick={handleBlock}
+					onInviteToPongClick={handleInviteToPong}
 					navigate={navigate}
 					isBlocked={isBlocked || blockedUsers.includes(user.id)}
 				/>

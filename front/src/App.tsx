@@ -17,6 +17,7 @@ import ChatRoutes from './ChatRoutes';
 import MatchmakingPage from './scenes/Matchmaking/Matchmaking';
 import PongRedirecPage from './scenes/Pong/PongRedirec';
 import RoomEmptyPage from './scenes/Matchmaking/RoomEmpty';
+import ProfileRedirection from './scenes/Chat/ProfileRedirection/ProfileRedirection';
 
 const defaultProtectedRouteProps: Omit<ProtectedRouteProps, 'outlet'> =
 {
@@ -35,7 +36,8 @@ function App()
         <Route path="/tfa" element={<TfaPage/>} />
         <Route path="/home" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<HomePage/>} />} />
         <Route path="/profile" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<ProfilePage/>} />} />
-        <Route path="/editprofile" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<EditProfilePage/>} />} />
+		<Route path="/profile/:userId" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<ProfileRedirection/>} />} />
+		<Route path="/editprofile" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<EditProfilePage/>} />} />
         <Route path="/matchmaking" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<MatchmakingPage/>} />} />
         <Route path="/pong" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<PongPage/>} />} />
         <Route path="/pongredirec" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<PongRedirecPage/>} />} />

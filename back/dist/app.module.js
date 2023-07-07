@@ -19,6 +19,7 @@ const pong_socket_module_1 = require("./pong/socket/pong.socket.module");
 const friends_module_1 = require("./chat/friends/friends.module");
 const directMessage_module_1 = require("./chat/directMessage/directMessage.module");
 const blockage_module_1 = require("./chat/blockage/blockage.module");
+const inviteToPong_module_1 = require("./chat/inviteToPong/inviteToPong.module");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -37,6 +38,7 @@ AppModule = __decorate([
             blockage_module_1.BlockageModule,
             directMessage_module_1.DirectMessageModule,
             friends_module_1.FriendsModule,
+            inviteToPong_module_1.InviteToPongModule,
         ],
     })
 ], AppModule);

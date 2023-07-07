@@ -57,9 +57,6 @@ export class FriendsService
 				}
 			});
 
-			console.log(`User with ID ${data.userId} ` +
-						`added ${data.friendId} as friend!`);
-
 			return (friend.friend);
 		}
 		catch (error)

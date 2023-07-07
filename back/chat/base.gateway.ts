@@ -10,24 +10,24 @@ export class BaseGateway
 
 	afterInit(server: Server)
 	{
-		console.log('Initialized!');
+		// console.log('Initialized!');
 	}
 
 	handleConnection(client: Socket)
 	{
-		console.log(`Client connected: ${client.id}`);
+		// console.log(`Client connected: ${client.id}`);
 	}
 
 	handleDisconnect(client: Socket)
 	{
-		console.log(`Client disconnected: ${client.id}`);
+		// console.log(`Client disconnected: ${client.id}`);
 
 		for (const [userId, socketId] of this.userSocketMap.entries())
 		{
 			if (socketId === client.id)
 			{
 				this.userSocketMap.delete(userId);
-				console.log(`User ${userId} disconnected, socket id ${client.id} removed from map.`);
+				// console.log(`User ${userId} disconnected, socket id ${client.id} removed from map.`);
 				break;
 			}
 		}
