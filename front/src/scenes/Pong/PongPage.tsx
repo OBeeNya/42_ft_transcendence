@@ -42,13 +42,11 @@ const PongPage = () => {
 				'pong/getPlayers',
 				{ headers: { Authorization: `Bearer ${token}` } }
 			);
-			// console.log(players.data);
 			if (players.data.length !== 2) {
 				const messageSpectating = document.getElementById("messageSpectating");
 				if (messageSpectating)
 					messageSpectating.textContent = "No game is currently being played";
-			}
-			else
+			} else
 				navigate('/pongGame');
 		} catch {
 			console.error('could not spectate');
