@@ -9,12 +9,14 @@ const MatchmakingPage = () => {
 	const navigate = useNavigate();
 
     const joinGame = async () => {
+        const response = await ax.get("http://localhost:8080/users/me", {
+            headers: { Authorization: `Bearer ${token}` },
+        });
         await ax.patch(
             'pong/addPlayer',
-            { add: 'adding' },
+            { name: response.data.name },
             { headers: { Authorization: `Bearer ${token}` } }
         );
-        // navigate('/pongGame');
         navigate('/empty');
     }
 

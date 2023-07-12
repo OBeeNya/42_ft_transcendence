@@ -18,10 +18,5 @@ __decorate([
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
 ], PlayerDto.prototype, "name", void 0);
-__decorate([
-    (0, class_validator_1.IsNumber)(),
-    (0, class_validator_1.IsNotEmpty)(),
-    __metadata("design:type", Number)
-], PlayerDto.prototype, "id", void 0);
 exports.PlayerDto = PlayerDto;
 //# sourceMappingURL=player.dto.js.map

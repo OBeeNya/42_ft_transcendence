@@ -16,6 +16,7 @@ exports.PongController = void 0;
 const common_1 = require("@nestjs/common");
 const pong_service_1 = require("./pong.service");
 const guard_1 = require("../auth/guard");
+const dto_1 = require("./dto");
 let PongController = class PongController {
     constructor(pongService) {
         this.pongService = pongService;
@@ -24,10 +25,10 @@ let PongController = class PongController {
         return this.pongService.setSocket();
     }
     addPlayer(add) {
-        return (this.pongService.addPlayer());
+        return (this.pongService.addPlayer(add.name));
     }
     removePlayer(rem) {
-        return (this.pongService.removePlayer());
+        return (this.pongService.removePlayer(rem.name));
     }
     getPlayers() {
         return (this.pongService.getPlayers());
@@ -43,14 +44,14 @@ __decorate([
     (0, common_1.Patch)('addPlayer'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [dto_1.PlayerDto]),
     __metadata("design:returntype", void 0)
 ], PongController.prototype, "addPlayer", null);
 __decorate([
     (0, common_1.Patch)('removePlayer'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [dto_1.PlayerDto]),
     __metadata("design:returntype", void 0)
 ], PongController.prototype, "removePlayer", null);
 __decorate([

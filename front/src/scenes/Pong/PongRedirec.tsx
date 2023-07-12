@@ -8,9 +8,12 @@ const PongRedirecPage = () => {
 
 	const remove = async () => {
 		try {
+			const response = await ax.get("http://localhost:8080/users/me", {
+				headers: { Authorization: `Bearer ${token}` },
+			});
 			await ax.patch(
 				'pong/removePlayer',
-				{ rem: 'removing' },
+ 		        { name: response.data.name },
 				{ headers: { Authorization: `Bearer ${token}` } }
 			);
 		} catch {

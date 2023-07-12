@@ -1,8 +1,8 @@
 export declare class PongService {
     constructor();
-    static players: number;
+    static players: string[];
     setSocket(): string;
-    addPlayer(): void;
-    removePlayer(): void;
-    getPlayers(): number;
+    addPlayer(add: string): void;
+    removePlayer(rem: string): void;
+    getPlayers(): string[];
 }

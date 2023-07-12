@@ -25,8 +25,6 @@ let DirectMessageGateway = class DirectMessageGateway extends base_gateway_1.Bas
         this.directMessageService = directMessageService;
         this.prisma = prisma;
         setInterval(() => {
-            console.log('Current userSocketMap(DirectMessage):');
-            console.log(Array.from(this.userSocketMap.entries()));
         }, 30000);
     }
     async handlePrivateMessage(data, client) {

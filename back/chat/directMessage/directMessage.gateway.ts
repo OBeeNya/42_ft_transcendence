@@ -17,8 +17,8 @@ export class DirectMessageGateway extends BaseGateway
 
 		setInterval(() =>
 		{
-			console.log('Current userSocketMap(DirectMessage):');
-			console.log(Array.from(this.userSocketMap.entries()));
+			// console.log('Current userSocketMap(DirectMessage):');
+			// console.log(Array.from(this.userSocketMap.entries()));
 		}, 30000);
 	}
 

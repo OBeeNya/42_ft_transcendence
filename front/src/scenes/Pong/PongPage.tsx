@@ -10,19 +10,22 @@ const PongPage = () => {
 
 	const matchMaking = async () => {
 		try {
+			const response = await ax.get("http://localhost:8080/users/me", {
+				headers: { Authorization: `Bearer ${token}` },
+			});
 			const players = await ax.get(
 				'pong/getPlayers',
 				{ headers: { Authorization: `Bearer ${token}` } }
 			);
-			if (players.data < 2) {
+			if (players.data.length < 2 && players.data.includes(response.data.name) === false) {
 				await ax.patch(
 					'pong/addPlayer',
-					{ add: 'adding' },
+					{ name: response.data.name },
 					{ headers: { Authorization: `Bearer ${token}` } }
 				);
 				navigate('/pongGame');
 			}
-			else
+			else if (players.data.includes(response.data.name) === false)
 				navigate('/matchmaking');
 		} catch {
 			console.error('could not matchmake');
@@ -35,7 +38,7 @@ const PongPage = () => {
 				'pong/getPlayers',
 				{ headers: { Authorization: `Bearer ${token}` } }
 			);
-			console.log(players.data);
+			// console.log(players.data);
 			if (players.data !== 2) {
 				const messageSpectating = document.getElementById("messageSpectating");
 				if (messageSpectating)
@@ -44,7 +47,7 @@ const PongPage = () => {
 			else
 				navigate('/pongGame');
 		} catch {
-			console.error('could not matchmake');
+			console.error('could not spectate');
 		}
 	}
 
