@@ -18,6 +18,10 @@ const PongPage = () => {
 				{ headers: { Authorization: `Bearer ${token}` } }
 			);
 			if (players.data.length < 2 && players.data.includes(response.data.name) === false) {
+				await ax.patch('users',
+					{ playing: true },
+					{ headers: { Authorization: `Bearer ${token}` } }
+				);
 				await ax.patch(
 					'pong/addPlayer',
 					{ name: response.data.name },
@@ -39,7 +43,7 @@ const PongPage = () => {
 				{ headers: { Authorization: `Bearer ${token}` } }
 			);
 			// console.log(players.data);
-			if (players.data !== 2) {
+			if (players.data.length !== 2) {
 				const messageSpectating = document.getElementById("messageSpectating");
 				if (messageSpectating)
 					messageSpectating.textContent = "No game is currently being played";

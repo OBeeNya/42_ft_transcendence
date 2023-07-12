@@ -8,4 +8,5 @@ export declare class EditUserDto {
     tfa?: boolean;
     exp?: number;
     ladder?: number;
+    playing?: boolean;
 }

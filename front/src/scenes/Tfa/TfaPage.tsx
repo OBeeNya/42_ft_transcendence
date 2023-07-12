@@ -45,15 +45,11 @@ const TfaPage = () => {
 				localStorage.setItem("token", tokentfa);
 				localStorage.setItem("isConnected", "yes");
 				localStorage.setItem("userStatus", "connected");
-				await ax.patch("users", {
-						connected: true,
-					}, {
-						headers: {
-						Authorization: `Bearer ${localStorage.getItem('token')}`
-					},
+				await ax.patch("users",
+					{ connected: true },
+					{ headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
 				});
-			}
-			else {
+			} else {
 				localStorage.setItem('tokentfa', '');
 				navigate('/');
 			}

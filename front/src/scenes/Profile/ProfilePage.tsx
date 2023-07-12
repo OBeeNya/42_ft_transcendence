@@ -71,7 +71,6 @@ const ProfilePage = () => {
 				</div>
 
 				<h1>Match history</h1>
-				<p className="matchHistory">
 				<div>
 					<table>
 						<thead>
@@ -92,7 +91,6 @@ const ProfilePage = () => {
 						</tbody>
 					</table>
 				</div>
-				</p>
 
 			</Content>
 		</div>

@@ -21,11 +21,9 @@ let PongService = PongService_1 = class PongService {
     }
     addPlayer(add) {
         PongService_1.players.push(add);
-        console.log('players: ', PongService_1.players);
     }
     removePlayer(rem) {
         PongService_1.players = PongService_1.players.filter(e => e !== rem);
-        console.log('players: ', PongService_1.players);
     }
     getPlayers() {
         return (PongService_1.players);

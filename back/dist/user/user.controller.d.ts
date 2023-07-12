@@ -22,6 +22,7 @@ export declare class UserController {
         wons: boolean[];
         gameDates: string[];
         exp: number;
+        playing: boolean;
     }, unknown, never> & {})[]>;
     findOne(name: string): Promise<import("@prisma/client/runtime").GetResult<{
         id: number;
@@ -41,6 +42,7 @@ export declare class UserController {
         wons: boolean[];
         gameDates: string[];
         exp: number;
+        playing: boolean;
     }, unknown, never> & {}>;
     getMe(user: User): import("@prisma/client/runtime").GetResult<{
         id: number;
@@ -60,6 +62,7 @@ export declare class UserController {
         wons: boolean[];
         gameDates: string[];
         exp: number;
+        playing: boolean;
     }, unknown, never> & {};
     findOneByName(name: string): Promise<import("@prisma/client/runtime").GetResult<{
         id: number;
@@ -79,6 +82,7 @@ export declare class UserController {
         wons: boolean[];
         gameDates: string[];
         exp: number;
+        playing: boolean;
     }, unknown, never> & {}>;
     findOneById(id: string): Promise<import("@prisma/client/runtime").GetResult<{
         id: number;
@@ -98,6 +102,7 @@ export declare class UserController {
         wons: boolean[];
         gameDates: string[];
         exp: number;
+        playing: boolean;
     }, unknown, never> & {}>;
     editUser(userId: number, dto: EditUserDto): Promise<any>;
     deleteUserById(id: string): Promise<{

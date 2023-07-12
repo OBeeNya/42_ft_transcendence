@@ -58,5 +58,10 @@ __decorate([
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", Number)
 ], EditUserDto.prototype, "ladder", void 0);
+__decorate([
+    (0, class_validator_1.IsBoolean)(),
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", Boolean)
+], EditUserDto.prototype, "playing", void 0);
 exports.EditUserDto = EditUserDto;
 //# sourceMappingURL=edit-user.dto.js.map

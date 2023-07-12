@@ -131,7 +131,6 @@ class Ball {
                     v: p.v,
                     w: p.w,
                     h: p.h,
-                    // p:p.p
                 };
                 socket.emit('start', infosPlayer);
                 let infosBall = {
@@ -164,8 +163,7 @@ class Ball {
                 if (master === true) {
                     p.p = data[0];
                     opponentPoints = data[1];
-                }
-                else {
+                } else {
                     p.p = data[1];
                     opponentPoints = data[0];
                 }
@@ -319,9 +317,11 @@ class Ball {
                 if (paused === 1) {
                     b.xv = 0;
                     b.yv = 0;
+                    p.v = 0;
                 } else {
                     b.xv = ballSpeed;   //doit reprendre a la vitesse d'avant, (ballspeed ou -ballspeed).
                     b.yv = ballSpeed;
+                    p.v = playerSpeed;
                 }
                 paused *= -1;
             }

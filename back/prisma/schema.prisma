@@ -16,7 +16,6 @@ model User {
 	wins					Int @default(0)
 	losses					Int @default(0)
 	ladder_level			Int @default(1)
-	// history				MatchHistory[]
 	oauthId					String
 	connected				Boolean @default(false)
 	isPlaying				Boolean @default(false)
@@ -26,6 +25,7 @@ model User {
 	wons					Boolean[]
 	gameDates				String[]
 	exp						Int @default(0)
+	playing					Boolean @default(false)
 	userFriends				UserFriend[] @relation("UserFriendUser")
 	friendUsers				UserFriend[] @relation("UserFriendFriend")
 	userBlocks				UserBlock[] @relation("UserBlockUser")

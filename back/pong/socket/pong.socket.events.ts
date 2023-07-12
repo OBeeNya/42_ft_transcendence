@@ -61,10 +61,10 @@ export class SocketEvents implements OnGatewayInit {
             for (let i = 0; i < players.length; i++) {
                 if (client.id === players[i].id)
                     pl = players[i];
-                }
-                if (pl !== undefined) {
-                    pl.x = data.x;
-                    pl.y = data.y;
+            }
+            if (pl !== undefined) {
+                pl.x = data.x;
+                pl.y = data.y;
                 pl.v = data.v;
                 pl.w = data.w;
                 pl.h = data.h;

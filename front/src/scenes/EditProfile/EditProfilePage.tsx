@@ -35,13 +35,10 @@ const EditProfilePage = () => {
 			return ;
 		try {
 			if (userInput.name !== '') {
-				await ax.patch('users', {
-					name: userInput.name,
-				}, {
-					headers: {
-						Authorization: `Bearer ${token}`
-					},
-				});
+				await ax.patch('users',
+					{ name: userInput.name },
+					{ headers: { Authorization: `Bearer ${token}` } }
+				);
 			}
 			try {
 				await ax.patch('users', {

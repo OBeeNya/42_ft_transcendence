@@ -12,6 +12,10 @@ const MatchmakingPage = () => {
         const response = await ax.get("http://localhost:8080/users/me", {
             headers: { Authorization: `Bearer ${token}` },
         });
+        await ax.patch('users',
+            { playing: true },
+            { headers: { Authorization: `Bearer ${token}` } }
+        );
         await ax.patch(
             'pong/addPlayer',
             { name: response.data.name },
@@ -26,7 +30,7 @@ const MatchmakingPage = () => {
 				'pong/getPlayers',
 				{ headers: { Authorization: `Bearer ${token}` } }
 			);
-            if (response.data === 0 || response.data === 1)
+            if (response.data.length === 0 || response.data.length === 1)
                 joinGame();
         } catch {
             console.error('could not get players in match making');

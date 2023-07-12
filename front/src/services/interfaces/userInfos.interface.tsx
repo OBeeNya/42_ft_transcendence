@@ -16,6 +16,7 @@ export interface UserInfos
 	ladders: number[];
 	wons: boolean[];
 	gameDates: string[];
+	playing: boolean;
 }
 
 export {};

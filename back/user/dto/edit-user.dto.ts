@@ -37,5 +37,9 @@ export class EditUserDto {
 	@IsNumber()
 	@IsOptional()
 	ladder?: number;
+
+	@IsBoolean()
+	@IsOptional()
+	playing?: boolean;
 	
 }

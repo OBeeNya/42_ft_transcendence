@@ -38,6 +38,6 @@ export class BaseGateway
 							  @ConnectedSocket() client: Socket)
 	{
 		this.userSocketMap.set(userId, client.id);
-		console.log(`User ${userId} connected with socket id ${client.id}`);
+		// console.log(`User ${userId} connected with socket id ${client.id}`);
 	}
 }

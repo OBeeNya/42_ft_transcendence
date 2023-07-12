@@ -111,6 +111,16 @@ let UserService = class UserService {
                 },
             });
         }
+        if (dto.playing !== undefined) {
+            user = await this.prisma.user.update({
+                where: {
+                    id: userId,
+                },
+                data: {
+                    playing: dto.playing,
+                },
+            });
+        }
         delete user.hash;
         return (user);
     }

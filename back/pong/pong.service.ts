@@ -5,7 +5,6 @@ export class PongService {
 
 	constructor() {}
 
-    // static players: number = 0;
     static players: string[] = [];
 
     setSocket() {
@@ -15,15 +14,13 @@ export class PongService {
 	}
     
     addPlayer(add: string) {
-        // PongService.players++;
         PongService.players.push(add);
-        console.log('players: ', PongService.players);
+        // console.log('players: ', PongService.players);
     }
     
     removePlayer(rem: string) {
-        // PongService.players--;
         PongService.players = PongService.players.filter(e => e !== rem);
-        console.log('players: ', PongService.players);
+        // console.log('players: ', PongService.players);
     }
 
     getPlayers() {

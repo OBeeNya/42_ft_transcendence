@@ -26,6 +26,7 @@ export declare class JwtStrategy extends JwtStrategy_base {
         wons: boolean[];
         gameDates: string[];
         exp: number;
+        playing: boolean;
     }, unknown, never> & {}>;
 }
 export {};
