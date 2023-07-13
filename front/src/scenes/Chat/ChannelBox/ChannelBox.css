@@ -5,7 +5,25 @@
 	margin: 5px;
   }
   
+
+  .sender-name {
+	font-size: 0.7em;
+	font-weight: bold;
+  }
+
+  .sender-name::after {
+	content: ": ";
+  }
+
+
+  .message-content {
+	word-break: break-word;
+	overflow-wrap: break-word;
+  }
+
   .message {
+	position: relative;
+	padding-top: 20px;
 	  max-width: 60%;
 	  line-height: 1.5;
 	  margin: 5px;

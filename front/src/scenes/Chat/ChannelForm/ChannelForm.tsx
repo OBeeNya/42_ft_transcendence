@@ -29,12 +29,10 @@ const ChannelForm: React.FC<Props> = ({senderId, channelId}) =>
 
 	const emitSocketEvent = () =>
 	{
-		if (socket) {
-			socket.emit('sendMessageToRoom', { roomId: channelId.toString(), message });
-		}
-		else
-			console.log('Socket is not available!');
-
+		if (!socket)
+			return;
+		socket.emit('channelMessage', { senderId: senderId, channelId: channelId, message: message });
+		console.log('message:  ', message, senderId, channelId);
 		setMessage('');
 	};
 

@@ -1,17 +1,39 @@
-import { IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateChannelDto {
     
     @IsNotEmpty()
     @IsString()
-    readonly name: string;
+    name: string;
+
+    userId: number;
+
+    @IsBoolean()
+    ispassword: boolean = false;
+
+    @IsString()
+    password?: string;
 }
 
 export class JoinRoomDto {
-    roomId: string;
+    @IsNotEmpty()
+    @IsString()
+    channelId: string;
+
+    @IsNotEmpty()
+    @IsString()
+    userId: string;
+
+    @IsNotEmpty()
+    @IsString()
+    password?: string;
 }
   
-export class MessageDto {
-    roomId: string;
+export class ChannelMessageDto {
+    senderId: number;
+    channelId: number;
+
+    @IsNotEmpty()
+    @IsString()
     message: string;
 }

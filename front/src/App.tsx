@@ -30,20 +30,31 @@ function App()
 	const [socket, setSocket] = useState<Socket | null>(null);
 	const [userId, setUserId] = useState<number | null>(null);
 	const [messages, setMessages] = useState<Message[]>([]);
-	const [chanmessages, chansetMessages] = useState<ChanMessage[]>([]);
+	const [channelmessages, setChannelMessages] = useState<ChanMessage[]>([]);
 
 	const token = localStorage.getItem("token");
 
 	useEffect(() => {
-		if (socket) {
-			socket.on('newMessage', (newMessage) => {
-				chansetMessages(oldMessages => [...oldMessages, newMessage]);
-			});
-		}
+		if (!socket)
+			return;
+		socket.on('joinRoom', (data: {userId: string, channelId: string}) =>
+		{
+			console.log(`User ${data.userId} joined channel ${data.channelId}`);
+		});
+		socket.on('channelMessage', (newMessage: ChanMessage) => {
+			console.log("Received 'channelMessage' event with data:", newMessage);
+			setChannelMessages(oldMessages => [...oldMessages, newMessage]);
+		});
+		socket.on('channelConversation', (messages: ChanMessage[]) => {
+			console.log('messages received: ', messages);
+			setChannelMessages(messages);
+		});
 
 		return () => {
 			if (socket) {
-				socket.off('newMessage');
+				socket.off('joinRoom');
+				socket.off('channelMessage');
+				socket.off('channelconversation');
 			}
 		}
 	}, [socket]);
@@ -125,6 +136,7 @@ function App()
 		{
 			newSocket.off('connect');
 			newSocket.off('disconnect');
+			newSocket.off('joinRoom');
 			newSocket.close();
 		};
 
@@ -133,7 +145,7 @@ function App()
   return (
 		<SocketContext.Provider value={socket}>
 			<MessageContext.Provider value={messages}>
-				<ChanMessageContext.Provider value={chanmessages}>
+				<ChanMessageContext.Provider value={channelmessages}>
 				<Routes>
 					<Route path="/" element={<AuthPage/>} />
 					<Route path="/signup" element={<SignupPage/>} />

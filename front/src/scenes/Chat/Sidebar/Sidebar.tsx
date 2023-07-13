@@ -2,13 +2,12 @@ import { useState, useRef, useContext } from "react";
 import { buttonChannelContext } from "../MainPage/MainPage"
 import './Sidebar.css';
 
-
 const Sidebar = () =>
 {
-	const { displayPopup, channels, activeChannel, joinChannel } = useContext(buttonChannelContext);
+	const { displayPopup, channels, handleJoinChannel } = useContext(buttonChannelContext);
 	const [channel, searchChannel] = useState('');
 	const searchInputRef = useRef<HTMLInputElement>(null);
-
+	  
 	const handleChange = () => {
 		if (searchInputRef.current) {
 			const value = searchInputRef.current.value;
@@ -53,8 +52,8 @@ const Sidebar = () =>
 			<input className="search-bar" ref={searchInputRef} placeholder="Search channel..." value={channel} onChange={handleChange} onKeyDown={handleKeyDown}/>
 			<div className="chanbutton-container">
 				{channels.map((channel) => (
-        			<button key={channel.id} className="chanbutton" onClick={() => joinChannel(channel)}>{channel.name}</button>
-				))}
+					<button key={channel.id} className="chanbutton" onClick={() => handleJoinChannel(channel)}>{channel.name}</button>
+					))}
 			</div>
 		</div>
 	);

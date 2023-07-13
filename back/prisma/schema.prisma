@@ -26,7 +26,7 @@ model User {
 	oauthId			String
 	connected		Boolean @default(false)
 	isPlaying		Boolean @default(false)
-	messages		Message[] @relation("UserMessage")
+	messages		ChanMessage[] @relation("UserMessage")
 	sentDMs			DirectMessage[] @relation("UserDMs")
 	receivedDMs		DirectMessage[] @relation("UserDMsReceived")
 	tfa				Boolean @default(false)
@@ -74,27 +74,29 @@ model Channel {
   users     User[]   @relation("UserChannels")
   type      ChatType @default(PUBLIC)
 
-  message Message[]
+  message ChanMessage[]
   ownerId Int
   owner User @relation("owner", fields: [ownerId], references:[id])
 
   @@map("channels")
 }
 
-model Message {
+model ChanMessage {
 	id			Int @id @default(autoincrement())
 	createdAt	DateTime @default(now())
 
 	content		String
 
-	sender		User @relation("UserMessage", fields: [userId], references: [id])
-	userId		Int
+	sender		User @relation("UserMessage", fields: [senderId], references: [id])
+	senderId		Int
 	
 	channel		Channel @relation(fields: [channelId], references: [id])
 	channelId		Int
 
-	@@map("messages")
+	@@map("Chanmessages")
 }
+
+
 
 model UserFriend {
 	id			Int @id @default(autoincrement())

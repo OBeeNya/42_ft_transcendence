@@ -11,9 +11,16 @@
     height: 100vh;
 }
 
-.chat-section {
+.chat-section, 
+.channel-section {
     flex: 1;
     overflow: auto;
+    display: none;
+}
+
+.chat-section.active, 
+.channel-section.active {
+    display: block;
 }
 
 .popup, .overlay {

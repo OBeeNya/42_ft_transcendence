@@ -7,21 +7,20 @@ export interface ChanMessage {
     senderId: number;
     channelId: number;
     content: string;
+    sender: {
+      name:string;
+    }
 }
 
 const ChannelBox = ({senderId, channelId}: {senderId: number , channelId: number}) =>
 {
    const allMessages = useContext(ChanMessageContext);
    const messagesEndRef = useRef<null | HTMLDivElement>(null);
-   console.log('le message passe dans channelBox', allMessages);
   
-    const messages = allMessages.filter(
-      (msg) =>
-        (msg.senderId === senderId && msg.channelId === channelId)
-    );
-   console.log('peut etre ici', allMessages);
+    const messages = allMessages.filter(msg => msg.channelId === channelId);
 
-  
+    console.log("check sender", senderId, "message", messages);
+
     const scrollToBottom = () => {
       messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     };
@@ -39,7 +38,8 @@ const ChannelBox = ({senderId, channelId}: {senderId: number , channelId: number
                 message.senderId === senderId ? "sent" : "received"
               }`}
             >
-              {message.content}
+              <span className="sender-name">{message.sender.name}</span>
+              <div className="message-content">{message.content}</div>
             </div>
           </div>
         ))}

@@ -4,8 +4,6 @@ import { Server, Socket } from "socket.io";
 export class BaseGateway
 {
 	protected userSocketMap = new Map<number, string>();
-	protected socketUserMap = new Map<string, number>();
-
 
 	@WebSocketServer()
 	server: Server;
@@ -38,7 +36,6 @@ export class BaseGateway
 	@SubscribeMessage('userConnected')
 	async handleUserConnected(@MessageBody() userId: number, @ConnectedSocket() client: Socket) {
   		this.userSocketMap.set(userId, client.id);
-  		this.socketUserMap.set(client.id, userId);
   		console.log(`User ${userId} connected with socket id ${client.id}`);
 	}
 
