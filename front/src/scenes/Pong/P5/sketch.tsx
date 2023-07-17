@@ -11,6 +11,7 @@ const sketch: Sketch = p5 => {
     let gameEnded = false;
     let opponentPoints = 0;
     let players: any[] = [];
+    let spectator: number[] = [];
     let counter = 0;
     let b: Ball;
     let socket: any;
@@ -159,7 +160,7 @@ class Ball {
         });
 
         socket.on('heartBeatScore', function(data: any){
-            if (data !== null) {
+            if (data !== null && p !== undefined) {
                 if (master === true) {
                     p.p = data[0];
                     opponentPoints = data[1];
@@ -168,6 +169,8 @@ class Ball {
                     opponentPoints = data[0];
                 }
             }
+            spectator[0] = data[0];
+            spectator[1] = data[1];
         });
     }
 
@@ -306,9 +309,17 @@ class Ball {
                 p5.fill(255,0,0);
                 p5.rectMode(p5.CENTER);
                 p5.rect(players[i].x, players[i].y, players[i].w, players[i].h);
+                if (i === 0) {
+                    p5.text(spectator[i], 20, 40);
+                }
+                else if (i === 1)
+                    p5.text(spectator[i], 710, 50);
             }
-        } else if (players.length === 0)
+        } else if (spectator[0] >= pointsToWin || spectator[1] >= pointsToWin || players.length === 0)
             showWinner();
+        // else if (players.length === 0)
+        //     showWinner();
+        
     }
 
     function pauseGame() {
