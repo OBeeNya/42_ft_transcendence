@@ -5,11 +5,13 @@ import { UserInfos } from "../../services/interfaces/userInfos.interface"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEye } from '@fortawesome/free-solid-svg-icons'
 import './Friends.css';
+import { useNavigate } from "react-router-dom";
 
 const Friends = () => 
 {
 	const [users, setUsers] = useState<UserInfos[]>([]);
 	const [currentUser, setCurrentUser] = useState<UserInfos | null>(null);
+	const navigate = useNavigate();
 	const socket = useContext(SocketContext);
 	const token = localStorage.getItem("token");
 
@@ -45,19 +47,16 @@ const Friends = () =>
 		{
 			const fetchFriends = async () =>
 			{
-				// console.log(`Requesting friends list for user ID: ${currentUser.id}`);
 				socket.emit('getFriends', {userId: currentUser.id});
 			};
 
 			const friendAddedListener = (newFriend: UserInfos) =>
 			{
-				// console.log('Friend added:', newFriend);
 				setUsers((users) => [...users, newFriend]);
 			};
 
 			const friendsListener = (friends: UserInfos[]) =>
 			{
-				// console.log('Friends received:', friends);
 				setUsers(friends);
 			};
 	
@@ -81,6 +80,32 @@ const Friends = () =>
 		}
 
 	}, [socket, currentUser]);
+
+	const spectateGame = async (user: UserInfos) =>
+	{
+		if (!user.playing)
+		{
+			console.log('User is not currently playing');
+			return;
+		}
+	
+		try
+		{
+			const players = await axios.get('pong/getPlayers', {headers: {Authorization: `Bearer ${token}`}});
+		  
+			if (players.data.length !== 2)
+			{
+				console.log("No game is currently being played");
+				return;
+			}
+
+			navigate('/pongGame');
+		}
+		catch (error)
+		{
+			console.error('Could not spectate', error);
+		}
+	};
 
 	return (
 		<div className="content-body friends">
@@ -111,7 +136,7 @@ const Friends = () =>
 						}
 					  </td>
 					  <td>
-						<button onClick={() => { /* fonction mode spec*/ }}>
+						<button onClick={() => spectateGame(user)}>
 							<FontAwesomeIcon icon={faEye} />
 						</button>
 					 </td>

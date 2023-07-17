@@ -20,6 +20,7 @@ CREATE TABLE "users" (
     "wons" BOOLEAN[],
     "gameDates" TEXT[],
     "exp" INTEGER NOT NULL DEFAULT 0,
+    "playing" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "users_pkey" PRIMARY KEY ("id")
 );
