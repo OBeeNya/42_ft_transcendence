@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEye } from '@fortawesome/free-solid-svg-icons'
 import './Friends.css';
 import { useNavigate } from "react-router-dom";
+import { ax } from "../../services/axios/axios";
 
 const Friends = () => 
 {
@@ -91,7 +92,7 @@ const Friends = () =>
 	
 		try
 		{
-			const players = await axios.get('pong/getPlayers', {headers: {Authorization: `Bearer ${token}`}});
+			const players = await ax.get('pong/getPlayers', {headers: {Authorization: `Bearer ${token}`}});
 		  
 			if (players.data.length !== 2)
 			{
