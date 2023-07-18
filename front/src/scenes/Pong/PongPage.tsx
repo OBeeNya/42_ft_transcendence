@@ -1,12 +1,19 @@
 import { useNavigate } from "react-router-dom";
+// import React, { useState } from 'react';
 import Content from "../../components/content"
 import Header from "../../components/header"
 import { ax } from "../../services/axios/axios";
+import Select from 'react-select'
 
 const PongPage = () => {
 
 	const navigate = useNavigate();
 	const token = localStorage.getItem("token");
+
+    const options = [
+        { value: 'Classic', label: 'Classic' },
+        { value: 'Terrifying Cat', label: 'Terrifying Cat' },
+      ]
 
 	const matchMaking = async () => {
 		try {
@@ -52,6 +59,12 @@ const PongPage = () => {
 			console.error('could not spectate');
 		}
 	}
+    const handleSelectMap = (selectedOption: any) => {
+        if (selectedOption.value === "Classic") 
+            console.log("Classic!!!"); 
+        else if (selectedOption.value === "Terrifying Cat")
+            console.log("Terrifying cat!!!"); 
+    }         
 
 	return (
 		<div>
@@ -59,9 +72,32 @@ const PongPage = () => {
 			<Content>
 				<h1>Pong page</h1>
 				<br></br>
+				<br></br>
+                <label >Choose a map:</label>
+				<br></br>
+				<br></br>
+                <Select 
+                        styles={{
+                            control: (baseStyles, state) => ({
+                            ...baseStyles,
+
+                            }),
+                            menuList: (baseStyles, state) => ({
+                                ...baseStyles,
+                                backgroundColor: '#060d22',
+                                color: 'white',
+
+                                }),
+                        }}
+                        options={options}
+                        onChange={handleSelectMap} />
+				<br></br>
+				<br></br>
 				<button onClick={matchMaking}>Multi Player</button>
 				<br></br>
+				<br></br>
 				<button onClick={matchMaking}>Multi Player but with a cat</button>
+				<br></br>
 				<br></br>
 				<button onClick={spectating}>Spectator mode</button>
 				<div id="messageSpectating"></div>
