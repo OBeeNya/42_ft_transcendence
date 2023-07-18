@@ -32,11 +32,11 @@ model User {
 	blockedUsers			UserBlock[] @relation("UserBlockBlocked")
 	pongInvitationsSent		PongInvitation[] @relation("PongInvitationsSent")
 	pongInvitationsReceived	PongInvitation[] @relation("PongInvitationsReceived")
-	channels				Channel[] @relation("UserChannels")
-	owner					Channel[] @relation("owner")
-	messages				Message[] @relation("UserMessage")
 	sentDMs					DirectMessage[] @relation("UserDMs")
 	receivedDMs				DirectMessage[] @relation("UserDMsReceived")
+	channels        Channel[]   @relation("UserChannels")
+	ownedChannels           Channel[] @relation("owner")
+	messages		ChanMessage[] @relation("UserMessage")
 
 	@@map("users")
 }
@@ -77,6 +77,7 @@ model UserBlock {
 	@@unique([userId, blockedId])
 }
 
+
 model DirectMessage {
 	id			Int @id @default(autoincrement())
 	createdAt	DateTime @default(now())
@@ -89,43 +90,42 @@ model DirectMessage {
 	@@map("direct_messages")
 }
 
-model Message {
-	id			Int @id @default(autoincrement())
-	createdAt	DateTime @default(now())
-	content		String
-	sender		User @relation("UserMessage", fields: [userId], references: [id])
-	userId		Int
-	chat		Chat @relation(fields: [chatId], references: [id])
-	chatId		Int
-
-	@@map("messages")
-}
 
 model Channel {
-  id			Int @id @default(autoincrement())
-  createdAt 	DateTime @default(now())
-  updatedAt		DateTime @updatedAt
-  name			String @unique
-  password		String?
-  ispassword	Boolean @default(false)
-  private		Boolean @default(false)
-  users			User[] @relation("UserChannels")
-  type			ChatType @default(PUBLIC)
-  owner			User[] @relation("owner")
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  name      String   @unique
+  password  String?
+
+  ispassword Boolean @default(false)
+  private Boolean @default(false)
+  
+
+  users     User[]   @relation("UserChannels")
+  type      ChatType @default(PUBLIC)
+
+  message ChanMessage[]
+  ownerId Int
+  owner User @relation("owner", fields: [ownerId], references:[id])
 
   @@map("channels")
 }
 
-model Chat {
+model ChanMessage {
 	id			Int @id @default(autoincrement())
 	createdAt	DateTime @default(now())
-	updatedAt	DateTime @updatedAt
-	name		String @unique
-	messages	Message[]
-	type		ChatType @default(PUBLIC)
-	password	String?
 
-	@@map("chats")
+	content		String
+
+	sender		User @relation("UserMessage", fields: [senderId], references: [id])
+	senderId		Int
+	
+	channel		Channel @relation(fields: [channelId], references: [id])
+	channelId		Int
+
+	@@map("Chanmessages")
 }
 
 enum ChatType {

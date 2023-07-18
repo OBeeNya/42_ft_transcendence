@@ -1,7 +1,7 @@
 import { Module } from "@nestjs/common";
-import { ChannelsGateway } from "./channels.gateway";
+import { ChannelsGateway } from "./back/chat/channels/channels.gateway";
 import { PrismaService } from "prisma_module/prisma.service";
-import { ChannelsService } from "./channels.service";
+import { ChannelsService } from "./back/chat/channels/channels.service";
 
 @Module(
 {

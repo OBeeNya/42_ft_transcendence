@@ -9,14 +9,14 @@ import ProfilePage from './scenes/Profile/ProfilePage';
 import Callback42 from './scenes/CallBack42/Callback42';
 import PongPage from './scenes/Pong/PongPage';
 import PongPageGame from './scenes/Pong/PongPageGame';
-import PongPageGameSolo from './scenes/Pong/PongPageGameSolo';
 import OnlinePage from './scenes/Online/OnlinePage';
-import PongRecord from './scenes/Pong/PongRecord';
 import TfaPage from './scenes/Tfa/TfaPage';
 import ChatRoutes from './ChatRoutes';
-import MatchmakingPage from './scenes/Matchmaking/Matchmaking';
-import PongRedirecPage from './scenes/Pong/PongRedirec';
+import PongPageGameSolo from './scenes/Pong/PongPageGameSolo';
 import RoomEmptyPage from './scenes/Matchmaking/RoomEmpty';
+import PongRecord from './scenes/Pong/PongRecord';
+import PongRedirecPage from './scenes/Pong/PongRedirec';
+import MatchmakingPage from './scenes/Matchmaking/Matchmaking';
 import ProfileRedirection from './scenes/Chat/ProfileRedirection/ProfileRedirection';
 
 const defaultProtectedRouteProps: Omit<ProtectedRouteProps, 'outlet'> =
@@ -26,6 +26,7 @@ const defaultProtectedRouteProps: Omit<ProtectedRouteProps, 'outlet'> =
 
 function App()
 {
+
 
   return (
 	<Routes>
@@ -48,7 +49,7 @@ function App()
 		<Route path="/online" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<OnlinePage/>} />} />
 		<Route path="/*" element={<ChatRoutes/>} />
 	</Routes>
-  );
+	);
 }
 
 export default App;

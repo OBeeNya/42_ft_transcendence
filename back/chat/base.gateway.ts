@@ -32,7 +32,7 @@ export class BaseGateway
 			}
 		}
 	}
-
+	
 	@SubscribeMessage('userConnected')
 	async handleUserConnected(@MessageBody() userId: number,
 							  @ConnectedSocket() client: Socket)

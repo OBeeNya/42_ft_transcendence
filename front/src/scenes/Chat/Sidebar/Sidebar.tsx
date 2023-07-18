@@ -1,23 +1,13 @@
-import { useState, useRef, useContext, useEffect } from "react";
+import { useState, useRef, useContext } from "react";
 import { buttonChannelContext } from "../MainPage/MainPage"
 import './Sidebar.css';
-import { ax } from "../../../services/axios/axios";
-
 
 const Sidebar = () =>
 {
-	const [selectedChannel, setSelectedChannel] = useState<string | null>(null);
-	const { displayPopup } = useContext(buttonChannelContext);
-	const { channelsName } = useContext(buttonChannelContext);
-	const [channels, setChannels] = useState([]);
+	const { displayPopup, channels, handleJoinChannel } = useContext(buttonChannelContext);
 	const [channel, searchChannel] = useState('');
 	const searchInputRef = useRef<HTMLInputElement>(null);
-	
-	const handleChannelClick = (channelId: string) => {
-		setSelectedChannel(channelId);
-	  };
 	  
-
 	const handleChange = () => {
 		if (searchInputRef.current) {
 			const value = searchInputRef.current.value;
@@ -26,26 +16,8 @@ const Sidebar = () =>
 	};
 
 	const ifchan = (name: string) => {
-		for (let i = 0; i <channelsName.length; i++) {
-			if (channelsName[i] === channel)
-				return true;
-		}
-		return false;
+		return channels.some(channel => channel.name === name);
 	};
-
-	const getchan = async () => {
-		const chan = await ax.get("chat/getchan");
-		const data = chan.data;
-		setChannels(data);
-	}
-
-	useEffect(() => {
-		getchan();
-	}, []);
-
-	useEffect(() => {
-		// console.log(channels); // Affiche les données de channels dans la console
-	  }, [channels]);
 
 	const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>): void => {
 		const key = event.key;
@@ -79,9 +51,9 @@ const Sidebar = () =>
 			</div>
 			<input className="search-bar" ref={searchInputRef} placeholder="Search channel..." value={channel} onChange={handleChange} onKeyDown={handleKeyDown}/>
 			<div className="chanbutton-container">
-				{channels.map((name) => (
-        			<button key={name} className="chanbutton" onClick={() => handleChannelClick(name)}>{name}</button>
-				))}
+				{channels.map((channel) => (
+					<button key={channel.id} className="chanbutton" onClick={() => handleJoinChannel(channel)}>{channel.name}</button>
+					))}
 			</div>
 		</div>
 	);
