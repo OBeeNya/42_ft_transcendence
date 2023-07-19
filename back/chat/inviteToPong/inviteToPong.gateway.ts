@@ -55,7 +55,13 @@ export class InviteToPongGateway extends BaseGateway
 			const inviterSocketId = this.userSocketMap.get(updatedInvitation.userId);
 
 			if (inviterSocketId)
-				this.server.to(inviterSocketId).emit('pongInvitationAccepted', updatedInvitation);
+			{
+    			console.log(`Emitting pongInvitationAccepted to ${inviterSocketId}`);
+    			this.server.to(inviterSocketId).emit('pongInvitationAccepted', updatedInvitation);
+			}
+
+			else
+				console.log(`No socket ID found for user ${updatedInvitation.userId}`);
 		}
 		catch (error)
 		{

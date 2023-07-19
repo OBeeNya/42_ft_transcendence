@@ -104,8 +104,10 @@ const User = ({user,isActive, onClick, onDirectMessageClick, navigate}:
 			socket.on('pongInvitationReceived', ({invitedId, inviterName}) =>
 			{
 				if (currentUser.id === invitedId)
-				setShowNotification(true);
-				setInviterName(inviterName);
+				{
+					setShowNotification(true);
+					setInviterName(inviterName);
+				}
 
 				setTimeout(() =>
 				{
@@ -123,6 +125,25 @@ const User = ({user,isActive, onClick, onDirectMessageClick, navigate}:
 
 	}, [currentUser, socket]);
 
+	useEffect(() =>
+	{
+		if (currentUser && socket)
+		{
+			socket.on('pongInvitationAccepted', ({userId}) =>
+			{
+				if (currentUser.id === userId) 
+					navigate('/matchmaking');
+			});
+		}
+
+		return () =>
+		{
+			if (socket) 
+				socket.off('pongInvitationAccepted');
+		};
+
+	}, [currentUser, socket, navigate]);
+	
 	const handleAccept = () =>
 	{
 		if (currentUser && socket)
