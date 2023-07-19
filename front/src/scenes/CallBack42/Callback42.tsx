@@ -11,9 +11,7 @@ const Callback42 = () => {
         const tokenSplit: string = url.split("=")[1];
         try {
             const response = await ax.get("http://localhost:8080/users/me", {
-                headers: {
-                    Authorization: `Bearer ${tokenSplit}`,
-                },
+                headers: { Authorization: `Bearer ${tokenSplit}` },
             });
             if (response.data.tfa === true) {
                 localStorage.setItem("tokentfa", tokenSplit);
@@ -23,12 +21,9 @@ const Callback42 = () => {
                 localStorage.setItem("userStatus", "connected");
                 localStorage.setItem("isConnected", "yes");
                 localStorage.setItem("token", tokenSplit);
-                await ax.patch("users", {
-                    connected: true,
-                    }, {
-	    			headers: {
-	    				Authorization: `Bearer ${tokenSplit}`
-	    			},
+                await ax.patch("users",
+                    { connected: true },
+                    { headers: { Authorization: `Bearer ${tokenSplit}` },
 	    		});
                 navigate('/editprofile');
             }

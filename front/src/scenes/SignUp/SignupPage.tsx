@@ -29,7 +29,7 @@ const SignupPage = () => {
 			const response = await ax.post('auth/signup', dto);
 			if (response.status === 200 || response.status === 201)
 				navigate('/');
-			// window.location.reload();
+			window.location.reload();
 		}
 		catch (error) {
 			console.error(error);
