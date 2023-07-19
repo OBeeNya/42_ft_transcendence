@@ -62,6 +62,7 @@ const UsersList = ({setCurrentUser, setPrivateMessageUserId}: UsersListProps) =>
 		window.addEventListener('click', clickHandler);
 
 		return () => window.removeEventListener('click', clickHandler);
+
 	}, []);
 
 	return (
