@@ -46,6 +46,11 @@ export class InviteToPongGateway extends BaseGateway
 
 			const updatedInvitation = await this.inviteToPongService.acceptInvitation(data.invitedId);
 			client.emit('pongInvitationAccepted', updatedInvitation);
+
+			const inviterSocketId = this.userSocketMap.get(updatedInvitation.userId);
+
+			if (inviterSocketId)
+				this.server.to(inviterSocketId).emit('pongInvitationAccepted', updatedInvitation);
 		}
 		catch (error)
 		{

@@ -34,7 +34,7 @@ export class InviteToPongService
 			{
 				userId: data.userId,
 				invitedId: data.invitedId,
-				expiresAt: new Date(Date.now() + 30 * 1000)
+				expiresAt: new Date(Date.now() + 15 * 1000)
 			},
 		});
 

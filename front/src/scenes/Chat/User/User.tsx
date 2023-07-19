@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { MouseEvent, useContext, useEffect, useState } from 'react';
+import { MouseEvent, useCallback, useContext, useEffect, useState } from 'react';
 import { UserInfos } from "../../../services/interfaces/userInfos.interface";
 import DropdownMenu from '../DropdownMenu/DropdownMenu';
 import { SocketContext } from '../../../contexts';
@@ -16,7 +16,6 @@ const User = ({user,isActive, onClick, onDirectMessageClick, navigate}:
 	const [currentUser, setCurrentUser] = useState<UserInfos | null>(null);
 	const [isBlocked, setIsBlocked] = useState(false);
 	const [blockedUsers, setBlockedUsers] = useState<number[]>([]);
-	// const [invitation, setInvitation] = useState<number[]>([]);
 	const [showNotification, setShowNotification] = useState<boolean>(false);
 	const token = localStorage.getItem("token");
 
@@ -103,54 +102,43 @@ const User = ({user,isActive, onClick, onDirectMessageClick, navigate}:
 			socket.on('pongInvitationReceived', ({invitedId}) =>
 			{
 				if (currentUser.id === invitedId)
-				{
 					setShowNotification(true);
-				}
-			});
 
-			socket.on('pongInvitationAccepted', ({invitedId}) =>
-			{
-				if (currentUser.id === invitedId || currentUser.id === user.id)
-				{
-					navigate('/matchmaking');
-					setShowNotification(false);
-				}
-			});
-
-			socket.on('pongInvitationRefused', ({invitedId}) =>
-			{
-				if (currentUser.id === invitedId) 
-				{
-					// How to hide the notification ?
-					setShowNotification(false);
-				}
+					setTimeout(() =>
+					{
+						handleRefuse();
+						setShowNotification(false);
+					}, 15000);
 			});
 		}
 
 		return () =>
 		{
 			if (socket)
-			{
 				socket.off('pongInvitationReceived');
-				socket.off('pongInvitationAccepted');
-				socket.off('pongInvitationRefused');
-			}		
 		};
 
-	}, [currentUser, socket, navigate]);
-
+	}, [currentUser, socket]);
+	
 	const handleAccept = () =>
 	{
 		if (currentUser && socket)
+		{
 			socket.emit('acceptPongInvitation', {userId: currentUser.id, invitedId: user.id});
-	}
-	
-	const handleRefuse = () =>
-	{
-		if (currentUser && socket)
-			socket.emit('refusePongInvitation', {userId: currentUser.id, invitedId: user.id});
+			navigate('/matchmaking');
+		}
 	}
 
+	const handleRefuse = useCallback(() =>
+	{
+		if (currentUser && socket)
+		{
+			socket.emit('refusePongInvitation', {userId: currentUser.id, invitedId: user.id});
+			setShowNotification(false);
+		}
+
+	}, [currentUser, socket, user.id]);
+	
 	return (
 		<div key={user.id} className={`user ${isActive ? 'show-menu' : ''}`}>
 			<p className="username" onClick={onClick}>{user.name}</p>

@@ -20,26 +20,4 @@ Un utilisateur essaye de rejoindre un channel :
 Problèmes :
 
 1) Le bloqueur freeze et ne voit plus le menu deroulant s'afficher de la users list
-2) Invitation au Pong.
-3) Logs en couleur
-
------------------------------------------------------------------------------------------
-Invitation au Pong
-
-L'invite recoit une notification proposant d'accepter ou non l'invitation au Pong
-Si oui
-
-Dans le front :
-
-socket.emit('acceptPongInvitation')
-socket.emit('refusePongInvitation')
-socket.emit('getPongInvitations)
-socket.on('pongInvitationAccepted')
-socket.on('pongInvitationRefused')
-socket.on('pongInvitations')
-
-Problemes :
-
-1) Notification pas rectangulaire et pas en bas.
-2) L'acceptation de l'invitation ne redirige pas les deux utilisateurs vers /matchmaking.
-3) Refuser l'invitation doit faire disparaitre la notification.
+2) Logs en couleur

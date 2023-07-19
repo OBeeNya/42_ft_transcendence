@@ -13,7 +13,6 @@ export class BlockageGateway extends BaseGateway
 				private prisma: PrismaService)
 	{
 		super();
-		// console.log(`Blockage instance: ${this}`);
 	}
 
 	@SubscribeMessage('blockUser')
@@ -23,7 +22,6 @@ export class BlockageGateway extends BaseGateway
 		try
 		{
 			await this.blockageService.blockUser(data);
-			// console.log(`User ${data.blockedId} has been blocked by ${data.userId}`);
 			client.emit('userBlocked', {userId: data.userId, blockedId: data.blockedId});
 		}
 		catch (error)
