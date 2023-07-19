@@ -17,24 +17,29 @@ export class InviteToPongGateway extends BaseGateway
 
 	@SubscribeMessage('sendPongInvitation')
 	async handleSendInvitation(@MessageBody() data: InviteToPongDto,
-							   @ConnectedSocket() client: Socket)
+						   @ConnectedSocket() client: Socket)
+{
+	try
 	{
-		try
-		{
-			console.log(`Invitation sent from user ${data.userId} to user ${data.invitedId}`);
+		console.log(`Invitation sent from user ${data.userId} to user ${data.invitedId}`);
 
-			const newInvitation = await this.inviteToPongService.createInvitation(data);
-			const invitedSocketId = this.userSocketMap.get(data.invitedId);
+		const inviterName = (await this.prisma.user.findUnique({
+			where: { id: data.userId },
+		}))?.name;
 
-			if (invitedSocketId)
-				this.server.to(invitedSocketId).emit('pongInvitationReceived', newInvitation);
-		}
-		catch (error)
-		{
-			console.error('Error while inviting to Pong:', error);
-			client.emit('error', {message: 'There was an error sending your invitation.', error: error.message});
-		}
+		const newInvitation = await this.inviteToPongService.createInvitation(data);
+		const invitedSocketId = this.userSocketMap.get(data.invitedId);
+
+		if (invitedSocketId)
+			this.server.to(invitedSocketId).emit('pongInvitationReceived', {...newInvitation, inviterName });
 	}
+	catch (error)
+	{
+		console.error('Error while inviting to Pong:', error);
+		client.emit('error', {message: 'There was an error sending your invitation.', error: error.message});
+	}
+}
+
 
 	@SubscribeMessage('acceptPongInvitation')
 	async handleAcceptInvitation(@MessageBody() data: InviteToPongDto,

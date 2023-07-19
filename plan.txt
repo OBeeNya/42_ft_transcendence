@@ -19,5 +19,6 @@ Un utilisateur essaye de rejoindre un channel :
 -----------------------------------------------------------------------------------------
 Problèmes :
 
-1) Le bloqueur freeze et ne voit plus le menu deroulant s'afficher de la users list
-2) Logs en couleur
+1) Notif du côté de l'inviteur
+2) Rafraichissement freeze meme si deja bloqué
+3) Logs en couleur

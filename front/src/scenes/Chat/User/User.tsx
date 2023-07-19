@@ -17,6 +17,7 @@ const User = ({user,isActive, onClick, onDirectMessageClick, navigate}:
 	const [isBlocked, setIsBlocked] = useState(false);
 	const [blockedUsers, setBlockedUsers] = useState<number[]>([]);
 	const [showNotification, setShowNotification] = useState<boolean>(false);
+	const [inviterName, setInviterName] = useState<string | null>(null);
 	const token = localStorage.getItem("token");
 
 	useEffect(() =>
@@ -59,6 +60,7 @@ const User = ({user,isActive, onClick, onDirectMessageClick, navigate}:
 		{
 			socket.emit('blockUser', {userId: currentUser.id, blockedId: user.id});
 			setIsBlocked(true);
+			window.location.reload();
 		}
 
 		else
@@ -99,16 +101,17 @@ const User = ({user,isActive, onClick, onDirectMessageClick, navigate}:
 	{
 		if (currentUser && socket)
 		{
-			socket.on('pongInvitationReceived', ({invitedId}) =>
+			socket.on('pongInvitationReceived', ({invitedId, inviterName}) =>
 			{
 				if (currentUser.id === invitedId)
-					setShowNotification(true);
+				setShowNotification(true);
+				setInviterName(inviterName);
 
-					setTimeout(() =>
-					{
-						handleRefuse();
-						setShowNotification(false);
-					}, 15000);
+				setTimeout(() =>
+				{
+					handleRefuse();
+					setShowNotification(false);
+				}, 15000);
 			});
 		}
 
@@ -119,7 +122,7 @@ const User = ({user,isActive, onClick, onDirectMessageClick, navigate}:
 		};
 
 	}, [currentUser, socket]);
-	
+
 	const handleAccept = () =>
 	{
 		if (currentUser && socket)
@@ -155,7 +158,7 @@ const User = ({user,isActive, onClick, onDirectMessageClick, navigate}:
 			)}
 
 			{showNotification &&
-			(<Notification accept={handleAccept} decline={handleRefuse} />)}
+			(<Notification accept={handleAccept} decline={handleRefuse} inviterName={inviterName} />)}
 
 			<div className={user.connected ? 'online' : 'offline'}>
 				{user.isPlaying ?
