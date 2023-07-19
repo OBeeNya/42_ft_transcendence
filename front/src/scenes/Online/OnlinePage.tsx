@@ -12,21 +12,7 @@ const OnlinePage = () =>
 
 	useEffect(() =>
 	{
-		// const getUsers = async () => {
-		//   try {
-		// 	const response = await axios.get("http://localhost:8080/users/me", {
-		// 	  headers: {
-		// 		Authorization: `Bearer ${token}`,
-		// 	  },
-		// 	});
-		// 	setUserInfos(response.data);
-		//   } catch (error) {
-		// 	console.error("Failed to fetch users.");
-		//   }
-		// };
-		// getUsers();
-
-		const	fetchUsers = async () => 
+		const fetchUsers = async () => 
 		{
 			try
 			{

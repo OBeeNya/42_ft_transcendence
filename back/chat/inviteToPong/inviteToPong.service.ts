@@ -74,20 +74,4 @@ export class InviteToPongService
 			data: {refused: true},
 		}));
 	}
-
-	async getInvitations(invitedId: number): Promise<PongInvitation[]>
-	{
-		return (this.prisma.pongInvitation.findMany(
-		{
-			where:
-			{
-				invitedId: invitedId
-			},
-
-			include:
-			{
-				user: true
-			}
-		}));
-	}
 }

@@ -125,25 +125,6 @@ const User = ({user,isActive, onClick, onDirectMessageClick, navigate}:
 
 	}, [currentUser, socket]);
 
-	useEffect(() =>
-	{
-		if (currentUser && socket)
-		{
-			socket.on('pongInvitationAccepted', ({userId}) =>
-			{
-				if (currentUser.id === userId) 
-					navigate('/matchmaking');
-			});
-		}
-
-		return () =>
-		{
-			if (socket) 
-				socket.off('pongInvitationAccepted');
-		};
-
-	}, [currentUser, socket, navigate]);
-	
 	const handleAccept = () =>
 	{
 		if (currentUser && socket)
@@ -152,6 +133,27 @@ const User = ({user,isActive, onClick, onDirectMessageClick, navigate}:
 			navigate('/matchmaking');
 		}
 	}
+
+	useEffect(() =>
+	{
+		if (currentUser && socket)
+		{
+			socket.on('pongInvitationAcceptedByInviter', ({userId}) =>
+			{
+				console.log(`Received pongInvitationAcceptedByInviter for user ${currentUser.id}`);
+				
+				if (currentUser.id === userId)
+					navigate('/matchmaking');
+			});
+		}
+
+		return () =>
+		{
+			if (socket)
+				socket.off('pongInvitationAcceptedByInviter');
+		};
+
+	}, [currentUser, socket, navigate]);
 
 	const handleRefuse = useCallback(() =>
 	{
