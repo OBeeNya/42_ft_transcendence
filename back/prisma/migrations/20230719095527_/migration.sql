@@ -29,6 +29,7 @@ CREATE TABLE "users" (
 CREATE TABLE "pong_invitations" (
     "id" SERIAL NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "expiresAt" TIMESTAMP(3) NOT NULL,
     "userId" INTEGER NOT NULL,
     "invitedId" INTEGER NOT NULL,
     "accepted" BOOLEAN NOT NULL DEFAULT false,

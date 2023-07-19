@@ -36,6 +36,42 @@ export class InviteToPongGateway extends BaseGateway
 		}
 	}
 
+	@SubscribeMessage('acceptPongInvitation')
+	async handleAcceptInvitation(@MessageBody() data: InviteToPongDto,
+								 @ConnectedSocket() client: Socket)
+	{
+		try
+		{
+			console.log(`User ${data.invitedId} accepted the invitation`);
+
+			const updatedInvitation = await this.inviteToPongService.acceptInvitation(data.invitedId);
+			client.emit('pongInvitationAccepted', updatedInvitation);
+		}
+		catch (error)
+		{
+			client.emit('error', {message: 'There was an error accepting the invitation.',
+								  error: error.message});
+		}
+	}
+
+	@SubscribeMessage('refusePongInvitation')
+	async handleRefuseInvitation(@MessageBody() data: InviteToPongDto,
+								 @ConnectedSocket() client: Socket)
+	{
+		try
+		{
+			console.log(`User ${data.invitedId} refused the invitation`);
+
+			const updatedInvitation = await this.inviteToPongService.refuseInvitation(data.invitedId);
+			client.emit('pongInvitationRefused', updatedInvitation);
+		}
+		catch (error)
+		{
+			client.emit('error', {message: 'There was an error refusing the invitation.',
+								  error: error.message});
+		}
+	}
+
 	@SubscribeMessage('getPongInvitations')
 	async handleGetInvitations(@MessageBody() data: InviteToPongDto,
 							   @ConnectedSocket() client: Socket)
@@ -49,41 +85,8 @@ export class InviteToPongGateway extends BaseGateway
 		}
 		catch (error)
 		{
-			client.emit('error', {message: 'There was an error getting your invitations.', error: error.message});
+			client.emit('error', {message: 'There was an error getting your invitations.',
+								  error: error.message});
 		}
 	}
 }
-	// @SubscribeMessage('acceptPongInvitation')
-	// async handleAcceptInvitation(@MessageBody() data: InviteToPongDto,
-	// 							 @ConnectedSocket() client: Socket)
-	// {
-	// 	try
-	// 	{
-	// 		console.log(`User ${data.invitedId} accepted the invitation`);
-
-	// 		const updatedInvitation = await this.inviteToPongService.acceptInvitation(data.invitedId);
-	// 		client.emit('pongInvitationAccepted', updatedInvitation);
-	// 	}
-	// 	catch (error)
-	// 	{
-	// 		client.emit('error', {message: 'There was an error accepting the invitation.',
-	// 							  error: error.message});
-	// 	}
-	// }
-
-	// @SubscribeMessage('refusePongInvitation')
-	// async handleRefuseInvitation(@MessageBody() data: InviteToPongDto,
-	// 							 @ConnectedSocket() client: Socket)
-	// {
-	// 	try
-	// 	{
-	// 		console.log(`User ${data.invitedId} refused the invitation`);
-
-	// 		const updatedInvitation = await this.inviteToPongService.refuseInvitation(data.invitedId);
-	// 		client.emit('pongInvitationRefused', updatedInvitation);
-	// 	}
-	// 	catch (error)
-	// 	{
-	// 		client.emit('error', {message: 'There was an error refusing the invitation.', error: error.message});
-	// 	}
-	// }

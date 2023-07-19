@@ -3,6 +3,7 @@ import { MouseEvent, useContext, useEffect, useState } from 'react';
 import { UserInfos } from "../../../services/interfaces/userInfos.interface";
 import DropdownMenu from '../DropdownMenu/DropdownMenu';
 import { SocketContext } from '../../../contexts';
+import Notification from '../InviteToPongNotification/Notification';
 
 const User = ({user,isActive, onClick, onDirectMessageClick, navigate}:
 			  {user: UserInfos;
@@ -15,6 +16,8 @@ const User = ({user,isActive, onClick, onDirectMessageClick, navigate}:
 	const [currentUser, setCurrentUser] = useState<UserInfos | null>(null);
 	const [isBlocked, setIsBlocked] = useState(false);
 	const [blockedUsers, setBlockedUsers] = useState<number[]>([]);
+	// const [invitation, setInvitation] = useState<number[]>([]);
+	const [showNotification, setShowNotification] = useState<boolean>(false);
 	const token = localStorage.getItem("token");
 
 	useEffect(() =>
@@ -84,7 +87,6 @@ const User = ({user,isActive, onClick, onDirectMessageClick, navigate}:
 		};
 
 	});
-	// }, [token, setCurrentUser, user.id, socket]);
 
 	const handleInviteToPong = async () =>
 	{
@@ -101,17 +103,53 @@ const User = ({user,isActive, onClick, onDirectMessageClick, navigate}:
 			socket.on('pongInvitationReceived', ({invitedId}) =>
 			{
 				if (currentUser.id === invitedId)
+				{
+					setShowNotification(true);
+				}
+			});
+
+			socket.on('pongInvitationAccepted', ({invitedId}) =>
+			{
+				if (currentUser.id === invitedId || currentUser.id === user.id)
+				{
 					navigate('/matchmaking');
+					setShowNotification(false);
+				}
+			});
+
+			socket.on('pongInvitationRefused', ({invitedId}) =>
+			{
+				if (currentUser.id === invitedId) 
+				{
+					// How to hide the notification ?
+					setShowNotification(false);
+				}
 			});
 		}
 
 		return () =>
 		{
-			if (socket) 
+			if (socket)
+			{
 				socket.off('pongInvitationReceived');
+				socket.off('pongInvitationAccepted');
+				socket.off('pongInvitationRefused');
+			}		
 		};
 
 	}, [currentUser, socket, navigate]);
+
+	const handleAccept = () =>
+	{
+		if (currentUser && socket)
+			socket.emit('acceptPongInvitation', {userId: currentUser.id, invitedId: user.id});
+	}
+	
+	const handleRefuse = () =>
+	{
+		if (currentUser && socket)
+			socket.emit('refusePongInvitation', {userId: currentUser.id, invitedId: user.id});
+	}
 
 	return (
 		<div key={user.id} className={`user ${isActive ? 'show-menu' : ''}`}>
@@ -127,6 +165,9 @@ const User = ({user,isActive, onClick, onDirectMessageClick, navigate}:
 					isBlocked={isBlocked || blockedUsers.includes(user.id)}
 				/>
 			)}
+
+			{showNotification &&
+			(<Notification accept={handleAccept} decline={handleRefuse} />)}
 
 			<div className={user.connected ? 'online' : 'offline'}>
 				{user.isPlaying ?

@@ -19,7 +19,7 @@ const ChannelBox = ({senderId, channelId}: {senderId: number , channelId: number
   
     const messages = allMessages.filter(msg => msg.channelId === channelId);
 
-    console.log("check sender", senderId, "message", messages);
+    // console.log("check sender", senderId, "message", messages);
 
     const scrollToBottom = () => {
       messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });

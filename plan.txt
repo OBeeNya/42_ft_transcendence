@@ -19,33 +19,27 @@ Un utilisateur essaye de rejoindre un channel :
 -----------------------------------------------------------------------------------------
 Problèmes :
 
-1) Pas de statut "In game", et le mode spectateur ne marche pas dans l'interface amis.
+1) Le bloqueur freeze et ne voit plus le menu deroulant s'afficher de la users list
+2) Invitation au Pong.
+3) Logs en couleur
 
------------------------------------------------------------------------------------------ 
+-----------------------------------------------------------------------------------------
+Invitation au Pong
 
-Lorsque l'utilisateur clique sur l'icone de l'oeil, verifier si playing est true.
-Si true et que deja 2 joueurs--> rediriger vers /pongGame
+L'invite recoit une notification proposant d'accepter ou non l'invitation au Pong
+Si oui
 
-const spectating = async () =>
-{
-	try
-	{
-		const players = await ax.get('pong/getPlayers', {headers: {Authorization: `Bearer ${token}`}});
+Dans le front :
 
-			if (players.data.length !== 2)
-			{
-				const messageSpectating = document.getElementById("messageSpectating");
+socket.emit('acceptPongInvitation')
+socket.emit('refusePongInvitation')
+socket.emit('getPongInvitations)
+socket.on('pongInvitationAccepted')
+socket.on('pongInvitationRefused')
+socket.on('pongInvitations')
 
-				if (messageSpectating)
-					messageSpectating.textContent = "No game is currently being played";
-			}
+Problemes :
 
-			else
-				navigate('/pongGame');
-
-		}
-		catch
-		{
-			console.error('could not spectate');
-		}
-}
+1) Notification pas rectangulaire et pas en bas.
+2) L'acceptation de l'invitation ne redirige pas les deux utilisateurs vers /matchmaking.
+3) Refuser l'invitation doit faire disparaitre la notification.
