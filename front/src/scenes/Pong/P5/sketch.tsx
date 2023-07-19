@@ -1,8 +1,6 @@
 import { ReactP5Wrapper, Sketch } from "@p5-wrapper/react";
 import io from "socket.io-client";
 
-export let newMap = false;  // passer en props
-
 const sketch: Sketch = p5 => {
 
     let p: Player;
@@ -25,6 +23,8 @@ const sketch: Sketch = p5 => {
     let drawLoops = 0;
     let background: any;
     let won: Boolean;
+    let newMap: string | null = "classic";
+    newMap = localStorage.getItem("map");
     
 class Player {
     x: number;
@@ -106,7 +106,7 @@ class Ball {
 
         socket = io('http://localhost:8080/pong');
         socket.on('connect', () => console.log("connected"));
-        if (newMap === true)
+        if (newMap === "terrifying")
             background = p5.loadImage('https://happycoding.io/images/stanley-1.jpg');
         p5.frameRate(85);
         p5.createCanvas(750, 600);
@@ -192,7 +192,7 @@ class Ball {
         }
         if(gameOn === true && p !== undefined) {
             p5.textSize(48);
-            if (newMap === true)
+            if (newMap === "terrifying")
                 p5.background(background);
             else
                 p5.rect(p5.width / 2, 0, 5, 1200);
@@ -302,6 +302,8 @@ class Ball {
     }
 
     function drawSpectator() {
+        if (newMap === "terrifying")
+            p5.background(background);
         b.show();
         b.move();
         if (players.length === 2) {

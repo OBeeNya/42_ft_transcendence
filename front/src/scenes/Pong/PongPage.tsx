@@ -10,6 +10,7 @@ const PongPage = () => {
 	const navigate = useNavigate();
 	const token = localStorage.getItem("token");
 
+    localStorage.setItem("map", "classic");
     const options = [
         { value: 'Classic', label: 'Classic' },
         { value: 'Terrifying Cat', label: 'Terrifying Cat' },
@@ -60,11 +61,15 @@ const PongPage = () => {
 		}
 	}
     const handleSelectMap = (selectedOption: any) => {
-        if (selectedOption.value === "Classic") 
+        if (selectedOption.value === "Classic") {
             console.log("Classic!!!"); 
-        else if (selectedOption.value === "Terrifying Cat")
+            localStorage.setItem("map", "classic");
+        }
+        else if (selectedOption.value === "Terrifying Cat") {
             console.log("Terrifying cat!!!"); 
-    }         
+            localStorage.setItem("map", "terrifying");
+        }
+    }     
 
 	return (
 		<div>
@@ -80,14 +85,15 @@ const PongPage = () => {
                         styles={{
                             control: (baseStyles, state) => ({
                             ...baseStyles,
-
                             }),
                             menuList: (baseStyles, state) => ({
                                 ...baseStyles,
-                                backgroundColor: '#060d22',
-                                color: 'white',
-
-                                }),
+                                color: '#060d22',
+                            }),
+                            container: (baseStyles, state) => ({
+                                ...baseStyles,
+                                width: 200,
+                            }),
                         }}
                         options={options}
                         onChange={handleSelectMap} />
@@ -96,11 +102,9 @@ const PongPage = () => {
 				<button onClick={matchMaking}>Multi Player</button>
 				<br></br>
 				<br></br>
-				<button onClick={matchMaking}>Multi Player but with a cat</button>
-				<br></br>
-				<br></br>
 				<button onClick={spectating}>Spectator mode</button>
 				<div id="messageSpectating"></div>
+				<br></br>
 				<button onClick={() => navigate("/pongGameSolo")}>Single player</button>
 				<br></br>
 			</Content>

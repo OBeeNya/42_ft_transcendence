@@ -57,7 +57,7 @@ export class AuthService {
 				sub: userId,
 				name,
 			}, {
-				expiresIn: '15m',
+				expiresIn: '90m',
 				secret: this.config.get('JWT_SECRET'),
 		});
 		const user = await this.prisma.user.findUnique({
@@ -75,7 +75,7 @@ export class AuthService {
 		};
 		const secret = this.config.get('JWT_SECRET');
 		const token = await this.jwt.signAsync(payload, {
-			expiresIn: '15m',
+			expiresIn: '90m',
 			secret: secret,
 		});
 		return ({
