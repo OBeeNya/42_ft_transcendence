@@ -184,12 +184,12 @@ const User = ({user,isActive, onClick, onDirectMessageClick, navigate}:
 					isBlocked={isBlocked || blockedUsers.includes(user.id)}
 				/>
 			)}
-
+	
 			{showNotification &&
 			(<Notification accept={handleAccept} decline={handleRefuse} inviterName={inviterName} />)}
-
+	
 			<div className={user.connected ? 'online' : 'offline'}>
-				{user.isPlaying ?
+				{user.playing ?
 					<>
 						<div className="playing-indicator" />
 						<span>Playing</span>

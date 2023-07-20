@@ -27,7 +27,7 @@
 	word-wrap: break-word;
 }
 
-.online-indicator, .offline-indicator {
+.online-indicator, .offline-indicator, .playing-indicator {
 	background-color: green;
 	width: 0.7em;
 	height: 0.7em;
@@ -40,14 +40,9 @@
 	background-color: red;
 }
 
-/* .ingame-indicator {
+.playing-indicator {
 	background-color: yellow;
-	width: 10px;
-	height: 10px;
-	border-radius: 50%;
-	display: inline-block;
-	margin-right: 5px;
-} */
+}
 
 .friends td {
 	border: 0.1em solid #fff;

@@ -7,7 +7,7 @@ export interface UserInfos
 	losses: number;
 	ladder_level: number;
 	connected: boolean;
-	isPlaying: boolean;
+	playing: boolean;
 	tfa: boolean;
 	tfa_key: string;
 	status: string;
@@ -16,7 +16,6 @@ export interface UserInfos
 	ladders: number[];
 	wons: boolean[];
 	gameDates: string[];
-	playing: boolean;
 }
 
 export {};
