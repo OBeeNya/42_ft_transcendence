@@ -18,14 +18,13 @@ model User {
 	ladder_level			Int @default(1)
 	oauthId					String
 	connected				Boolean @default(false)
-	isPlaying				Boolean @default(false)
+	playing					Boolean @default(false)
 	tfa						Boolean @default(false)
 	tfa_key					String
 	ladders					Int[]
 	wons					Boolean[]
 	gameDates				String[]
 	exp						Int @default(0)
-	playing					Boolean @default(false)
 	userFriends				UserFriend[] @relation("UserFriendUser")
 	friendUsers				UserFriend[] @relation("UserFriendFriend")
 	userBlocks				UserBlock[] @relation("UserBlockUser")

@@ -124,18 +124,23 @@ const Friends = () =>
 				(
 					<tr key={user.id}>
 					  <td>{user.name}</td>
-					  <td className={user.connected ? 'online' : 'offline'}>
-						{user.connected ?
-						  <>
-							<div className="online-indicator" />
-							<span>Online</span>
-						  </> :
-						  <>
-							<div className="offline-indicator" />
-							<span>Offline</span>
-						  </>
-						}
-					  </td>
+						<td className={user.connected ? 'online' : 'offline'}>
+							{user.playing ?
+								<>
+									<div className="playing-indicator" />
+									<span>Playing</span>
+								</> :
+								(user.connected ?
+								<>
+									<div className="online-indicator" />
+									<span>Online</span>
+								</> :
+								<>
+									<div className="offline-indicator" />
+									<span>Offline</span>
+								</>)
+							}
+						</td>
 					  <td>
 						<button onClick={() => spectateGame(user)}>
 							<FontAwesomeIcon icon={faEye} />

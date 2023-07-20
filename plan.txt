@@ -16,10 +16,3 @@ Un utilisateur essaye de rejoindre un channel :
 
 - L'utilisateur a été banni du channel
 
------------------------------------------------------------------------------------------
-Problèmes :
-
-1) Redirection inviteur
-2) Rafraichissement freeze meme si deja bloqué
-
-(Logs nestjs en couleur)

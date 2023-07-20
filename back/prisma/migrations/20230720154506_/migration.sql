@@ -13,14 +13,13 @@ CREATE TABLE "users" (
     "ladder_level" INTEGER NOT NULL DEFAULT 1,
     "oauthId" TEXT NOT NULL,
     "connected" BOOLEAN NOT NULL DEFAULT false,
-    "isPlaying" BOOLEAN NOT NULL DEFAULT false,
+    "playing" BOOLEAN NOT NULL DEFAULT false,
     "tfa" BOOLEAN NOT NULL DEFAULT false,
     "tfa_key" TEXT NOT NULL,
     "ladders" INTEGER[],
     "wons" BOOLEAN[],
     "gameDates" TEXT[],
     "exp" INTEGER NOT NULL DEFAULT 0,
-    "playing" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "users_pkey" PRIMARY KEY ("id")
 );
