@@ -16,11 +16,10 @@ const PongPage = () => {
 				headers: { Authorization: `Bearer ${token}` },
 			});
 			await ax.patch('users',
-			{ playing: false },
+				{ playing: false },
            		{ headers: { Authorization: `Bearer ${token}` } }
-				   );
-				   await ax.patch(
-					   'pong/removePlayer',
+			);
+			await ax.patch('pong/removePlayer',
  		        { name: response.data.name },
 				{ headers: { Authorization: `Bearer ${token}` } }
 			);

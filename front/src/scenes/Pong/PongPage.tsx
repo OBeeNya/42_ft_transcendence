@@ -60,6 +60,7 @@ const PongPage = () => {
 			console.error('could not spectate');
 		}
 	}
+
     const handleSelectMap = (selectedOption: any) => {
         if (selectedOption.value === "Classic") {
             console.log("Classic!!!"); 
@@ -69,7 +70,19 @@ const PongPage = () => {
             console.log("Terrifying cat!!!"); 
             localStorage.setItem("map", "terrifying");
         }
-    }     
+    }
+
+	const soloGame = async () => {
+		try {
+			await ax.patch('users',
+				{ playing: true },
+           		{ headers: { Authorization: `Bearer ${token}` } }
+			);
+		} catch {
+			console.error('could not update playing status when playing solo');
+		}
+		navigate("/pongGameSolo");
+	}
 
 	return (
 		<div>
@@ -113,7 +126,7 @@ const PongPage = () => {
 				<button onClick={spectating}>Spectator mode</button>
 				<div id="messageSpectating"></div>
 				<br></br>
-				<button onClick={() => navigate("/pongGameSolo")}>Single player</button>
+				<button onClick={soloGame}>Single player</button>
 				<br></br>
 			</Content>
 		</div>
