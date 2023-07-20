@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import Content from "../../components/content"
 import { SketchComponentSolo } from "./P5/sketchSolo"
 import { ax } from "../../services/axios/axios";
+import React from "react";
 
 const PongPage = () => {
 
@@ -20,6 +21,15 @@ const PongPage = () => {
         navigate("/pong");
         window.location.reload();
     };
+
+	const BackButtonListener = ({children}: any) => {
+		React.useEffect(() => {
+			window.onpopstate = e => {
+				handleQuit();
+			};
+		});
+		return <div></div> ;
+	};
 
 	return (
 		<div>

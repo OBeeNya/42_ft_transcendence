@@ -1,4 +1,5 @@
 import { ReactP5Wrapper, Sketch } from "@p5-wrapper/react";
+import { ax } from "../../../services/axios/axios";
 
 const sketch: Sketch = p5 => {
 
@@ -11,9 +12,10 @@ const sketch: Sketch = p5 => {
     let playerSize = 20;
     let playerSpeed = 8;
     let ballSize = 15;
-    let ballSpeed = 5; // 3 ou 5
+    let ballSpeed = 5;
     let pointsToWin = 3;
     let paused = 1;
+	const token = localStorage.getItem("token");
 
 /******************************** PLAYER ********************************/
 
@@ -182,7 +184,7 @@ class Ball {
         }
     }
 
-    function showWinner() {
+    async function showWinner() {
         p5.background(0);
         p5.textFont('Courier New');
         p5.textAlign(p5.CENTER); 
@@ -200,6 +202,14 @@ class Ball {
             p5.textSize(30);
             p5.text("reloading the page...", p5.width/2, p5.height/2 + 100);
         }
+        try {
+			await ax.patch('users',
+				{ playing: false },
+           		{ headers: { Authorization: `Bearer ${token}` } }
+			);
+		} catch {
+			console.error('could not update playing status when quitting');
+		}
         setTimeout(() => {  window.location.href = "/pong"; }, 3000);
     }
 
@@ -210,7 +220,7 @@ class Ball {
                     b.xv = 0;
                     b.yv = 0;
                 } else {
-                    b.xv = ballSpeed; //doit reprendre a la vitesse d'avant, (ballspeed ou -ballspeed).
+                    b.xv = ballSpeed;
                     b.yv = ballSpeed;
                 }
                 paused *= -1;
