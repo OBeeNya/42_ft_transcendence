@@ -81,6 +81,13 @@ const PongPage = () => {
                 <label >Choose a map:</label>
 				<br></br>
 				<br></br>
+				<div
+   			    style={{
+ 		        display: 'flex',
+    		    justifyContent: 'center',
+   			    alignItems: 'center',
+    			}}
+ 				>
                 <Select 
                         styles={{
                             control: (baseStyles, state) => ({
@@ -97,6 +104,7 @@ const PongPage = () => {
                         }}
                         options={options}
                         onChange={handleSelectMap} />
+						    </div>
 				<br></br>
 				<br></br>
 				<button onClick={matchMaking}>Multi Player</button>

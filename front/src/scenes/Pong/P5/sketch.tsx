@@ -186,6 +186,7 @@ class Ball {
             p5.textSize(40); 
             p5.text("Waiting for your opponent...", p5.width/2, p5.height/2); 
         }
+        checkScores();
         if (gameEnded === true) {
             p5.noLoop();
             showWinner();
@@ -258,11 +259,19 @@ class Ball {
             drawSpectator();
     };
 
-    function throwBall() {
-        if (p.p >= pointsToWin || opponentPoints >= pointsToWin ) {
+    function checkScores() {
+        if (p !== undefined && p.p >= pointsToWinProps || opponentPoints >= pointsToWinProps ) {
             gameOn = false;
             gameEnded = true;
         }
+    }
+
+    function throwBall() {
+        // if (p.p >= pointsToWin || opponentPoints >= pointsToWin ) {
+        // if (p.p >= pointsToWinProps || opponentPoints >= pointsToWinProps ) {
+        //     gameOn = false;
+        //     gameEnded = true;
+        // }
         p5.loop();
         b.x = p5.width / 2;
         b.y = p5.height / 2;
@@ -274,12 +283,12 @@ class Ball {
         p5.textAlign(p5.CENTER); 
         p5.textSize(80);
         p5.fill(0, 102, 153);
-        if (p !== undefined && p.p >= pointsToWin) {
+        if (p !== undefined && p.p >= pointsToWinProps) {
             p5.textFont('Courier New');
             p5.text("You WON!", p5.width/2, p5.height/2); 
             p5.textSize(30);
             p5.text("reloading the page...", p5.width/2, p5.height/2 + 100); 
-        } else if (p !== undefined && opponentPoints >= pointsToWin) {
+        } else if (p !== undefined && opponentPoints >= pointsToWinProps) {
             p5.textFont('Courier New');
             p5.text("You LOST...", p5.width/2, p5.height/2);
             p5.textSize(30);
