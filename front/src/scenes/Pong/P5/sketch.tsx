@@ -260,7 +260,7 @@ class Ball {
     };
 
     function checkScores() {
-        if (p !== undefined && p.p >= pointsToWinProps || opponentPoints >= pointsToWinProps ) {
+        if (p !== undefined && (p.p >= pointsToWinProps || opponentPoints >= pointsToWinProps)) {
             gameOn = false;
             gameEnded = true;
         }
