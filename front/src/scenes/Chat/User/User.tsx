@@ -1,8 +1,9 @@
 import axios from 'axios';
-import { MouseEvent, useContext, useEffect, useState } from 'react';
+import { MouseEvent, useCallback, useContext, useEffect, useState } from 'react';
 import { UserInfos } from "../../../services/interfaces/userInfos.interface";
 import DropdownMenu from '../DropdownMenu/DropdownMenu';
 import { SocketContext } from '../../../contexts';
+import Notification from '../InviteToPongNotification/Notification';
 
 const User = ({user,isActive, onClick, onDirectMessageClick, navigate}:
 			  {user: UserInfos;
@@ -15,6 +16,9 @@ const User = ({user,isActive, onClick, onDirectMessageClick, navigate}:
 	const [currentUser, setCurrentUser] = useState<UserInfos | null>(null);
 	const [isBlocked, setIsBlocked] = useState(false);
 	const [blockedUsers, setBlockedUsers] = useState<number[]>([]);
+	const [showNotification, setShowNotification] = useState<boolean>(false);
+	const [inviterName, setInviterName] = useState<string | null>(null);
+	// const [invitationAccepted, setInvitationAccepted] = useState(false);
 	const token = localStorage.getItem("token");
 
 	useEffect(() =>
@@ -57,6 +61,7 @@ const User = ({user,isActive, onClick, onDirectMessageClick, navigate}:
 		{
 			socket.emit('blockUser', {userId: currentUser.id, blockedId: user.id});
 			setIsBlocked(true);
+			window.location.reload();
 		}
 
 		else
@@ -84,7 +89,6 @@ const User = ({user,isActive, onClick, onDirectMessageClick, navigate}:
 		};
 
 	});
-	// }, [token, setCurrentUser, user.id, socket]);
 
 	const handleInviteToPong = async () =>
 	{
@@ -98,21 +102,74 @@ const User = ({user,isActive, onClick, onDirectMessageClick, navigate}:
 	{
 		if (currentUser && socket)
 		{
-			socket.on('pongInvitationReceived', ({invitedId}) =>
+			socket.on('pongInvitationReceived', ({invitedId, inviterName}) =>
 			{
 				if (currentUser.id === invitedId)
-					navigate('/matchmaking');
+				{
+					setShowNotification(true);
+					setInviterName(inviterName);
+				}
+
+				setTimeout(() =>
+				{
+					handleRefuse();
+					setShowNotification(false);
+				}, 15000);
 			});
 		}
 
 		return () =>
 		{
-			if (socket) 
+			if (socket)
 				socket.off('pongInvitationReceived');
 		};
 
-	}, [currentUser, socket, navigate]);
+	}, [currentUser, socket]);
 
+	const handleAccept = () =>
+	{
+		if (currentUser && socket)
+		{
+			socket.emit('acceptPongInvitation', {userId: currentUser.id, invitedId: user.id});
+			navigate('/matchmaking');
+			// setInvitationAccepted(true);
+			// console.log('Invitation Accepted state set to true');
+		}
+	}
+
+	// useEffect(() =>
+	// {
+	// 	console.log("useEffect called");
+
+	// 	if (currentUser && socket && invitationAccepted)
+	// 	{
+	// 		console.log("Invitation Accepted is true in useEffect");
+
+	// 		socket.on('pongInvitationAccepted', (userId) =>
+	// 		{				
+	// 			if (currentUser.id === userId)
+	// 				navigate('/matchmaking');
+	// 		});
+	// 	}
+
+	// 	return () =>
+	// 	{
+	// 		if (socket)
+	// 			socket.off('pongInvitationAccepted');
+	// 	};
+
+	// }, [currentUser, socket, navigate, invitationAccepted]);
+
+	const handleRefuse = useCallback(() =>
+	{
+		if (currentUser && socket)
+		{
+			socket.emit('refusePongInvitation', {userId: currentUser.id, invitedId: user.id});
+			setShowNotification(false);
+		}
+
+	}, [currentUser, socket, user.id]);
+	
 	return (
 		<div key={user.id} className={`user ${isActive ? 'show-menu' : ''}`}>
 			<p className="username" onClick={onClick}>{user.name}</p>
@@ -127,6 +184,9 @@ const User = ({user,isActive, onClick, onDirectMessageClick, navigate}:
 					isBlocked={isBlocked || blockedUsers.includes(user.id)}
 				/>
 			)}
+
+			{showNotification &&
+			(<Notification accept={handleAccept} decline={handleRefuse} inviterName={inviterName} />)}
 
 			<div className={user.connected ? 'online' : 'offline'}>
 				{user.isPlaying ?

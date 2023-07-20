@@ -8,26 +8,17 @@ export class BaseGateway
 	@WebSocketServer()
 	server: Server;
 
-	afterInit(server: Server)
-	{
-		// console.log('Initialized!');
-	}
+	afterInit(server: Server) {}
 
-	handleConnection(client: Socket)
-	{
-		// console.log(`Client connected: ${client.id}`);
-	}
+	handleConnection(client: Socket) {}
 
 	handleDisconnect(client: Socket)
 	{
-		// console.log(`Client disconnected: ${client.id}`);
-
 		for (const [userId, socketId] of this.userSocketMap.entries())
 		{
 			if (socketId === client.id)
 			{
 				this.userSocketMap.delete(userId);
-				// console.log(`User ${userId} disconnected, socket id ${client.id} removed from map.`);
 				break;
 			}
 		}
@@ -38,6 +29,5 @@ export class BaseGateway
 							  @ConnectedSocket() client: Socket)
 	{
 		this.userSocketMap.set(userId, client.id);
-		// console.log(`User ${userId} connected with socket id ${client.id}`);
 	}
 }

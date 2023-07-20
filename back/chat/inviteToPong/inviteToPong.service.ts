@@ -33,57 +33,45 @@ export class InviteToPongService
 			data:
 			{
 				userId: data.userId,
-				invitedId: data.invitedId
+				invitedId: data.invitedId,
+				expiresAt: new Date(Date.now() + 15 * 1000)
 			},
 		});
 
 		return (invitation);
 	}
 
-	async getInvitations(invitedId: number): Promise<PongInvitation[]>
+	async acceptInvitation(id: number): Promise<PongInvitation>
 	{
-		return (this.prisma.pongInvitation.findMany(
-		{
-			where:
-			{
-				invitedId: invitedId
-			},
+		const invitation = await this.prisma.pongInvitation.findUnique({where: {id}});
 
-			include:
-			{
-				user: true
-			}
+		if (new Date() > invitation.expiresAt)
+			throw new Error('This invitation has expired.');
+
+		if (invitation.accepted)
+			throw new Error('This invitation has already been accepted.');
+
+		return (this.prisma.pongInvitation.update(
+		{
+			where: {id: id},
+			data: {accepted: true},
+		}));
+	}
+
+	async refuseInvitation(id: number): Promise<PongInvitation>
+	{
+		const invitation = await this.prisma.pongInvitation.findUnique({where: {id}});
+
+		if (invitation.accepted)
+			throw new Error('This invitation has already been accepted.');
+
+		if (invitation.refused)
+			throw new Error('This invitation has already been refused.');
+
+		return (this.prisma.pongInvitation.update(
+		{
+			where: {id: id},
+			data: {refused: true},
 		}));
 	}
 }
-
-	// async acceptInvitation(id: number): Promise<PongInvitation>
-	// {
-	// 	const invitation = await this.prisma.pongInvitation.findUnique({where: {id}});
-
-	// 	if (invitation.accepted)
-	// 		throw new Error('This invitation has already been accepted.');
-
-	// 	return (this.prisma.pongInvitation.update(
-	// 	{
-	// 		where: {id: id},
-	// 		data: {accepted: true},
-	// 	}));
-	// }
-
-	// async refuseInvitation(id: number): Promise<PongInvitation>
-	// {
-	// 	const invitation = await this.prisma.pongInvitation.findUnique({where: {id}});
-
-	// 	if (invitation.accepted)
-	// 		throw new Error('This invitation has already been accepted.');
-
-	// 	if (invitation.refused)
-	// 		throw new Error('This invitation has already been refused.');
-
-	// 	return (this.prisma.pongInvitation.update(
-	// 	{
-	// 		where: {id: id},
-	// 		data: {refused: true},
-	// 	}));
-	// }
