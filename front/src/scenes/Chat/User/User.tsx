@@ -18,6 +18,7 @@ const User = ({user,isActive, onClick, onDirectMessageClick, navigate}:
 	const [blockedUsers, setBlockedUsers] = useState<number[]>([]);
 	const [showNotification, setShowNotification] = useState<boolean>(false);
 	const [inviterName, setInviterName] = useState<string | null>(null);
+	// const [invitationAccepted, setInvitationAccepted] = useState(false);
 	const token = localStorage.getItem("token");
 
 	useEffect(() =>
@@ -131,29 +132,33 @@ const User = ({user,isActive, onClick, onDirectMessageClick, navigate}:
 		{
 			socket.emit('acceptPongInvitation', {userId: currentUser.id, invitedId: user.id});
 			navigate('/matchmaking');
+			// setInvitationAccepted(true);
+			// console.log('Invitation Accepted state set to true');
 		}
 	}
 
-	useEffect(() =>
-	{
-		if (currentUser && socket)
-		{
-			socket.on('pongInvitationAcceptedByInviter', ({userId}) =>
-			{
-				console.log(`Received pongInvitationAcceptedByInviter for user ${currentUser.id}`);
-				
-				if (currentUser.id === userId)
-					navigate('/matchmaking');
-			});
-		}
+	// useEffect(() =>
+	// {
+	// 	console.log("useEffect called");
 
-		return () =>
-		{
-			if (socket)
-				socket.off('pongInvitationAcceptedByInviter');
-		};
+	// 	if (currentUser && socket && invitationAccepted)
+	// 	{
+	// 		console.log("Invitation Accepted is true in useEffect");
 
-	}, [currentUser, socket, navigate]);
+	// 		socket.on('pongInvitationAccepted', (userId) =>
+	// 		{				
+	// 			if (currentUser.id === userId)
+	// 				navigate('/matchmaking');
+	// 		});
+	// 	}
+
+	// 	return () =>
+	// 	{
+	// 		if (socket)
+	// 			socket.off('pongInvitationAccepted');
+	// 	};
+
+	// }, [currentUser, socket, navigate, invitationAccepted]);
 
 	const handleRefuse = useCallback(() =>
 	{
