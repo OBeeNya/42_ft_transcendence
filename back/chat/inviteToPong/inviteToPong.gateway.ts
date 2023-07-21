@@ -5,6 +5,8 @@ import { InviteToPongService } from "./inviteToPong.service";
 import { InviteToPongDto } from "./inviteToPong.dto";
 import { PrismaService } from "prisma_module/prisma.service";
 import { BaseGateway } from "chat/base.gateway";
+import { writeFileSync, appendFileSync } from 'fs';
+import { join } from 'path';
 
 @WebSocketGateway({cors: {origin: "*"}})
 export class InviteToPongGateway extends BaseGateway
@@ -28,16 +30,32 @@ export class InviteToPongGateway extends BaseGateway
 	@SubscribeMessage('acceptPongInvitation')
 	async handleAcceptInvitation(@MessageBody() data: InviteToPongDto, @ConnectedSocket() client: Socket)
 	{
-		const updatedInvitation = await this.inviteToPongService.acceptInvitation(data.invitedId);
-		const inviterSocketId = this.userSocketMap.get(updatedInvitation.userId);
+		try
+		{
+			const updatedInvitation = await this.inviteToPongService.acceptInvitation(data.invitedId);
+			const inviterSocketId = this.userSocketMap.get(updatedInvitation.userId);
 
-		if (inviterSocketId)
-			this.server.to(inviterSocketId).emit('pongInvitationAccepted', updatedInvitation.userId);
+			if (inviterSocketId)
+				this.server.to(inviterSocketId).emit('pongInvitationAccepted', updatedInvitation.userId);
+		}
+		catch (error)
+		{
+			const logFilePath = join(__dirname, 'error.log');
+			appendFileSync(logFilePath, `${new Date().toISOString()} - Error: ${error.message}\n`);
+		}	
 	}
 
 	@SubscribeMessage('refusePongInvitation')
 	async handleRefuseInvitation(@MessageBody() data: InviteToPongDto, @ConnectedSocket() client: Socket)
 	{
-		const updatedInvitation = await this.inviteToPongService.refuseInvitation(data.invitedId);
+		try
+		{
+			const updatedInvitation = await this.inviteToPongService.refuseInvitation(data.invitedId);
+		}
+		catch (error)
+		{
+			const logFilePath = join(__dirname, 'error.log');
+			appendFileSync(logFilePath, `${new Date().toISOString()} - Error: ${error.message}\n`);
+		}
 	}
 }

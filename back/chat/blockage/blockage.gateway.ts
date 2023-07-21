@@ -9,26 +9,15 @@ import { BlockageService } from "./blockage.service";
 @WebSocketGateway({cors: {origin: "*"}})
 export class BlockageGateway extends BaseGateway
 {
-	constructor(private blockageService: BlockageService,
-				private prisma: PrismaService)
+	constructor(private blockageService: BlockageService, private prisma: PrismaService)
 	{
 		super();
 	}
 
 	@SubscribeMessage('blockUser')
-	async handleBlockUser(@MessageBody() data: BlockageDto,
-						  @ConnectedSocket() client: Socket)
+	async handleBlockUser(@MessageBody() data: BlockageDto, @ConnectedSocket() client: Socket)
 	{
-		try
-		{
-			await this.blockageService.blockUser(data);
-			client.emit('userBlocked', {userId: data.userId, blockedId: data.blockedId});
-		}
-		catch (error)
-		{
-			console.error('Error while blocking user:', error);
-			client.emit('error', {message: 'There was an error blocking the user.',
-								  error: error.message});
-		}
+		await this.blockageService.blockUser(data);
+		client.emit('userBlocked', {userId: data.userId, blockedId: data.blockedId});
 	}
 }

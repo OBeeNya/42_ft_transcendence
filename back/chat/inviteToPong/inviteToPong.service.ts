@@ -34,7 +34,6 @@ export class InviteToPongService
 			{
 				userId: data.userId,
 				invitedId: data.invitedId,
-				expiresAt: new Date(Date.now() + 15 * 1000)
 			},
 		});
 
@@ -44,12 +43,6 @@ export class InviteToPongService
 	async acceptInvitation(id: number): Promise<PongInvitation>
 	{
 		const invitation = await this.prisma.pongInvitation.findUnique({where: {id}});
-
-		if (new Date() > invitation.expiresAt)
-			throw new Error('This invitation has expired.');
-
-		if (invitation.accepted)
-			throw new Error('This invitation has already been accepted.');
 
 		return (this.prisma.pongInvitation.update(
 		{
@@ -61,12 +54,6 @@ export class InviteToPongService
 	async refuseInvitation(id: number): Promise<PongInvitation>
 	{
 		const invitation = await this.prisma.pongInvitation.findUnique({where: {id}});
-
-		if (invitation.accepted)
-			throw new Error('This invitation has already been accepted.');
-
-		if (invitation.refused)
-			throw new Error('This invitation has already been refused.');
 
 		return (this.prisma.pongInvitation.update(
 		{
