@@ -10,86 +10,69 @@ export class FriendsService
 
 	async addFriend(data: FriendsDto): Promise<User>
 	{
-		try
+		if (data.userId === data.friendId) 
+			throw new Error("User cannot add themselves as a friend");
+
+		const blockExists = await this.prisma.userBlock.findFirst(
 		{
-			if (data.userId === data.friendId) 
-				throw new Error("User cannot add themselves as a friend");
-
-			const blockExists = await this.prisma.userBlock.findFirst(
+			where:
 			{
-				where:
-				{
-					OR:
-					[
-						{userId: data.userId, blockedId: data.friendId},
-						{userId: data.friendId, blockedId: data.userId}
-					]
-				}
-			});
+				OR:
+				[
+					{userId: data.userId, blockedId: data.friendId},
+					{userId: data.friendId, blockedId: data.userId}
+				]
+			}
+		});
 
-			if (blockExists)
-				throw new Error(`Friend cannot be added. ` + 
-								`One user has blocked the other.`);
+		if (blockExists)
+			throw new Error(`Friend cannot be added. One user has blocked the other.`);
 
-			const friendshipExists = await this.prisma.userFriend.findFirst(
+		const friendshipExists = await this.prisma.userFriend.findFirst(
+		{
+			where:
 			{
-				where:
-				{
-					userId: data.userId,
-					friendId: data.friendId
-				}
-			});
+				userId: data.userId,
+				friendId: data.friendId
+			}
+		});
 							
-			if (friendshipExists)
-				throw new Error('This user is already a friend.');
+		if (friendshipExists)
+			throw new Error('This user is already a friend.');
 
-			const friend = await this.prisma.userFriend.create(
-			{
-				data:
-				{
-					userId: data.userId,
-					friendId: data.friendId
-				},
-
-				include:
-				{
-					friend: true
-				}
-			});
-
-			return (friend.friend);
-		}
-		catch (error)
+		const friend = await this.prisma.userFriend.create(
 		{
-			console.error('Error while adding friend:', error);
-			throw error;
-		}
+			data:
+			{
+				userId: data.userId,
+				friendId: data.friendId
+			},
+
+			include:
+			{
+				friend: true
+			}
+		});
+
+		return (friend.friend);
 	}
 
 	async getFriends(data: FriendsDto) : Promise<User[]>
 	{
-		try
+		const userFriends = await this.prisma.userFriend.findMany(
 		{
-			const userFriends = await this.prisma.userFriend.findMany(
+			where:
 			{
-				where:
-				{
-					userId: data.userId
-				},
+				userId: data.userId
+			},
 
-				include:
-				{
-					friend: true
-				}
-			});
+			include:
+			{
+				friend: true
+			}
+		});
 
-			const friends = userFriends.map(userFriend => userFriend.friend);
-			return (friends);
-		}
-		catch (error)
-		{
-			console.error('Error while getting friends:', error);
-			throw error;
-		}
+		const friends = userFriends.map(userFriend => userFriend.friend);
+		return (friends);
 	}
 }

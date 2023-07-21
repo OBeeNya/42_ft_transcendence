@@ -10,55 +10,47 @@ export class BlockageService
 
 	async blockUser(data: BlockageDto): Promise<User>
 	{
-		try
+		if (data.userId === data.blockedId) 
+			throw new Error("User cannot block themselves");
+
+		const blockExists = await this.prisma.userBlock.findFirst(
 		{
-			if (data.userId === data.blockedId) 
-				throw new Error("User cannot block themselves");
-
-			const blockExists = await this.prisma.userBlock.findFirst(
+			where:
 			{
-				where:
-				{
-					OR:
-					[
-						{userId: data.userId, blockedId: data.blockedId},
-						{userId: data.blockedId, blockedId: data.userId}
-					]
-				}
-			});
+				OR:
+				[
+					{userId: data.userId, blockedId: data.blockedId},
+					{userId: data.blockedId, blockedId: data.userId}
+				]
+			}
+		});
 
-			if (blockExists)
-				throw new Error("Block cannot be created. One user has already blocked the other.");
+		if (blockExists)
+			throw new Error("Block cannot be created. One user has already blocked the other.");
 
-			const user = await this.prisma.user.findUnique({ where: {id: data.userId}});
-			const blockedUser = await this.prisma.user.findUnique({ where: {id: data.blockedId}});
+		const user = await this.prisma.user.findUnique({ where: {id: data.userId}});
+		const blockedUser = await this.prisma.user.findUnique({ where: {id: data.blockedId}});
 
-			if (!user || !blockedUser) 
-				throw new Error("One or both users do not exist");
+		if (!user || !blockedUser) 
+			throw new Error("One or both users do not exist");
 
-			const existingBlock = await this.prisma.userBlock.findUnique(
-			{
-				where: {userId_blockedId: {userId: data.userId, blockedId: data.blockedId}},
-			});
-
-			if (existingBlock)
-				throw new Error("User has already been blocked");
-
-			const newBlock = await this.prisma.userBlock.create(
-			{
-				data:
-				{
-					userId: data.userId,
-					blockedId: data.blockedId
-				}
-			});
-
-			return (newBlock);
-		}
-		catch (error)
+		const existingBlock = await this.prisma.userBlock.findUnique(
 		{
-			console.error('Error while blocking user:', error);
-			throw error;
-		}
+			where: {userId_blockedId: {userId: data.userId, blockedId: data.blockedId}},
+		});
+
+		if (existingBlock)
+			throw new Error("User has already been blocked");
+
+		const newBlock = await this.prisma.userBlock.create(
+		{
+			data:
+			{
+				userId: data.userId,
+				blockedId: data.blockedId
+			}
+		});
+
+		return (newBlock);
 	}
 }

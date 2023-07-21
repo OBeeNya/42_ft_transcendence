@@ -10,67 +10,52 @@ export class DirectMessageService
 
 	async create(data: DirectMessageDto): Promise<DirectMessage>
 	{
-		try
+		const blockExists = await this.prisma.userBlock.findFirst(
 		{
-			const blockExists = await this.prisma.userBlock.findFirst(
+			where:
 			{
-				where:
-				{
-					OR:
-					[
-						{userId: data.senderId, blockedId: data.receiverId},
-						{userId: data.receiverId, blockedId: data.senderId}
-					]
-				}
-			});
+				OR:
+				[
+					{userId: data.senderId, blockedId: data.receiverId},
+					{userId: data.receiverId, blockedId: data.senderId}
+				]
+			}
+		});
 
-			if (blockExists)
-				throw new Error("Message cannot be sent. One user has blocked the other.");
-
-			const createdMessage = await this.prisma.directMessage.create(
-			{
-				data:
-				{
-					senderId: data.senderId,
-					receiverId: data.receiverId,
-					content: data.content,
-				},
-			});
-
-			return (createdMessage);
-		}
-		catch (error)
+		if (blockExists)
+			throw new Error("Message cannot be sent. One user has blocked the other.");
+		
+		const createdMessage = await this.prisma.directMessage.create(
 		{
-			console.error('Error while creating direct message:', error);
-			throw error;
-		}
+			data:
+			{
+				senderId: data.senderId,
+				receiverId: data.receiverId,
+				content: data.content,
+			},
+		});
+
+		return (createdMessage);
 	}
 
 	async getConversation(senderId: number, receiverId: number): Promise<DirectMessage[]>
 	{
-		try
+		const messages = await this.prisma.directMessage.findMany(
 		{
-			const messages = await this.prisma.directMessage.findMany(
+			where:
 			{
-				where:
-				{
-					OR: [
-						{ senderId: senderId, receiverId: receiverId },
-						{ senderId: receiverId, receiverId: senderId }
-					]
-				},
-				orderBy:
-				{
-					createdAt: 'asc',
-				}
-			});
+				OR:
+				[
+					{ senderId: senderId, receiverId: receiverId },
+					{ senderId: receiverId, receiverId: senderId }
+				]
+			},
+			orderBy:
+			{
+				createdAt: 'asc',
+			}
+		});
 
-			return (messages);
-		}
-		catch (error)
-		{
-			console.error('Error while getting conversation:', error);
-			throw error;
-		}
+		return (messages);
 	}
 }
