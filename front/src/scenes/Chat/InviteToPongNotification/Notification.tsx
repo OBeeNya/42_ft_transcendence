@@ -11,7 +11,7 @@ const Notification: React.FC<NotificationProps> = ({accept, decline, inviterName
 {
 	return (
 		<div className="notification">
-			<p>{inviterName} has invited you to Pong !</p>
+			<p>Accept to play with {inviterName} !</p>
 			<button className="accept-button" onClick={accept}>Accept</button>
 			<button className="decline-button" onClick={decline}>Decline</button>
 		</div>

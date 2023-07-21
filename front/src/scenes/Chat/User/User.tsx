@@ -113,7 +113,7 @@ const User = ({user,isActive, onClick, onDirectMessageClick, navigate}:
 				{
 					handleRefuse();
 					setShowNotification(false);
-				}, 5000);
+				}, 15000);
 			});
 		}
 
