@@ -2,6 +2,9 @@
 /dist
 /node_modules
 /back/node_modules
+/back/dist
+/back/yarn.lock
+/front/yarn.lock
 
 # Logs
 logs

@@ -43,11 +43,10 @@ class Player {
 
     move = (): void => {
         if (p5.keyIsPressed) {
-            if (p5.keyCode === p5.UP_ARROW && this.y !== 0) { 
+            if (p5.keyCode === p5.UP_ARROW && this.y >= 0)
                 this.y -= this.v;
-            } else if (p5.keyCode === p5.DOWN_ARROW && this.y !== p5.height) { 
+            else if (p5.keyCode === p5.DOWN_ARROW && this.y <= p5.height)
                 this.y += this.v;
-            }
           }
     }
 }
