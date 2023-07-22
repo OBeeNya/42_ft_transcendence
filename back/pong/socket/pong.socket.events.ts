@@ -3,6 +3,7 @@ import { Server, Socket } from "socket.io";
 
 let connections: number = 0;
 let players = [];
+let playersId:string[] = [];
 let b;
 let interval = 10;
 let scores: number[] = [0, 0];
@@ -39,17 +40,18 @@ export class SocketEvents implements OnGatewayInit {
     constructor() {}
 
     handleConnection(client: Socket) {
-
         connections++;
         this.getCounter();
         
         client.on("start", (data) => {
-            if (players.length > 0 && players[players.length - 1].id === client.id)
+            if (players.length > 0 && players[players.length - 1].id === client.id) {
                 return;
+            }
             if (players.length < 2) {
                 let p = new Player(client.id, data.x, data.y, data.v, data.w, data.h, data.p);
                 players.push(p);
-            }
+                playersId.push(client.id);
+            } 
         });
 
         client.on("startBall", function(data) {
@@ -131,10 +133,14 @@ export class SocketEvents implements OnGatewayInit {
         this.startScoreHeartbeat();
     }
 
-    handleDisconnect() {
+    handleDisconnect(client: Socket) {
+        for (let i = 0; i < playersId.length; i++) {
+            if (client.id === playersId[i]) {
+                players = [];
+                scores = [0, 0];
+            }
+        }
         connections--;
-        players = [];
-        scores = [0, 0];
     }
 
 }
