@@ -97,6 +97,16 @@ const User = ({user,isActive, onClick, onDirectMessageClick, navigate}:
 			console.error('Current user is null or socket is not available');
 	}
 
+	const handleRefuse = useCallback(() =>
+	{
+		if (currentUser && socket)
+		{
+			socket.emit('refusePongInvitation', {userId: currentUser.id, invitedId: user.id});
+			setShowNotification(false);
+		}
+
+	}, [currentUser, socket, user.id]);
+
 	useEffect(() =>
 	{
 		if (currentUser && socket)
@@ -123,7 +133,7 @@ const User = ({user,isActive, onClick, onDirectMessageClick, navigate}:
 				socket.off('pongInvitationReceived');
 		};
 
-	}, [currentUser, socket]);
+	}, [currentUser, socket, handleRefuse]);
 
 	const handleAccept = () =>
 	{
@@ -133,16 +143,6 @@ const User = ({user,isActive, onClick, onDirectMessageClick, navigate}:
 			navigate('/matchmaking');
 		}
 	}
-
-	const handleRefuse = useCallback(() =>
-	{
-		if (currentUser && socket)
-		{
-			socket.emit('refusePongInvitation', {userId: currentUser.id, invitedId: user.id});
-			setShowNotification(false);
-		}
-
-	}, [currentUser, socket, user.id]);
 	
 	return (
 		<div key={user.id} className={`user ${isActive ? 'show-menu' : ''}`}>

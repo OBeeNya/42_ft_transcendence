@@ -26,30 +26,18 @@ services:
     restart: unless-stopped
     networks:
       - transcendence
-##
-#  frontend:
-#    build: ./front
-#    volumes:
-#      - ./front:/app
-#    expose:
-#      - 3000
-#    depends_on:
-#      - backend
-#    restart: unless-stopped
-#    networks:
-#      - transcendence
-#
-#  nginx:
-#    build: app/nginx/
-#    depends_on:
-#      - frontend
-#      - backend
-#    ports:
-#      - 443:443
-#    restart: unless-stopped
-#    networks:
-#      -transcendence
-    
+
+  frontend:
+   build: ./front
+   ports:
+    - 3000:3000
+   volumes:
+     - ./front:/app
+   depends_on:
+     - backend
+   restart: unless-stopped
+   networks:
+     - transcendence
 
 networks:
   transcendence:

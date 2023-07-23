@@ -2,9 +2,9 @@ import { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import { ax } from '../../services/axios/axios'
 import { AxiosError } from 'axios'
-import { AuthDto } from "../../../../back/auth/dto";
+// import { AuthDto } from "../../../../back/auth/dto";
+import { AuthDto } from "../../../../back/auth/dto/auth.dto";
 import Content from "../../components/content"
-
 
 const SignupPage = () => {
 

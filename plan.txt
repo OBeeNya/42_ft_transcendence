@@ -16,3 +16,8 @@ Un utilisateur essaye de rejoindre un channel :
 
 - L'utilisateur a été banni du channel
 
+---------------------------------------------------------------------------------------------------
+
+A NE PAS OUBLIER AVANT DE PUSH :
+
+- remplacer DATABASE_URL dans .env

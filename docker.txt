@@ -1,0 +1,15 @@
+Tout le projet doit être lancé avec docker-compose up --build
+
+Le fichier Docker Compose doit décrire au moins 3 services :
+- DB PostgreSQL
+- Application backend NestJS
+- Application frontend React/Typescript
+
+On doit utiliser Docker en mode rootless (deja par defaut sur la session)
+donc pas de volumes "bind-mount"
+
+Fichiers d'exe de Docker doivent etre situes dans /goinfre ou /sgoinfre
+
+Reconstruire conteneur apres modifs/creer notre propre image Docker avec root
+comme ID d'utilisateur unique.
+
