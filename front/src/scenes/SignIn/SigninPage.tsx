@@ -1,7 +1,5 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-// import { SigninDto } from "../../../../back/auth/dto"
-import { SigninDto } from "../../../../back/auth/dto/signin.dto";
 import { ax } from '../../services/axios/axios'
 import { AxiosError } from 'axios'
 import Content from "../../components/content"
@@ -16,7 +14,7 @@ const SigninPage = () => {
 		try {
 			if (!nameInput || !passwordInput)
 				return ;
-			const dto: SigninDto = {
+			const dto = {
 				name: nameInput,
 				password: passwordInput,
 			};
