@@ -1,0 +1,39 @@
+.side-profile {
+    background-color: #f0f0f0;
+    max-width: 300px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.side-profile > button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.side-profile > button:hover {
+    opacity: 0.9;
+}
+
+.side-profile > button:first-child {
+    background-color: #008CBA; /* Blue for add friend */
+}
+
+.side-profile > button:nth-child(2) {
+    background-color: #ff4c4c; /* Red for ban */
+}
+
+.side-profile > button:nth-child(3) {
+    background-color: #ffcc00; /* Yellow for mute */
+}
+
+.side-profile > button:nth-child(4) {
+    background-color: #4caf50; /* Green for set as administrator */
+}
+

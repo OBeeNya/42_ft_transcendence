@@ -1,6 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import { ProtectedRoute, ProtectedRouteProps } from "./components/protectedRoutes";
-import { ChanMessageContext, MessageContext, SocketContext } from "./contexts";
+import { ChanMessageContext, ChanUsersContext, MessageContext, SocketContext } from "./contexts";
 import { Socket, io } from "socket.io-client";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -8,6 +8,8 @@ import MainPage from "./scenes/Chat/MainPage/MainPage";
 import { Message } from "./scenes/Chat/ChatBox/ChatBox";
 import Friends from "./scenes/Friends/Friends";
 import { ChanMessage } from "./scenes/Chat/ChannelBox/ChannelBox";
+import { ChanUser } from "./scenes/Chat/MainPage/MainPage";
+
 
 const defaultProtectedRouteProps: Omit<ProtectedRouteProps, 'outlet'> =
 {
@@ -20,7 +22,7 @@ function ChatRoutes()
 	const [userId, setUserId] = useState<number | null>(null);
 	const [messages, setMessages] = useState<Message[]>([]);
 	const [channelmessages, setChannelMessages] = useState<ChanMessage[]>([]);
-
+	const [channelUsers, setChannelUsers] = useState<ChanUser[]>([]);
 	const token = localStorage.getItem("token");
 
 	useEffect(() => {
@@ -34,6 +36,10 @@ function ChatRoutes()
 			console.log('messages received: ', messages);
 			setChannelMessages(messages);
 		});
+		socket.on('channelUsers', (users: ChanUser[]) => {
+			setChannelUsers(users);
+		});
+		
 
 		return () => {
 			if (socket) {
@@ -129,10 +135,12 @@ function ChatRoutes()
 		<SocketContext.Provider value={socket}>
 			<MessageContext.Provider value={messages}>
 				<ChanMessageContext.Provider value={channelmessages}>
-				<Routes>
-					<Route path="/chat" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<MainPage/>} />} />
-					<Route path="/friends" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<Friends/>} />} />
-				</Routes>
+					<ChanUsersContext.Provider value ={channelUsers}>
+					<Routes>
+						<Route path="/chat" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<MainPage/>} />} />
+						<Route path="/friends" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<Friends/>} />} />
+					</Routes>
+					</ChanUsersContext.Provider>
 				</ChanMessageContext.Provider>
 			</MessageContext.Provider>
 		</SocketContext.Provider>

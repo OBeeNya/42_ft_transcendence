@@ -19,7 +19,7 @@ export class ChannelsGateway extends BaseGateway
 	}
 
 	@SubscribeMessage('createChannel')
-	async handleCreateChannel(@Body() createChannelDto: CreateChannelDto): Promise<WsResponse<Channel>> {
+	async handleCreateChannel(@Body() createChannelDto: CreateChannelDto): Promise<WsResponse<Channel | string>> {
 		const newChannel = await this.channelsService.createChannel(createChannelDto);
 		return { event: 'channelCreated', data: newChannel };
 	}
@@ -30,6 +30,14 @@ export class ChannelsGateway extends BaseGateway
         return { event: 'channels', data: channels };
     }
 	
+	@SubscribeMessage('getChannelUsers')
+	async handleGetChannelUsers(@MessageBody() data: { channelId: string }, @ConnectedSocket() client: Socket): Promise<WsResponse<{id: number; name: string;}[]>> {
+		const users = await this.channelsService.getUsersFromChannel(data.channelId);
+		return { event: 'channelUsers', data: users };
+	}
+	
+
+
 	@SubscribeMessage('joinRoom')
 	async handleJoinRoom(@MessageBody() joinRoomDto: JoinRoomDto, @ConnectedSocket() client: Socket) {
 		

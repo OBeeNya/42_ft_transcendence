@@ -3,7 +3,42 @@
     flex-direction: row;
     justify-content: space-between;
     height: 100vh;
+	overflow: hidden;
 }
+
+.userbutton {
+	display: flex;
+	flex-direction: row;
+    background-color: transparent;
+    color: white;
+    border: none;
+    padding: 0.625em 1.25em;
+    font-size: 1em;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    transition: background-color 0.1s;
+}
+
+.userbutton:hover {
+	background-color: white;
+	color: #008080;
+}
+
+.userbutton:active {
+	background-color: white;
+	color: #008080;
+}
+
+.dropdown-item {
+	padding: 10px;
+	border-bottom: 1px solid #ddd;
+}
+  
+  .dropdown-item:last-child {
+	border-bottom: none;
+}
+  
 
 .chat-page {
     display: flex;

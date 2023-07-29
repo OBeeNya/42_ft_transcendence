@@ -1,6 +1,7 @@
 import { useContext, useEffect, useRef } from "react";
-import { ChanMessageContext } from "../../../contexts";
+import { ChanMessageContext, ChanUsersContext } from "../../../contexts";
 import "./ChannelBox.css";
+import { AiOutlineUser } from 'react-icons/ai';
 
 
 export interface ChanMessage {
@@ -12,14 +13,12 @@ export interface ChanMessage {
     }
 }
 
-const ChannelBox = ({senderId, channelId}: {senderId: number , channelId: number}) =>
+const ChannelBox = ({senderId, channelId, toggleUsersPopup}: {senderId: number , channelId: number, toggleUsersPopup: () => void}) =>
 {
    const allMessages = useContext(ChanMessageContext);
    const messagesEndRef = useRef<null | HTMLDivElement>(null);
   
     const messages = allMessages.filter(msg => msg.channelId === channelId);
-
-    // console.log("check sender", senderId, "message", messages);
 
     const scrollToBottom = () => {
       messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -31,6 +30,7 @@ const ChannelBox = ({senderId, channelId}: {senderId: number , channelId: number
   
     return (
       <div className="chat-box">
+        <button className={"buttonuser"} onClick={toggleUsersPopup}><AiOutlineUser size={20}/></button>
         {messages.map((message, i) => (
           <div key={i} className={`message-container`}>
             <div

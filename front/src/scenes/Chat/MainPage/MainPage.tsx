@@ -5,9 +5,17 @@ import UsersList from "../UsersList/UsersList";
 import DirectMessageForm from "../DirectMessageForm/DirectMessageForm";
 import './MainPage.css';
 import ChannelBox from '../ChannelBox/ChannelBox';
-import ChannelForm from '../ChannelForm/ChannelForm'
+import ChannelForm from '../ChannelForm/ChannelForm';
+import SideProfile from '../SideProfile/SideProfile';
 import ChatBox from '../ChatBox/ChatBox';
 import Sidebar from '../Sidebar/Sidebar';
+import { ChanUsersContext } from "../../../contexts";
+
+
+export interface ChanUser {
+	id: number;
+	name: string;
+  }
 
 interface ButtonChannelContextValue {
 	displayPopup: () => void;
@@ -34,7 +42,8 @@ const ChatPage = () =>
 {
     const [currentUser, setCurrentUser] = useState<any>(null);
 	const [activeChannel, setActiveChannel] = useState<Channel | null>(null);
-    const [privateMessageUserId, setPrivateMessageUserId] = useState<number | null>(null);
+	const [activeUser, setActiveUser] = useState<ChanUser | null>(null);
+	const [privateMessageUserId, setPrivateMessageUserId] = useState<number | null>(null);
 	const [statepopup, ChangeStatePopup] = useState(false);
 	const createInputRef = useRef<HTMLInputElement>(null);
 	const [channel, setChannel] = useState('');
@@ -47,8 +56,13 @@ const ChatPage = () =>
 	const [channelToJoin, setChannelToJoin] = useState<Channel | null>(null);
 	const [enteredPassword, setEnteredPassword] = useState('');
 	const [isPasswordIncorrect, setPasswordIncorrect] = useState(false);
+	const [showUsersPopup, setShowUsersPopup] = useState(false);
+	const allUsers = useContext(ChanUsersContext);
 
-
+	const toggleUsersPopup = () => {
+		setShowUsersPopup(!showUsersPopup);
+	};
+	
 	const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setPassword(event.target.value);
 	}
@@ -86,6 +100,7 @@ const ChatPage = () =>
 			setActiveChannel(channel);
 			socket.emit('joinRoom', {channelId: channel.id, userId: currentUser.id});
 			socket.emit('getChannelConversation', {channelId: channel.id});
+			socket.emit('getChannelUsers', { channelId: channel.id });
 		}
 	};
 
@@ -109,7 +124,7 @@ const ChatPage = () =>
 			event.preventDefault();
 		} else if (!letters.test(key)) {
 		  event.preventDefault();
-		} else if (createInputRef.current && createInputRef.current.value.length > 0  && key === 'Enter') {
+		} else if (createInputRef.current && createInputRef.current.value.length > 0  && key === 'Enter' && !passwordEnabled) {
 			event.preventDefault();
 			const newChannelName = createInputRef.current.value;
 			if (socket) {
@@ -168,6 +183,7 @@ const ChatPage = () =>
 					setActiveView('CHANNEL');
 					setActiveChannel(channelToJoin);
 					socket.emit('getChannelConversation', {channelId: channelToJoin.id});
+					socket.emit('getChannelUsers', { channelId: channelToJoin.id });
 					setShowPasswordPopup(false);
 				} else {
 					setPasswordIncorrect(true);
@@ -216,7 +232,12 @@ const ChatPage = () =>
 					{activeChannel && currentUser && (
 						<ChannelForm senderId ={currentUser.id} channelId={ parseInt(activeChannel.id)} />
 						)}
-						<ChannelBox senderId ={currentUser ? currentUser.id : -1} channelId={ activeChannel ? parseInt(activeChannel.id) : -1} />
+						<ChannelBox senderId ={currentUser ? currentUser.id : -1} channelId={ activeChannel ? parseInt(activeChannel.id) : -1} toggleUsersPopup={toggleUsersPopup} />
+				</div>
+				<div className='user-selected'>
+					{activeUser && (
+						<SideProfile user = {activeUser} />
+					)}
 				</div>
 				<div className="users-list">
 					<UsersList
@@ -251,6 +272,18 @@ const ChatPage = () =>
 							<button className="close-popup" onClick={() => setShowPasswordPopup(false)}>close</button>
         				</div>
     				</div>
+				)}
+				{showUsersPopup && (
+					<div className="popup">
+						<div onClick={toggleUsersPopup} className="overlay"></div>
+						<div className="popup-content">
+							<h2> Users List </h2>
+							{allUsers.map((user) => (
+								<button key={user.id} className="userbutton" onClick={() => setActiveUser(user)}>{user.name}</button>
+							))}
+							<button className="close-popup" onClick={toggleUsersPopup}>close</button>
+						</div>
+					</div>
 				)}
 			</div>
 		</div>

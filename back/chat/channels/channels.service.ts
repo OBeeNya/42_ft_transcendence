@@ -4,13 +4,25 @@ import { PrismaService } from "prisma_module/prisma.service";
 import { ChannelMessageDto, CreateChannelDto } from "./channels.dto";
 import * as argon from 'argon2';
 
+
+
 @Injectable()
 export class ChannelsService
 {
     constructor(private prisma: PrismaService) {}
 
-    async createChannel(createChannelDto: CreateChannelDto): Promise<Channel> {
+    async createChannel(createChannelDto: CreateChannelDto): Promise<Channel | string> {
         const { name, userId, ispassword, password } = createChannelDto;
+        const existingChannel = await this.prisma.channel.findFirst({
+            where: {
+              name: name,
+            },
+          });
+      
+          if (existingChannel) {
+            return `Le channel ${name} existe déjà.`;
+          }
+        
         const hash = await argon.hash(password);
         const newChannel = await this.prisma.channel.create({
             data: {
@@ -76,6 +88,28 @@ export class ChannelsService
     async getAllChannels(): Promise<Channel[]> {
         return this.prisma.channel.findMany();
     }
+
+    async getUsersFromChannel(channelId: string): Promise<{id: number; name: string; }[]> {
+        const channel = await this.prisma.channel.findUnique({
+            where: { id: Number(channelId) },
+            include: { 
+                users: {
+                    select: {
+                        id: true,
+                        name: true,
+                    }
+                } 
+            },
+        });
+    
+        if (!channel) {
+            throw new Error(`Channel with id ${channelId} does not exist`);
+        }
+    
+        return channel.users as {id: number; name: string; }[];
+    }
+    
+    
 
     async create(data: ChannelMessageDto): Promise<ChanMessage> {
         console.log('Creating channel message with data:', data);
