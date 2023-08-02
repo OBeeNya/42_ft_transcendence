@@ -20,4 +20,6 @@ Un utilisateur essaye de rejoindre un channel :
 
 A NE PAS OUBLIER AVANT DE PUSH :
 
-- remplacer DATABASE_URL dans .env
+(Logs nestjs en couleur)
+
+

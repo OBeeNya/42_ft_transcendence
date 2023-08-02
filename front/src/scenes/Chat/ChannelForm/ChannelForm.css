@@ -8,6 +8,7 @@
 	box-sizing: border-box;
 	border-radius: 12px;
 	padding: 8px 35px 8px 16px;
+	z-index: 1;
 }
 
 .message-input {

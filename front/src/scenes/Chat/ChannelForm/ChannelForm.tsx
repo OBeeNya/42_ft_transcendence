@@ -18,12 +18,15 @@ const ChannelForm: React.FC<Props> = ({senderId, channelId}) =>
 
 	const validateForm = () =>
 	{
-		if (senderId <= 0 || channelId <= 0)
+		if (senderId <= 0)
 		{
 			setError('Invalid user IDs');
 			return false;
 		}
-
+		if (channelId === -2) {
+			setError('You are muted');
+			return false;
+		}
 		return (true);
 	};
 
@@ -32,7 +35,6 @@ const ChannelForm: React.FC<Props> = ({senderId, channelId}) =>
 		if (!socket)
 			return;
 		socket.emit('channelMessage', { senderId: senderId, channelId: channelId, message: message });
-		console.log('message:  ', message, senderId, channelId);
 		setMessage('');
 	};
 
