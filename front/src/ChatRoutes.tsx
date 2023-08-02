@@ -1,10 +1,10 @@
 import { Route, Routes } from "react-router-dom";
 import { ProtectedRoute, ProtectedRouteProps } from "./components/protectedRoutes";
-import { ChanMessageContext, ChanUsersContext, MessageContext, SocketContext } from "./contexts";
+import { ChanMessageContext, ChanToUserContext, ChanUsersContext, ChanUsersContextValue, MessageContext, SocketContext } from "./contexts";
 import { Socket, io } from "socket.io-client";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import MainPage from "./scenes/Chat/MainPage/MainPage";
+import MainPage, { ChannelToUser } from "./scenes/Chat/MainPage/MainPage";
 import { Message } from "./scenes/Chat/ChatBox/ChatBox";
 import Friends from "./scenes/Friends/Friends";
 import { ChanMessage } from "./scenes/Chat/ChannelBox/ChannelBox";
@@ -23,7 +23,14 @@ function ChatRoutes()
 	const [messages, setMessages] = useState<Message[]>([]);
 	const [channelmessages, setChannelMessages] = useState<ChanMessage[]>([]);
 	const [channelUsers, setChannelUsers] = useState<ChanUser[]>([]);
+	const [chanToUser, setChanToUser] = useState<ChannelToUser[]>([]);
+
 	const token = localStorage.getItem("token");
+
+	const contextChanUserValue: ChanUsersContextValue = {
+		allUsers: channelUsers,
+		setChannelUsers,
+	}
 
 	useEffect(() => {
 		if (!socket)
@@ -36,16 +43,82 @@ function ChatRoutes()
 			console.log('messages received: ', messages);
 			setChannelMessages(messages);
 		});
-		socket.on('channelUsers', (users: ChanUser[]) => {
+
+		socket.on('channelToUser', (chanToUser: ChannelToUser[]) => {
+			setChanToUser(chanToUser);
+		});
+		socket.on('isAdmin', (relation: ChannelToUser) => {
+			setChanToUser(oldrelations => {
+			  // si la relation existe, la met à jour, sinon l'ajoute
+			  if (oldrelations.find(r => r.userId === relation.userId && r.channelId === relation.channelId)) {
+				return oldrelations.map(r => {
+				  // si la relation correspond, retourne la nouvelle relation, sinon retourne l'ancienne
+				  if (r.userId === relation.userId && r.channelId === relation.channelId) {
+					return relation;
+				  } else {
+					return r;
+				  }
+				});
+			  } else {
+				return [...oldrelations, relation];
+			  }
+			});
+		});
+
+		socket.on('isMuted', (relation: ChannelToUser) => {
+			setChanToUser(oldrelations => {
+			  // si la relation existe, la met à jour, sinon l'ajoute
+			if (oldrelations.find(r => r.userId === relation.userId && r.channelId === relation.channelId)) {
+				return oldrelations.map(r => {
+				  // si la relation correspond, retourne la nouvelle relation, sinon retourne l'ancienne
+				if (r.userId === relation.userId && r.channelId === relation.channelId) {
+					return relation;
+				} else {
+					return r;
+				}
+				});
+			} else {
+				return [...oldrelations, relation];
+			}
+			});
+		});
+
+		socket.on('isBanned', (relation: ChannelToUser) => {
+			setChanToUser(oldrelations => {
+			  // si la relation existe, la met à jour, sinon l'ajoute
+			if (oldrelations.find(r => r.userId === relation.userId && r.channelId === relation.channelId)) {
+				return oldrelations.map(r => {
+				  // si la relation correspond, retourne la nouvelle relation, sinon retourne l'ancienne
+				if (r.userId === relation.userId && r.channelId === relation.channelId) {
+					return relation;
+				} else {
+					return r;
+				}
+				});
+			} else {
+				return [...oldrelations, relation];
+			}
+			});
+		});
+
+		socket.on('delete', (relation: ChannelToUser) => {
+			setChanToUser(oldrelations => {
+				if (oldrelations.find(r => r.userId === relation.userId && r.channelId === relation.channelId))
+					return oldrelations.filter(r => r.userId !== relation.userId || r.channelId !== relation.channelId);
+				return oldrelations;
+				});
+		});
+		socket.on('newUser', (users: ChanUser[]) => {
 			setChannelUsers(users);
 		});
-		
 
 		return () => {
 			if (socket) {
-				socket.off('joinRoom');
 				socket.off('channelMessage');
 				socket.off('channelconversation');
+				socket.off('isAdmin');
+				socket.off('newUser');
+				socket.off('isMuted');
 			}
 		}
 	}, [socket]);
@@ -135,11 +208,13 @@ function ChatRoutes()
 		<SocketContext.Provider value={socket}>
 			<MessageContext.Provider value={messages}>
 				<ChanMessageContext.Provider value={channelmessages}>
-					<ChanUsersContext.Provider value ={channelUsers}>
-					<Routes>
-						<Route path="/chat" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<MainPage/>} />} />
-						<Route path="/friends" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<Friends/>} />} />
-					</Routes>
+					<ChanUsersContext.Provider value={contextChanUserValue}>
+						<ChanToUserContext.Provider value={chanToUser}>
+							<Routes>
+								<Route path="/chat" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<MainPage/>} />} />
+								<Route path="/friends" element={<ProtectedRoute {...defaultProtectedRouteProps} outlet={<Friends/>} />} />
+							</Routes>
+						</ChanToUserContext.Provider>
 					</ChanUsersContext.Provider>
 				</ChanMessageContext.Provider>
 			</MessageContext.Provider>

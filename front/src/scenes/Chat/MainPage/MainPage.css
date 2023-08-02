@@ -59,6 +59,7 @@
 }
 
 .popup, .overlay {
+	z-index: 2;
 	width: 100vw;
 	height: 100vh;
 	top: 0;
@@ -73,6 +74,7 @@
 }
 
 .popup-content {
+	z-index: 2;
 	position: absolute;
 	top: 50%;
 	left: 50%;

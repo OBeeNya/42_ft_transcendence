@@ -1,3 +1,5 @@
+import { Channel } from "../../scenes/Chat/MainPage/MainPage";
+
 export interface UserInfos
 {
 	id: number;

@@ -3,7 +3,7 @@ import { Server, Socket } from 'socket.io'
 import { BaseGateway } from "chat/base.gateway";
 import { PrismaService } from "prisma_module/prisma.service";
 import { ChannelsService } from "./channels.service";
-import { Channel, ChatType, ChanMessage } from "@prisma/client";
+import { Channel, ChatType, ChanMessage, ChannelToUser } from "@prisma/client";
 import { Body } from "@nestjs/common";
 import { CreateChannelDto, JoinRoomDto, ChannelMessageDto } from "./channels.dto";
 
@@ -31,31 +31,97 @@ export class ChannelsGateway extends BaseGateway
     }
 	
 	@SubscribeMessage('getChannelUsers')
-	async handleGetChannelUsers(@MessageBody() data: { channelId: string }, @ConnectedSocket() client: Socket): Promise<WsResponse<{id: number; name: string;}[]>> {
+	async handleGetChannelUsers(@MessageBody() data: { channelId: string }, @ConnectedSocket() client: Socket): Promise<void> {
+		const { channelId } = data;
 		const users = await this.channelsService.getUsersFromChannel(data.channelId);
-		return { event: 'channelUsers', data: users };
+		this.server.to(channelId.toString()).emit('newUser', users);
 	}
 	
+	@SubscribeMessage('getChannelToUser')
+	async handleGetChannelToUser(@MessageBody() data: { channelId: string }, @ConnectedSocket() client: Socket) {
+		const { channelId } = data;
+		const ChannelToUser = await this.channelsService.getRelationFromChannel(data.channelId);
+		this.server.to(channelId.toString()).emit('channelToUser', ChannelToUser);
+	}
 
+	@SubscribeMessage('handleAdmin')
+	async handleAdmin(@MessageBody() data: { userId: string, channelId: string }, @ConnectedSocket() client: Socket) {
+		const { channelId, userId } = data;
+		const channelToUser = await this.channelsService.AdminPrivilegeChannel(channelId, parseInt(userId));
+		this.server.to(channelId.toString()).emit('isAdmin', channelToUser);
+	}
+
+	@SubscribeMessage('handleMuted')
+	async handleMuted(@MessageBody() data: { userId: string, channelId: string }, @ConnectedSocket() client: Socket) {
+		const { channelId, userId } = data;
+		const channelToUser = await this.channelsService.MutedChannel(channelId, parseInt(userId));
+		this.server.to(channelId.toString()).emit('isMuted', channelToUser);
+	}
+
+	@SubscribeMessage('handleBanned')
+	async handleBanned(@MessageBody() data: { userId: string, channelId: string }, @ConnectedSocket() client: Socket) {
+		const { channelId, userId } = data;
+		const channelToUser = await this.channelsService.BannedChannel(channelId, parseInt(userId));
+		this.server.to(channelId.toString()).emit('isBanned', channelToUser);
+	}
 
 	@SubscribeMessage('joinRoom')
 	async handleJoinRoom(@MessageBody() joinRoomDto: JoinRoomDto, @ConnectedSocket() client: Socket) {
 		
 		try {
 			const { channelId, userId, password} = joinRoomDto;
-			await this.channelsService.addUserToChannel(channelId, parseInt(userId), password);
+			const banned = await this.channelsService.addUserToChannel(channelId, parseInt(userId), password);
+			if (banned === 'banned') {
+				client.emit('userBanned', {banned: true})
+				return;
+			}
 			client.join(channelId.toString());
 			client.emit('passwordChecked', { correct: true });
 
 		}
 		catch (error) {
-			client.emit('passwordChecked', {correct: false})
+				client.emit('passwordChecked', {correct: false})
 		}
 	}
 
-	isClientInRoom(clientId: string, roomId: string) {
-		const room = this.server.sockets.adapter.rooms.get(roomId);
-		return room ? room.has(clientId) : false;
+	@SubscribeMessage('leaveRoom')
+	async handleLeaveRoom(@MessageBody() joinRoomDto: JoinRoomDto, @ConnectedSocket() client: Socket) {
+		try {
+			const { channelId, userId } = joinRoomDto;
+			const deleted = await this.channelsService.removeUserFromChannel(channelId, parseInt(userId));
+			const socketId = this.userSocketMap.get(Number(userId));
+			if (socketId) {
+				const userSocket = this.server.sockets.sockets.get(socketId)
+				if (userSocket) {
+					userSocket.leave(channelId.toString());
+					if (deleted) {
+						this.server.to(socketId).emit('delete', deleted);
+						this.server.to(channelId).emit('delete', deleted);
+					}
+					this.server.to(socketId).emit('userKicked', userId);
+					this.server.to(channelId.toString()).emit('userKicked', userId); //supprimer userId de chanUser
+				}
+			}
+		}
+		catch (error) {
+			console.error('Error while handling leave channel:', error);
+			client.emit('error');
+		}
+	}
+
+
+	@SubscribeMessage('exitRoom')
+	async handleexitRoom(@ConnectedSocket() client: Socket) {
+		try {
+			for (let room of client.rooms) {
+				if (room !== client.id)
+					client.leave(room);
+			}
+		}
+		catch (error) {
+			console.error('Error while handling leave channel:', error);
+			client.emit('error');
+		}
 	}
 
 	@SubscribeMessage('channelMessage')
@@ -63,10 +129,9 @@ export class ChannelsGateway extends BaseGateway
 							  @ConnectedSocket() client: Socket)
 	{	
 		try {
-			//client.join(data.channelId.toString());
-			const isClientin = this.isClientInRoom(client.id, data.channelId.toString());
-			console.log(`Client ${client.id} is in room ${data.channelId}: ${isClientin}`);
 			const newMessage = await this.channelsService.create(data);	
+			if (newMessage === null)
+				return;
 			this.server.to(data.channelId.toString()).emit('channelMessage', newMessage);
 		}
 		catch (error) {
@@ -79,7 +144,6 @@ export class ChannelsGateway extends BaseGateway
 	@SubscribeMessage('getChannelConversation')
 	async handleGetConversation(@MessageBody() roomDetails: { channelId: string }, @ConnectedSocket() client: Socket): Promise<WsResponse<ChanMessage[]>> {
 		const messages = await this.channelsService.getRoomMessages(roomDetails.channelId);
-		console.log(`Sending 'channelConversation' event with data:`, messages);
 		return { event: 'channelConversation', data: messages };
 	}
 

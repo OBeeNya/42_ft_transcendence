@@ -1,39 +1,61 @@
 .side-profile {
-    background-color: #f0f0f0;
-    max-width: 300px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    width: 200px;
+    height: auto;
+    padding: 10px;
+    background-color: #f3f3f3;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+    font-family: Arial, sans-serif;
+    color: #333;
     display: flex;
     flex-direction: column;
+    gap: 10px;
     align-items: center;
 }
 
-.side-profile > button {
-    margin-top: 10px;
-    padding: 10px 20px;
-    border-radius: 5px;
+.side-profile .close-button {
+    align-self: flex-end;
+    background-color: #ff4b5c;
+    color: white;
     border: none;
-    color: #fff;
+    border-radius: 50%;
+    width: 15%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     cursor: pointer;
-    transition: background-color 0.3s ease;
 }
 
-.side-profile > button:hover {
-    opacity: 0.9;
+.side-profile button {
+    width: 100%;
+    padding: 8px;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+    font-size: 0.8em;
 }
 
-.side-profile > button:first-child {
-    background-color: #008CBA; /* Blue for add friend */
+.side-profile .add-button {
+    background-color: #4b86ff; /* Bleu pour ajouter des amis */
 }
 
-.side-profile > button:nth-child(2) {
-    background-color: #ff4c4c; /* Red for ban */
+.side-profile .ban-button {
+    background-color: #ff4b5c; /* Rouge pour bannir */
 }
 
-.side-profile > button:nth-child(3) {
-    background-color: #ffcc00; /* Yellow for mute */
+.side-profile .unadmin-button {
+    background-color: #ff4b5c;
 }
 
-.side-profile > button:nth-child(4) {
-    background-color: #4caf50; /* Green for set as administrator */
+.side-profile .kick-button {
+    background-color: #ff9800; /* Orange pour mute */
 }
 
+.side-profile .mute-button {
+    background-color: #ff9800; /* Orange pour mute */
+}
+
+.side-profile .admin-button {
+    background-color: #9c27b0; /* Violet pour set en tant qu'administrateur */
+}

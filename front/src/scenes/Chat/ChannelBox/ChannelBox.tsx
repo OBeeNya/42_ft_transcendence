@@ -1,6 +1,7 @@
 import { useContext, useEffect, useRef } from "react";
-import { ChanMessageContext, ChanUsersContext } from "../../../contexts";
+import { ChanMessageContext } from "../../../contexts";
 import "./ChannelBox.css";
+import { SocketContext } from '../../../contexts';
 import { AiOutlineUser } from 'react-icons/ai';
 
 
@@ -13,37 +14,54 @@ export interface ChanMessage {
     }
 }
 
-const ChannelBox = ({senderId, channelId, toggleUsersPopup}: {senderId: number , channelId: number, toggleUsersPopup: () => void}) =>
+const ChannelBox = ({senderId, channelId, toggleUsersPopup, onLeaveChannel}: {senderId: number , channelId: number, toggleUsersPopup: () => void, onLeaveChannel: () => void}) =>
 {
-   const allMessages = useContext(ChanMessageContext);
-   const messagesEndRef = useRef<null | HTMLDivElement>(null);
+  const socket = useContext(SocketContext);
+  const allMessages = useContext(ChanMessageContext);
+  const messagesEndRef = useRef<null | HTMLDivElement>(null);
   
-    const messages = allMessages.filter(msg => msg.channelId === channelId);
+  const messages = allMessages.filter(msg => msg.channelId === channelId);
 
-    const scrollToBottom = () => {
-      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    };
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
   
+  const handleLeaveChannel = async () => {
+    if (socket) {
+      socket.emit('leaveRoom', {channelId: channelId, userId: senderId.toString()});
+      onLeaveChannel();
+    }
+  };
+
     useEffect(() => {
       scrollToBottom();
     }, [messages]);
   
+    useEffect(() => {
+      
+    })
+
     return (
-      <div className="chat-box">
-        <button className={"buttonuser"} onClick={toggleUsersPopup}><AiOutlineUser size={20}/></button>
-        {messages.map((message, i) => (
-          <div key={i} className={`message-container`}>
-            <div
-              className={`message ${
-                message.senderId === senderId ? "sent" : "received"
-              }`}
-            >
-              <span className="sender-name">{message.sender.name}</span>
-              <div className="message-content">{message.content}</div>
+      <div className="channel-box">
+        <div className="button-container">
+        <button className="leavechannel" onClick={handleLeaveChannel}>leave channel</button>
+        <button className="buttonuser" onClick={() => toggleUsersPopup()}> <AiOutlineUser size={20}/></button>
+        </div>
+        <div className="chat-box">
+          {messages.map((message, i) => (
+            <div key={i} className={`message-container`}>
+              <div
+                className={`message ${
+                  message.senderId === senderId ? "sent" : "received"
+                }`}
+                >
+                <span className="sender-name">{message.sender.name}</span>
+                <div className="message-content">{message.content}</div>
+              </div>
             </div>
-          </div>
-        ))}
-        <div ref={messagesEndRef} />
+          ))}
+          <div ref={messagesEndRef} />
+        </div>
       </div>
     );
   };

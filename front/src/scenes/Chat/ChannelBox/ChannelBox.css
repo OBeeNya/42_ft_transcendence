@@ -1,3 +1,13 @@
+.channel-box {
+	position: relative;
+}
+
+.button-container {
+	position: sticky;
+	top: 0;
+	z-index: 1;
+  }
+
 .message-container {
 	width: 100%;
 	display: flex;
@@ -15,11 +25,11 @@
 	content: ": ";
   }
 
-.buttonuser {
-	position: fixed;
+  .buttonuser {
+	position: absolute;
+	top: 10px;  
+	right: 10px;  
 	padding: 8px;
-	margin-top: 10px;
-	margin-left: 10px;
 	border-radius: 100px;
 	background-color: white;
 	border: none;
@@ -60,6 +70,7 @@
   }
 
   .chat-box {
+	padding-top: 50px;
 	padding-bottom: 55px;
 	overflow-y: scroll;
 	-ms-overflow-style: none;  /* IE and Edge */
