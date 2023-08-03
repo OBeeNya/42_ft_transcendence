@@ -10,6 +10,7 @@ const ProfilePage = () => {
 	const [userInfos, setUserInfos] = useState<UserInfos | null>(null);
 	const token = localStorage.getItem("token");
 	const [showTFAKey, setShowTFAKey] = useState(false);
+	const [imageSrc, setImageSrc] = useState('');
 
 	useEffect(() => {
 		const getUsers = async () => {
@@ -27,6 +28,22 @@ const ProfilePage = () => {
 		getUsers();
 	}, [token]);
 
+	useEffect(() => {
+		if (userInfos?.id) {
+			fetch('http://localhost:8080/images/' + userInfos.id + '.png')
+			.then((response) => {
+				if (!response.ok) throw new Error('Image not found');
+				return response.blob();
+			})
+			.then((blob) => {
+				setImageSrc(URL.createObjectURL(blob));
+			})
+			.catch((error) => {
+				console.error(error);
+			});
+		}
+	}, [userInfos?.id]);
+
 	const toggleTFAKey = () => {
 		setShowTFAKey(!showTFAKey);
 	  };
@@ -38,7 +55,8 @@ const ProfilePage = () => {
 				<div className="userProfileContainer">
 					<h1>Your profile</h1>
 					<img 	className="userAvatar"
-							src={'/avatar/' + userInfos?.id + '.png'}
+							// src={'/avatar/' + userInfos?.id + '.png'}
+							src={imageSrc}
 							alt="avatar"
 							onError={(event) => {
 								const target = event.target as HTMLImageElement;

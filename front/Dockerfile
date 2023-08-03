@@ -1,4 +1,4 @@
-FROM node:18
+FROM node:latest
 
 RUN npm install -g npm@9.6.5
 
