@@ -95,6 +95,7 @@ const EditProfilePage = () => {
 					'Content-Type': 'multipart/form-data',
 				}
 			});
+			window.location.reload();
 		}
 		catch {
 			const messageAvatar = document.getElementById("messageAvatar");
@@ -128,7 +129,7 @@ const EditProfilePage = () => {
 								onError={(event) => {
 									const target = event.target as HTMLImageElement;
 									target.src = '/avatar/auto.png';
-								  }}
+								}}
 								/>
 							<div className="avatarChangeButtonContainer">
 								{/* <label className="avatarChangeButtonLabel">Change avatar:</label> */}

@@ -4,6 +4,8 @@ import { PassportStrategy } from "@nestjs/passport";
 import { ExtractJwt, Strategy } from "passport-jwt";
 import { PrismaService } from "../../prisma_module/prisma.service";
 import { Request } from "express";
+import { join } from 'path';
+import { appendFileSync } from 'fs';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
@@ -21,6 +23,8 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
 	}
 
 	async validate(payload: {sub: number, name: string}) {
+	try
+	{
 		const user = await this.prisma.user.findUnique({
 			where: {
 				id: payload.sub,
@@ -28,6 +32,12 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
 		});
 		delete user.hash;
 		return (user);
-	}
 
+	}
+	catch (error)
+	{
+		const logFilePath = join(__dirname, 'error.log');
+		appendFileSync(logFilePath, `${new Date().toISOString()} - Error: ${error.message}\n`);
+	}
+	}
 }
