@@ -11,6 +11,7 @@ const ProfileRedirection = () =>
 	const { userId } = useParams();
 	const [userInfos, setUserInfos] = useState<UserInfos | null>(null);
 	const token = localStorage.getItem("token");
+	const [imageSrc, setImageSrc] = useState('');
 
 	useEffect(() =>
 	{
@@ -40,13 +41,30 @@ const ProfileRedirection = () =>
 
 	}, [token, userId]);
 
+	useEffect(() => {
+		if (userInfos?.id) {
+			fetch('http://localhost:8080/images/' + userInfos.id + '.png')
+			.then((response) => {
+				if (!response.ok) throw new Error('Image not found');
+				return response.blob();
+			})
+			.then((blob) => {
+				setImageSrc(URL.createObjectURL(blob));
+			})
+			.catch((error) => {
+				console.error(error);
+			});
+		}
+	}, [userInfos?.id]);
+
 	return (
 		<div>
 			<Header />
 			<Content>
 				<div className="userProfileContainer">
 					<img 	className="userAvatar"
-							src={'/avatar/' + userInfos?.id + '.png'}
+							src={imageSrc}
+							// src={'/avatar/' + userInfos?.id + '.png'}
 							alt="avatar"
 							onError={(event) =>
 							{
