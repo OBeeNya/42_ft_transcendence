@@ -95,6 +95,7 @@ const EditProfilePage = () => {
 					'Content-Type': 'multipart/form-data',
 				}
 			});
+			window.location.reload();
 		}
 		catch {
 			const messageAvatar = document.getElementById("messageAvatar");
