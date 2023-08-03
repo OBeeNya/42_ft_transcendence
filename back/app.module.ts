@@ -12,6 +12,7 @@ import { BlockageModule } from 'chat/blockage/blockage.module';
 // import { SocketEvents } from 'pong/socket/pong.socket.events';
 import { InviteToPongModule } from 'chat/inviteToPong/inviteToPong.module';
 import { ChannelsModule } from 'chat/channels/channels.module';
+import { AvatarModule } from 'avatar/avatar.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { ChannelsModule } from 'chat/channels/channels.module';
 	DirectMessageModule,
 	FriendsModule,
 	InviteToPongModule,
+	AvatarModule,
   ],
 //   providers: [
 // 	{

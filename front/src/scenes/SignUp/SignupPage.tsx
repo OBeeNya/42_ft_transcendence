@@ -17,13 +17,13 @@ const SignupPage = () => {
 					name: nameInput,
 					password: passwordInput,
 				};
-			// var expression = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})");
-			// if (!expression.test(dto.password)) {
-			// 	const messagePwd = document.getElementById("messagePwd");
-			// 	if (messagePwd)
-			// 		messagePwd.textContent = "Your password must contain at least 8 characters, 1 lowercase and 1 uppercase alphabetical character, 1 numeric character and 1 special character";
-			// 		return ;
-			// }
+			var expression = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})");
+			if (!expression.test(dto.password)) {
+				const messagePwd = document.getElementById("messagePwd");
+				if (messagePwd)
+					messagePwd.textContent = "Your password must contain at least 8 characters, 1 lowercase and 1 uppercase alphabetical character, 1 numeric character and 1 special character";
+					return ;
+			}
 			const response = await ax.post('auth/signup', dto);
 			if (response.status === 200 || response.status === 201)
 				navigate('/');

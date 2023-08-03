@@ -10,6 +10,7 @@ import "./style/EditProfilePage.css";
 const EditProfilePage = () => {
 	const navigate = useNavigate();
 	const [userInfos, setUserInfos] = useState<UserInfos | null>();
+	const [imageSrc, setImageSrc] = useState('');
 	
 	const token = localStorage.getItem("token");
 	const { register, handleSubmit, reset } = useForm({defaultValues: {	name: userInfos?.name, }});
@@ -65,6 +66,22 @@ const EditProfilePage = () => {
 		}
 	};
 
+	useEffect(() => {
+		if (userInfos?.id) {
+			fetch('http://localhost:8080/images/' + userInfos.id + '.png')
+			.then((response) => {
+				if (!response.ok) throw new Error('Image not found');
+				return response.blob();
+			})
+			.then((blob) => {
+				setImageSrc(URL.createObjectURL(blob));
+			})
+			.catch((error) => {
+				console.error(error);
+			});
+		}
+	}, [userInfos?.id]);
+
 	const handleAvatarChange = async (event: ChangeEvent<HTMLInputElement>) => {
 		if (!event.target.files)
 			return ;
@@ -78,6 +95,7 @@ const EditProfilePage = () => {
 					'Content-Type': 'multipart/form-data',
 				}
 			});
+			window.location.reload();
 		}
 		catch {
 			const messageAvatar = document.getElementById("messageAvatar");
@@ -105,7 +123,8 @@ const EditProfilePage = () => {
 						<div className="avatarChange">
 							<img
 								className="editUserAvatar"
-								src={'/avatar/' + userInfos?.id + '.png'}
+								// src={'/avatar/' + userInfos?.id + '.png'}
+								src={imageSrc}
 								alt="avatar"
 								onError={(event) => {
 									const target = event.target as HTMLImageElement;
@@ -118,7 +137,7 @@ const EditProfilePage = () => {
 									type='file'
 									className="avatarChangeButton"
 									onChange={handleAvatarChange}
-									/>
+								/>
 								<div id="messageAvatar"></div>
 							</div>
 						</div>
