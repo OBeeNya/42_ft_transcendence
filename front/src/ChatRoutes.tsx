@@ -43,7 +43,6 @@ function ChatRoutes()
 			console.log('messages received: ', messages);
 			setChannelMessages(messages);
 		});
-
 		socket.on('channelToUser', (chanToUser: ChannelToUser[]) => {
 			setChanToUser(chanToUser);
 		});

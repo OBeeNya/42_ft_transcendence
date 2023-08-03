@@ -24,6 +24,14 @@ export class ChannelsGateway extends BaseGateway
 		return { event: 'channelCreated', data: newChannel };
 	}
 
+	@SubscribeMessage('setPassword')
+	async handleSetPassword(@Body() data: {channelId: string, password: string}): Promise<WsResponse<Channel[]>> {
+		const {channelId, password} = data;
+		await this.channelsService.setNewPassword(channelId, password);
+		const channels = await this.channelsService.getAllChannels();
+        return { event: 'channels', data: channels };
+	}
+
 	@SubscribeMessage('getChannels')
     async handleGetChannels(@ConnectedSocket() client: Socket): Promise<WsResponse<Channel[]>> {
         const channels = await this.channelsService.getAllChannels();
@@ -132,7 +140,14 @@ export class ChannelsGateway extends BaseGateway
 			const newMessage = await this.channelsService.create(data);	
 			if (newMessage === null)
 				return;
-			this.server.to(data.channelId.toString()).emit('channelMessage', newMessage);
+
+			const excludedUsers = await this.channelsService.getBlockedIds(data.senderId);
+			console.log('les userid: ', excludedUsers);
+			const excludedSockets = excludedUsers.map((excludedUser) => {
+				return this.userSocketMap.get(excludedUser);
+			})
+			
+			this.server.to(data.channelId.toString()).except(excludedSockets).emit('channelMessage', newMessage);
 		}
 		catch (error) {
 			console.error('Error while handling channel message:', error);

@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { Channel, ChatType, ChanMessage, User, ChannelToUser } from "@prisma/client";
+import { Channel, ChatType, ChanMessage, User, ChannelToUser, UserBlock} from "@prisma/client";
 import { PrismaService } from "prisma_module/prisma.service";
 import { ChannelMessageDto, CreateChannelDto } from "./channels.dto";
 import * as argon from 'argon2';
@@ -40,6 +40,32 @@ export class ChannelsService
         return newChannel;
     }
     
+    async setNewPassword(ChannelId: string, password: string) {   
+        if (password === null) {
+            await this.prisma.channel.update({
+                where: {
+                    id: Number(ChannelId),
+                },
+                data: {
+                    ispassword: false,
+                    password: null,
+                },
+            });
+            return ;
+        }
+        
+        const hash = await argon.hash(password);
+        await this.prisma.channel.update({
+            where: {
+                id: Number(ChannelId),
+            },
+            data: {
+                ispassword: true,
+                password: hash,
+            },
+        });
+    }
+
     async checkPassword(hashedPassword: string, password: string): Promise<boolean> {
         try {
             const correctPassword = await argon.verify(hashedPassword, password);
@@ -311,7 +337,38 @@ export class ChannelsService
         return channel.users as {id: number; name: string; administratedChannels: ChannelToUser[]; ownedChannels: Channel[]}[];
     }
     
-    
+
+    async getBlockedIds(userId: number): Promise<number[]> {
+        const userBlocks: UserBlock[] = await this.prisma.userBlock.findMany({
+          where: {
+            OR: [
+              {
+                userId: userId,
+              },
+              {
+                blockedId: userId,
+              },
+            ],
+        },
+        select: {
+          userId: true,
+          blockedId: true,
+        },
+        });
+      
+        const blockedIds: number[] = [];
+      
+        userBlocks.forEach((userBlock: UserBlock) => {
+          if (userBlock.userId === Number(userId)) {
+            blockedIds.push(userBlock.blockedId);
+          } else {
+            blockedIds.push(userBlock.userId);
+          }
+        });
+      
+        return blockedIds;
+      }
+      
 
     async create(data: ChannelMessageDto): Promise<ChanMessage | null> {
         console.log('Creating channel message with data:', data);
@@ -343,6 +400,7 @@ export class ChannelsService
                 },
                 include: { sender: true },
             });
+
             return (createdMessage);
         }
         catch (error)
@@ -350,6 +408,16 @@ export class ChannelsService
             console.error('Error while creating channel message:', error);
             throw error;
         }
+    }
+
+    async isBlocked(userId: number, blockedId: number): Promise<boolean> {
+        const blockedUser = await this.prisma.userBlock.findFirst({
+            where: {
+                userId,
+                blockedId,
+            },
+        });
+        return !!blockedUser;
     }
 
     async getRoomMessages(channelId: string): Promise<ChanMessage[]> {

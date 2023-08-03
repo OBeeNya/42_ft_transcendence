@@ -63,6 +63,7 @@ const ChatPage = () =>
 	const [activeUser, setActiveUser] = useState<ChanUser | null>(null);
 	const [privateMessageUserId, setPrivateMessageUserId] = useState<number | null>(null);
 	const [statepopup, ChangeStatePopup] = useState(false);
+	const [options, setOptions] = useState(false);
 	const createInputRef = useRef<HTMLInputElement>(null);
 	const [channel, setChannel] = useState('');
 	const [channels, setChannels] = useState<{id: string, name: string, ispassword: boolean, password: string, ownerId: string}[]>([]);
@@ -75,9 +76,10 @@ const ChatPage = () =>
 	const [enteredPassword, setEnteredPassword] = useState('');
 	const [isPasswordIncorrect, setPasswordIncorrect] = useState(false);
 	const [showUsersPopup, setShowUsersPopup] = useState(false);
+	const [showInputpassword, setShowInputpassword] = useState(false);
+	const [isOwner, setIsOwner] = useState(false);
 	const { allUsers, setChannelUsers } = useContext(ChanUsersContext);
 	const allrelations = useContext(ChanToUserContext);
-
 
 	const kick = useCallback((userId: string) => {
 		const userFromAllUsers = allUsers.find(user => user.id === currentUser.id);
@@ -85,13 +87,24 @@ const ChatPage = () =>
 			setActiveChannel(null);
 	}, [allUsers, currentUser] );
 
-	const handleLeaveChannel = () => {
-		setActiveChannel(null);
-	};
+	const handleLeaveChannel = async () => {
+		if (socket && activeChannel && currentUser) {
+		  socket.emit('leaveRoom', {channelId: activeChannel.id, userId: currentUser.id.toString()});
+		  setActiveChannel(null);
+		}
+	  };
 
+	
 	const handleActiveUserChange = () => {
 		setActiveUser(null);
 	};
+
+	const toggleOptionsPopup = () => {
+		const currentuserFromAllUsers = allUsers.find(user => user.id === currentUser.id);
+		if (currentuserFromAllUsers && activeChannel && currentuserFromAllUsers.ownedChannels.some(channel => channel.id === activeChannel.id))
+			setIsOwner(true);
+		setOptions(!options);
+	}
 
 	const toggleUsersPopup = () => {
 		setShowUsersPopup(!showUsersPopup);
@@ -113,6 +126,24 @@ const ChatPage = () =>
 				socket.emit('joinRoom', { channelId: channelToJoin.id, userId: currentUser.id ,password: enteredPassword });
 			}
 			setEnteredPassword('');
+		}
+	}
+
+	const handleNewPassword = (event: React.KeyboardEvent<HTMLInputElement>) => {
+		const key = event.key;
+		if ( enteredPassword.length > 0  && key === 'Enter') {
+			event.preventDefault();
+			if (socket && activeChannel) {
+				socket.emit('setPassword', { channelId: activeChannel.id, password: enteredPassword });
+			}
+			setEnteredPassword('');
+			setShowInputpassword(false);
+		}
+	}
+
+	const unsetPassword = () => {
+		if (socket && activeChannel) {
+			socket.emit('setPassword', {channelId: activeChannel.id, password: null});
 		}
 	}
 
@@ -179,8 +210,9 @@ const ChatPage = () =>
 		}
 	};
 	
-	
 	const handleCreateChannelClick = () => {
+		if (createInputRef.current && (createInputRef.current.value.length === 0 || password.length === 0))
+			return;
 		if (createInputRef.current && createInputRef.current.value.length > 0) {
 			displayPopup();
 			const newChannelName = createInputRef.current.value;
@@ -298,7 +330,7 @@ const ChatPage = () =>
 					{activeChannel && currentUser && (
 						<>
 							<ChannelForm senderId ={currentUser.id} channelId={parseInt(activeChannel.id)} />
-							<ChannelBox senderId ={currentUser ? currentUser.id : -1} channelId={ activeChannel ? parseInt(activeChannel.id) : -1} toggleUsersPopup={toggleUsersPopup} onLeaveChannel={handleLeaveChannel}/>
+							<ChannelBox senderId ={currentUser ? currentUser.id : -1} channelId={ activeChannel ? parseInt(activeChannel.id) : -1} toggleUsersPopup={toggleUsersPopup} optionPopUp={toggleOptionsPopup}/>
 						</>
 						)}
 				</div>
@@ -353,6 +385,25 @@ const ChatPage = () =>
 								)
 							))}
 							<button className="close-popup" onClick={toggleUsersPopup}>close</button>
+						</div>
+					</div>
+				)}
+				{options && (
+					<div className="popup">
+						<div onClick={toggleOptionsPopup} className="overlay"></div>
+						<div className="popup-content">
+							<h2>Options</h2>
+							<button className="leave Channel" onClick={() => {handleLeaveChannel(); toggleOptionsPopup()}}>leave channel</button>
+							{isOwner && (
+								<div>
+									<button className='unsetPassword' onClick={() => {unsetPassword(); toggleOptionsPopup()}}>unset Password </button>
+									<button className='ChangePassword' onClick={() => setShowInputpassword(true)}>set/Change Password </button>
+									{showInputpassword && (
+										<input type='password' value={enteredPassword} placeholder='Password...' onChange={handlePasswordInputChange} onKeyDown={handleNewPassword}></input>
+									)}
+								</div>
+							)}
+							<button className="close-popup" onClick={toggleOptionsPopup}>close</button>
 						</div>
 					</div>
 				)}

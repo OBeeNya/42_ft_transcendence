@@ -100,6 +100,6 @@ const SideProfile = () => {
             )}
         </div>
     );
-}
+};
 
 export default SideProfile;

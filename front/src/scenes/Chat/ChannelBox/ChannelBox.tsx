@@ -1,7 +1,6 @@
 import { useContext, useEffect, useRef } from "react";
 import { ChanMessageContext } from "../../../contexts";
 import "./ChannelBox.css";
-import { SocketContext } from '../../../contexts';
 import { AiOutlineUser } from 'react-icons/ai';
 
 
@@ -14,9 +13,8 @@ export interface ChanMessage {
     }
 }
 
-const ChannelBox = ({senderId, channelId, toggleUsersPopup, onLeaveChannel}: {senderId: number , channelId: number, toggleUsersPopup: () => void, onLeaveChannel: () => void}) =>
+const ChannelBox = ({senderId, channelId, toggleUsersPopup, optionPopUp}: {senderId: number , channelId: number, toggleUsersPopup: () => void, optionPopUp: () => void}) =>
 {
-  const socket = useContext(SocketContext);
   const allMessages = useContext(ChanMessageContext);
   const messagesEndRef = useRef<null | HTMLDivElement>(null);
   
@@ -26,13 +24,6 @@ const ChannelBox = ({senderId, channelId, toggleUsersPopup, onLeaveChannel}: {se
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
   
-  const handleLeaveChannel = async () => {
-    if (socket) {
-      socket.emit('leaveRoom', {channelId: channelId, userId: senderId.toString()});
-      onLeaveChannel();
-    }
-  };
-
     useEffect(() => {
       scrollToBottom();
     }, [messages]);
@@ -44,7 +35,7 @@ const ChannelBox = ({senderId, channelId, toggleUsersPopup, onLeaveChannel}: {se
     return (
       <div className="channel-box">
         <div className="button-container">
-        <button className="leavechannel" onClick={handleLeaveChannel}>leave channel</button>
+        <button className="options" onClick={optionPopUp}>options</button>
         <button className="buttonuser" onClick={() => toggleUsersPopup()}> <AiOutlineUser size={20}/></button>
         </div>
         <div className="chat-box">
